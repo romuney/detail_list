@@ -1,0 +1,4 @@
+stand/.db/
+__pycache__/
+*.pyc
+proteus/.check-history.json

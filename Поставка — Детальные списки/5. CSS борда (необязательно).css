@@ -1,0 +1,41 @@
+/* ==========================================================================
+   Детальные списки — чарт на всю вкладку: без заголовка и полей платформы.
+   НЕОБЯЗАТЕЛЬНО: виджет работает в ячейке любого размера и сам прокручивается.
+
+   ЗАМЕНИТЕ 000000 на id чарта «Детальные списки», 111111 — на id чарта
+   «Детальные списки КП», во ВСЕХ местах (Ctrl+H). Правила — как у борда HRBP HUB
+   (проверенная вставка Proteus Adoption).
+   ========================================================================== */
+
+/* 1. заголовок чарта не нужен: у виджета своя шапка */
+.dashboard-chart-id-000000 .header-title,
+.dashboard-chart-id-111111 .header-title {
+  display: none !important;
+}
+
+/* 2. без поля 16 px вокруг чарта (emotion-паддинг холдера в форке) */
+.dashboard-grid .dashboard-chart-id-000000 .dashboard-component-chart-holder,
+.dashboard-grid .dashboard-component-chart-holder.dashboard-chart-id-000000,
+.dashboard-grid .dashboard-chart-id-111111 .dashboard-component-chart-holder,
+.dashboard-grid .dashboard-component-chart-holder.dashboard-chart-id-111111 {
+  padding: 0 !important;
+}
+
+/* 3. область чарта — колонка на всю высоту ячейки */
+.dashboard-chart-id-000000 .chart-slice,
+.dashboard-chart-id-111111 .chart-slice {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 4. без паддинга платформы вокруг iframe */
+.dashboard-chart-id-000000 .chart-container,
+.dashboard-chart-id-111111 .chart-container {
+  padding: 0 !important;
+}
+
+/* 5. iframe без строчной щели снизу */
+.dashboard-chart-id-000000 iframe,
+.dashboard-chart-id-111111 iframe {
+  display: block;
+}
