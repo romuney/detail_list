@@ -1,0 +1,157 @@
+table_name: mdm_employee_d_header
+main_dttm_col: null
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: null
+schema: prod_proteus
+sql: "{% macro apply_filters(fields) %}\n  {% for field in fields %}\n    {% set filter_val\
+  \ = filter_values(field) %}\n    {{ ' and ' + field + ' in ' + filter_val|where_in\
+  \ if filter_val else '' }}\n  {% endfor %}\n{% endmacro %}\n\n{% macro apply_regional_hr_filter()\
+  \ %}\n  {% set filters = get_filters('regional_hr_login', remove_filter=True) %}\n\
+  \  {% for f in filters %}\n    {% if f.val %}\n      and hasAny(\n        login_reg_hr_list,\n\
+  \        [\n          {% for v in f.val %}\n            '{{ v | replace(\"'\", \"\
+  ''\") }}'{% if not loop.last %}, {% endif %}\n          {% endfor %}\n        ]\n\
+  \      )\n    {% endif %}\n  {% endfor %}\n{% endmacro %}\n\n{% set filters = [\n\
+  \    'mdm_employee_rk'\n  , 'ad_login'\n  , 'employee_main_work_no'\n  , 'employment_relation_type_desc'\n\
+  \  , 'employee_status_desc'\n  , 'active_type_nm'\n  , 'employee_contract_type_desc'\n\
+  \  , 'residential_state_nm'\n  , 'office_desc'\n  , 'emp_specialization_oper_code'\n\
+  \  , 'emp_specialization_it_code'\n  , 'emp_stream_desc'\n  , 'emp_specialization_desc'\n\
+  \  , 'lvl3_mapped_management_unit_nm'\n  , 'lvl4_mapped_management_unit_nm'\n  ,\
+  \ 'lvl5_mapped_management_unit_nm'\n  , 'lvl6_mapped_management_unit_nm'\n  , 'lvl7_mapped_management_unit_nm'\n\
+  \  , 'lvl8_mapped_management_unit_nm'\n  , 'lvl9_mapped_management_unit_nm'\n  ,\
+  \ 'lvl10_mapped_management_unit_nm'\n  , 'lvl11_mapped_management_unit_nm'\n  ,\
+  \ 'management_head_flg'\n  , 'hrbp_login'\n  , 'lvl1_legal_unit_nm'\n  , 'lvl2_legal_unit_nm'\n\
+  \  , 'lvl3_legal_unit_nm'\n  , 'lvl4_legal_unit_nm'\n  , 'lvl5_legal_unit_nm'\n\
+  \  , 'lvl6_legal_unit_nm'\n  , 'lvl7_legal_unit_nm'\n  , 'party_id'\n  , 'employee_main_contract_type_nm'\n\
+  \  , 'mapping_channel_name'\n  , 'respond_source_nm'\n  , 't_education_desc'\n \
+  \ , 'company_fire_flg'\n  , 'rb_flg'\n  , 'rb_migration_flg'\n  , 'legal_position_nm'\n\
+  \  , 'city_nm'\n  , 'subordination_lvl'\n] %}\n\nwith (\nselect (mdm_employee_rk\n\
+  \  , ad_login\n  , first_nm\n  , management_unit_nm\n  , warden_lvl_number\n  ,\
+  \ personal_management_unit_nm_list\n  , hr_special_role_nm\n  , warden_cross_data_flg\n\
+  \  \n  , personal_management_unit_rk_list\n  , personal_exception_management_unit_rk_list\n\
+  \  , personal_exception_mdm_employee_rk_list\n  \n  , grade_management_unit_rk_list\n\
+  \  , grade_exception_management_unit_rk_list\n  , grade_exception_mdm_employee_rk_list\n\
+  \  \n  , personal_legal_unit_rk_list\n  , personal_legal_unit_nm_list\n\n  , warden_support_gph_flg\n\
+  \  , filter_management_unit_nm\n  )\nfrom prod_proteus.warden_access_array_cross\n\
+  where 1=1\n  and ad_login = '{{ current_username() }}'\n) as warden_array\n\n{%\
+  \ if filter_values('new_functional_unit_nm')|length > 0 %}\n, (\nselect \n( groupArray((functional_unit_rk))\n\
+  )\nfrom prod_proteus.cross_filter_functional_structure\nwhere 1=1\nand new_functional_unit_nm\
+  \ in ({{ \"'\" + \"', '\".join(filter_values('new_functional_unit_nm')) + \"'\"\
+  \ }})\n) as kp_structure\n{% endif %}\n\n\n{% if filter_values('new_management_unit_nm')|length\
+  \ > 0 %}\n, (\nselect \n( groupArray((management_unit_rk))\n)\nfrom prod_proteus.cross_filter_management_structure\n\
+  where 1=1\nand new_management_unit_nm in ({{ \"'\" + \"', '\".join(filter_values('new_management_unit_nm'))\
+  \ + \"'\" }})\n) as mu_structure\n{% endif %}\n\n{% if filter_values('new_legal_unit_nm')|length\
+  \ > 0 %}\n, (\nselect \n( groupArray((legal_unit_rk))\n)\nfrom prod_proteus.cross_filter_legal_structure\n\
+  where 1=1\nand new_legal_unit_nm in ({{ \"'\" + \"', '\".join(filter_values('new_legal_unit_nm'))\
+  \ + \"'\" }})\n) as lu_structure\n{% endif %} \n\nselect \n   count(*) as cnt_row\n\
+  \  , warden_array\n\nfrom \n{% if '\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\
+  \u0442\u0435\u043B\u044C\u0441\u043A\u0430\u044F \u0434\u0430\u0442\u0430' in filter_values('calendar_date')\
+  \ %}\nprod_proteus.mdm_employee_d_detail_period\n{% else %}\nprod_proteus.mdm_employee_d_detail_last_day\n\
+  {% endif %}\n\nwhere 1=1\nand {% if '\u0410\u043A\u0442\u0438\u0432\u043D\u0430\u044F\
+  ' in filter_values('employee_type') %} active_employee_flg\n  {% elif '\u042E\u0440\
+  \u0438\u0434\u0438\u0447\u0435\u0441\u043A\u0430\u044F' in filter_values('employee_type')\
+  \ %} legal_employee_flg\n  {% else %} 1 {% endif %} = 1\n\nand {% if '\u041F\u043E\
+  \u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u0430\u044F\
+  \ \u0434\u0430\u0442\u0430' in filter_values('calendar_date') %}\nbusiness_dt =\
+  \ toDate({{filter_values('business_dt_detail')}}[1]/1000)\n{% else %}\n1=1\n{% endif\
+  \ %}\n\nand {% if '\u0422\u0426\u0420 \u0420\u0424' in filter_values('tcr_type')\
+  \ %} rus_tcr_flg\n  {% elif '\u0422\u0426\u0420 \u0421\u041D\u0413' in filter_values('tcr_type')\
+  \ %} foreign_tcr_flg\n  {% elif '\u0422\u0426\u0420 \u0420\u0424 + \u0422\u0426\u0420\
+  \ \u0421\u041D\u0413' in filter_values('tcr_type') %} tcr_flg\n  {% else %} 1 {%\
+  \ endif %} = 1\n/*\u0424\u0438\u043B\u044C\u0442\u0440\u0443\u0435\u043C \u041A\u041F\
+  */\n{% if filter_values('lvl1_functional_unit_nm')|length or filter_values('lvl2_functional_unit_nm')|length\
+  \ or filter_values('lvl3_functional_unit_nm')|length or filter_values('lvl4_functional_unit_nm')|length\
+  \ \n   or filter_values('lvl5_functional_unit_nm')|length or filter_values('lvl6_functional_unit_nm')|length\
+  \ or filter_values('lvl7_functional_unit_nm')|length or filter_values('lvl8_functional_unit_nm')|length\n\
+  \   or filter_values('lvl9_functional_unit_nm')|length or filter_values('lvl10_functional_unit_nm')|length\
+  \ or filter_values('lvl11_functional_unit_nm')|length or filter_values('lvl12_functional_unit_nm')|length\
+  \ %}\nand arrayExists(x -> 1,arrayFilter(x -> (1=1 \n                        {%\
+  \ if filter_values('lvl1_functional_unit_nm')|length %} and x.1 in {{ filter_values('lvl1_functional_unit_nm')|where_in\
+  \ }} {% endif %}\n                        {% if filter_values('lvl2_functional_unit_nm')|length\
+  \ %} and x.2 in {{ filter_values('lvl2_functional_unit_nm')|where_in }} {% endif\
+  \ %}\n                        {% if filter_values('lvl3_functional_unit_nm')|length\
+  \ %} and x.3 in {{ filter_values('lvl3_functional_unit_nm')|where_in }} {% endif\
+  \ %}\n                        {% if filter_values('lvl4_functional_unit_nm')|length\
+  \ %} and x.4 in {{ filter_values('lvl4_functional_unit_nm')|where_in }} {% endif\
+  \ %}\n                        {% if filter_values('lvl5_functional_unit_nm')|length\
+  \ %} and x.5 in {{ filter_values('lvl5_functional_unit_nm')|where_in }} {% endif\
+  \ %}\n                        {% if filter_values('lvl6_functional_unit_nm')|length\
+  \ %} and x.6 in {{ filter_values('lvl6_functional_unit_nm')|where_in }} {% endif\
+  \ %}\n                        {% if filter_values('lvl7_functional_unit_nm')|length\
+  \ %} and x.7 in {{ filter_values('lvl7_functional_unit_nm')|where_in }} {% endif\
+  \ %}\n                        {% if filter_values('lvl8_functional_unit_nm')|length\
+  \ %} and x.8 in {{ filter_values('lvl8_functional_unit_nm')|where_in }} {% endif\
+  \ %}\n                        {% if filter_values('lvl9_functional_unit_nm')|length\
+  \ %} and x.9 in {{ filter_values('lvl9_functional_unit_nm')|where_in }} {% endif\
+  \ %}\n                        {% if filter_values('lvl10_functional_unit_nm')|length\
+  \ %} and x.10 in {{ filter_values('lvl10_functional_unit_nm')|where_in }} {% endif\
+  \ %}\n                        {% if filter_values('lvl11_functional_unit_nm')|length\
+  \ %} and x.11 in {{ filter_values('lvl11_functional_unit_nm')|where_in }} {% endif\
+  \ %}\n                        {% if filter_values('lvl12_functional_unit_nm')|length\
+  \ %} and x.12 in {{ filter_values('lvl12_functional_unit_nm')|where_in }} {% endif\
+  \ %}), \n            arrayMap (x -> \n            tuple(\n                    splitByString('<>',\
+  \ ifNull(x,'-'))[1],\n                    splitByString('<>', ifNull(x,'-'))[2],\n\
+  \                    splitByString('<>', ifNull(x,'-'))[3],\n                  \
+  \  splitByString('<>', ifNull(x,'-'))[4],\n                    splitByString('<>',\
+  \ ifNull(x,'-'))[5],\n                    splitByString('<>', ifNull(x,'-'))[6],\n\
+  \                    splitByString('<>', ifNull(x,'-'))[7],\n                  \
+  \  splitByString('<>', ifNull(x,'-'))[8],\n                    splitByString('<>',\
+  \ ifNull(x,'-'))[9],\n                    splitByString('<>', ifNull(x,'-'))[10],\n\
+  \                    splitByString('<>', ifNull(x,'-'))[11],\n                 \
+  \   splitByString('<>', ifNull(x,'-'))[12],\n                    splitByString('<>',\
+  \ ifNull(x,0))[13]\n                ),splitByString(';', assumeNotNull(functional_lvl_all_array)))\n\
+  \                ))\n{% endif %}\nand    true\n    {{ apply_filters(filters) }}\n\
+  \n--\u043A\u0440\u043E\u0441\u0441-\u0444\u0438\u043B\u044C\u0442\u0440 \u043F\u043E\
+  \ \u041A\u041F\n{% if filter_values('new_functional_unit_nm')|length > 0 %}\nand\
+  \ hasAny(kp_structure, splitByString(';', assumeNotNull(array_functional_unit_rk)))\n\
+  {% endif %} \n\n--\u043A\u0440\u043E\u0441\u0441-\u0444\u0438\u043B\u044C\u0442\u0440\
+  \ \u043F\u043E \u0423\u0421\n{% if filter_values('new_management_unit_nm')|length\
+  \ > 0 %}\nand hasAny(mu_structure, [lvl1_mapped_management_unit_rk, lvl2_mapped_management_unit_rk,\
+  \ lvl3_mapped_management_unit_rk, lvl4_mapped_management_unit_rk, lvl5_mapped_management_unit_rk,\
+  \ lvl6_mapped_management_unit_rk, lvl7_mapped_management_unit_rk, lvl8_mapped_management_unit_rk,\
+  \ lvl9_mapped_management_unit_rk, lvl10_mapped_management_unit_rk, lvl11_mapped_management_unit_rk,\
+  \ lvl12_mapped_management_unit_rk])\n{% endif %} \n\n--\u043A\u0440\u043E\u0441\u0441\
+  -\u0444\u0438\u043B\u044C\u0442\u0440 \u043F\u043E \u042E\u0421\n{% if filter_values('new_legal_unit_nm')|length\
+  \ > 0 %}\nand hasAny(lu_structure, [lvl1_legal_unit_rk, lvl2_legal_unit_rk, lvl3_legal_unit_rk,\
+  \ lvl4_legal_unit_rk, lvl5_legal_unit_rk, lvl6_legal_unit_rk, lvl7_legal_unit_rk])\n\
+  {% endif %}\n\n--\u0444\u0438\u043B\u044C\u0442\u0440 \u043F\u043E \u0440\u0435\u0433\
+  \ HR\n{{ apply_regional_hr_filter() }}\n"
+params: null
+template_params: {}
+filter_select_enabled: false
+fetch_values_predicate: null
+extra: null
+uuid: b79a6d1d-fb80-4886-a712-0a7d283b06ac
+metrics: []
+columns:
+- column_name: warden_array
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: TUPLE(NULLABLE(INT32), NULLABLE(STRING), NULLABLE(STRING), NULLABLE(STRING),
+    NULLABLE(INT16), NULLABLE(STRING), NULLABLE(STRING), NULLABLE(INT16), ARRAY(STRING),
+    ARRAY(STRING), ARRAY(STRING), ARRAY(STRING), ARRAY(STRING), ARRAY(STRING))
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: cnt_row
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: UINT64
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+version: 1.0.0
+database_uuid: f3cf662e-9267-42ad-85d9-a009bacb4736

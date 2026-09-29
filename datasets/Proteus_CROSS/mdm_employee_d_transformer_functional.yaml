@@ -1,0 +1,2097 @@
+table_name: mdm_employee_d_transformer_functional
+main_dttm_col: null
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: null
+schema: prod_proteus
+sql: "{% macro apply_filters(fields) %}\n  {% for field in fields %}\n    {% set filter_val\
+  \ = filter_values(field) %}\n    {{ ' and ' + field + ' in ' + filter_val|where_in\
+  \ if filter_val else '' }}\n  {% endfor %}\n{% endmacro %}\n\n{% set filters = [\n\
+  \    'mdm_employee_rk'\n  , 'ad_login'\n  , 'employee_main_work_no'\n  , 'employment_relation_type_desc'\n\
+  \  , 'employee_status_desc'\n  , 'active_type_nm'\n  , 'employee_contract_type_desc'\n\
+  \  , 'residential_state_nm'\n  , 'office_desc'\n  , 'emp_specialization_oper_code'\n\
+  \  , 'emp_specialization_it_code'\n  , 'emp_stream_desc'\n  , 'emp_specialization_desc'\n\
+  \  , 'lvl3_mapped_management_unit_nm'\n  , 'lvl4_mapped_management_unit_nm'\n  ,\
+  \ 'lvl5_mapped_management_unit_nm'\n  , 'lvl6_mapped_management_unit_nm'\n  , 'lvl7_mapped_management_unit_nm'\n\
+  \  , 'lvl8_mapped_management_unit_nm'\n  , 'lvl9_mapped_management_unit_nm'\n  ,\
+  \ 'lvl10_mapped_management_unit_nm'\n  , 'lvl11_mapped_management_unit_nm'\n  ,\
+  \ 'lvl12_mapped_management_unit_nm'\n  , 'lvl13_mapped_management_unit_nm'\n  ,\
+  \ 'management_head_flg'\n  , 'hrbp_login'\n  , 'lvl1_legal_unit_nm'\n  , 'lvl2_legal_unit_nm'\n\
+  \  , 'lvl3_legal_unit_nm'\n  , 'lvl4_legal_unit_nm'\n  , 'lvl5_legal_unit_nm'\n\
+  \  , 'lvl6_legal_unit_nm'\n  , 'lvl7_legal_unit_nm'\n  , 'regional_hr_login'\n \
+  \ , 'party_id'\n  , 'employee_main_contract_type_nm'\n  , 'mapping_channel_name'\n\
+  \  , 'respond_source_nm'\n  , 't_education_desc'\n  , 'company_fire_flg'\n  , 'rb_flg'\n\
+  \  , 'rb_migration_flg'\n  , 'legal_position_nm'\n  , 'city_nm'\n  , 'lvl1_functional_unit_nm'\n\
+  \  , 'lvl2_functional_unit_nm'\n  , 'lvl3_functional_unit_nm'\n  , 'lvl4_functional_unit_nm'\n\
+  \  , 'lvl5_functional_unit_nm'\n  , 'lvl6_functional_unit_nm'\n  , 'lvl7_functional_unit_nm'\n\
+  \  , 'lvl8_functional_unit_nm'\n  , 'lvl9_functional_unit_nm'\n  , 'lvl10_functional_unit_nm'\n\
+  \  , 'lvl11_functional_unit_nm'\n  , 'lvl12_functional_unit_nm'\n  , 'subordination_lvl'\n\
+  \  , 'head_lvl_segment'\n] %}\n\n{% set functional_filters = [\n    'lvl1_functional_unit_nm',\
+  \ 'lvl2_functional_unit_nm', 'lvl3_functional_unit_nm',\n    'lvl4_functional_unit_nm',\
+  \ 'lvl5_functional_unit_nm', 'lvl6_functional_unit_nm',\n    'lvl7_functional_unit_nm',\
+  \ 'lvl8_functional_unit_nm', 'lvl9_functional_unit_nm',\n    'lvl10_functional_unit_nm',\
+  \ 'lvl11_functional_unit_nm', 'lvl12_functional_unit_nm'\n] %}\n\nwith (\nselect\
+  \ (mdm_employee_rk\n  , ad_login\n  , first_nm\n  , management_unit_nm\n  , warden_cross_data_flg\n\
+  \  \n  , personal_management_unit_rk_list\n  , personal_exception_management_unit_rk_list\n\
+  \  , personal_legal_unit_rk_list\n  , personal_functional_unit_rk_list\n  , personal_exception_mdm_employee_rk_list\n\
+  \n  , grade_management_unit_rk_list\n  , grade_exception_management_unit_rk_list\n\
+  \  , grade_legal_unit_rk_list\n  , grade_functional_unit_rk_list\n  , grade_exception_mdm_employee_rk_list\n\
+  \n  , seniority_management_unit_rk_list\n  , seniority_exception_management_unit_rk_list\n\
+  \  , seniority_legal_unit_rk_list\n  , seniority_exception_mdm_employee_rk_list\n\
+  \n  , review_management_unit_rk_list\n  , review_exception_management_unit_rk_list\n\
+  \  , review_legal_unit_rk_list\n  , review_functional_unit_rk_list\n  , review_exception_mdm_employee_rk_list\n\
+  \n  , warden_support_gph_flg\n\n  , profession_array_nm\n  )\nfrom prod_proteus.warden_access_array_cross\n\
+  where 1=1\n  and ad_login = lower('{{ current_username()}}')\n) as warden_array\n\
+  \n{% if filter_values('new_functional_unit_nm')|length > 0 %}\n, (\nselect \n( groupArray((functional_unit_rk))\n\
+  )\nfrom prod_proteus.cross_filter_functional_structure\nwhere 1=1\nand new_functional_unit_nm\
+  \ in ({{ \"'\" + \"', '\".join(filter_values('new_functional_unit_nm')) + \"'\"\
+  \ }})\n) as kp_structure\n{% endif %} \n\n{% if filter_values('new_management_unit_nm')|length\
+  \ > 0 %}\n, (\nselect \n( groupArray((management_unit_rk))\n)\nfrom prod_proteus.cross_filter_management_structure\n\
+  where 1=1\nand new_management_unit_nm in ({{ \"'\" + \"', '\".join(filter_values('new_management_unit_nm'))\
+  \ + \"'\" }})\n) as mu_structure\n{% endif %} \n\n{% if filter_values('new_legal_unit_nm')|length\
+  \ > 0 %}\n, (\nselect \n( groupArray((legal_unit_rk))\n)\nfrom prod_proteus.cross_filter_legal_structure\n\
+  where 1=1\nand new_legal_unit_nm in ({{ \"'\" + \"', '\".join(filter_values('new_legal_unit_nm'))\
+  \ + \"'\" }})\n) as lu_structure\n{% endif %} \n\nselect\n  mdm_employee_rk\n  ,\
+  \ employee_link as \"\u0421\u0441\u044B\u043B\u043A\u0430_\u043D\u0430_\u043C\u0430\
+  \u0439\u0442\u0438\"\n  --, toString(formatDateTime(company_hire_dt,'%d.%m.%Y'))\
+  \ as \"\u0414\u0430\u0442\u0430_\u043D\u0430\u0439\u043C\u0430_\u0432_\u043A\u043E\
+  \u043C\u043F\u0430\u043D\u0438\u044E\"\n  , company_hire_dt as \"\u0414\u0430\u0442\
+  \u0430_\u043D\u0430\u0439\u043C\u0430_\u0432_\u043A\u043E\u043C\u043F\u0430\u043D\
+  \u0438\u044E\"\n  , toYear(toDate(now())) as current_year\n  , warden_first_nm\n\
+  \  , array_functional_unit_rk\n  , lvl1_functional_unit_nm as \"\u041A\u041F_\u0423\
+  \u0440\u043E\u0432\u0435\u043D\u044C_1\"\n  , lvl2_functional_unit_nm as \"\u041A\
+  \u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_2\"\n  , lvl3_functional_unit_nm\
+  \ as \"\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_3\"\n  , lvl4_functional_unit_nm\
+  \ as \"\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_4\"\n  , lvl5_functional_unit_nm\
+  \ as \"\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_5\"\n  , lvl6_functional_unit_nm\
+  \ as \"\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_6\"\n  , lvl7_functional_unit_nm\
+  \ as \"\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_7\"\n  , lvl8_functional_unit_nm\
+  \ as \"\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_8\"\n  , lvl9_functional_unit_nm\
+  \ as \"\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_9\"\n  , lvl10_functional_unit_nm\
+  \ as \"\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_10\"\n  , lvl11_functional_unit_nm\
+  \ as \"\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_11\"\n  , lvl12_functional_unit_nm\
+  \ as \"\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_12\"\n  , allocation_prt_norm\
+  \ as \"\u0410\u043B\u043B\u043E\u043A\u0430\u0446\u0438\u044F_\u043D\u043E\u0440\
+  \u043C\u0438\u0440\u043E\u0432\u0430\u043D\u043D\u0430\u044F\"\n--\u041F\u0435\u0440\
+  \u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0435 \u0434\u0430\u043D\u043D\u044B\
+  \u0435 \n  , {% if '\u0424\u0430\u043C\u0438\u043B\u0438\u044F' in filter_values('value_attr')%}\
+  \ last_nm {% else %} '   ' {% endif %} as \"\u0424\u0430\u043C\u0438\u043B\u0438\
+  \u044F\"\n  , {% if '\u0418\u043C\u044F' in filter_values('value_attr')%} first_nm\
+  \ {% else %} '   ' {% endif %} as \"\u0418\u043C\u044F\"\n  , {% if '\u041F\u043E\
+  \u043B\u043D\u043E\u0435 \u0424\u0418\u041E' in filter_values('value_attr')%} full_nm\
+  \ {% else %} '   ' {% endif %} as \"\u041F\u043E\u043B\u043D\u043E\u0435_\u0424\u0418\
+  \u041E\"\n  --, {% if '\u0414\u0430\u0442\u0430 \u0440\u043E\u0436\u0434\u0435\u043D\
+  \u0438\u044F' in filter_values('value_attr')%} parseDateTime(birth_dt, '%d.%m.%Y')\
+  \ {% else %} '   ' {% endif %} as \"\u0414\u0430\u0442\u0430_\u0440\u043E\u0436\u0434\
+  \u0435\u043D\u0438\u044F\"\n  , {% if '\u0414\u0430\u0442\u0430 \u0440\u043E\u0436\
+  \u0434\u0435\u043D\u0438\u044F' in filter_values('value_attr')%} birth_dt {% else\
+  \ %} '   ' {% endif %} as \"\u0414\u0430\u0442\u0430_\u0440\u043E\u0436\u0434\u0435\
+  \u043D\u0438\u044F\"\n\n  , {% if '\u0422\u0438\u043F \u0434\u043E\u043A\u0443\u043C\
+  \u0435\u043D\u0442\u0430' in filter_values('value_attr')%} employee_document_type_desc\
+  \ {% else %} '   ' {% endif %} as \"\u0422\u0438\u043F_\u0434\u043E\u043A\u0443\u043C\
+  \u0435\u043D\u0442\u0430\"\n  , {% if '\u0421\u0442\u0440\u0430\u043D\u0430 \u0433\
+  \u0440\u0430\u0436\u0434\u0430\u043D\u0441\u0442\u0432\u0430' in filter_values('value_attr')\
+  \ %} citizenship_country_desc {% else %} '   ' {% endif %} as \"\u0421\u0442\u0440\
+  \u0430\u043D\u0430_\u0433\u0440\u0430\u0436\u0434\u0430\u043D\u0441\u0442\u0432\u0430\
+  \"\n  , {% if '\u0420\u0435\u0433\u0438\u043E\u043D \u0440\u0435\u0433\u0438\u0441\
+  \u0442\u0440\u0430\u0446\u0438\u0438' in filter_values('value_attr') %} registration_state_nm\
+  \ {% else %} '   ' {% endif %} as \"\u0420\u0435\u0433\u0438\u043E\u043D_\u0440\u0435\
+  \u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0438\"\n  , {% if '\u0413\u043E\
+  \u0440\u043E\u0434 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0438\
+  ' in filter_values('value_attr') %} registration_city_nm  {% else %} '   ' {% endif\
+  \ %} as \"\u0413\u043E\u0440\u043E\u0434_\u0440\u0435\u0433\u0438\u0441\u0442\u0440\
+  \u0430\u0446\u0438\u0438\"\n  , {% if '\u0420\u0435\u0433\u0438\u043E\u043D \u043F\
+  \u0440\u043E\u0436\u0438\u0432\u0430\u043D\u0438\u044F' in filter_values('value_attr')\
+  \ %} residential_state_nm {% else %} '   ' {% endif %} as \"\u0420\u0435\u0433\u0438\
+  \u043E\u043D_\u043F\u0440\u043E\u0436\u0438\u0432\u0430\u043D\u0438\u044F\"\n  ,\
+  \ {% if '\u0413\u043E\u0440\u043E\u0434 \u043F\u0440\u043E\u0436\u0438\u0432\u0430\
+  \u043D\u0438\u044F' in filter_values('value_attr') %} residential_city_nm {% else\
+  \ %} '   ' {% endif %} as \"\u0413\u043E\u0440\u043E\u0434_\u043F\u0440\u043E\u0436\
+  \u0438\u0432\u0430\u043D\u0438\u044F\"\n  , {% if '\u0421\u0435\u043C\u0435\u0439\
+  \u043D\u043E\u0435 \u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435' in filter_values('value_attr')\
+  \ %} marital_status_desc {% else %} '   ' {% endif %} as \"\u0421\u0435\u043C\u0435\
+  \u0439\u043D\u043E\u0435_\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435\"\
+  \n  , {% if '\u041F\u043E\u043B' in filter_values('value_attr') %} gender_desc {%\
+  \ else %} '   ' {% endif %} as \"\u041F\u043E\u043B\"\n  , {% if '\u041D\u043E\u043C\
+  \u0435\u0440 \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0430' in filter_values('value_attr')\
+  \ %} contact_main_phone_no {% else %} '   ' {% endif %} as \"\u041D\u043E\u043C\u0435\
+  \u0440_\u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0430\"\n  , {% if '\u041B\u0438\
+  \u0447\u043D\u0430\u044F \u043F\u043E\u0447\u0442\u0430' in filter_values('value_attr')\
+  \ %} prs_email_address_txt {% else %} '   ' {% endif %} as \"\u041B\u0438\u0447\u043D\
+  \u0430\u044F_\u043F\u043E\u0447\u0442\u0430\"\n  \n  , {% if '\u0413\u043E\u0440\
+  \u043E\u0434 \u043E\u0442\u043F\u0440\u0430\u0432\u043A\u0438 \u0434\u043E\u043A\
+  \u0443\u043C\u0435\u043D\u0442\u043E\u0432 \u0438\u0437 1\u0421' in filter_values('value_attr')\
+  \ %} doc_city_nm {% else %} '   ' {% endif %} as \"\u0413\u043E\u0440\u043E\u0434\
+  _\u043E\u0442\u043F\u0440\u0430\u0432\u043A\u0438_\u0434\u043E\u043A\u0443\u043C\
+  \u0435\u043D\u0442\u043E\u0432_\u0438\u0437_1\u0421\"\n  , {% if '\u041F\u043E\u043B\
+  \u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u043F\u0440\u043E\u0436\u0438\
+  \u0432\u0430\u043D\u0438\u044F' in filter_values('value_attr') %} residential_full_address_txt\
+  \ {% else %} '   ' {% endif %} as \"\u041F\u043E\u043B\u043D\u044B\u0439_\u0430\u0434\
+  \u0440\u0435\u0441_\u043F\u0440\u043E\u0436\u0438\u0432\u0430\u043D\u0438\u044F\"\
+  \n  , {% if '\u041F\u043E\u043B\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441\
+  \ \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0438' in filter_values('value_attr')\
+  \ %} registration_full_address_txt {% else %} '   ' {% endif %} as \"\u041F\u043E\
+  \u043B\u043D\u044B\u0439_\u0430\u0434\u0440\u0435\u0441_\u0440\u0435\u0433\u0438\
+  \u0441\u0442\u0440\u0430\u0446\u0438\u0438\"\n\n--\u0410\u0442\u0440\u0438\u0431\
+  \u0443\u0442\u044B \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430\n\
+  \  , {% if '\u041E\u0444\u0438\u0441' in filter_values('value_attr') %} office_desc\
+  \ {% else %} '   ' {% endif %} as \"\u041E\u0444\u0438\u0441\"\n  , {% if '\u041B\
+  \u043E\u0433\u0438\u043D' in filter_values('value_attr') %} ad_login {% else %}\
+  \ '   ' {% endif %} as \"\u041B\u043E\u0433\u0438\u043D\"\n  , {% if '\u0420\u0430\
+  \u0431\u043E\u0447\u0430\u044F \u043F\u043E\u0447\u0442\u0430' in filter_values('value_attr')\
+  \ %} wrk_email_address_txt {% else %} '   ' {% endif %} as \"\u0420\u0430\u0431\u043E\
+  \u0447\u0430\u044F_\u043F\u043E\u0447\u0442\u0430\"\n  , {% if 'WO \u043B\u043E\u0433\
+  \u0438\u043D' in filter_values('value_attr') %} wo_employee_login {% else %} ' \
+  \  ' {% endif %} as \"WO_\u043B\u043E\u0433\u0438\u043D\"\n  , {% if '\u0420\u0430\
+  \u0437\u043C\u0435\u0440 \u043E\u0434\u0435\u0436\u0434\u044B' in filter_values('value_attr')\
+  \ %} clothes_size_code {% else %} '   ' {% endif %} as \"\u0420\u0430\u0437\u043C\
+  \u0435\u0440_\u043E\u0434\u0435\u0436\u0434\u044B\"\n  , {% if '\u041E\u0441\u043D\
+  \u043E\u0432\u043D\u043E\u0439 Siebel_ID' in filter_values('value_attr') %} party_id\
+  \ {% else %} '   ' {% endif %} as \"\u041E\u0441\u043D\u043E\u0432\u043D\u043E\u0439\
+  _Siebel_ID\"\n  , {% if '\u0422\u0438\u043F \u0447\u0438\u0441\u043B\u0435\u043D\
+  \u043D\u043E\u0441\u0442\u0438' in filter_values('value_attr') %} active_type_nm\
+  \ {% else %} '   ' {% endif %} as \"\u0422\u0438\u043F_\u0447\u0438\u0441\u043B\u0435\
+  \u043D\u043D\u043E\u0441\u0442\u0438\"\n  , {% if '\u0414\u0430\u0442\u0430 \u0443\
+  \u0432\u043E\u043B\u044C\u043D\u0435\u043D\u0438\u044F \u0438\u0437 \u043A\u043E\
+  \u043C\u043F\u0430\u043D\u0438\u0438' in filter_values('value_attr') %} company_fire_dt\
+  \ {% else %} '   ' {% endif %} as \"\u0414\u0430\u0442\u0430_\u0443\u0432\u043E\u043B\
+  \u044C\u043D\u0435\u043D\u0438\u044F_\u0438\u0437_\u043A\u043E\u043C\u043F\u0430\
+  \u043D\u0438\u0438\"\n  , {% if '\u041E\u0446\u0435\u043D\u043A\u0430 \u0440\u0435\
+  \u0432\u044C\u044E' in filter_values('value_attr') %} summary_score {% else %} '\
+  \   ' {% endif %} as \"\u041E\u0446\u0435\u043D\u043A\u0430_\u0440\u0435\u0432\u044C\
+  \u044E\"\n  , {% if '\u0413\u0440\u0443\u043F\u043F\u0430 \u0441\u0442\u0430\u0436\
+  \u0430' in filter_values('value_attr') %} experience_group_nm {% else %} '   ' {%\
+  \ endif %} as \"\u0413\u0440\u0443\u043F\u043F\u0430_\u0441\u0442\u0430\u0436\u0430\
+  \"\n  , {% if '\u0421\u0442\u0430\u0436 \u0432 \u0433\u043E\u0434\u0430\u0445' in\
+  \ filter_values('value_attr') %} work_experience_year {% else %} '   ' {% endif\
+  \ %} as \"\u0421\u0442\u0430\u0436_\u0432_\u0433\u043E\u0434\u0430\u0445\"\n  ,\
+  \ {% if '\u0412\u043E\u0437\u0440\u0430\u0441\u0442' in filter_values('value_attr')\
+  \ %} mdm_employee_age {% else %} '   ' {% endif %} as \"\u0412\u043E\u0437\u0440\
+  \u0430\u0441\u0442\"\n\n\n--\u0410\u0442\u0440\u0438\u0431\u0443\u0442\u044B \u042E\
+  \u0421\n  , {% if '\u0422\u0438\u043F \u0442\u0440\u0443\u0434\u043E\u0443\u0441\
+  \u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430' in filter_values('value_attr')\
+  \ %} employment_relation_type_desc {% else %}'   ' {% endif %} as \"\u0422\u0438\
+  \u043F_\u0442\u0440\u0443\u0434\u043E\u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\
+  \u0432\u0430\"\n  , {% if '\u0421\u0442\u0430\u0442\u0443\u0441 \u043F\u043E\u0437\
+  \u0438\u0446\u0438\u0438' in filter_values('value_attr') %} employee_status_desc\
+  \ {% else %} '   ' {% endif %} as \"\u0421\u0442\u0430\u0442\u0443\u0441_\u043F\u043E\
+  \u0437\u0438\u0446\u0438\u0438\"\n  --, {% if '\u0414\u0430\u0442\u0430 \u043D\u0430\
+  \u0439\u043C\u0430 \u043D\u0430 \u044E\u0440 \u043F\u043E\u0437\u0438\u0446\u0438\
+  \u044E' in filter_values('value_attr') %} toString(formatDateTime(legal_hire_dt,'%d-%m-%Y'))\
+  \ {% else %} '   ' {% endif %} as \"\u0414\u0430\u0442\u0430_\u043D\u0430\u0439\u043C\
+  \u0430_\u043D\u0430_\u044E\u0440_\u043F\u043E\u0437\u0438\u0446\u0438\u044E\"\n\
+  \  , {% if '\u0414\u0430\u0442\u0430 \u043D\u0430\u0439\u043C\u0430 \u043D\u0430\
+  \ \u044E\u0440 \u043F\u043E\u0437\u0438\u0446\u0438\u044E' in filter_values('value_attr')\
+  \ %} legal_hire_dt {% else %} '   ' {% endif %} as \"\u0414\u0430\u0442\u0430_\u043D\
+  \u0430\u0439\u043C\u0430_\u043D\u0430_\u044E\u0440_\u043F\u043E\u0437\u0438\u0446\
+  \u0438\u044E\"\n  , {% if '\u0414\u0430\u0442\u0430 \u0443\u0432\u043E\u043B\u044C\
+  \u043D\u0435\u043D\u0438\u044F \u0441 \u044E\u0440 \u043F\u043E\u0437\u0438\u0446\
+  \u0438\u0438' in filter_values('value_attr') %} legal_fire_dt {% else %} '   ' {%\
+  \ endif %} as \"\u0414\u0430\u0442\u0430_\u0443\u0432\u043E\u043B\u044C\u043D\u0435\
+  \u043D\u0438\u044F_\u0441_\u044E\u0440_\u043F\u043E\u0437\u0438\u0446\u0438\u0438\
+  \"\n  , {% if '\u0422\u0438\u043F \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0430\
+  ' in filter_values('value_attr') %} employee_contract_type_desc {% else %} '   '\
+  \ {% endif %} as \"\u0422\u0438\u043F_\u0434\u043E\u0433\u043E\u0432\u043E\u0440\
+  \u0430\"\n  , {% if '\u0414\u043E\u043B\u0436\u043D\u043E\u0441\u0442\u044C' in\
+  \ filter_values('value_attr') %} legal_position_nm {% else %} '   ' {% endif %}\
+  \ as \"\u0414\u043E\u043B\u0436\u043D\u043E\u0441\u0442\u044C\"\n  , {% if '\u0422\
+  \u0430\u0431\u0435\u043B\u044C\u043D\u044B\u0439 \u043D\u043E\u043C\u0435\u0440\
+  ' in filter_values('value_attr') %} employee_main_work_no {% else %} '   ' {% endif\
+  \ %} as \"\u0422\u0430\u0431\u0435\u043B\u044C\u043D\u044B\u0439_\u043D\u043E\u043C\
+  \u0435\u0440\"\n  , {% if '\u042E\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C\
+  \ 1' in filter_values('value_attr') %} lvl1_legal_unit_nm {% else %} '   ' {% endif\
+  \ %} as \"\u042E\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_1\"\n  , {% if\
+  \ '\u042E\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 2' in filter_values('value_attr')\
+  \ %} lvl2_legal_unit_nm {% else %} '   ' {% endif %} as \"\u042E\u0421_\u0423\u0440\
+  \u043E\u0432\u0435\u043D\u044C_2\"\n  , {% if '\u042E\u0421 - \u0423\u0440\u043E\
+  \u0432\u0435\u043D\u044C 3' in filter_values('value_attr') %} lvl3_legal_unit_nm\
+  \ {% else %} '   ' {% endif %} as \"\u042E\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\
+  \u044C_3\"\n  , {% if '\u042E\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C\
+  \ 4' in filter_values('value_attr') %} lvl4_legal_unit_nm {% else %} '   ' {% endif\
+  \ %} as \"\u042E\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_4\"\n  , {% if\
+  \ '\u042E\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 5' in filter_values('value_attr')\
+  \ %} lvl5_legal_unit_nm {% else %} '   ' {% endif %} as \"\u042E\u0421_\u0423\u0440\
+  \u043E\u0432\u0435\u043D\u044C_5\"\n  , {% if '\u042E\u0421 - \u0423\u0440\u043E\
+  \u0432\u0435\u043D\u044C 6' in filter_values('value_attr') %} lvl6_legal_unit_nm\
+  \ {% else %} '   ' {% endif %} as \"\u042E\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\
+  \u044C_6\"\n  , {% if '\u042E\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C\
+  \ 7' in filter_values('value_attr') %} lvl7_legal_unit_nm {% else %} '   ' {% endif\
+  \ %} as \"\u042E\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_7\"\n\n  , {%\
+  \ if '\u0424\u0418 \u0440\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E\
+  \u0433\u043E HR' in filter_values('value_attr') %} hr_head_nm {% else %} '   ' {%\
+  \ endif %} as \"\u0424\u0418_\u0440\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\
+  \u043D\u043E\u0433\u043E_HR\"\n  , {% if '\u041B\u043E\u0433\u0438\u043D \u0440\u0435\
+  \u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E\u0433\u043E HR' in filter_values('value_attr')\
+  \ %} regional_hr_login {% else %} '   ' {% endif %} as \"\u041B\u043E\u0433\u0438\
+  \u043D_\u0440\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E\u0433\u043E\
+  _HR\"\n\n  --, {% if '\u0418\u043C\u044F \u0440\u0435\u0433\u0438\u043E\u043D\u0430\
+  \u043B\u044C\u043D\u043E\u0433\u043E HR' in filter_values('value_attr') %} hr_head_first_nm\
+  \ {% else %} '   ' {% endif %} as \"\u0418\u043C\u044F_\u0440\u0435\u0433\u0438\u043E\
+  \u043D\u0430\u043B\u044C\u043D\u043E\u0433\u043E_HR\"\n  , {% if '\u0421\u0440\u043E\
+  \u0447\u043D\u044B\u0439/\u0431\u0435\u0441\u0441\u0440\u043E\u0447\u043D\u044B\u0439\
+  \ \u0422\u0414' in filter_values('value_attr') %} employee_main_contract_type_nm\
+  \ {% else %} '   ' {% endif %} as \"\u0421\u0440\u043E\u0447\u043D\u044B\u0439_\u0431\
+  \u0435\u0441\u0441\u0440\u043E\u0447\u043D\u044B\u0439_\u0422\u0414\"\n  , {% if\
+  \ '\u0414\u0430\u0442\u0430 \u043E\u043A\u043E\u043D\u0447\u0430\u043D\u0438\u044F\
+  \ \u0422\u0414' in filter_values('value_attr') %} employee_main_contract_end_dt\
+  \ {% else %} '   ' {% endif %} as \"\u0414\u0430\u0442\u0430_\u043E\u043A\u043E\u043D\
+  \u0447\u0430\u043D\u0438\u044F_\u0422\u0414\"\n  , {% if '\u0424\u043B\u0430\u0433\
+  \ \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F \u042E\
+  \u0421' in filter_values('value_attr') %} toString(legal_head_flg) {% else %} '\
+  \   ' {% endif %} as \"\u0424\u043B\u0430\u0433_\u0440\u0443\u043A\u043E\u0432\u043E\
+  \u0434\u0438\u0442\u0435\u043B\u044F_\u042E\u0421\"\n  , {% if '\u041A\u043E\u0434\
+  \ \u044E\u043D\u0438\u0442\u0430 \u0438\u0437 1\u0421' in filter_values('value_attr')\
+  \ %} code_1c {% else %} '   ' {% endif %} as \"\u041A\u043E\u0434_\u044E\u043D\u0438\
+  \u0442\u0430_\u0438\u0437_1\u0421\"\n  , {% if '\u0428\u0442\u0430\u0442\u043D\u043E\
+  \u0435 \u0440\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u0435' in filter_values('value_attr')\
+  \ %} employee_main_schedule_nm {% else %} '   ' {% endif %} as \"\u0428\u0442\u0430\
+  \u0442\u043D\u043E\u0435_\u0440\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u0435\
+  \"\n  , {% if '\u041D\u043E\u043C\u0435\u0440 \u0442\u0440\u0443\u0434\u043E\u0432\
+  \u043E\u0433\u043E \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0430' in filter_values('value_attr')\
+  \ %} emp_contract_no {% else %} '   ' {% endif %} as \"\u041D\u043E\u043C\u0435\u0440\
+  _\u0442\u0440\u0443\u0434\u043E\u0432\u043E\u0433\u043E_\u0434\u043E\u0433\u043E\
+  \u0432\u043E\u0440\u0430\"\n\n--\u0410\u0442\u0440\u0438\u0431\u0443\u0442\u044B\
+  \ \u0423\u0421\n  , {% if '\u0423\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C\
+  \ 3' in filter_values('value_attr') %} lvl3_mapped_management_unit_nm {% else %}\
+  \ '   ' {% endif %} as \"\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C\
+  _3\"\n  , {% if '\u0423\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 4' in\
+  \ filter_values('value_attr') %} lvl4_mapped_management_unit_nm {% else %} '   '\
+  \ {% endif %} as \"\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_4\"\n\
+  \  , {% if '\u0423\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 5' in filter_values('value_attr')\
+  \ %} lvl5_mapped_management_unit_nm {% else %} '   ' {% endif %} as \"\u0423\u0421\
+  _\u0423\u0440\u043E\u0432\u0435\u043D\u044C_5\"\n  , {% if '\u0423\u0421 - \u0423\
+  \u0440\u043E\u0432\u0435\u043D\u044C 6' in filter_values('value_attr') %} lvl6_mapped_management_unit_nm\
+  \ {% else %} '   ' {% endif %} as \"\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\
+  \u044C_6\"\n  , {% if '\u0423\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C\
+  \ 7' in filter_values('value_attr') %} lvl7_mapped_management_unit_nm {% else %}\
+  \ '   ' {% endif %} as \"\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C\
+  _7\"\n  , {% if '\u0423\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 8' in\
+  \ filter_values('value_attr') %} lvl8_mapped_management_unit_nm {% else %} '   '\
+  \ {% endif %} as \"\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_8\"\n\
+  \  , {% if '\u0423\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 9' in filter_values('value_attr')\
+  \ %} lvl9_mapped_management_unit_nm {% else %} '   ' {% endif %} as \"\u0423\u0421\
+  _\u0423\u0440\u043E\u0432\u0435\u043D\u044C_9\"\n  , {% if '\u0423\u0421 - \u0423\
+  \u0440\u043E\u0432\u0435\u043D\u044C 10' in filter_values('value_attr') %} lvl10_mapped_management_unit_nm\
+  \ {% else %} '   ' {% endif %} as \"\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\
+  \u044C_10\"\n  , {% if '\u0423\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C\
+  \ 11' in filter_values('value_attr') %} lvl11_mapped_management_unit_nm {% else\
+  \ %} '   ' {% endif %} as \"\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C\
+  _11\"\n  , {% if '\u042E\u043D\u0438\u0442 \u0423\u0421' in filter_values('value_attr')\
+  \ %} mapped_management_unit_nm {% else %} '   ' {% endif %} as \"\u042E\u043D\u0438\
+  \u0442_\u0423\u0421\"\n  , {% if 'HQ|Line|Support' in filter_values('value_attr')\
+  \ %} emp_specialization_oper_code {% else %} '   ' {% endif %} as \"HQ_Line_Support\"\
+  \n  , {% if 'IT|nonIT' in filter_values('value_attr') %} emp_specialization_it_code\
+  \ {% else %} '   ' {% endif %} as \"IT_nonIT\"\n  , {% if '\u0421\u0442\u0440\u0438\
+  \u043C' in filter_values('value_attr') %} emp_stream_desc {% else %} '   ' {% endif\
+  \ %} as \"\u0421\u0442\u0440\u0438\u043C\"\n\n  , {% if '\u0421\u043F\u0435\u0446\
+  \u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044F' in filter_values('value_attr')\
+  \ %} emp_specialization_desc {% else %} '   ' {% endif %} as \"\u0421\u043F\u0435\
+  \u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044F\"\n  , {% if '\u0424\
+  \u043B\u0430\u0433 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\
+  \u044F \u0423\u0421' in filter_values('value_attr') %} toString(management_head_flg)\
+  \ {% else %} '   ' {% endif %} as \"\u0424\u043B\u0430\u0433_\u0440\u0443\u043A\u043E\
+  \u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F_\u0423\u0421\"\n  , {% if '\u0424\
+  \u0418 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F\
+  ' in filter_values('value_attr') %} management_head_nm {% else %} '   ' {% endif\
+  \ %} as \"\u0424\u0418_\u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\
+  \u043B\u044F\"\n  , {% if '\u041F\u043E\u0447\u0442\u0430 \u0440\u0443\u043A\u043E\
+  \u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F' in filter_values('value_attr')\
+  \ %} head_wrk_email_address_txt {% else %} '   ' {% endif %} as \"\u041F\u043E\u0447\
+  \u0442\u0430_\u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F\
+  \"\n  , {% if '\u041B\u043E\u0433\u0438\u043D \u0440\u0443\u043A\u043E\u0432\u043E\
+  \u0434\u0438\u0442\u0435\u043B\u044F' in filter_values('value_attr') %} head_login\
+  \ {% else %} '   ' {% endif %} as \"\u041B\u043E\u0433\u0438\u043D_\u0440\u0443\u043A\
+  \u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F\"\n  , {% if '\u041B\u043E\
+  \u0433\u0438\u043D HRBP' in filter_values('value_attr') %} hrbp_login {% else %}\
+  \ '   ' {% endif %} as \"\u041B\u043E\u0433\u0438\u043D_HRBP\"\n  , {% if '\u041B\
+  \u043E\u0433\u0438\u043D HRAP' in filter_values('value_attr') %} hrap_login {% else\
+  \ %} '   ' {% endif %} as \"\u041B\u043E\u0433\u0438\u043D_HRAP\"\n  , {% if 'WO\
+  \ \u043B\u043E\u0433\u0438\u043D \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\
+  \u0442\u0435\u043B\u044F' in filter_values('value_attr') %} head_wo_employee_login\
+  \ {% else %} '   ' {% endif %} as \"WO_\u043B\u043E\u0433\u0438\u043D_\u0440\u0443\
+  \u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F\"\n\n  --, {% if '\u0418\
+  \u043C\u044F \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F\
+  ' in filter_values('value_attr') %} management_head_first_nm {% else %} '   ' {%\
+  \ endif %} as \"\u0418\u043C\u044F_\u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\
+  \u0442\u0435\u043B\u044F\"\n  , {% if '\u0424\u0418 HRBP' in filter_values('value_attr')\
+  \ %} hrbp_nm {% else %} '   ' {% endif %} as \"\u0424\u0418_HRBP\"\n  --, {% if\
+  \ '\u0418\u043C\u044F HRBP' in filter_values('value_attr') %} hrbp_first_nm {% else\
+  \ %} '   ' {% endif %} as \"\u0418\u043C\u044F_HRBP\"\n  , {% if '\u0423\u0440\u043E\
+  \u0432\u0435\u043D\u044C \u043F\u043E\u0437\u0438\u0446\u0438\u0438' in filter_values('value_attr')\
+  \ %} seniority {% else %} '   ' {% endif %} as \"\u0423\u0440\u043E\u0432\u0435\u043D\
+  \u044C_\u043F\u043E\u0437\u0438\u0446\u0438\u0438\"\n  , {% if '\u0413\u0440\u0435\
+  \u0439\u0434' in filter_values('value_attr') %} grade {% else %} '   ' {% endif\
+  \ %} as \"\u0413\u0440\u0435\u0439\u0434\"\n  , {% if '\u0414\u0430\u0442\u0430\
+  \ \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u0430 \u0432 \u0442\u0435\u043A\u0443\
+  \u0449\u0438\u0439 \u0433\u0440\u0435\u0439\u0434' in filter_values('value_attr')\
+  \ %} change_grade_dt_text {% else %} '   ' {% endif %} as \"\u0414\u0430\u0442\u0430\
+  _\u043F\u0435\u0440\u0435\u0432\u043E\u0434\u0430_\u0432_\u0442\u0435\u043A\u0443\
+  \u0449\u0438\u0439_\u0433\u0440\u0435\u0439\u0434\"\n  \n  , {% if '\u0414\u0430\
+  \u0442\u0430 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u0430 \u0432 \u0442\u0435\
+  \u043A\u0443\u0449\u0443\u044E \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\
+  \u0430\u0446\u0438\u044E' in filter_values('value_attr') %} change_specialization_dt_text\
+  \ {% else %} '   ' {% endif %} as \"\u0414\u0430\u0442\u0430_\u043F\u0435\u0440\u0435\
+  \u0432\u043E\u0434\u0430_\u0432_\u0442\u0435\u043A\u0443\u0449\u0443\u044E_\u0441\
+  \u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044E\"\n  ,\
+  \ {% if '\u0414\u0430\u0442\u0430 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u0430\
+  \ \u0432 \u0442\u0435\u043A\u0443\u0449\u0443\u044E \u043A\u043E\u043C\u0430\u043D\
+  \u0434\u0443' in filter_values('value_attr') %} change_management_unit_dt_text {%\
+  \ else %} '   ' {% endif %} as \"\u0414\u0430\u0442\u0430_\u043F\u0435\u0440\u0435\
+  \u0432\u043E\u0434\u0430_\u0432_\u0442\u0435\u043A\u0443\u0449\u0443\u044E_\u043A\
+  \u043E\u043C\u0430\u043D\u0434\u0443\"\n  , {% if '\u0414\u0430\u0442\u0430 \u043F\
+  \u0435\u0440\u0435\u0432\u043E\u0434\u0430 \u0432 \u0440\u0443\u043A\u043E\u0432\
+  \u043E\u0434\u0438\u0442\u0435\u043B\u044F' in filter_values('value_attr') %} change_management_head_dt\
+  \ {% else %} '   ' {% endif %} as \"\u0414\u0430\u0442\u0430_\u043F\u0435\u0440\u0435\
+  \u0432\u043E\u0434\u0430_\u0432_\u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\
+  \u0442\u0435\u043B\u044F\"\n  \n  , {% if '\u041F\u0440\u0438\u043D\u0430\u0434\u043B\
+  \u0435\u0436\u043D\u043E\u0441\u0442\u044C \u043A T-\u043E\u0431\u0440\u0430\u0437\
+  \u043E\u0432\u0430\u043D\u0438\u044E' in filter_values('value_attr') %} t_education_desc\
+  \ {% else %} '   ' {% endif %} as \"\u041F\u0440\u0438\u043D\u0430\u0434\u043B\u0435\
+  \u0436\u043D\u043E\u0441\u0442\u044C_\u043A_T-\u043E\u0431\u0440\u0430\u0437\u043E\
+  \u0432\u0430\u043D\u0438\u044E\"\n  , {% if '\u041F\u043E\u043B\u043E\u0436\u0435\
+  \u043D\u0438\u0435 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430\
+  \ \u0432 \u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0435' in filter_values('value_attr')\
+  \ %} subordination_lvl {% else %} '   ' {% endif %} as \"\u041F\u043E\u043B\u043E\
+  \u0436\u0435\u043D\u0438\u0435_\u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\
+  \u0430_\u0432_\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0435\"\n  \n  ,\
+  \ {% if '\u0423\u0440\u043E\u0432\u0435\u043D\u044C \u043E\u0431\u0440\u0430\u0437\
+  \u043E\u0432\u0430\u043D\u0438\u044F' in filter_values('value_attr') %} education_degree_unique_max\
+  \ {% else %} '   ' {% endif %} as \"\u0423\u0440\u043E\u0432\u0435\u043D\u044C_\u043E\
+  \u0431\u0440\u0430\u0437\u043E\u0432\u0430\u043D\u0438\u044F\"\n  , {% if '\u0421\
+  \u0435\u0433\u043C\u0435\u043D\u0442 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\
+  \u0442\u0435\u043B\u044F' in filter_values('value_attr') %} head_lvl_segment {%\
+  \ else %} '   ' {% endif %} as \"\u0421\u0435\u0433\u043C\u0435\u043D\u0442_\u0440\
+  \u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F\"\n  -- , business_year_nm\n\
+  \  -- , business_month_nm\n  -- , business_day_nm\n  , active_type_nm \n  \n  --MasterID\
+  \ \u0441\u043F\u0435\u0446 \u0440\u043E\u043B\u0435\u0439\n  , {% if 'MasterID \u0440\
+  \u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F' in filter_values('value_attr')\
+  \ %} management_head_mdm_employee_rk {% else %} '   ' {% endif %} as \"MasterID_\u0440\
+  \u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F\"\n  , {% if\
+  \ 'MasterID HRBP' in filter_values('value_attr') %} hrbp_mdm_employee_rk {% else\
+  \ %} '   ' {% endif %} as \"MasterID_HRBP\"\n  , {% if 'MasterID HRAP' in filter_values('value_attr')\
+  \ %} hrap_mdm_employee_rk {% else %} '   ' {% endif %} as \"MasterID_HRAP\"\n  ,\
+  \ {% if 'MasterID \u0440\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E\
+  \u0433\u043E HR' in filter_values('value_attr') %} hr_head_mdm_employee_rk {% else\
+  \ %} '   ' {% endif %} as \"MasterID_\u0440\u0435\u0433\u0438\u043E\u043D\u0430\u043B\
+  \u044C\u043D\u043E\u0433\u043E_HR\"\n\n  , {% if '\u0412\u043E\u0437\u0440\u0430\
+  \u0441\u0442\u043D\u044B\u0435 \u043F\u043E\u043A\u043E\u043B\u0435\u043D\u0438\u044F\
+  ' in filter_values('value_attr') %} age_generation_nm {% else %} '   ' {% endif\
+  \ %} as \"\u0412\u043E\u0437\u0440\u0430\u0441\u0442\u043D\u044B\u0435_\u043F\u043E\
+  \u043A\u043E\u043B\u0435\u043D\u0438\u044F\"\n  , {% if '\u041D\u0430\u043F\u0440\
+  \u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u043E\u0431\u0440\u0430\u0437\u043E\u0432\
+  \u0430\u043D\u0438\u044F' in filter_values('value_attr') %} education_spec_nm {%\
+  \ else %} '   ' {% endif %} as \"\u041D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\
+  \u043D\u0438\u0435_\u043E\u0431\u0440\u0430\u0437\u043E\u0432\u0430\u043D\u0438\u044F\
+  \"\n  , {% if '\u041D\u0430\u043B\u0438\u0447\u0438\u0435 \u0434\u0435\u0442\u0435\
+  \u0439' in filter_values('value_attr') %} has_children_flg {% else %} '   ' {% endif\
+  \ %} as \"\u041D\u0430\u043B\u0438\u0447\u0438\u0435_\u0434\u0435\u0442\u0435\u0439\
+  \"\n\n\nfrom (\n    select  mdm_employee_rk\n    , company_hire_dt\n    , warden_array.3\
+  \ as warden_first_nm\n    , array_functional_unit_rk\n    , employee_document_type_desc\n\
+  \    , residential_state_nm\n    , residential_city_nm\n    , doc_city_nm\n    ,\
+  \ gender_desc\n    , office_desc\n    , ad_login\n    , wrk_email_address_txt\n\
+  \    , wo_employee_login\n    , clothes_size_code\n    , party_id\n    , company_fire_dt\n\
+  \    , employment_relation_type_desc\n    , employee_status_desc\n    , legal_hire_dt\n\
+  \    , legal_fire_dt\n    , employee_contract_type_desc\n    , legal_position_nm\n\
+  \    , employee_main_work_no\n    , lvl1_legal_unit_nm\n    , lvl2_legal_unit_nm\n\
+  \    , lvl3_legal_unit_nm\n    , lvl4_legal_unit_nm\n    , lvl5_legal_unit_nm\n\
+  \    , lvl6_legal_unit_nm\n    , lvl7_legal_unit_nm\n    , legal_head_flg\n    ,\
+  \ employee_main_contract_type_nm\n    , employee_main_contract_end_dt\n    , lvl3_mapped_management_unit_nm\n\
+  \    , lvl4_mapped_management_unit_nm\n    , lvl5_mapped_management_unit_nm\n  \
+  \  , lvl6_mapped_management_unit_nm\n    , lvl7_mapped_management_unit_nm\n    ,\
+  \ lvl8_mapped_management_unit_nm\n    , lvl9_mapped_management_unit_nm\n    , lvl10_mapped_management_unit_nm\n\
+  \    , lvl11_mapped_management_unit_nm\n    , mapped_management_unit_nm\n    , emp_specialization_oper_code\n\
+  \    , emp_specialization_it_code\n    , emp_stream_desc\n    , emp_specialization_desc\n\
+  \    , management_head_flg\n    -- , business_year_nm\n    -- , business_month_nm\n\
+  \    -- , business_day_nm\n    , active_type_nm\n    , t_education_desc\n    , employee_link\n\
+  \    , head_wrk_email_address_txt\n    , lvl1_functional_unit_nm\n    , lvl2_functional_unit_nm\n\
+  \    , lvl3_functional_unit_nm\n    , lvl4_functional_unit_nm\n    , lvl5_functional_unit_nm\n\
+  \    , lvl6_functional_unit_nm\n    , lvl7_functional_unit_nm\n    , lvl8_functional_unit_nm\n\
+  \    , lvl9_functional_unit_nm\n    , lvl10_functional_unit_nm\n    , lvl11_functional_unit_nm\n\
+  \    , lvl12_functional_unit_nm\n    , allocation_prt_norm\n    , experience_group_nm\n\
+  \    , head_login\n    , hrbp_login\n    , hrap_login\n    , regional_hr_login\n\
+  \    , work_experience_year\n    , code_1c\n    , head_wo_employee_login\n    ,\
+  \ employee_main_schedule_nm\n    , emp_contract_no\n    , subordination_lvl\n  \
+  \  , education_degree_unique_max\n    , head_lvl_segment\n    , change_specialization_dt_text\n\
+  \    , change_management_unit_dt_text\n    , change_management_head_dt\n    , hrap_mdm_employee_rk\n\
+  \    , hrbp_mdm_employee_rk\n    , management_head_mdm_employee_rk\n    , hr_head_mdm_employee_rk\n\
+  \    , education_spec_nm\n    --\u0432\u0430\u0440\u0434\u0435\u043D \u043F\u043E\
+  \ \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u043A\u0435\n, if (\n    \n \
+  \   warden_array.5=1\n    or\n      case when warden_array.2 in ('an.a.sokolova','r.dorofeev')\
+  \ then active_type_nm = '\u0421\u0442\u0430\u0436\u0435\u0440\u044B' else 1!=1 end\
+  \ --\u0434\u043E\u0441\u0442\u0443\u043F \u0432 \u0440\u0430\u043C\u043A\u0430\u0445\
+  \ \u0437\u0430\u0434\u0430\u0447\u0438 CROSS-8440 \u0438 CROSS-15151\n    or\n \
+  \     case when warden_array.2 in ('v.larionova', 'a.tumanik','k.a.chernova','i.lelyuk',\
+  \ 'i.s.verbitskaya','k.samolyuk', 'e.tyazheva') then tcr_flg = 1 else 1!=1 end --\u0434\
+  \u043E\u0441\u0442\u0443\u043F \u0432 \u0440\u0430\u043C\u043A\u0430\u0445 \u0437\
+  \u0430\u0434\u0430\u0447\u0438 CROSS-9940\n    or\n      case when warden_array.25\
+  \ =1 then employment_relation_type_desc != '\u0428\u0442\u0430\u0442\u043D\u044B\
+  \u0439 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A' else 1!=1 end --\u0434\
+  \u043E\u0441\u0442\u0443\u043F \u0434\u043B\u044F \u043A\u043E\u043C\u0430\u043D\
+  \u0434\u044B \u0443\u0447\u0435\u0442\u0430 \u0438\u0441\u043F\u043E\u043B\u043D\
+  \u0438\u0442\u0435\u043B\u0435\u0439\n    or\n    hasAny(warden_array.26, profession_nm_array_new)\
+  \ --\u0432\u0430\u0440\u0434\u0435\u043D \u0434\u043B\u044F \u043B\u0438\u0434\u0435\
+  \u0440\u043E\u0432 \u043F\u0440\u043E\u0444\u0435\u0441\u0441\u0438\u0439\n    or\n\
+  \    (\n    (\n      (\n      hasAny(warden_array.6, mapped_management_unit_rk_list)\n\
+  \      and (not hasAny(warden_array.7, mapped_management_unit_rk_list))\n      )\n\
+  \    or \n      (hasAny(warden_array.8, legal_unit_rk_list)\n      )\n    or\n \
+  \     (hasAny(warden_array.9, functional_unit_rk_list))\n    )\n    and (not hasAny(warden_array.10,\
+  \ mdm_employee_rk_list)))\n    ,1,0) as warden_personal_flg\n    \n    --\u0432\u0430\
+  \u0440\u0434\u0435\u043D \u043F\u043E \u0433\u0440\u0435\u0439\u0434\u0443\n   \
+  \ , if (\n    warden_array.5=1\n    or\n      hasAny(warden_array.26, profession_nm_array_new)\
+  \ --\u0432\u0430\u0440\u0434\u0435\u043D \u0434\u043B\u044F \u043B\u0438\u0434\u0435\
+  \u0440\u043E\u0432 \u043F\u0440\u043E\u0444\u0435\u0441\u0441\u0438\u0439\n    or\n\
+  \      case when warden_array.2 in ('v.larionova', 'a.tumanik','k.a.chernova','i.lelyuk',\
+  \ 'i.s.verbitskaya','k.samolyuk', 'e.tyazheva') then tcr_flg = 1 else 1!=1 end --\u0434\
+  \u043E\u0441\u0442\u0443\u043F \u0432 \u0440\u0430\u043C\u043A\u0430\u0445 \u0437\
+  \u0430\u0434\u0430\u0447\u0438 CROSS-9940\n            or\n      warden_array.2\
+  \ in ('v.poljakov') and v_poljakov_access_flg = 1 --\u0434\u043E\u0441\u0442\u0443\
+  \u043F \u0432 \u0440\u0430\u043C\u043A\u0430\u0445 \u0437\u0430\u0434\u0430\u0447\
+  \u0438 CROSS-16526\n            or\n      (\n    (\n      (\n      hasAny(warden_array.11,\
+  \ mapped_management_unit_rk_list)\n      and (not hasAny(warden_array.12, mapped_management_unit_rk_list))\n\
+  \      )\n    or \n      (hasAny(warden_array.13, legal_unit_rk_list)\n      )\n\
+  \    or\n      (hasAny(warden_array.14, functional_unit_rk_list))\n    )\n    and\
+  \ (not hasAny(warden_array.15, mdm_employee_rk_list)))\n    ,1,0) as warden_grade_flg\n\
+  \    \n    , if( warden_personal_flg=1, last_nm, '\u26D4\uFE0F \u041D\u0435\u0442\
+  \ \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A \u0434\u0430\u043D\u043D\u044B\
+  \u043C') as last_nm\n    , if( warden_personal_flg=1, first_nm, '\u26D4\uFE0F \u041D\
+  \u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A \u0434\u0430\u043D\
+  \u043D\u044B\u043C') as first_nm\n    , if( warden_personal_flg=1, full_nm, '\u26D4\
+  \uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A \u0434\
+  \u0430\u043D\u043D\u044B\u043C') as full_nm\n    , if( warden_personal_flg=1, birth_dt,\
+  \  toDateTime('5999-01-01')) as birth_dt\n    , if( warden_personal_flg=1, toString(mdm_employee_age)\
+  \ , '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430\
+  \ \u043A \u0434\u0430\u043D\u043D\u044B\u043C') as mdm_employee_age\n    , if( warden_personal_flg=1,\
+  \ age_generation_nm , '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\
+  \u043F\u0430 \u043A \u0434\u0430\u043D\u043D\u044B\u043C') as age_generation_nm\n\
+  \    , if( warden_personal_flg=1, toString(has_children_flg) , '\u26D4\uFE0F \u041D\
+  \u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A \u0434\u0430\u043D\
+  \u043D\u044B\u043C') as has_children_flg\n\n    , if( warden_personal_flg=1, employee_document_type_desc,\
+  \ '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A\
+  \ \u0434\u0430\u043D\u043D\u044B\u043C') as employee_document_type_desc\n    , if(\
+  \ warden_personal_flg=1, citizenship_country_desc, '\u26D4\uFE0F \u041D\u0435\u0442\
+  \ \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A \u0434\u0430\u043D\u043D\u044B\
+  \u043C') as citizenship_country_desc\n    , if( warden_personal_flg=1, registration_state_nm,\
+  \ '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A\
+  \ \u0434\u0430\u043D\u043D\u044B\u043C') as registration_state_nm\n    , if( warden_personal_flg=1,\
+  \ coalesce(registration_city_nm,registration_settlement_nm), '\u26D4\uFE0F \u041D\
+  \u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A \u0434\u0430\u043D\
+  \u043D\u044B\u043C') as registration_city_nm\n    , if( warden_personal_flg=1, marital_status_desc,\
+  \ '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A\
+  \ \u0434\u0430\u043D\u043D\u044B\u043C') as marital_status_desc\n    , if( warden_personal_flg=1,\
+  \ hr_head_nm, '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\
+  \u0430 \u043A \u0434\u0430\u043D\u043D\u044B\u043C') as hr_head_nm\n    --, if(\
+  \ warden_personal_flg=1, hr_head_first_nm, '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\
+  \u043E\u0441\u0442\u0443\u043F\u0430 \u043A \u0434\u0430\u043D\u043D\u044B\u043C\
+  ') as hr_head_first_nm\n    , if( warden_personal_flg=1, management_head_nm, '\u26D4\
+  \uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A \u0434\
+  \u0430\u043D\u043D\u044B\u043C') as management_head_nm\n    --, if( warden_personal_flg=1,\
+  \ management_head_first_nm, '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\
+  \u0443\u043F\u0430 \u043A \u0434\u0430\u043D\u043D\u044B\u043C') as management_head_first_nm\n\
+  \    , if( warden_personal_flg=1, hrbp_nm, '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\
+  \u043E\u0441\u0442\u0443\u043F\u0430 \u043A \u0434\u0430\u043D\u043D\u044B\u043C\
+  ') as hrbp_nm\n    --, if( warden_personal_flg=1, hrbp_first_nm, '\u26D4\uFE0F \u041D\
+  \u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A \u0434\u0430\u043D\
+  \u043D\u044B\u043C') as hrbp_first_nm\n    , if( warden_personal_flg=1, contact_main_phone_no,\
+  \ '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A\
+  \ \u0434\u0430\u043D\u043D\u044B\u043C') as contact_main_phone_no\n    , if( warden_personal_flg=1,\
+  \ prs_email_address_txt, '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\
+  \u0443\u043F\u0430 \u043A \u0434\u0430\u043D\u043D\u044B\u043C') as prs_email_address_txt\n\
+  \    , if( warden_personal_flg=1, residential_full_address_txt, '\u26D4\uFE0F \u041D\
+  \u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A \u0434\u0430\u043D\
+  \u043D\u044B\u043C') as residential_full_address_txt\n    , if( warden_personal_flg=1,\
+  \ registration_full_address_txt, '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\
+  \u0442\u0443\u043F\u0430 \u043A \u0434\u0430\u043D\u043D\u044B\u043C') as registration_full_address_txt\n\
+  \    \n --\u0432\u0430\u0440\u0434\u0435\u043D \u043F\u043E \u0441\u0435\u043D\u044C\
+  \u043E\u0440\u043D\u043E\u0441\u0442\u0438\n    , if (\n    warden_array.5=1\n \
+  \   or\n      hasAny(warden_array.26, profession_nm_array_new) --\u0432\u0430\u0440\
+  \u0434\u0435\u043D \u0434\u043B\u044F \u043B\u0438\u0434\u0435\u0440\u043E\u0432\
+  \ \u043F\u0440\u043E\u0444\u0435\u0441\u0441\u0438\u0439\n    or\n       case when\
+  \ warden_array.2 in ('v.larionova', 'a.tumanik','k.a.chernova','i.lelyuk', 'i.s.verbitskaya','k.samolyuk',\
+  \ 'e.tyazheva') then tcr_flg = 1 else 1!=1 end --\u0434\u043E\u0441\u0442\u0443\u043F\
+  \ \u0432 \u0440\u0430\u043C\u043A\u0430\u0445 \u0437\u0430\u0434\u0430\u0447\u0438\
+  \ CROSS-9940\n    or\n      warden_array.2 in ('v.poljakov') and v_poljakov_access_flg\
+  \ = 1 --\u0434\u043E\u0441\u0442\u0443\u043F \u0432 \u0440\u0430\u043C\u043A\u0430\
+  \u0445 \u0437\u0430\u0434\u0430\u0447\u0438 CROSS-16526        \n    or\n      \
+  \    ((\n        (\n        hasAny(warden_array.16, mapped_management_unit_rk_list)\n\
+  \        and (not hasAny(warden_array.17, mapped_management_unit_rk_list))\n   \
+  \     )\n      or\n        (\n        hasAny(warden_array.18, legal_unit_rk_list)\n\
+  \        )\n        )\n      and (not hasAny(warden_array.19, mdm_employee_rk_list)))\n\
+  \    ,1,0) as warden_seniority_flg\n    , if( warden_seniority_flg=1, seniority,\
+  \ '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043A\
+  \ \u0434\u0430\u043D\u043D\u044B\u043C') as seniority\n    \n    , if( warden_grade_flg=1,\
+  \ toString(grade), '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\
+  \u043F\u0430 \u043A \u0434\u0430\u043D\u043D\u044B\u043C') as grade\n    , if( warden_grade_flg=1,\
+  \ change_grade_dt_text , '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\
+  \u0443\u043F\u0430 \u043A \u0434\u0430\u043D\u043D\u044B\u043C') as change_grade_dt_text\n\
+  \    \n    --\u0432\u0430\u0440\u0434\u0435\u043D \u043F\u043E \u043E\u0446\u0435\
+  \u043D\u043A\u0435 \u0440\u0435\u0432\u044C\u044E\n    , if (\n    warden_array.5=1\n\
+  \        or\n    (\n    (\n      (\n      hasAny(warden_array.20, mapped_management_unit_rk_list)\n\
+  \      and (not hasAny(warden_array.21, mapped_management_unit_rk_list))\n     \
+  \ )\n    or \n      (hasAny(warden_array.22, legal_unit_rk_list)\n      )\n    or\n\
+  \      (hasAny(warden_array.23, functional_unit_rk_list))\n    )\n    and (not hasAny(warden_array.24,\
+  \ mdm_employee_rk_list)))\n    ,1,0) as warden_review_flg\n    \n    , if( warden_review_flg=1,\
+  \ summary_score, '\u26D4\uFE0F \u041D\u0435\u0442 \u0434\u043E\u0441\u0442\u0443\
+  \u043F\u0430 \u043A \u0434\u0430\u043D\u043D\u044B\u043C') as summary_score\n  \
+  \  from \n{% if '\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\
+  \u044C\u0441\u043A\u0430\u044F \u0434\u0430\u0442\u0430' in filter_values('calendar_date')\
+  \ %}\nprod_proteus.mdm_employee_d_detail_period_functional\n{% else %}\nprod_proteus.mdm_employee_d_detail_last_day_functional\n\
+  {% endif %}\n\nprewhere 1=1\nand {% if '\u0410\u043A\u0442\u0438\u0432\u043D\u0430\
+  \u044F' in filter_values('employee_type') %} active_employee_flg\n  {% elif '\u042E\
+  \u0440\u0438\u0434\u0438\u0447\u0435\u0441\u043A\u0430\u044F' in filter_values('employee_type')\
+  \ %} legal_employee_flg\n  {% else %} 1 {% endif %} = 1\n\nand {% if '\u041F\u043E\
+  \u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u0430\u044F\
+  \ \u0434\u0430\u0442\u0430' in filter_values('calendar_date') %}\nbusiness_dt =\
+  \ toDate({{filter_values('business_dt_detail')}}[1]/1000)\n{% else %}\n1=1\n{% endif\
+  \ %}\n\nand \n{% if '\u0414\u0430' in filter_values('selected_option') %} \n  (warden_array.4\
+  \ = lvl1_mapped_management_unit_rk or \n   warden_array.4 = lvl2_mapped_management_unit_rk\
+  \ or\n   warden_array.4 = lvl3_mapped_management_unit_rk or\n   warden_array.4 =\
+  \ lvl4_mapped_management_unit_rk or\n   warden_array.4 = lvl5_mapped_management_unit_rk\
+  \ or\n   warden_array.4 = lvl6_mapped_management_unit_rk or\n   warden_array.4 =\
+  \ lvl7_mapped_management_unit_rk or\n   warden_array.4 = lvl8_mapped_management_unit_rk\
+  \ or\n   warden_array.4 = lvl9_mapped_management_unit_rk or\n   warden_array.4 =\
+  \ lvl10_mapped_management_unit_rk or\n   warden_array.4 = lvl11_mapped_management_unit_rk\n\
+  \  )\n{% else %} 1=1 {% endif %}\nwhere 1=1\nand \n{% if '\u0422\u0426\u0420 \u0420\
+  \u0424' in filter_values('tcr_type') %} rus_tcr_flg\n  {% elif '\u0422\u0426\u0420\
+  \ \u0421\u041D\u0413' in filter_values('tcr_type') %} foreign_tcr_flg\n  {% elif\
+  \ '\u0422\u0426\u0420 \u0420\u0424 + \u0422\u0426\u0420 \u0421\u041D\u0413' in filter_values('tcr_type')\
+  \ %} tcr_flg\n  {% else %} 1 {% endif %} = 1\n\nand    true\n    {{ apply_filters(filters)\
+  \ }}\n\n--\u043A\u0440\u043E\u0441\u0441-\u0444\u0438\u043B\u044C\u0442\u0440 \u043F\
+  \u043E \u041A\u041F\n{% if filter_values('new_functional_unit_nm')|length > 0 %}\n\
+  and hasAny(kp_structure, splitByString(';', assumeNotNull(array_functional_unit_rk)))\n\
+  {% endif %} \n\n--\u043A\u0440\u043E\u0441\u0441-\u0444\u0438\u043B\u044C\u0442\u0440\
+  \ \u043F\u043E \u0423\u0421\n{% if filter_values('new_management_unit_nm')|length\
+  \ > 0 %}\nand hasAny(mu_structure, [lvl1_mapped_management_unit_rk, lvl2_mapped_management_unit_rk,\
+  \ lvl3_mapped_management_unit_rk, lvl4_mapped_management_unit_rk, lvl5_mapped_management_unit_rk,\
+  \ lvl6_mapped_management_unit_rk, lvl7_mapped_management_unit_rk, lvl8_mapped_management_unit_rk,\
+  \ lvl9_mapped_management_unit_rk, lvl10_mapped_management_unit_rk, lvl11_mapped_management_unit_rk,\
+  \ lvl12_mapped_management_unit_rk])\n{% endif %} \n\n--\u043A\u0440\u043E\u0441\u0441\
+  -\u0444\u0438\u043B\u044C\u0442\u0440 \u043F\u043E \u042E\u0421\n{% if filter_values('new_legal_unit_nm')|length\
+  \ > 0 %}\nand hasAny(lu_structure, [lvl1_legal_unit_rk, lvl2_legal_unit_rk, lvl3_legal_unit_rk,\
+  \ lvl4_legal_unit_rk, lvl5_legal_unit_rk, lvl6_legal_unit_rk, lvl7_legal_unit_rk])\n\
+  {% endif %}\n\n\n)"
+params: null
+template_params: {}
+filter_select_enabled: false
+fetch_values_predicate: null
+extra: null
+uuid: 817c39de-0891-4593-8858-e7fccf54ea30
+metrics:
+- metric_name: cnt_employee
+  verbose_name: ''
+  metric_type: null
+  expression: COUNT(*)
+  description: null
+  d3format: null
+  extra:
+    warning_markdown: null
+  warning_text: null
+- metric_name: TF_cnt_employee
+  verbose_name: ''
+  metric_type: null
+  expression: COUNT(mdm_employee_rk)>1000
+  description: null
+  d3format: null
+  extra:
+    warning_markdown: null
+  warning_text: null
+- metric_name: max_current_year
+  verbose_name: ''
+  metric_type: null
+  expression: MAX(current_year)
+  description: null
+  d3format: null
+  extra:
+    warning_markdown: null
+  warning_text: null
+columns:
+- column_name: "\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_10"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_11"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_12"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_1"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: mdm_employee_rk
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_2"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_3"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0410\u043B\u043B\u043E\u043A\u0430\u0446\u0438\u044F_\u043D\u043E\
+    \u0440\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u043D\u0430\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Float64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_4"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_5"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_6"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_7"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_8"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041A\u041F_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_9"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0414\u0430\u0442\u0430_\u043D\u0430\u0439\u043C\u0430_\u0432_\u043A\
+    \u043E\u043C\u043F\u0430\u043D\u0438\u044E"
+  verbose_name: null
+  is_dttm: true
+  is_active: null
+  type: Nullable(Date)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: array_functional_unit_rk
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: active_type_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: warden_first_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0421\u0441\u044B\u043B\u043A\u0430_\u043D\u0430_\u043C\u0430\u0439\
+    \u0442\u0438"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041F\u0440\u0438\u043D\u0430\u0434\u043B\u0435\u0436\u043D\u043E\
+    \u0441\u0442\u044C_\u043A_T-\u043E\u0431\u0440\u0430\u0437\u043E\u0432\u0430\u043D\
+    \u0438\u044E"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_10"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_11"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: current_year
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: UInt16
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0413\u043E\u0440\u043E\u0434_\u043E\u0442\u043F\u0440\u0430\u0432\
+    \u043A\u0438_\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432_\u0438\
+    \u0437_1\u0421"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041A\u043E\u0434_\u044E\u043D\u0438\u0442\u0430_\u0438\u0437_1\u0421"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u042E\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_1"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u042E\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_2"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_3"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u042E\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_3"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_4"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u042E\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_4"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_5"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u042E\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_5"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_6"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u042E\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_6"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_7"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u042E\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_7"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_8"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0423\u0421_\u0423\u0440\u043E\u0432\u0435\u043D\u044C_9"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: MasterID_HRAP
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041B\u043E\u0433\u0438\u043D_HRAP"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: MasterID_HRBP
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0424\u0418_HRBP"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041B\u043E\u0433\u0438\u043D_HRBP"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "MasterID_\u0440\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\
+    \u043E\u0433\u043E_HR"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "MasterID_\u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\
+    \u043B\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041E\u0441\u043D\u043E\u0432\u043D\u043E\u0439_Siebel_ID"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: HQ_Line_Support
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0424\u0418_\u0440\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\
+    \u043D\u043E\u0433\u043E_HR"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041B\u043E\u0433\u0438\u043D_\u0440\u0435\u0433\u0438\u043E\u043D\
+    \u0430\u043B\u044C\u043D\u043E\u0433\u043E_HR"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: IT_nonIT
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "WO_\u043B\u043E\u0433\u0438\u043D_\u0440\u0443\u043A\u043E\u0432\u043E\
+    \u0434\u0438\u0442\u0435\u043B\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "WO_\u043B\u043E\u0433\u0438\u043D"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0414\u0430\u0442\u0430_\u043F\u0435\u0440\u0435\u0432\u043E\u0434\
+    \u0430_\u0432_\u0442\u0435\u043A\u0443\u0449\u0443\u044E_\u0441\u043F\u0435\u0446\
+    \u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044E"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0414\u0430\u0442\u0430_\u043D\u0430\u0439\u043C\u0430_\u043D\u0430\
+    _\u044E\u0440_\u043F\u043E\u0437\u0438\u0446\u0438\u044E"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0414\u0430\u0442\u0430_\u043F\u0435\u0440\u0435\u0432\u043E\u0434\
+    \u0430_\u0432_\u0442\u0435\u043A\u0443\u0449\u0443\u044E_\u043A\u043E\u043C\u0430\
+    \u043D\u0434\u0443"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0414\u0430\u0442\u0430_\u043F\u0435\u0440\u0435\u0432\u043E\u0434\
+    \u0430_\u0432_\u0442\u0435\u043A\u0443\u0449\u0438\u0439_\u0433\u0440\u0435\u0439\
+    \u0434"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0414\u0430\u0442\u0430_\u0443\u0432\u043E\u043B\u044C\u043D\u0435\
+    \u043D\u0438\u044F_\u0441_\u044E\u0440_\u043F\u043E\u0437\u0438\u0446\u0438\u0438"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0414\u0430\u0442\u0430_\u043F\u0435\u0440\u0435\u0432\u043E\u0434\
+    \u0430_\u0432_\u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\
+    \u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0414\u0430\u0442\u0430_\u0443\u0432\u043E\u043B\u044C\u043D\u0435\
+    \u043D\u0438\u044F_\u0438\u0437_\u043A\u043E\u043C\u043F\u0430\u043D\u0438\u0438"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435_\u0441\u043E\
+    \u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430_\u0432_\u0441\u0442\u0440\u0443\
+    \u043A\u0442\u0443\u0440\u0435"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0414\u0430\u0442\u0430_\u043E\u043A\u043E\u043D\u0447\u0430\u043D\
+    \u0438\u044F_\u0422\u0414"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0421\u0440\u043E\u0447\u043D\u044B\u0439_\u0431\u0435\u0441\u0441\
+    \u0440\u043E\u0447\u043D\u044B\u0439_\u0422\u0414"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041D\u043E\u043C\u0435\u0440_\u0442\u0440\u0443\u0434\u043E\u0432\
+    \u043E\u0433\u043E_\u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0430"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041F\u043E\u043B\u043D\u044B\u0439_\u0430\u0434\u0440\u0435\u0441\
+    _\u043F\u0440\u043E\u0436\u0438\u0432\u0430\u043D\u0438\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041F\u043E\u043B\u043D\u044B\u0439_\u0430\u0434\u0440\u0435\u0441\
+    _\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0438"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0424\u043B\u0430\u0433_\u0440\u0443\u043A\u043E\u0432\u043E\u0434\
+    \u0438\u0442\u0435\u043B\u044F_\u0423\u0421"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0424\u043B\u0430\u0433_\u0440\u0443\u043A\u043E\u0432\u043E\u0434\
+    \u0438\u0442\u0435\u043B\u044F_\u042E\u0421"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0421\u0442\u0430\u0436_\u0432_\u0433\u043E\u0434\u0430\u0445"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0412\u043E\u0437\u0440\u0430\u0441\u0442\u043D\u044B\u0435_\u043F\
+    \u043E\u043A\u043E\u043B\u0435\u043D\u0438\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0413\u0440\u0443\u043F\u043F\u0430_\u0441\u0442\u0430\u0436\u0430"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0413\u043E\u0440\u043E\u0434_\u043F\u0440\u043E\u0436\u0438\u0432\
+    \u0430\u043D\u0438\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0413\u043E\u0440\u043E\u0434_\u0440\u0435\u0433\u0438\u0441\u0442\
+    \u0440\u0430\u0446\u0438\u0438"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0414\u0430\u0442\u0430_\u0440\u043E\u0436\u0434\u0435\u043D\u0438\
+    \u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041F\u043E\u043B\u043D\u043E\u0435_\u0424\u0418\u041E"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0424\u0418_\u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\
+    \u0435\u043B\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041B\u0438\u0447\u043D\u0430\u044F_\u043F\u043E\u0447\u0442\u0430"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041B\u043E\u0433\u0438\u043D_\u0440\u0443\u043A\u043E\u0432\u043E\
+    \u0434\u0438\u0442\u0435\u043B\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435\
+    _\u043E\u0431\u0440\u0430\u0437\u043E\u0432\u0430\u043D\u0438\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041D\u0430\u043B\u0438\u0447\u0438\u0435_\u0434\u0435\u0442\u0435\
+    \u0439"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041D\u043E\u043C\u0435\u0440_\u0442\u0435\u043B\u0435\u0444\u043E\
+    \u043D\u0430"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041E\u0446\u0435\u043D\u043A\u0430_\u0440\u0435\u0432\u044C\u044E"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041F\u043E\u0447\u0442\u0430_\u0440\u0443\u043A\u043E\u0432\u043E\
+    \u0434\u0438\u0442\u0435\u043B\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0420\u0430\u0431\u043E\u0447\u0430\u044F_\u043F\u043E\u0447\u0442\
+    \u0430"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0420\u0435\u0433\u0438\u043E\u043D_\u043F\u0440\u043E\u0436\u0438\
+    \u0432\u0430\u043D\u0438\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0420\u0435\u0433\u0438\u043E\u043D_\u0440\u0435\u0433\u0438\u0441\
+    \u0442\u0440\u0430\u0446\u0438\u0438"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0420\u0430\u0437\u043C\u0435\u0440_\u043E\u0434\u0435\u0436\u0434\
+    \u044B"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u042E\u043D\u0438\u0442_\u0423\u0421"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0421\u0442\u0440\u0430\u043D\u0430_\u0433\u0440\u0430\u0436\u0434\
+    \u0430\u043D\u0441\u0442\u0432\u0430"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0421\u0442\u0430\u0442\u0443\u0441_\u043F\u043E\u0437\u0438\u0446\
+    \u0438\u0438"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0421\u0435\u0433\u043C\u0435\u043D\u0442_\u0440\u0443\u043A\u043E\
+    \u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0421\u0435\u043C\u0435\u0439\u043D\u043E\u0435_\u043F\u043E\u043B\
+    \u043E\u0436\u0435\u043D\u0438\u0435"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0422\u0430\u0431\u0435\u043B\u044C\u043D\u044B\u0439_\u043D\u043E\
+    \u043C\u0435\u0440"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0422\u0438\u043F_\u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0430"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0422\u0438\u043F_\u0442\u0440\u0443\u0434\u043E\u0443\u0441\u0442\
+    \u0440\u043E\u0439\u0441\u0442\u0432\u0430"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0422\u0438\u043F_\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\
+    \u0430"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0422\u0438\u043F_\u0447\u0438\u0441\u043B\u0435\u043D\u043D\u043E\
+    \u0441\u0442\u0438"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C_\u043E\u0431\u0440\u0430\
+    \u0437\u043E\u0432\u0430\u043D\u0438\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C_\u043F\u043E\u0437\u0438\
+    \u0446\u0438\u0438"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0428\u0442\u0430\u0442\u043D\u043E\u0435_\u0440\u0430\u0441\u043F\
+    \u0438\u0441\u0430\u043D\u0438\u0435"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0412\u043E\u0437\u0440\u0430\u0441\u0442"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0413\u0440\u0435\u0439\u0434"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0414\u043E\u043B\u0436\u043D\u043E\u0441\u0442\u044C"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0418\u043C\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041B\u043E\u0433\u0438\u043D"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041E\u0444\u0438\u0441"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u041F\u043E\u043B"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0421\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\
+    \u0438\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0421\u0442\u0440\u0438\u043C"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: "\u0424\u0430\u043C\u0438\u043B\u0438\u044F"
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: String
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+version: 1.0.0
+database_uuid: f3cf662e-9267-42ad-85d9-a009bacb4736

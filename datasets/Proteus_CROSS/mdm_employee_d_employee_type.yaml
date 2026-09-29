@@ -1,0 +1,48 @@
+table_name: mdm_employee_d_employee_type
+main_dttm_col: null
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: null
+schema: prod_proteus
+sql: "select distinct active_type_nm\n, '\u0410\u043A\u0442\u0438\u0432\u043D\u0430\
+  \u044F' as employee_type\nfrom prod_proteus.mdm_employee_d_light\nwhere active_employee_flg=1\n\
+  \nunion all\n\nselect distinct active_type_nm\n, '\u042E\u0440\u0438\u0434\u0438\
+  \u0447\u0435\u0441\u043A\u0430\u044F' as employee_type\nfrom prod_proteus.mdm_employee_d_light\n\
+  where legal_employee_flg=1\n"
+params: null
+template_params: {}
+filter_select_enabled: false
+fetch_values_predicate: null
+extra: null
+uuid: 6569a939-941d-484c-98e9-d4598946a893
+metrics: []
+columns:
+- column_name: active_type_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: NULLABLE(STRING)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: employee_type
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+version: 1.0.0
+database_uuid: f3cf662e-9267-42ad-85d9-a009bacb4736

@@ -1,0 +1,16 @@
+uuid: 9e2bb3bd-3740-4503-9ffc-ab1a11ecd2ff
+template_name: "HR Exec - \u043F\u043B\u0430\u0448\u043A\u0430 NEW"
+css: "/*\u041F\u043B\u0430\u0448\u043A\u0430 NEW*/\n#TABS-ylBLCJMbGH > .ant-tabs-nav\
+  \ .ant-tabs-tab:nth-child(2) span[data-test=\"editable-title-input\"]:after{\n \
+  \ content: 'NEW';\n  font-size: 10px;\n  padding: 5px;\n  background: rgb(210, 255,\
+  \ 114);\n  border-radius: 4px;\n  color: rgb(34, 34, 34);\n  margin-left: 5px;\n\
+  }\n#TABS-39gh3chWvy > .ant-tabs-nav .ant-tabs-tab:first-child span[data-test=\"\
+  editable-title-input\"]:after{\n  content: 'NEW';\n  font-size: 10px;\n  padding:\
+  \ 5px;\n  background: rgb(210, 255, 114);\n  border-radius: 4px;\n  color: rgb(34,\
+  \ 34, 34);\n  margin-left: 5px;\n}\n#TABS-rOxWIyuUsx > .ant-tabs-nav .ant-tabs-tab:nth-child(2)\
+  \ span[data-test=\"editable-title-input\"]:after{\n  content: 'NEW';\n  font-size:\
+  \ 10px;\n  padding: 5px;\n  background: rgb(210, 255, 114);\n  border-radius: 4px;\n\
+  \  color: rgb(34, 34, 34);\n  margin-left: 5px;\n}"
+is_public: false
+order_num: 3
+dashboard_id: 7241

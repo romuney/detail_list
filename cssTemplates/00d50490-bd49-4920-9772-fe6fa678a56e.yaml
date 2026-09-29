@@ -1,0 +1,39 @@
+uuid: 00d50490-bd49-4920-9772-fe6fa678a56e
+template_name: "Cross - \u0431\u0430\u0437\u043E\u0432\u044B\u0439"
+css: ":root {\n  --dashboard-background: #f6f6f6;\n}\n/*\u0421\u043A\u0440\u044B\u0432\
+  \u0430\u0435\u043C \u0437\u0430\u0433\u043E\u043B\u043E\u0432\u043E\u043A*/\n.header-title\
+  \ {\n  display: none!important;\n}\n/*\u0422\u0440\u0438 \u0442\u043E\u0447\u043A\
+  \u0438*/\n.css-1n2xxv > .header-controls {\n  position: absolute;\n  right: 10px;\n\
+  \  z-index: 10;\n}\n.css-nxtj6w {\n  visibility: hidden;\n}\n/*\u0423\u0431\u0438\
+  \u0440\u0430\u0435\u043C \u0438\u043A\u043E\u043D\u043A\u0443 \u0444\u0438\u043B\
+  \u044C\u0442\u0440\u043E\u0432*/\n.css-bpuk29 {\n  visibility: hidden;\n  position:\
+  \ absolute;\n  z-index: 0;\n}\n/*\u0414\u0435\u043B\u0430\u0435\u043C \u0441\u0435\
+  \u0440\u044B\u0439 \u0444\u043E\u043D \u043D\u0430 \u0432\u043A\u043B\u0430\u0434\
+  \u043A\u0430\u0445*/\n.ant-tabs-nav-wrap,\ndiv[role=\"tabpanel\"] {\n  background:\
+  \ var(--dashboard-background);\n}\n/* \u0438\u0437\u043C\u0435\u043D\u044F\u0435\
+  \u043C \u0444\u043E\u043D \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u044B*/\nhtml\
+  \ {\n  background: var(--dashboard-background);\n}\n/*\u0412\u0438\u0434\u0436\u0435\
+  \u0442-\u0444\u0438\u043B\u044C\u0442\u0440*/\n.dashboard-component-chart-holder\
+  \ {\n  border-color: transparent!important;\n  box-shadow: none!important;\n}\n\
+  .dashboard-component-chart-holder:has( .filter_box) {\n  position: relative;\n}\n\
+  .Select__control {\n  box-shadow: none;\n  border: none;\n  cursor: pointer;\n}\n\
+  .filter_box > div {\n  height: 38px!important;\n}\n.chart-container:has( .filter_box)\
+  \ {\n  min-height: 48px!important;\n}\n.filter_box {\n  padding: 0;\n}\n.filter_box\
+  \ > div {\n  overflow: visible !important;\n}\n.filter_box .css-6bf80h {\n  font-size:\
+  \ 12px;\n}\n.Select__option {\n  font-size: 12px !important;\n}\n.Select__menu-list\
+  \ {\n  border: 1px solid rgba(0,0,0,0.2);\n  margin-top: 8px;\n  width: 600px;\n\
+  \  border-radius:8px\n}\n.Select__control {\n  box-shadow: none;\n  border: none;\n\
+  \  border-radius: 8px;\n  font-size: 12px;\n  margin-top: 8px;\n  cursor: pointer;\n\
+  }\n.Select__menu {\n  right: 0!important;\n}\n/* \u0418\u043A\u043E\u043D\u043A\u0438\
+  \ \u0432 \u0448\u0430\u043F\u043A\u0435 */\n.dashboard-info-panel span[data-qa-type=\"\
+  uikit/icon.content\"] {\n  height: 20px!important;\n  width: 20px!important;\n}\n\
+  .dashboard-info-panel span[data-qa-type=\"tui/icon\"] {\n  --t-size: 20px!important;\n\
+  }\n.dashboard-info-panel *[data-qa-type=\"tui/button\"] > span {\n  padding: 7px!important;\n\
+  }\n.dashboard-info-panel {\n  padding: 8px 16px;\n}\n.dashboard-info-panel img {\n\
+  \  height: 36px!important;\n}\ndiv[data-test=\"dashboard-builder-component-pane-tabs-navigation\"\
+  ] {\n  position: relative;\n  z-index: 99!important;\n  background: #F6F6F6;\n}\n\
+  .dashboard-container > div:has( div[data-test=\"dashboard-header-container\"]) {\n\
+  \  width: 100% !important;\n  max-width: 100vw !important;\n}\n\n"
+is_public: true
+order_num: 2
+dashboard_id: 7241

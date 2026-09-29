@@ -1,0 +1,1595 @@
+slice_name: "\u0420\u0430\u0431\u043E\u0447\u0430\u044F \u041E\u0425\u0420\u0415\u041D\
+  \u0415\u041D\u041D\u0410\u042F \u0442\u0430\u0431\u043B\u0438\u0446\u0430"
+description: null
+certified_by: null
+certification_details: null
+viz_type: react_sanbbox
+params:
+  datasource: 156669__table
+  viz_type: react_sanbbox
+  slice_id: 726821
+  groupby:
+  - mdm_employee_rk
+  - packed_b64
+  - total_cnt
+  - warden_first_nm
+  percent_metrics: []
+  timeseries_limit_metric: null
+  order_by_cols: []
+  order_desc: true
+  server_pagination: false
+  row_limit: '25000'
+  server_page_length: 10
+  show_totals: false
+  adhoc_filters: []
+  jsx: "var CSS = \".chart-root{--ink:#0f172a;--muted:#7b8794;--line:#eef1f6;--bg-soft:#f8fafc;--accent:#4f6bed;--accent-2:#7c5cff;--accent-soft:#eef1fe;--hi:#fff3bf;--row-hover:#f6f8ff;--grp-bg:#f2f0ff;font-family:-apple-system,\\\
+    \"Segoe UI\\\",Roboto,Arial,sans-serif;color:var(--ink);font-size:13px}.chart-root\
+    \ *{box-sizing:border-box}.chart-root .greeting-bar{margin:0 0 12px 0;padding:16px\
+    \ 18px;background:linear-gradient(135deg,var(--accent-soft),#fff);border:1px solid\
+    \ var(--line);border-radius:14px;box-shadow:0 4px 14px rgba(79,107,237,.08);font-size:15px;color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.chart-root\
+    \ .greeting-bar .greet-left{display:flex;align-items:center;gap:10px}.chart-root\
+    \ .greeting-bar .wave{font-size:20px}.chart-root .greeting-bar b{font-weight:700}.chart-root\
+    \ .main-card{border-radius:12px;box-shadow:inset 0 0 0 1px var(--line)}.chart-root\
+    \ .toolbar{display:flex;flex-direction:column;gap:0;padding:0;border-bottom:1px\
+    \ solid var(--line);background:#fff;border-top-left-radius:12px;border-top-right-radius:12px}.chart-root\
+    \ .tb-row-top{padding:12px 16px;position:relative;z-index:60}.chart-root .tb-row-bottom{padding:8px\
+    \ 16px;background:var(--bg-soft);border-top:1px solid var(--line)}.chart-root\
+    \ .tb-row{display:flex;align-items:center;gap:10px;width:100%}.chart-root .tb-row-top{flex-wrap:nowrap}.chart-root\
+    \ .tb-row-bottom{flex-wrap:wrap;justify-content:space-between}.chart-root .total-badge{display:flex;flex-direction:column;gap:2px;align-items:flex-start;line-height:1.3;font-weight:500;color:var(--muted);font-size:13px;flex:0\
+    \ 0 auto}.chart-root .total-badge .tb-line{white-space:nowrap}.chart-root .total-badge\
+    \ .hl-num{background:#ffe27a;border-radius:3px;padding:0 4px}.chart-root .total-badge\
+    \ .trunc-hint{font-size:11px;font-weight:500;color:#8a6d1f;white-space:normal;line-height:1.3}.chart-root\
+    \ .tb-row-bottom .pager{margin:0}.chart-root .pg-left{display:flex;align-items:center;gap:8px}.chart-root\
+    \ .pg-nav{display:flex;align-items:center;gap:8px}.chart-root .dd-wrap{flex:0\
+    \ 0 auto}.chart-root .tb-row-top .btn{flex:0 0 auto}.chart-root .total-badge b{color:var(--ink);font-weight:700;font-size:15px;margin-left:2px}.chart-root\
+    \ .spacer{margin-left:auto}.chart-root .pager{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);white-space:nowrap}.chart-root\
+    \ .pager.hidden{display:none}.chart-root .pg-lbl{font-weight:500}.chart-root .pg-size{height:28px;padding:0\
+    \ 8px;border:1px solid var(--line);border-radius:7px;background:#fff;font-family:inherit;font-size:12.5px;color:var(--ink);cursor:pointer;outline:none}.chart-root\
+    \ .pg-size:focus{border-color:var(--accent);background:#fff}.chart-root .pg-nav{display:flex;align-items:center;gap:6px}.chart-root\
+    \ .pg-btn{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border:1px\
+    \ solid var(--line);background:#fff;border-radius:7px;cursor:pointer;font-size:15px;line-height:1;color:var(--ink);padding:0}.chart-root\
+    \ .pg-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}.chart-root\
+    \ .pg-btn:disabled{opacity:.4;cursor:default}.chart-root .pg-info{min-width:110px;text-align:center;font-weight:600;color:var(--ink);font-size:12.5px}.chart-root\
+    \ .search-box{position:relative;flex:0 1 320px;width:320px;min-width:200px;max-width:360px}.chart-root\
+    \ .search-box input{width:100%;height:34px;padding:0 14px 0 38px;border:1px solid\
+    \ var(--line);border-radius:8px;font-size:13px;outline:none;font-family:inherit;background:var(--bg-soft)}.chart-root\
+    \ .search-box input:focus{border-color:var(--accent);background:#fff;box-shadow:0\
+    \ 0 0 4px var(--accent-soft)}.chart-root .search-box .ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:15px;height:15px;pointer-events:none}.chart-root\
+    \ .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:34px;padding:0\
+    \ 13px;border:1px solid var(--line);background:#fff;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--ink);white-space:nowrap;font-family:inherit}.chart-root\
+    \ .btn:hover{border-color:var(--accent);color:var(--accent)}.chart-root .btn svg{width:15px;height:15px}.chart-root\
+    \ .btn.ok{border-color:#16a34a;color:#16a34a}.chart-root .btn .badge{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-radius:10px;padding:1px\
+    \ 7px;font-size:11px;font-weight:700;min-width:20px;text-align:center}.chart-root\
+    \ .dd-wrap{position:relative}.chart-root .dd-panel{position:fixed;top:116px;left:50%;right:auto;transform:translateX(-50%);z-index:2000;width:min(1180px,calc(100vw\
+    \ - 32px));max-height:calc(100vh - 100px);overflow:auto;background:#fff;border:1px\
+    \ solid var(--line);border-radius:14px;box-shadow:0 12px 40px rgba(15,23,42,.16);display:none}.chart-root\
+    \ .dd-panel.open{display:block}.chart-root .dd-sticky{position:sticky;top:0;z-index:30;background:#fff;box-shadow:0\
+    \ 8px 12px -10px rgba(15,23,42,.45)}.chart-root .dd-head{position:relative;background:#fff;padding:13px\
+    \ 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;z-index:1}.chart-root\
+    \ .dd-head .dd-title{font-weight:700;font-size:13.5px}.chart-root .dd-head .dd-mini{font-size:12px;color:var(--accent);cursor:pointer;font-weight:500}.chart-root\
+    \ .dd-head .dd-mini:hover{text-decoration:underline}.chart-root .dd-search-box{position:relative;background:#fff;padding:10px\
+    \ 16px 12px;border-bottom:1px solid var(--line);z-index:1}.chart-root .dd-search-box-inner{position:relative}.chart-root\
+    \ .dd-search-box input{width:100%;height:32px;padding:0 30px 0 10px;border:1px\
+    \ solid var(--line);border-radius:8px;font-size:12.5px;font-family:inherit;outline:none;box-sizing:border-box;background:var(--bg-soft)}.chart-root\
+    \ .dd-search-box input:focus{border-color:var(--accent);background:#fff}.chart-root\
+    \ .dd-search-clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:14px;line-height:1;display:none;background:var(--line)}.chart-root\
+    \ .dd-search-clear:hover{background:var(--accent);color:#fff}.chart-root .dd-presets{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px\
+    \ 16px;border-bottom:1px solid var(--line);background:#fff;position:relative;z-index:1}.chart-root\
+    \ .dd-presets-label{font-size:11px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin-right:2px}.chart-root\
+    \ .preset-chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0\
+    \ 12px;border:1px solid var(--line);background:var(--bg-soft);border-radius:14px;cursor:pointer;font-size:12px;font-weight:500;color:var(--ink);font-family:inherit;white-space:nowrap}.chart-root\
+    \ .preset-chip:hover{border-color:var(--accent);color:var(--accent)}.chart-root\
+    \ .preset-chip.active{background:linear-gradient(135deg,var(--accent),var(--accent-2));border-color:transparent;color:#fff}.chart-root\
+    \ #dd-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;padding:12px;background:#fff}.chart-root\
+    \ .grp{min-width:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}.chart-root\
+    \ .grp-hd{display:flex;align-items:center;gap:7px;padding:10px 12px;background:var(--bg-soft);cursor:pointer;font-weight:600;font-size:11px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);user-select:none}.chart-root\
+    \ .grp-toggle{flex:0 0 auto;width:15px;height:15px;margin:0;cursor:pointer;accent-color:var(--accent)}.chart-root\
+    \ .grp-hd .caret{transition:transform .15s;font-size:9px;color:var(--accent)}.chart-root\
+    \ .grp.collapsed .caret{transform:rotate(-90deg)}.chart-root .grp.collapsed .grp-body{display:none}.chart-root\
+    \ .grp-cnt{margin-left:auto;font-weight:600;font-size:11px;color:var(--accent);background:var(--accent-soft);border-radius:8px;padding:1px\
+    \ 7px}.chart-root .opt{display:flex;align-items:center;gap:9px;padding:7px 12px;cursor:pointer;font-size:12.5px;border-radius:8px;margin:1px\
+    \ 6px}.chart-root .opt:hover{background:var(--accent-soft)}.chart-root .opt input{margin:0;cursor:pointer;accent-color:var(--accent);width:15px;height:15px}.chart-root\
+    \ .drag-ghost-note{font-size:11px;color:var(--muted);margin-left:2px}.chart-root\
+    \ .group-zone{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:11px\
+    \ 16px;min-height:46px;border-bottom:1px solid var(--line);background:var(--bg-soft)}.chart-root\
+    \ .group-zone.drag-over{background:var(--accent-soft);box-shadow:inset 0 0 0 2px\
+    \ var(--accent)}.chart-root .gz-hint{color:var(--muted);font-size:12px}.chart-root\
+    \ .gz-actions{margin-left:auto;display:flex;gap:14px}.chart-root .gz-link{font-size:12px;color:var(--accent);cursor:pointer;white-space:nowrap;font-weight:500}.chart-root\
+    \ .gz-link:hover{text-decoration:underline}.chart-root .chip{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-radius:20px;padding:5px\
+    \ 7px 5px 13px;font-size:12px;font-weight:500;cursor:grab}.chart-root .chip .x{width:17px;height:17px;border-radius:50%;background:rgba(255,255,255,.28);display:inline-flex;align-items:center;justify-content:center;font-size:11px;line-height:1;cursor:pointer}.chart-root\
+    \ .chip .x:hover{background:rgba(255,255,255,.5)}.chart-root .chip .arw{opacity:.8;font-size:11px}.chart-root\
+    \ .table-scroll{overflow:auto;position:relative;background:#fff;border-bottom-left-radius:12px;border-bottom-right-radius:12px}.chart-root\
+    \ table{border-collapse:separate;border-spacing:0;width:auto;table-layout:fixed}.chart-root\
+    \ thead th{background:var(--bg-soft);text-align:left;padding:0;border-bottom:1px\
+    \ solid var(--line);font-weight:600;font-size:11px;letter-spacing:.3px;text-transform:uppercase;color:var(--muted);white-space:nowrap}.chart-root\
+    \ thead th .th-in{position:relative;display:flex;align-items:center;gap:5px;padding:11px\
+    \ 16px 11px 12px;cursor:grab;overflow:hidden}.chart-root thead th.drag-src{opacity:.4}.chart-root\
+    \ thead th.drag-over-col{box-shadow:inset 3px 0 0 var(--accent)}.chart-root thead\
+    \ th .th-lbl{overflow:hidden;text-overflow:ellipsis;flex:1}.chart-root thead th\
+    \ .grip{color:#cbd2dc;font-size:11px;flex:none}.chart-root thead th .sort-ind{flex:none;font-size:9px;color:var(--accent);width:10px;text-align:center}.chart-root\
+    \ th .resizer{position:absolute;top:0;right:0;width:9px;height:100%;cursor:col-resize;z-index:20}.chart-root\
+    \ th .resizer:hover{background:var(--accent);opacity:.6}.chart-root tbody td{padding:10px\
+    \ 12px;border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;background:#fff}.chart-root\
+    \ tbody tr:hover td{background:var(--row-hover)}.chart-root tbody tr.grp-row td{background:var(--grp-bg);font-weight:600;cursor:pointer;color:var(--ink)}.chart-root\
+    \ tbody tr.grp-row:hover td{background:#e8e5ff}.chart-root .g-caret{display:inline-block;width:12px;font-size:10px;transition:transform\
+    \ .15s}.chart-root tr.grp-row.collapsed .g-caret{transform:rotate(-90deg)}.chart-root\
+    \ .g-badge{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-radius:12px;padding:2px\
+    \ 9px;font-size:11px;margin-left:9px;font-weight:600}.chart-root .hl{background:var(--hi);border-radius:2px;padding:0\
+    \ 1px}.chart-root .empty{padding:40px;text-align:center;color:var(--muted)}@media(max-width:640px){.chart-root\
+    \ .tb-row-top{flex-wrap:wrap}.chart-root .spacer{display:none}.chart-root .search-box{flex:1\
+    \ 1 100%;order:3;max-width:none;width:100%}.chart-root .dd-panel{top:12px;width:calc(100vw\
+    \ - 20px);max-height:calc(100vh - 24px)}.chart-root #dd-groups{grid-template-columns:1fr;padding:8px;gap:8px}}\"\
+    ;\n\n// ============================================================================\n\
+    // \u0414\u0415\u0422\u0410\u041B\u042C\u041D\u0410\u042F \u0422\u0410\u0411\u041B\
+    \u0418\u0426\u0410 v19 \u2014 \u0448\u0438\u0440\u043E\u043A\u0430\u044F \u043D\
+    \u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430 \u043F\u043E\u043B\u0435\u0439\
+    \ \u043F\u043E \u0433\u0440\u0443\u043F\u043F\u0430\u043C\n// ============================================================================\n\
+    \nif (!window.__pvtState) window.__pvtState = {};\nvar __S = window.__pvtState;\n\
+    \nvar COLS_SRC = [\n  \"mdm_employee_rk\", \"company_hire_dt\", \"last_nm\", \"\
+    first_nm\", \"full_nm\",\n  \"birth_dt\", \"birth_day\", \"birth_month\", \"mdm_employee_age\"\
+    , \"age_generation_nm\",\n  \"contact_main_phone_no\", \"prs_email_address_txt\"\
+    , \"employee_document_type_desc\", \"citizenship_country_desc\", \"registration_state_nm\"\
+    ,\n  \"registration_city_nm\", \"registration_full_address_txt\", \"residential_state_nm\"\
+    , \"city_nm\", \"residential_full_address_txt\",\n  \"doc_city_nm\", \"marital_status_desc\"\
+    , \"gender_desc\", \"education_degree_unique_max\", \"education_spec_nm\",\n \
+    \ \"has_children_flg\", \"location_type\", \"macroregion_nm\", \"office_desc\"\
+    , \"ad_login\", \"wo_employee_login\", \"wrk_email_address_txt\",\n  \"clothes_size_code\"\
+    , \"party_id\", \"company_fire_dt\", \"t_education_desc\", \"work_experience_year\"\
+    ,\n  \"experience_group_nm\", \"active_type_nm\", \"seniority\", \"grade\", \"\
+    change_grade_dt_text\",\n  \"change_specialization_dt_text\", \"change_management_unit_dt_text\"\
+    , \"change_management_head_dt\", \"summary_score\", \"employment_relation_type_desc\"\
+    ,\n  \"employee_status_desc\", \"employee_contract_type_desc\", \"legal_position_nm\"\
+    , \"employee_main_work_no\", \"legal_hire_dt\",\n  \"legal_fire_dt\", \"lvl1_legal_unit_nm\"\
+    , \"lvl2_legal_unit_nm\", \"lvl3_legal_unit_nm\", \"lvl4_legal_unit_nm\",\n  \"\
+    lvl5_legal_unit_nm\", \"lvl6_legal_unit_nm\", \"lvl7_legal_unit_nm\", \"hr_head_nm\"\
+    , \"regional_hr_login\",\n  \"hr_head_mdm_employee_rk\", \"code_1c\", \"employee_main_contract_type_nm\"\
+    , \"employee_main_contract_end_dt\", \"legal_head_flg\",\n  \"employee_main_schedule_nm\"\
+    , \"emp_contract_no\", \"lvl3_mapped_management_unit_nm\", \"lvl4_mapped_management_unit_nm\"\
+    , \"lvl5_mapped_management_unit_nm\",\n  \"lvl6_mapped_management_unit_nm\", \"\
+    lvl7_mapped_management_unit_nm\", \"lvl8_mapped_management_unit_nm\", \"lvl9_mapped_management_unit_nm\"\
+    , \"lvl10_mapped_management_unit_nm\",\n  \"lvl11_mapped_management_unit_nm\"\
+    , \"mapped_management_unit_nm\", \"emp_specialization_oper_code\", \"emp_specialization_it_code\"\
+    , \"emp_stream_desc\",\n  \"emp_specialization_desc\", \"management_head_flg\"\
+    , \"head_lvl_segment\", \"management_head_nm\", \"head_login\",\n  \"head_wo_employee_login\"\
+    , \"head_wrk_email_address_txt\", \"management_head_mdm_employee_rk\", \"hrbp_nm\"\
+    , \"hrbp_login\",\n  \"hrbp_mdm_employee_rk\", \"hrap_login\", \"hrap_mdm_employee_rk\"\
+    , \"subordination_lvl\"\n];\n\nfunction b64ToUtf8(b64) {\n  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';\n\
+    \  var lookup = {}; for (var i = 0; i < chars.length; i++) lookup[chars.charAt(i)]\
+    \ = i;\n  b64 = String(b64).replace(/[^A-Za-z0-9+/]/g, '');\n  var bytes = [];\n\
+    \  for (var p = 0; p < b64.length; p += 4) {\n    var e1 = lookup[b64.charAt(p)],\
+    \ e2 = lookup[b64.charAt(p+1)];\n    var e3 = lookup[b64.charAt(p+2)], e4 = lookup[b64.charAt(p+3)];\n\
+    \    bytes.push((e1 << 2) | (e2 >> 4));\n    if (b64.charAt(p+2) !== '') bytes.push(((e2\
+    \ & 15) << 4) | (e3 >> 2));\n    if (b64.charAt(p+3) !== '') bytes.push(((e3 &\
+    \ 3) << 6) | e4);\n  }\n  var out = '', k = 0;\n  while (k < bytes.length) {\n\
+    \    var b = bytes[k++];\n    if (b < 0x80) out += String.fromCharCode(b);\n \
+    \   else if (b >= 0xC0 && b < 0xE0) out += String.fromCharCode(((b & 0x1F) <<\
+    \ 6) | (bytes[k++] & 0x3F));\n    else if (b >= 0xE0 && b < 0xF0) out += String.fromCharCode(((b\
+    \ & 0x0F) << 12) | ((bytes[k++] & 0x3F) << 6) | (bytes[k++] & 0x3F));\n    else\
+    \ { var cp = ((b & 0x07) << 18) | ((bytes[k++] & 0x3F) << 12) | ((bytes[k++] &\
+    \ 0x3F) << 6) | (bytes[k++] & 0x3F); cp -= 0x10000; out += String.fromCharCode(0xD800\
+    \ + (cp >> 10), 0xDC00 + (cp & 0x3FF)); }\n  }\n  return out;\n}\n\nfunction parseDate(raw)\
+    \ {\n  if (raw === null || raw === undefined || raw === '') return null;\n  if\
+    \ (typeof raw === 'number' || (typeof raw === 'string' && /^\\d{9,}$/.test(String(raw).trim())))\
+    \ {\n    var n = Number(raw), d0 = new Date(n > 1e12 ? n : n * 1000);\n    if\
+    \ (!isNaN(d0.getTime())) return { year: d0.getUTCFullYear(), month: d0.getUTCMonth(),\
+    \ day: d0.getUTCDate() };\n  }\n  var s = String(raw).trim(), m = s.match(/^(\\\
+    d{4})-(\\d{2})-(\\d{2})/);\n  if (m) return { year: +m[1], month: +m[2] - 1, day:\
+    \ +m[3] };\n  var d = new Date(s);\n  if (!isNaN(d.getTime())) return { year:\
+    \ d.getUTCFullYear(), month: d.getUTCMonth(), day: d.getUTCDate() };\n  return\
+    \ null;\n}\nfunction pad2(x){ x = String(x); return x.length < 2 ? '0' + x : x;\
+    \ }\nfunction transformRow(row) {\n  function iso(d){ return d ? d.year + '-'\
+    \ + pad2(d.month+1) + '-' + pad2(d.day) : ''; }\n  return {\n    master_id: String(row.mdm_employee_rk\
+    \ || ''), hiredate: iso(parseDate(row.company_hire_dt)), last_nm: String(row.last_nm\
+    \ || ''), first_nm: String(row.first_nm || ''), full_nm: String(row.full_nm ||\
+    \ ''), birth_dt: iso(parseDate(row.birth_dt)), birth_day: String(row.birth_day\
+    \ || ''), birth_month: String(row.birth_month || ''), mdm_employee_age: String(row.mdm_employee_age\
+    \ || ''), age_generation_nm: String(row.age_generation_nm || ''), contact_main_phone_no:\
+    \ String(row.contact_main_phone_no || ''), prs_email_address_txt: String(row.prs_email_address_txt\
+    \ || ''), employee_document_type_desc: String(row.employee_document_type_desc\
+    \ || ''), citizenship_country_desc: String(row.citizenship_country_desc || ''),\
+    \ registration_state_nm: String(row.registration_state_nm || ''), registration_city_nm:\
+    \ String(row.registration_city_nm || ''), registration_full_address_txt: String(row.registration_full_address_txt\
+    \ || ''), residential_state_nm: String(row.residential_state_nm || ''), city_nm:\
+    \ String(row.city_nm || ''), residential_full_address_txt: String(row.residential_full_address_txt\
+    \ || ''), doc_city_nm: String(row.doc_city_nm || ''), marital_status_desc: String(row.marital_status_desc\
+    \ || ''), gender_desc: String(row.gender_desc || ''), education_degree_unique_max:\
+    \ String(row.education_degree_unique_max || ''), education_spec_nm: String(row.education_spec_nm\
+    \ || ''), has_children_flg: String(row.has_children_flg || ''), location_type:\
+    \ String(row.location_type || ''), macroregion_nm: String(row.macroregion_nm ||\
+    \ ''), office_desc: String(row.office_desc || ''), ad_login: String(row.ad_login\
+    \ || ''), wo_employee_login: String(row.wo_employee_login || ''), wrk_email_address_txt:\
+    \ String(row.wrk_email_address_txt || ''), clothes_size_code: String(row.clothes_size_code\
+    \ || ''), party_id: String(row.party_id || ''), company_fire_dt: iso(parseDate(row.company_fire_dt)),\
+    \ t_education_desc: String(row.t_education_desc || ''), work_experience_year:\
+    \ String(row.work_experience_year || ''), experience_group_nm: String(row.experience_group_nm\
+    \ || ''), active_type_nm: String(row.active_type_nm || ''), seniority: String(row.seniority\
+    \ || ''), grade: String(row.grade || ''), change_grade_dt_text: String(row.change_grade_dt_text\
+    \ || ''), change_specialization_dt_text: String(row.change_specialization_dt_text\
+    \ || ''), change_management_unit_dt_text: String(row.change_management_unit_dt_text\
+    \ || ''), change_management_head_dt: iso(parseDate(row.change_management_head_dt)),\
+    \ summary_score: String(row.summary_score || ''), employment_relation_type_desc:\
+    \ String(row.employment_relation_type_desc || ''), employee_status_desc: String(row.employee_status_desc\
+    \ || ''), employee_contract_type_desc: String(row.employee_contract_type_desc\
+    \ || ''), legal_position_nm: String(row.legal_position_nm || ''), employee_main_work_no:\
+    \ String(row.employee_main_work_no || ''), legal_hire_dt: iso(parseDate(row.legal_hire_dt)),\
+    \ legal_fire_dt: iso(parseDate(row.legal_fire_dt)), lvl1_legal_unit_nm: String(row.lvl1_legal_unit_nm\
+    \ || ''), lvl2_legal_unit_nm: String(row.lvl2_legal_unit_nm || ''), lvl3_legal_unit_nm:\
+    \ String(row.lvl3_legal_unit_nm || ''), lvl4_legal_unit_nm: String(row.lvl4_legal_unit_nm\
+    \ || ''), lvl5_legal_unit_nm: String(row.lvl5_legal_unit_nm || ''), lvl6_legal_unit_nm:\
+    \ String(row.lvl6_legal_unit_nm || ''), lvl7_legal_unit_nm: String(row.lvl7_legal_unit_nm\
+    \ || ''), hr_head_nm: String(row.hr_head_nm || ''), regional_hr_login: String(row.regional_hr_login\
+    \ || ''), hr_head_mdm_employee_rk: String(row.hr_head_mdm_employee_rk || ''),\
+    \ code_1c: String(row.code_1c || ''), employee_main_contract_type_nm: String(row.employee_main_contract_type_nm\
+    \ || ''), employee_main_contract_end_dt: iso(parseDate(row.employee_main_contract_end_dt)),\
+    \ legal_head_flg: String(row.legal_head_flg || ''), employee_main_schedule_nm:\
+    \ String(row.employee_main_schedule_nm || ''), emp_contract_no: String(row.emp_contract_no\
+    \ || ''), lvl3_mapped_management_unit_nm: String(row.lvl3_mapped_management_unit_nm\
+    \ || ''), lvl4_mapped_management_unit_nm: String(row.lvl4_mapped_management_unit_nm\
+    \ || ''), lvl5_mapped_management_unit_nm: String(row.lvl5_mapped_management_unit_nm\
+    \ || ''), lvl6_mapped_management_unit_nm: String(row.lvl6_mapped_management_unit_nm\
+    \ || ''), lvl7_mapped_management_unit_nm: String(row.lvl7_mapped_management_unit_nm\
+    \ || ''), lvl8_mapped_management_unit_nm: String(row.lvl8_mapped_management_unit_nm\
+    \ || ''), lvl9_mapped_management_unit_nm: String(row.lvl9_mapped_management_unit_nm\
+    \ || ''), lvl10_mapped_management_unit_nm: String(row.lvl10_mapped_management_unit_nm\
+    \ || ''), lvl11_mapped_management_unit_nm: String(row.lvl11_mapped_management_unit_nm\
+    \ || ''), mapped_management_unit_nm: String(row.mapped_management_unit_nm || ''),\
+    \ emp_specialization_oper_code: String(row.emp_specialization_oper_code || ''),\
+    \ emp_specialization_it_code: String(row.emp_specialization_it_code || ''), emp_stream_desc:\
+    \ String(row.emp_stream_desc || ''), emp_specialization_desc: String(row.emp_specialization_desc\
+    \ || ''), management_head_flg: String(row.management_head_flg || ''), head_lvl_segment:\
+    \ String(row.head_lvl_segment || ''), management_head_nm: String(row.management_head_nm\
+    \ || ''), head_login: String(row.head_login || ''), head_wo_employee_login: String(row.head_wo_employee_login\
+    \ || ''), head_wrk_email_address_txt: String(row.head_wrk_email_address_txt ||\
+    \ ''), management_head_mdm_employee_rk: String(row.management_head_mdm_employee_rk\
+    \ || ''), hrbp_nm: String(row.hrbp_nm || ''), hrbp_login: String(row.hrbp_login\
+    \ || ''), hrbp_mdm_employee_rk: String(row.hrbp_mdm_employee_rk || ''), hrap_login:\
+    \ String(row.hrap_login || ''), hrap_mdm_employee_rk: String(row.hrap_mdm_employee_rk\
+    \ || ''), subordination_lvl: String(row.subordination_lvl || '')\n  };\n}\n\n\
+    var rawData = [];\nvar TOTAL_CNT = null;\nvar WARDEN_FIRST_NM = \"\";\ntry {\n\
+    \  var __src = (typeof data !== 'undefined' && Array.isArray(data)) ? data : [];\n\
+    \  var __tc = null;\n  for (var t = 0; t < __src.length; t++) {\n    var row0\
+    \ = __src[t];\n    if (!row0) continue;\n    var tv = row0.total_cnt;\n    if\
+    \ (tv !== undefined && tv !== null && tv !== '') { var tn = Number(tv); if (!isNaN(tn))\
+    \ { __tc = (__tc === null) ? tn : Math.max(__tc, tn); } }\n    if (row0.warden_first_nm\
+    \ !== undefined && row0.warden_first_nm !== null && row0.warden_first_nm !== ''\
+    \ && !WARDEN_FIRST_NM) WARDEN_FIRST_NM = String(row0.warden_first_nm);\n  }\n\
+    \  TOTAL_CNT = __tc;\n  var parts = [];\n  for (var r = 0; r < __src.length; r++)\
+    \ {\n    var b64 = __src[r].packed_b64 || __src[r][Object.keys(__src[r])[0]];\n\
+    \    if (!b64) continue;\n    var g = JSON.parse('[' + b64ToUtf8(b64) + ']');\n\
+    \    for (var kk = 0; kk < g.length; kk++) parts.push(g[kk]);\n  }\n  rawData\
+    \ = parts.map(function(a){ var o={}; for (var i=0;i<COLS_SRC.length;i++) o[COLS_SRC[i]]=a[i];\
+    \ return o; });\n} catch (e) { rawData = []; }\n\nfunction escSafe(s){ return\
+    \ String(s==null?\"\":s).replace(/&/g,\"&amp;\").replace(/</g,\"&lt;\").replace(/>/g,\"\
+    &gt;\"); }\n\nvar __overlay = null;\nfunction getOverlay() {\n  if (__overlay\
+    \ && document.body.contains(__overlay)) return __overlay;\n  var hosts = document.querySelectorAll('[_echarts_instance_]');\n\
+    \  if (!hosts || hosts.length === 0) return document.body;\n  var host = hosts[hosts.length\
+    \ - 1];\n  var cvs = host.querySelectorAll('canvas');\n  for (var i = 0; i < cvs.length;\
+    \ i++) cvs[i].style.display = 'none';\n  var prev = host.querySelector('.chart-root');\
+    \ if (prev) prev.remove();\n  var overlay = document.createElement('div');\n \
+    \ overlay.className = 'chart-root';\n  overlay.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;z-index:10;background:#fff;overflow:auto;box-sizing:border-box;';\n\
+    \  try { if (getComputedStyle(host).position === 'static') host.style.position\
+    \ = 'relative'; } catch (e) {}\n  host.appendChild(overlay);\n  __overlay = overlay;\n\
+    \  return overlay;\n}\n\n(function(){\n  try {\n    var ROOT = getOverlay();\n\
+    \    if (!ROOT) return;\n    var FIELD_DEFS = \"master_id~MasterID~\u0411\u0430\
+    \u0437\u043E\u0432\u043E\u0435;hiredate~\u0414\u0430\u0442\u0430 \u043D\u0430\u0439\
+    \u043C\u0430 \u0432 \u043A\u043E\u043C\u043F\u0430\u043D\u0438\u044E~\u0411\u0430\
+    \u0437\u043E\u0432\u043E\u0435;last_nm~\u0424\u0430\u043C\u0438\u043B\u0438\u044F\
+    ~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;first_nm~\u0418\u043C\
+    \u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;full_nm~\u041F\u043E\
+    \u043B\u043D\u043E\u0435 \u0424\u0418\u041E~\u0410\u0442\u0440\u0438\u0431\u0443\
+    \u0442 \u0424\u041B;birth_dt~\u0414\u0430\u0442\u0430 \u0440\u043E\u0436\u0434\
+    \u0435\u043D\u0438\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B\
+    ;birth_day~\u0414\u0435\u043D\u044C \u0440\u043E\u0436\u0434\u0435\u043D\u0438\
+    \u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;birth_month~\u041C\
+    \u0435\u0441\u044F\u0446 \u0440\u043E\u0436\u0434\u0435\u043D\u0438\u044F~\u0410\
+    \u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;mdm_employee_age~\u0412\u043E\
+    \u0437\u0440\u0430\u0441\u0442~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\
+    \u041B;age_generation_nm~\u0412\u043E\u0437\u0440\u0430\u0441\u0442\u043D\u044B\
+    \u0435 \u043F\u043E\u043A\u043E\u043B\u0435\u043D\u0438\u044F~\u0410\u0442\u0440\
+    \u0438\u0431\u0443\u0442 \u0424\u041B;contact_main_phone_no~\u041D\u043E\u043C\
+    \u0435\u0440 \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0430~\u0410\u0442\u0440\
+    \u0438\u0431\u0443\u0442 \u0424\u041B;prs_email_address_txt~\u041B\u0438\u0447\
+    \u043D\u0430\u044F \u043F\u043E\u0447\u0442\u0430~\u0410\u0442\u0440\u0438\u0431\
+    \u0443\u0442 \u0424\u041B;employee_document_type_desc~\u0422\u0438\u043F \u0434\
+    \u043E\u043A\u0443\u043C\u0435\u043D\u0442\u0430~\u0410\u0442\u0440\u0438\u0431\
+    \u0443\u0442 \u0424\u041B;citizenship_country_desc~\u0421\u0442\u0440\u0430\u043D\
+    \u0430 \u0433\u0440\u0430\u0436\u0434\u0430\u043D\u0441\u0442\u0432\u0430~\u0410\
+    \u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;registration_state_nm~\u0420\
+    \u0435\u0433\u0438\u043E\u043D \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\
+    \u0446\u0438\u0438~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;registration_city_nm~\u0413\
+    \u043E\u0440\u043E\u0434 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\
+    \u0438\u0438~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;registration_full_address_txt~\u041F\
+    \u043E\u043B\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u0440\u0435\u0433\
+    \u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0438~\u0410\u0442\u0440\u0438\u0431\
+    \u0443\u0442 \u0424\u041B;residential_state_nm~\u0420\u0435\u0433\u0438\u043E\u043D\
+    \ \u043F\u0440\u043E\u0436\u0438\u0432\u0430\u043D\u0438\u044F~\u0410\u0442\u0440\
+    \u0438\u0431\u0443\u0442 \u0424\u041B;city_nm~\u0413\u043E\u0440\u043E\u0434 \u043F\
+    \u0440\u043E\u0436\u0438\u0432\u0430\u043D\u0438\u044F~\u0410\u0442\u0440\u0438\
+    \u0431\u0443\u0442 \u0424\u041B;residential_full_address_txt~\u041F\u043E\u043B\
+    \u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u043F\u0440\u043E\u0436\u0438\
+    \u0432\u0430\u043D\u0438\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\
+    \u041B;doc_city_nm~\u0413\u043E\u0440\u043E\u0434 \u043E\u0442\u043F\u0440\u0430\
+    \u0432\u043A\u0438 \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432\
+    \ \u0438\u0437 1\u0421~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B\
+    ;marital_status_desc~\u0421\u0435\u043C\u0435\u0439\u043D\u043E\u0435 \u043F\u043E\
+    \u043B\u043E\u0436\u0435\u043D\u0438\u0435~\u0410\u0442\u0440\u0438\u0431\u0443\
+    \u0442 \u0424\u041B;gender_desc~\u041F\u043E\u043B~\u0410\u0442\u0440\u0438\u0431\
+    \u0443\u0442 \u0424\u041B;education_degree_unique_max~\u0423\u0440\u043E\u0432\
+    \u0435\u043D\u044C \u043E\u0431\u0440\u0430\u0437\u043E\u0432\u0430\u043D\u0438\
+    \u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;education_spec_nm~\u041D\
+    \u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u043E\u0431\u0440\
+    \u0430\u0437\u043E\u0432\u0430\u043D\u0438\u044F~\u0410\u0442\u0440\u0438\u0431\
+    \u0443\u0442 \u0424\u041B;has_children_flg~\u041D\u0430\u043B\u0438\u0447\u0438\
+    \u0435 \u0434\u0435\u0442\u0435\u0439~\u0410\u0442\u0440\u0438\u0431\u0443\u0442\
+    \ \u0424\u041B;location_type~\u041B\u043E\u043A\u0430\u0446\u0438\u044F~\u0410\
+    \u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;macroregion_nm~\u041C\u0430\u043A\
+    \u0440\u043E\u0440\u0435\u0433\u0438\u043E\u043D~\u0410\u0442\u0440\u0438\u0431\
+    \u0443\u0442 \u0424\u041B;office_desc~\u041E\u0444\u0438\u0441~\u0410\u0442\u0440\
+    \u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\
+    \u0430;ad_login~\u041B\u043E\u0433\u0438\u043D~\u0410\u0442\u0440\u0438\u0431\u0443\
+    \u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;wo_employee_login~WO\
+    \ \u043B\u043E\u0433\u0438\u043D~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\
+    \u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;wrk_email_address_txt~\u0420\
+    \u0430\u0431\u043E\u0447\u0430\u044F \u043F\u043E\u0447\u0442\u0430~\u0410\u0442\
+    \u0440\u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\
+    \u043A\u0430;clothes_size_code~\u0420\u0430\u0437\u043C\u0435\u0440 \u043E\u0434\
+    \u0435\u0436\u0434\u044B~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u043E\
+    \u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;party_id~\u041E\u0441\u043D\u043E\
+    \u0432\u043D\u043E\u0439 Siebel_ID~\u0410\u0442\u0440\u0438\u0431\u0443\u0442\
+    \ \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;company_fire_dt~\u0414\
+    \u0430\u0442\u0430 \u0443\u0432\u043E\u043B\u044C\u043D\u0435\u043D\u0438\u044F\
+    \ \u0438\u0437 \u043A\u043E\u043C\u043F\u0430\u043D\u0438\u0438~\u0410\u0442\u0440\
+    \u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\
+    \u0430;t_education_desc~\u041F\u0440\u0438\u043D\u0430\u0434\u043B\u0435\u0436\
+    \u043D\u043E\u0441\u0442\u044C \u043A T-\u043E\u0431\u0440\u0430\u0437\u043E\u0432\
+    \u0430\u043D\u0438\u044E~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u043E\
+    \u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;work_experience_year~\u0421\u0442\
+    \u0430\u0436 \u0432 \u0433\u043E\u0434\u0430\u0445~\u0410\u0442\u0440\u0438\u0431\
+    \u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;experience_group_nm~\u0413\
+    \u0440\u0443\u043F\u043F\u0430 \u0441\u0442\u0430\u0436\u0430~\u0410\u0442\u0440\
+    \u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\
+    \u0430;active_type_nm~\u0422\u0438\u043F \u0447\u0438\u0441\u043B\u0435\u043D\u043D\
+    \u043E\u0441\u0442\u0438~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u043E\
+    \u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;seniority~\u0423\u0440\u043E\u0432\
+    \u0435\u043D\u044C \u043F\u043E\u0437\u0438\u0446\u0438\u0438~\u0410\u0442\u0440\
+    \u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\
+    \u0430;grade~\u0413\u0440\u0435\u0439\u0434~\u0410\u0442\u0440\u0438\u0431\u0443\
+    \u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;change_grade_dt_text~\u0414\
+    \u0430\u0442\u0430 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u0430 \u0432 \u0442\
+    \u0435\u043A\u0443\u0449\u0438\u0439 \u0433\u0440\u0435\u0439\u0434~\u0410\u0442\
+    \u0440\u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\
+    \u043A\u0430;change_specialization_dt_text~\u0414\u0430\u0442\u0430 \u043F\u0435\
+    \u0440\u0435\u0432\u043E\u0434\u0430 \u0432 \u0442\u0435\u043A\u0443\u0449\u0443\
+    \u044E \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\
+    \u044E~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\
+    \u0434\u043D\u0438\u043A\u0430;change_management_unit_dt_text~\u0414\u0430\u0442\
+    \u0430 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u0430 \u0432 \u0442\u0435\u043A\
+    \u0443\u0449\u0443\u044E \u043A\u043E\u043C\u0430\u043D\u0434\u0443~\u0410\u0442\
+    \u0440\u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\
+    \u043A\u0430;change_management_head_dt~\u0414\u0430\u0442\u0430 \u043F\u0435\u0440\
+    \u0435\u0432\u043E\u0434\u0430 \u0432 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\
+    \u0438\u0442\u0435\u043B\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\
+    \u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;summary_score~\u041E\u0446\
+    \u0435\u043D\u043A\u0430 \u0440\u0435\u0432\u044C\u044E~\u0410\u0442\u0440\u0438\
+    \u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430\
+    ;employment_relation_type_desc~\u0422\u0438\u043F \u0442\u0440\u0443\u0434\u043E\
+    \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430~\u0410\u0442\u0440\
+    \u0438\u0431\u0443\u0442 \u042E\u0421;employee_status_desc~\u0421\u0442\u0430\u0442\
+    \u0443\u0441 \u043F\u043E\u0437\u0438\u0446\u0438\u0438~\u0410\u0442\u0440\u0438\
+    \u0431\u0443\u0442 \u042E\u0421;employee_contract_type_desc~\u0422\u0438\u043F\
+    \ \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0430~\u0410\u0442\u0440\u0438\u0431\
+    \u0443\u0442 \u042E\u0421;legal_position_nm~\u0414\u043E\u043B\u0436\u043D\u043E\
+    \u0441\u0442\u044C~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;employee_main_work_no~\u0422\
+    \u0430\u0431\u0435\u043B\u044C\u043D\u044B\u0439 \u043D\u043E\u043C\u0435\u0440\
+    ~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;legal_hire_dt~\u0414\u0430\
+    \u0442\u0430 \u043D\u0430\u0439\u043C\u0430 \u043D\u0430 \u044E\u0440 \u043F\u043E\
+    \u0437\u0438\u0446\u0438\u044E~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\
+    \u0421;legal_fire_dt~\u0414\u0430\u0442\u0430 \u0443\u0432\u043E\u043B\u044C\u043D\
+    \u0435\u043D\u0438\u044F \u0441 \u044E\u0440 \u043F\u043E\u0437\u0438\u0446\u0438\
+    \u0438~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;lvl1_legal_unit_nm~\u042E\
+    \u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 1~\u0410\u0442\u0440\u0438\
+    \u0431\u0443\u0442 \u042E\u0421;lvl2_legal_unit_nm~\u042E\u0421 - \u0423\u0440\
+    \u043E\u0432\u0435\u043D\u044C 2~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\
+    \u0421;lvl3_legal_unit_nm~\u042E\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C\
+    \ 3~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;lvl4_legal_unit_nm~\u042E\
+    \u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 4~\u0410\u0442\u0440\u0438\
+    \u0431\u0443\u0442 \u042E\u0421;lvl5_legal_unit_nm~\u042E\u0421 - \u0423\u0440\
+    \u043E\u0432\u0435\u043D\u044C 5~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\
+    \u0421;lvl6_legal_unit_nm~\u042E\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C\
+    \ 6~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;lvl7_legal_unit_nm~\u042E\
+    \u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 7~\u0410\u0442\u0440\u0438\
+    \u0431\u0443\u0442 \u042E\u0421;hr_head_nm~\u0424\u0418 \u0440\u0435\u0433\u0438\
+    \u043E\u043D\u0430\u043B\u044C\u043D\u043E\u0433\u043E HR~\u0410\u0442\u0440\u0438\
+    \u0431\u0443\u0442 \u042E\u0421;regional_hr_login~\u041B\u043E\u0433\u0438\u043D\
+    \ \u0440\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E\u0433\u043E\
+    \ HR~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;hr_head_mdm_employee_rk~MasterID\
+    \ \u0440\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E\u0433\u043E\
+    \ HR~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;code_1c~\u041A\u043E\
+    \u0434 \u044E\u043D\u0438\u0442\u0430 \u0438\u0437 1\u0421~\u0410\u0442\u0440\u0438\
+    \u0431\u0443\u0442 \u042E\u0421;employee_main_contract_type_nm~\u0421\u0440\u043E\
+    \u0447\u043D\u044B\u0439/\u0431\u0435\u0441\u0441\u0440\u043E\u0447\u043D\u044B\
+    \u0439 \u0422\u0414~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;employee_main_contract_end_dt~\u0414\
+    \u0430\u0442\u0430 \u043E\u043A\u043E\u043D\u0447\u0430\u043D\u0438\u044F \u0422\
+    \u0414~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;legal_head_flg~\u0424\
+    \u043B\u0430\u0433 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\
+    \u043B\u044F \u042E\u0421~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421\
+    ;employee_main_schedule_nm~\u0428\u0442\u0430\u0442\u043D\u043E\u0435 \u0440\u0430\
+    \u0441\u043F\u0438\u0441\u0430\u043D\u0438\u0435~\u0410\u0442\u0440\u0438\u0431\
+    \u0443\u0442 \u042E\u0421;emp_contract_no~\u041D\u043E\u043C\u0435\u0440 \u0442\
+    \u0440\u0443\u0434\u043E\u0432\u043E\u0433\u043E \u0434\u043E\u0433\u043E\u0432\
+    \u043E\u0440\u0430~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;lvl3_mapped_management_unit_nm~\u0423\
+    \u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 3~\u0410\u0442\u0440\u0438\
+    \u0431\u0443\u0442 \u0423\u0421;lvl4_mapped_management_unit_nm~\u0423\u0421 -\
+    \ \u0423\u0440\u043E\u0432\u0435\u043D\u044C 4~\u0410\u0442\u0440\u0438\u0431\u0443\
+    \u0442 \u0423\u0421;lvl5_mapped_management_unit_nm~\u0423\u0421 - \u0423\u0440\
+    \u043E\u0432\u0435\u043D\u044C 5~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\
+    \u0421;lvl6_mapped_management_unit_nm~\u0423\u0421 - \u0423\u0440\u043E\u0432\u0435\
+    \u043D\u044C 6~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;lvl7_mapped_management_unit_nm~\u0423\
+    \u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 7~\u0410\u0442\u0440\u0438\
+    \u0431\u0443\u0442 \u0423\u0421;lvl8_mapped_management_unit_nm~\u0423\u0421 -\
+    \ \u0423\u0440\u043E\u0432\u0435\u043D\u044C 8~\u0410\u0442\u0440\u0438\u0431\u0443\
+    \u0442 \u0423\u0421;lvl9_mapped_management_unit_nm~\u0423\u0421 - \u0423\u0440\
+    \u043E\u0432\u0435\u043D\u044C 9~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\
+    \u0421;lvl10_mapped_management_unit_nm~\u0423\u0421 - \u0423\u0440\u043E\u0432\
+    \u0435\u043D\u044C 10~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421\
+    ;lvl11_mapped_management_unit_nm~\u0423\u0421 - \u0423\u0440\u043E\u0432\u0435\
+    \u043D\u044C 11~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;mapped_management_unit_nm~\u042E\
+    \u043D\u0438\u0442 \u0423\u0421~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\
+    \u0421;emp_specialization_oper_code~HQ|Line|Support~\u0410\u0442\u0440\u0438\u0431\
+    \u0443\u0442 \u0423\u0421;emp_specialization_it_code~IT|nonIT~\u0410\u0442\u0440\
+    \u0438\u0431\u0443\u0442 \u0423\u0421;emp_stream_desc~\u0421\u0442\u0440\u0438\
+    \u043C~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;emp_specialization_desc~\u0421\
+    \u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044F~\u0410\
+    \u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;management_head_flg~\u0424\u043B\
+    \u0430\u0433 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\
+    \u044F \u0423\u0421~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;head_lvl_segment~\u0421\
+    \u0435\u0433\u043C\u0435\u043D\u0442 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\
+    \u0438\u0442\u0435\u043B\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\
+    \u0421;management_head_nm~\u0424\u0418 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\
+    \u0438\u0442\u0435\u043B\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\
+    \u0421;head_login~\u041B\u043E\u0433\u0438\u043D \u0440\u0443\u043A\u043E\u0432\
+    \u043E\u0434\u0438\u0442\u0435\u043B\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\
+    \u0442 \u0423\u0421;head_wo_employee_login~WO \u043B\u043E\u0433\u0438\u043D \u0440\
+    \u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F~\u0410\u0442\
+    \u0440\u0438\u0431\u0443\u0442 \u0423\u0421;head_wrk_email_address_txt~\u041F\u043E\
+    \u0447\u0442\u0430 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\
+    \u043B\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;management_head_mdm_employee_rk~MasterID\
+    \ \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F~\u0410\
+    \u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;hrbp_nm~\u0424\u0418 HRBP~\u0410\
+    \u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;hrbp_login~\u041B\u043E\u0433\
+    \u0438\u043D HRBP~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;hrbp_mdm_employee_rk~MasterID\
+    \ HRBP~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;hrap_login~\u041B\
+    \u043E\u0433\u0438\u043D HRAP~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\
+    \u0421;hrap_mdm_employee_rk~MasterID HRAP~\u0410\u0442\u0440\u0438\u0431\u0443\
+    \u0442 \u0423\u0421;subordination_lvl~\u041F\u043E\u043B\u043E\u0436\u0435\u043D\
+    \u0438\u0435 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430 \u0432\
+    \ \u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0435~\u0410\u0442\u0440\u0438\
+    \u0431\u0443\u0442 \u0423\u0421\".split(\";\").map(function(s){var p=s.split(\"\
+    ~\");return {key:p[0],label:p[1],group:p[2]};});\n    var DEFAULT_COLS = [\"master_id\"\
+    ,\"hiredate\"];\n    var LOCKED_COLS = [\"master_id\",\"hiredate\"];\n    var\
+    \ PRESETS = [\n      {\n        name: \"\u041F\u0435\u0440\u0441\u043E\u043D\u0430\
+    \u043B\u043A\u0430\",\n        cols: [\n          \"master_id\",\"full_nm\",\"\
+    birth_dt\",\"mdm_employee_age\",\"age_generation_nm\",\"company_fire_dt\",\n \
+    \         \"work_experience_year\",\"contact_main_phone_no\",\"prs_email_address_txt\"\
+    ,\"registration_state_nm\",\n          \"registration_city_nm\",\"registration_full_address_txt\"\
+    ,\"residential_state_nm\",\"city_nm\",\n          \"residential_full_address_txt\"\
+    ,\"doc_city_nm\",\"education_degree_unique_max\",\"education_spec_nm\",\n    \
+    \      \"office_desc\",\"ad_login\",\"wrk_email_address_txt\",\"active_type_nm\"\
+    ,\"employment_relation_type_desc\",\n          \"employee_status_desc\",\"employee_contract_type_desc\"\
+    ,\"hiredate\",\"regional_hr_login\",\n          \"employee_main_contract_type_nm\"\
+    ,\"employee_main_contract_end_dt\",\"legal_position_nm\",\n          \"lvl3_mapped_management_unit_nm\"\
+    ,\"lvl4_mapped_management_unit_nm\",\"lvl5_mapped_management_unit_nm\",\n    \
+    \      \"lvl6_mapped_management_unit_nm\",\"lvl7_mapped_management_unit_nm\",\"\
+    lvl8_mapped_management_unit_nm\",\n          \"lvl9_mapped_management_unit_nm\"\
+    ,\"lvl10_mapped_management_unit_nm\",\"lvl11_mapped_management_unit_nm\",\n  \
+    \        \"mapped_management_unit_nm\",\"subordination_lvl\",\"emp_specialization_oper_code\"\
+    ,\"emp_specialization_it_code\",\n          \"emp_stream_desc\",\"emp_specialization_desc\"\
+    ,\"management_head_flg\",\"head_lvl_segment\",\"management_head_nm\",\n      \
+    \    \"head_login\",\"hrbp_nm\",\"hrbp_login\",\"hrap_login\",\"change_management_unit_dt_text\"\
+    ,\n          \"change_management_head_dt\",\"change_specialization_dt_text\",\"\
+    has_children_flg\"\n        ]\n      },\n      {\n        name: \"\u0420\u0430\
+    \u0431\u043E\u0447\u0438\u0435 \u0434\u0430\u043D\u043D\u044B\u0435\",\n     \
+    \   cols: [\n          \"master_id\",\"employee_main_work_no\",\"full_nm\",\"\
+    legal_position_nm\",\"grade\",\"management_head_flg\",\n          \"birth_dt\"\
+    ,\"mdm_employee_age\",\"company_fire_dt\",\"work_experience_year\",\"registration_state_nm\"\
+    ,\n          \"registration_city_nm\",\"residential_state_nm\",\"city_nm\",\"\
+    doc_city_nm\",\"office_desc\",\"ad_login\",\n          \"wrk_email_address_txt\"\
+    ,\"active_type_nm\",\"t_education_desc\",\"employment_relation_type_desc\",\n\
+    \          \"employee_status_desc\",\"employee_contract_type_desc\",\"hiredate\"\
+    ,\"lvl1_legal_unit_nm\",\n          \"lvl2_legal_unit_nm\",\"lvl3_legal_unit_nm\"\
+    ,\"lvl4_legal_unit_nm\",\"lvl5_legal_unit_nm\",\n          \"lvl6_legal_unit_nm\"\
+    ,\"lvl7_legal_unit_nm\",\"code_1c\",\"employee_main_schedule_nm\",\"hr_head_nm\"\
+    ,\n          \"regional_hr_login\",\"employee_main_contract_type_nm\",\"employee_main_contract_end_dt\"\
+    ,\n          \"lvl3_mapped_management_unit_nm\",\"lvl4_mapped_management_unit_nm\"\
+    ,\"lvl5_mapped_management_unit_nm\",\n          \"lvl6_mapped_management_unit_nm\"\
+    ,\"lvl7_mapped_management_unit_nm\",\"lvl8_mapped_management_unit_nm\",\n    \
+    \      \"lvl9_mapped_management_unit_nm\",\"lvl10_mapped_management_unit_nm\"\
+    ,\"lvl11_mapped_management_unit_nm\",\n          \"mapped_management_unit_nm\"\
+    ,\"subordination_lvl\",\"emp_specialization_oper_code\",\"emp_specialization_it_code\"\
+    ,\n          \"emp_stream_desc\",\"emp_specialization_desc\",\"head_lvl_segment\"\
+    ,\"management_head_nm\",\n          \"head_wrk_email_address_txt\",\"head_login\"\
+    ,\"hrbp_nm\",\"hrbp_login\",\"hrap_login\",\"change_grade_dt_text\",\n       \
+    \   \"seniority\",\"change_management_unit_dt_text\",\"change_management_head_dt\"\
+    ,\"change_specialization_dt_text\",\n          \"summary_score\"\n        ]\n\
+    \      }\n    ];\n    var DATE_KEYS = { hiredate:1, birth_dt:1, company_fire_dt:1,\
+    \ change_management_head_dt:1, legal_hire_dt:1, legal_fire_dt:1, employee_main_contract_end_dt:1\
+    \ };\n    var COL_MIN_W = 160;\n    var data = rawData.map(transformRow);\n  \
+    \  function fmtDate(iso){ if(!iso) return ''; var p=String(iso).split('-'); return\
+    \ p.length===3 ? p[2]+'.'+p[1]+'.'+p[0] : iso; }\n    function cellVal(row,k){\
+    \ return DATE_KEYS[k] ? fmtDate(row[k]) : (row[k]==null?'':row[k]); }\n    ROOT.innerHTML\
+    \ = '<style>' + CSS + '</style>' + (WARDEN_FIRST_NM ? '<div class=\"greeting-bar\"\
+    ><span class=\"greet-left\"><span class=\"wave\">\U0001F44B</span>\u041F\u0440\
+    \u0438\u0432\u0435\u0442, <b>' + escSafe(WARDEN_FIRST_NM) + '</b>!</span></div>'\
+    \ : '') + '<div class=\"main-card\"><div class=\"toolbar\"><div class=\"tb-row\
+    \ tb-row-top\"><div class=\"total-badge\" id=\"total-badge\"><span class=\"tb-line\"\
+    >\u041F\u043E\u043A\u0430\u0437\u0430\u043D\u043E \u0441\u043E\u0442\u0440\u0443\
+    \u0434\u043D\u0438\u043A\u043E\u0432: <b>0</b></span></div><div class=\"spacer\"\
+    ></div><div class=\"search-box\"><svg class=\"ico\" viewBox=\"0 0 24 24\" fill=\"\
+    none\" stroke=\"#6b7a8d\" stroke-width=\"2\"><circle cx=\"11\" cy=\"11\" r=\"\
+    7\"/><line x1=\"21\" y1=\"21\" x2=\"16.5\" y2=\"16.5\"/></svg><input type=\"text\"\
+    \ id=\"search\" placeholder=\"\u041F\u043E\u0438\u0441\u043A \u043F\u043E \u0442\
+    \u0430\u0431\u043B\u0438\u0446\u0435\u2026\" autocomplete=\"off\"></div><button\
+    \ class=\"btn\" id=\"copy-btn\" title=\"\u0421\u043A\u043E\u043F\u0438\u0440\u043E\
+    \u0432\u0430\u0442\u044C \u0432\u0438\u0434\u0438\u043C\u044B\u0435 \u0441\u0442\
+    \u0440\u043E\u043A\u0438\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"\
+    currentColor\" stroke-width=\"2\"><rect x=\"9\" y=\"9\" width=\"11\" height=\"\
+    11\" rx=\"2\"/><path d=\"M5 15V5a2 2 0 0 1 2-2h8\"/></svg>\u041A\u043E\u043F\u0438\
+    \u0440\u043E\u0432\u0430\u0442\u044C</button><div class=\"dd-wrap\"><button class=\"\
+    btn\" id=\"gear-btn\" title=\"\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\
+    \u0430 \u0442\u0430\u0431\u043B\u0438\u0446\u044B\"><svg viewBox=\"0 0 24 24\"\
+    \ fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"\
+    12\" r=\"3\"/><path d=\"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83\
+    \ 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4\
+    \ 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65\
+    \ 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0\
+    \ 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65\
+    \ 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1\
+    \ 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65\
+    \ 0 0 0 .33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0\
+    \ 0-1.51 1z\"/></svg>\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430 \u0442\
+    \u0430\u0431\u043B\u0438\u0446\u044B <span class=\"badge\" id=\"col-badge\">0</span></button><div\
+    \ class=\"dd-panel\" id=\"dd-panel\"><div class=\"dd-sticky\"><div class=\"dd-head\"\
+    ><span class=\"dd-title\">\u041F\u043E\u043B\u044F \u0442\u0430\u0431\u043B\u0438\
+    \u0446\u044B</span><span class=\"dd-mini\" id=\"reset-cols\">\u0421\u0431\u0440\
+    \u043E\u0441\u0438\u0442\u044C</span></div><div class=\"dd-search-box\"><div class=\"\
+    dd-search-box-inner\"><input type=\"text\" id=\"dd-search\" placeholder=\"\u041F\
+    \u043E\u0438\u0441\u043A \u043F\u043E \u043D\u0430\u0437\u0432\u0430\u043D\u0438\
+    \u044E \u043F\u043E\u043B\u044F\u2026\" autocomplete=\"off\"><span id=\"dd-search-clear\"\
+    \ class=\"dd-search-clear\" title=\"\u041E\u0447\u0438\u0441\u0442\u0438\u0442\
+    \u044C\">\u2715</span></div></div><div class=\"dd-presets\" id=\"dd-presets\"\
+    ></div></div><div id=\"dd-groups\"></div></div></div></div><div class=\"tb-row\
+    \ tb-row-bottom\" id=\"pager\"><div class=\"pg-left\"><span class=\"pg-lbl\">\u0421\
+    \u0442\u0440\u043E\u043A \u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\
+    \u0435:</span><select id=\"pg-size\" class=\"pg-size\"><option value=\"10\">10</option><option\
+    \ value=\"50\">50</option><option value=\"100\">100</option><option value=\"500\"\
+    >500</option></select></div><div class=\"pg-nav\"><span class=\"pg-info\" id=\"\
+    pg-info\"></span><button id=\"pg-prev\" class=\"pg-btn\" title=\"\u041D\u0430\u0437\
+    \u0430\u0434\">\u2039</button><button id=\"pg-next\" class=\"pg-btn\" title=\"\
+    \u0412\u043F\u0435\u0440\u0451\u0434\">\u203A</button></div></div></div><div class=\"\
+    group-zone\" id=\"group-zone\"><span class=\"gz-hint\" id=\"gz-hint\">\u041F\u0435\
+    \u0440\u0435\u0442\u0430\u0449\u0438\u0442\u0435 \u0437\u0430\u0433\u043E\u043B\
+    \u043E\u0432\u043E\u043A \u043A\u043E\u043B\u043E\u043D\u043A\u0438 \u0441\u044E\
+    \u0434\u0430, \u0447\u0442\u043E\u0431\u044B \u0441\u0433\u0440\u0443\u043F\u043F\
+    \u0438\u0440\u043E\u0432\u0430\u0442\u044C \u2192</span><div class=\"gz-actions\"\
+    \ id=\"gz-actions\" style=\"display:none\"><span class=\"gz-link\" id=\"collapse-all\"\
+    >\u0421\u0432\u0435\u0440\u043D\u0443\u0442\u044C \u0432\u0441\u0435</span><span\
+    \ class=\"gz-link\" id=\"expand-all\">\u0420\u0430\u0437\u0432\u0435\u0440\u043D\
+    \u0443\u0442\u044C \u0432\u0441\u0435</span></div></div><div class=\"table-scroll\"\
+    ><table id=\"tbl\"><thead id=\"thead\"></thead><tbody id=\"tbody\"></tbody></table></div></div>';\n\
+    \n    function $(id){ return ROOT.querySelector('#'+id); }\n    if (!__S.detTable)\
+    \ __S.detTable = { visible_cols: DEFAULT_COLS.slice(), group_by: [], search:\"\
+    \", col_widths:{}, collapsed_groups:{}, dd_group_collapsed:{}, sort_key:null,\
+    \ sort_dir:1, page_size:100, page:1, dd_search:\"\" };\n    var state = __S.detTable;\n\
+    \    if(state.page_size==null) state.page_size=100;\n    if(state.page==null)\
+    \ state.page=1;\n    var DEF_BY_KEY = {}; FIELD_DEFS.forEach(function(f){ DEF_BY_KEY[f.key]=f;\
+    \ });\n    function labelOf(k){ return DEF_BY_KEY[k] ? DEF_BY_KEY[k].label : k;\
+    \ }\n    function fmtNum(n){ return String(n).replace(/\\B(?=(\\d{3})+(?!\\d))/g,\
+    \ ' '); }\n    function esc(s){ return String(s==null?\"\":s).replace(/&/g,\"\
+    &amp;\").replace(/</g,\"&lt;\").replace(/>/g,\"&gt;\"); }\n    function highlight(txt,q){\
+    \ txt=String(txt==null?\"\":txt); if(!q) return esc(txt); var lo=txt.toLowerCase(),\
+    \ i=lo.indexOf(q), out=\"\", last=0; while(i!==-1){ out+=esc(txt.slice(last,i))+'<span\
+    \ class=\"hl\">'+esc(txt.slice(i,i+q.length))+'</span>'; last=i+q.length; i=lo.indexOf(q,last);\
+    \ } out+=esc(txt.slice(last)); return out; }\n    function cmpVals(a,b){ var na=parseFloat(a),\
+    \ nb=parseFloat(b); var aNum=(a!==\"\"&&a!=null&&!isNaN(na)&&/^-?\\d/.test(String(a)));\
+    \ var bNum=(b!==\"\"&&b!=null&&!isNaN(nb)&&/^-?\\d/.test(String(b))); if(aNum&&bNum)\
+    \ return na-nb; return String(a==null?\"\":a).localeCompare(String(b==null?\"\"\
+    :b),\"ru\"); }\n    function getFilteredRows(){ var q=state.search.trim().toLowerCase(),\
+    \ rows; if(!q) rows=data.slice(); else { var cols=state.visible_cols.concat(state.group_by);\
+    \ rows=data.filter(function(row){ for(var i=0;i<cols.length;i++){ var v=cellVal(row,cols[i]);\
+    \ if(v!=null && String(v).toLowerCase().indexOf(q)!==-1) return true; } return\
+    \ false; }); } if(state.sort_key){ var k=state.sort_key, dir=state.sort_dir; rows.sort(function(x,y){\
+    \ return dir*cmpVals(cellVal(x,k),cellVal(y,k)); }); } return rows; }\n    function\
+    \ totalToShow(filteredLen){ var searching = state.search.trim() !== \"\"; var\
+    \ loaded = data.length; var dbTotal = (TOTAL_CNT !== null && !isNaN(TOTAL_CNT))\
+    \ ? TOTAL_CNT : loaded; return { shown: filteredLen, loaded: loaded, total: dbTotal,\
+    \ truncated: dbTotal > loaded, searching: searching }; }\n    function renderTotalBadge(filteredLen){\
+    \ var ti = totalToShow(filteredLen), badge = $('total-badge'); if(ti.truncated)\
+    \ badge.innerHTML='<span class=\"tb-line\">\u041F\u043E\u043A\u0430\u0437\u0430\
+    \u043D\u043E <b class=\"hl-num\">'+fmtNum(ti.shown)+'</b> \u0438\u0437 <b>'+fmtNum(ti.total)+'</b>\
+    \ \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432</span><span\
+    \ class=\"trunc-hint\">\u0412 \u0442\u0430\u0431\u043B\u0438\u0446\u0443 \u043F\
+    \u043E\u043F\u0430\u043B\u0438 \u043D\u0435 \u0432\u0441\u0435. \u041E\u0442\u0444\
+    \u0438\u043B\u044C\u0442\u0440\u0443\u0439\u0442\u0435 \u0441\u043F\u0438\u0441\
+    \u043E\u043A, \u0447\u0442\u043E\u0431\u044B \u0432 \u043D\u0435\u0433\u043E \u0432\
+    \u043E\u0448\u043B\u0438 \u0432\u0441\u0435 \u043D\u0443\u0436\u043D\u044B\u0435\
+    \ \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0438.</span>'; else\
+    \ badge.innerHTML='<span class=\"tb-line\">'+(ti.searching ? '\u041D\u0430\u0439\
+    \u0434\u0435\u043D\u043E: ' : '\u0412\u0441\u0435\u0433\u043E \u0441\u043E\u0442\
+    \u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432 \u0432 \u0441\u043F\u0438\u0441\
+    \u043A\u0435: ')+'<b>'+fmtNum(ti.shown)+'</b></span>'; }\n    function isSelectableField(f){\
+    \ return LOCKED_COLS.indexOf(f.key)===-1; }\n    function buildSettings(){\n \
+    \     var q = state.dd_search.trim().toLowerCase(), groups=[], seen={};\n    \
+    \  FIELD_DEFS.forEach(function(f){ if(!isSelectableField(f)) return; if(!seen[f.group]){\
+    \ seen[f.group]=[]; groups.push(f.group); } seen[f.group].push(f); });\n     \
+    \ var box=$('dd-groups'); box.innerHTML=\"\";\n      groups.forEach(function(gName){\n\
+    \        var flds=seen[gName], visibleFlds=q ? flds.filter(function(f){ return\
+    \ f.label.toLowerCase().indexOf(q)!==-1; }) : flds;\n        if(visibleFlds.length===0)\
+    \ return;\n        var selectedCount=flds.filter(function(f){ return state.visible_cols.indexOf(f.key)!==-1;\
+    \ }).length;\n        var allSelected=selectedCount===flds.length, partlySelected=selectedCount>0&&!allSelected;\n\
+    \        var g=document.createElement(\"div\"); g.className=\"grp\"+(state.dd_group_collapsed[gName]&&!q?\"\
+    \ collapsed\":\"\");\n        var hd=document.createElement(\"div\"); hd.className=\"\
+    grp-hd\";\n        hd.innerHTML='<input class=\"grp-toggle\" type=\"checkbox\"\
+    \ '+(allSelected?'checked':'')+'><span class=\"caret\">\u25BC</span><span>'+esc(gName)+'</span><span\
+    \ class=\"grp-cnt\">'+selectedCount+'/'+flds.length+'</span>';\n        var groupCb=hd.querySelector('.grp-toggle');\
+    \ groupCb.indeterminate=partlySelected;\n        groupCb.onclick=function(e){\
+    \ e.stopPropagation(); };\n        groupCb.onchange=function(){\n          var\
+    \ shouldSelect=groupCb.checked;\n          flds.forEach(function(f){\n       \
+    \     var pos=state.visible_cols.indexOf(f.key);\n            if(shouldSelect\
+    \ && pos===-1) state.visible_cols.push(f.key);\n            if(!shouldSelect &&\
+    \ pos!==-1) state.visible_cols.splice(pos,1);\n          });\n          state.page=1;\
+    \ render(); buildSettings();\n        };\n        hd.onclick=function(e){ if(e.target===groupCb)\
+    \ return; state.dd_group_collapsed[gName]=!state.dd_group_collapsed[gName]; g.classList.toggle(\"\
+    collapsed\"); };\n        g.appendChild(hd);\n        var body=document.createElement(\"\
+    div\"); body.className=\"grp-body\";\n        visibleFlds.forEach(function(f){\n\
+    \          var opt=document.createElement(\"label\"); opt.className=\"opt\";\n\
+    \          var checked=state.visible_cols.indexOf(f.key)!==-1, inGroup=state.group_by.indexOf(f.key)!==-1;\n\
+    \          opt.innerHTML='<input type=\"checkbox\" '+(checked?\"checked\":\"\"\
+    )+(inGroup?\" disabled\":\"\")+'><span class=\"opt-lbl\">'+highlight(f.label,q)+'</span>'+(inGroup?'\
+    \ <span class=\"drag-ghost-note\">(\u0432 \u0433\u0440\u0443\u043F\u043F\u0438\
+    \u0440\u043E\u0432\u043A\u0435)</span>':'');\n          var cb=opt.querySelector(\"\
+    input\");\n          cb.onchange=function(){ if(cb.checked){ if(state.visible_cols.indexOf(f.key)===-1)\
+    \ state.visible_cols.push(f.key); } else state.visible_cols=state.visible_cols.filter(function(k){return\
+    \ k!==f.key;}); state.page=1; render(); buildSettings(); };\n          body.appendChild(opt);\n\
+    \        });\n        g.appendChild(body); box.appendChild(g);\n      });\n  \
+    \    if(box.children.length===0) box.innerHTML='<div class=\"empty\" style=\"\
+    padding:24px 16px;\">\u041F\u043E\u043B\u044F \u043D\u0435 \u043D\u0430\u0439\u0434\
+    \u0435\u043D\u044B \u043F\u043E \u0437\u0430\u043F\u0440\u043E\u0441\u0443 \xAB\
+    '+esc(state.dd_search)+'\xBB</div>';\n    }\n    function updatePresetHighlight(){\
+    \ var bar=$('dd-presets'); if(!bar) return; var chips=bar.querySelectorAll('.preset-chip');\
+    \ Array.prototype.slice.call(chips).forEach(function(c){ c.classList.remove('active');\
+    \ }); PRESETS.forEach(function(p,i){ var match=p.cols.length===state.visible_cols.length\
+    \ && p.cols.every(function(k){ return state.visible_cols.indexOf(k)!==-1; });\
+    \ if(match){ var c=chips[i]; if(c) c.classList.add('active'); } }); }\n    function\
+    \ applyPreset(p){ var cols=p.cols.slice(); LOCKED_COLS.forEach(function(k){ if(cols.indexOf(k)===-1)\
+    \ cols.unshift(k); }); state.visible_cols=cols; state.group_by=[]; state.sort_key=null;\
+    \ state.sort_dir=1; state.collapsed_groups={}; state.page=1; state.search='';\
+    \ var si=$('search'); if(si) si.value=''; render(); buildSettings(); updatePresetHighlight();\
+    \ }\n    function buildPresets(){ var bar=$('dd-presets'); if(!bar) return; bar.innerHTML='<span\
+    \ class=\"dd-presets-label\">\u041F\u0440\u0435\u0441\u0435\u0442\u044B</span>';\
+    \ PRESETS.forEach(function(p){ var b=document.createElement('button'); b.type='button';\
+    \ b.className='preset-chip'; b.textContent=p.name; b.onclick=function(){ applyPreset(p);\
+    \ }; bar.appendChild(b); }); updatePresetHighlight(); }\n    function ensureLocked(){\
+    \ LOCKED_COLS.forEach(function(k){ if(state.visible_cols.indexOf(k)===-1) state.visible_cols.unshift(k);\
+    \ state.group_by=state.group_by.filter(function(g){return g!==k;}); }); }\n  \
+    \  function render(){ ensureLocked(); updatePresetHighlight(); var rows=getFilteredRows();\
+    \ renderTotalBadge(rows.length); $('col-badge').textContent=state.visible_cols.length;\
+    \ var grouped=state.group_by.length>0, ps=state.page_size; if(!grouped){ var total=rows.length,\
+    \ maxPage=Math.max(1,Math.ceil(total/ps)); if(state.page>maxPage) state.page=maxPage;\
+    \ if(state.page<1) state.page=1; var startI=(state.page-1)*ps; renderPager(total,false);\
+    \ renderGroupZone(); renderHead(); renderBody(rows.slice(startI,startI+ps)); return;\
+    \ } var flat=buildGroupedFlat(rows), total2=flat.length, maxPage2=Math.max(1,Math.ceil(total2/ps));\
+    \ if(state.page>maxPage2) state.page=maxPage2; if(state.page<1) state.page=1;\
+    \ var startI2=(state.page-1)*ps; renderPager(total2,false); renderGroupZone();\
+    \ renderHead(); renderBodyGrouped(flat,startI2,startI2+ps); }\n    function buildGroupedFlat(rows){\
+    \ var flat=[], allKeys=[]; function walk(subset,level,pathKey,ancestors){ var\
+    \ gkey=state.group_by[level], map={}, order=[]; subset.forEach(function(r){ var\
+    \ val=cellVal(r,gkey)===\"\"||cellVal(r,gkey)==null?\"(\u043F\u0443\u0441\u0442\
+    \u043E)\":String(cellVal(r,gkey)); if(!map[val]){map[val]=[];order.push(val);}\
+    \ map[val].push(r); }); order.sort(function(a,b){return cmpVals(a,b);}); order.forEach(function(val){\
+    \ var members=map[val], rowKey=pathKey+\"||\"+level+\":\"+val, collapsed=!!state.collapsed_groups[rowKey],\
+    \ hdr={type:\"header\",gkey:gkey,val:val,members:members,level:level,rowKey:rowKey,collapsed:collapsed,ancestors:ancestors};\
+    \ allKeys.push(rowKey); flat.push(hdr); if(collapsed) return; var nextAnc=ancestors.concat([hdr]);\
+    \ if(level+1<state.group_by.length) walk(members,level+1,rowKey,nextAnc); else\
+    \ members.forEach(function(row){flat.push({type:\"data\",row:row,level:level+1,ancestors:nextAnc});});\
+    \ }); } walk(rows,0,\"root\",[]); ALL_GROUP_KEYS=allKeys; return flat; }\n   \
+    \ function renderPager(total){ var pager=$('pager'); if(!pager) return; pager.classList.remove(\"\
+    hidden\"); var sel=$('pg-size'); if(sel&&sel.value!=String(state.page_size)) sel.value=String(state.page_size);\
+    \ var ps=state.page_size,maxPage=Math.max(1,Math.ceil(total/ps)),startI=total===0?0:(state.page-1)*ps+1,endI=Math.min(state.page*ps,total);\
+    \ $('pg-info').textContent=startI+\"\u2013\"+endI+\" \u0438\u0437 \"+total; $('pg-prev').disabled=(state.page<=1);\
+    \ $('pg-next').disabled=(state.page>=maxPage); }\n    function renderGroupZone(){\
+    \ var z=$('group-zone'),hint=$('gz-hint'),actions=$('gz-actions'); Array.prototype.slice.call(z.querySelectorAll(\"\
+    .chip\")).forEach(function(c){c.remove();}); if(state.group_by.length===0){hint.style.display=\"\
+    \";actions.style.display=\"none\";return;} hint.style.display=\"none\";actions.style.display=\"\
+    flex\";state.group_by.forEach(function(k,idx){var chip=document.createElement(\"\
+    span\");chip.className=\"chip\";chip.innerHTML=(idx>0?'<span class=\"arw\">\u2192\
+    </span> ':'')+esc(labelOf(k))+' <span class=\"x\" title=\"\u0423\u0431\u0440\u0430\
+    \u0442\u044C\">\u2715</span>';chip.querySelector(\".x\").onclick=function(e){e.stopPropagation();state.group_by=state.group_by.filter(function(x){return\
+    \ x!==k;});if(state.visible_cols.indexOf(k)===-1)state.visible_cols.push(k);state.page=1;render();buildSettings();};z.insertBefore(chip,actions);});\
+    \ }\n    function colW(k){return state.col_widths[k]||COL_MIN_W;}\n    function\
+    \ layoutCols(){var tbl=$('tbl'),cg=ROOT.querySelector('#colgroup');if(!tbl||!cg)return;var\
+    \ cols=cg.children,keys=state.visible_cols;if(keys.length===0)return;var natural=0;keys.forEach(function(k){natural+=colW(k);});var\
+    \ avail=ROOT.querySelector('.table-scroll').clientWidth;if(natural<=avail){var\
+    \ per=(avail-natural)/keys.length;keys.forEach(function(k,i){if(cols[i])cols[i].style.width=(colW(k)+per)+'px';});tbl.style.width=avail+'px';}else{keys.forEach(function(k,i){if(cols[i])cols[i].style.width=colW(k)+'px';});tbl.style.width=natural+'px';}}\n\
+    \    function syncCols(){layoutCols();}\n    function renderHead(){var tbl=$('tbl'),oldCg=ROOT.querySelector('#colgroup');if(oldCg)oldCg.remove();var\
+    \ cg=document.createElement('colgroup');cg.id='colgroup';state.visible_cols.forEach(function(k){var\
+    \ c=document.createElement('col');c.style.width=colW(k)+'px';cg.appendChild(c);});tbl.insertBefore(cg,tbl.firstChild);var\
+    \ thead=$('thead');thead.innerHTML='';var tr=document.createElement('tr');state.visible_cols.forEach(function(k){var\
+    \ th=document.createElement('th');th.setAttribute('data-col',k);var ind=state.sort_key===k?(state.sort_dir===1?'\u25B2\
+    ':'\u25BC'):'';th.innerHTML='<div class=\"th-in\" draggable=\"true\"><span class=\"\
+    grip\">\u22EE\u22EE</span><span class=\"th-lbl\">'+esc(labelOf(k))+'</span><span\
+    \ class=\"sort-ind\">'+ind+'</span><div class=\"resizer\"></div></div>';attachColDnd(th,k);attachResizer(th,k);attachSort(th,k);tr.appendChild(th);});thead.appendChild(tr);layoutCols();}\n\
+    \    function renderBody(rows){var tbody=$('tbody');tbody.innerHTML='';var q=state.search.trim().toLowerCase(),cols=state.visible_cols;if(cols.length===0){tbody.innerHTML='<tr><td\
+    \ class=\"empty\">\u041D\u0435\u0442 \u0432\u044B\u0431\u0440\u0430\u043D\u043D\
+    \u044B\u0445 \u043A\u043E\u043B\u043E\u043D\u043E\u043A. \u041E\u0442\u043A\u0440\
+    \u043E\u0439\u0442\u0435 \xAB\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430\
+    \ \u0442\u0430\u0431\u043B\u0438\u0446\u044B\xBB.</td></tr>';return;}if(rows.length===0){tbody.innerHTML='<tr><td\
+    \ class=\"empty\" colspan=\"'+cols.length+'\">\u041D\u0438\u0447\u0435\u0433\u043E\
+    \ \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u043E \u043F\u043E \u0437\u0430\
+    \u043F\u0440\u043E\u0441\u0443 \xAB'+esc(state.search)+'\xBB</td></tr>';return;}var\
+    \ frag=document.createDocumentFragment();rows.forEach(function(row){var tr=document.createElement('tr');cols.forEach(function(k){var\
+    \ td=document.createElement('td');td.innerHTML=highlight(cellVal(row,k),q);tr.appendChild(td);});frag.appendChild(tr);});tbody.appendChild(frag);}\n\
+    \    var ALL_GROUP_KEYS=[];\n    function renderBodyGrouped(flat,startI,endI){var\
+    \ tbody=$('tbody');tbody.innerHTML='';var q=state.search.trim().toLowerCase(),cols=state.visible_cols;if(cols.length===0){tbody.innerHTML='<tr><td\
+    \ class=\"empty\">\u041D\u0435\u0442 \u0432\u044B\u0431\u0440\u0430\u043D\u043D\
+    \u044B\u0445 \u043A\u043E\u043B\u043E\u043D\u043E\u043A. \u041E\u0442\u043A\u0440\
+    \u043E\u0439\u0442\u0435 \xAB\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430\
+    \ \u0442\u0430\u0431\u043B\u0438\u0446\u044B\xBB.</td></tr>';return;}if(flat.length===0){tbody.innerHTML='<tr><td\
+    \ class=\"empty\" colspan=\"'+cols.length+'\">\u041D\u0438\u0447\u0435\u0433\u043E\
+    \ \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u043E \u043F\u043E \u0437\u0430\
+    \u043F\u0440\u043E\u0441\u0443 \xAB'+esc(state.search)+'\xBB</td></tr>';return;}var\
+    \ frag=document.createDocumentFragment();function makeHeader(h){var tr=document.createElement('tr');tr.className='grp-row'+(h.collapsed?'\
+    \ collapsed':'');var td=document.createElement('td');td.setAttribute('colspan',cols.length||1);td.style.paddingLeft=(10+h.level*22)+'px';td.innerHTML='<span\
+    \ class=\"g-caret\">\u25BC</span> <b>'+esc(labelOf(h.gkey))+':</b> '+highlight(String(h.val),q)+'<span\
+    \ class=\"g-badge\">'+h.members.length+' \u0447\u0435\u043B.</span>';td.onclick=function(){state.collapsed_groups[h.rowKey]=!state.collapsed_groups[h.rowKey];render();};tr.appendChild(td);return\
+    \ tr;}function makeDataRow(it){var dtr=document.createElement('tr');cols.forEach(function(k,ci){var\
+    \ dtd=document.createElement('td');if(ci===0)dtd.style.paddingLeft=(10+it.level*22)+'px';dtd.innerHTML=highlight(cellVal(it.row,k),q);dtr.appendChild(dtd);});return\
+    \ dtr;}var printed={};for(var i=startI;i<endI&&i<flat.length;i++){var it=flat[i];if(it.type==='header'){printed[it.rowKey]=1;frag.appendChild(makeHeader(it));}else{for(var\
+    \ ai=0;ai<it.ancestors.length;ai++){var a=it.ancestors[ai];if(!printed[a.rowKey]){printed[a.rowKey]=1;frag.appendChild(makeHeader(a));}}frag.appendChild(makeDataRow(it));}}tbody.appendChild(frag);}\n\
+    \    function attachSort(th,k){var lbl=th.querySelector('.th-lbl');lbl.style.cursor='pointer';lbl.addEventListener('click',function(e){e.stopPropagation();if(state.sort_key===k)state.sort_dir=-state.sort_dir;else{state.sort_key=k;state.sort_dir=1;}state.page=1;render();});}\n\
+    \    var dragKey=null;\n    function attachColDnd(th,k){var handle=th.querySelector('.th-in');handle.addEventListener('dragstart',function(e){dragKey=k;th.classList.add('drag-src');e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',k);}catch(err){}});handle.addEventListener('dragend',function(){dragKey=null;th.classList.remove('drag-src');Array.prototype.slice.call(ROOT.querySelectorAll('.drag-over-col')).forEach(function(el){el.classList.remove('drag-over-col');});});th.addEventListener('dragover',function(e){e.preventDefault();th.classList.add('drag-over-col');e.dataTransfer.dropEffect='move';});th.addEventListener('dragleave',function(){th.classList.remove('drag-over-col');});th.addEventListener('drop',function(e){e.preventDefault();th.classList.remove('drag-over-col');if(!dragKey||dragKey===k)return;var\
+    \ arr=state.visible_cols,from=arr.indexOf(dragKey);if(from===-1||arr.indexOf(k)===-1)return;arr.splice(from,1);arr.splice(arr.indexOf(k),0,dragKey);render();});}\n\
+    \    var gz=$('group-zone');gz.addEventListener('dragover',function(e){e.preventDefault();gz.classList.add('drag-over');e.dataTransfer.dropEffect='move';});gz.addEventListener('dragleave',function(){gz.classList.remove('drag-over');});gz.addEventListener('drop',function(e){e.preventDefault();gz.classList.remove('drag-over');if(!dragKey)return;if(LOCKED_COLS.indexOf(dragKey)!==-1){dragKey=null;return;}state.visible_cols=state.visible_cols.filter(function(x){return\
+    \ x!==dragKey;});if(state.group_by.indexOf(dragKey)===-1)state.group_by.push(dragKey);state.page=1;render();buildSettings();});\n\
+    \    function attachResizer(th,k){var rz=th.querySelector('.resizer');rz.setAttribute('draggable','false');rz.addEventListener('dragstart',function(e){e.preventDefault();e.stopPropagation();});rz.addEventListener('click',function(e){e.stopPropagation();});rz.addEventListener('mousedown',function(e){e.preventDefault();e.stopPropagation();var\
+    \ startX=e.clientX,startW=colW(k);document.body.style.cursor='col-resize';document.body.style.userSelect='none';function\
+    \ move(ev){var w=Math.max(COL_MIN_W,startW+(ev.clientX-startX));state.col_widths[k]=w;syncCols();}function\
+    \ up(){document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',up);document.body.style.cursor='';document.body.style.userSelect='';}document.addEventListener('mousemove',move);document.addEventListener('mouseup',up);});}\n\
+    \    $('search').addEventListener('input',function(e){state.search=e.target.value;state.page=1;render();});\n\
+    \    $('pg-size').addEventListener('change',function(e){state.page_size=parseInt(e.target.value,10)||100;state.page=1;render();});\n\
+    \    $('pg-prev').addEventListener('click',function(){if(state.page>1){state.page--;render();}});\n\
+    \    $('pg-next').addEventListener('click',function(){state.page++;render();});\n\
+    \    $('collapse-all').addEventListener('click',function(){var rows=getFilteredRows(),gkey=state.group_by[0],seen={};if(gkey!=null){rows.forEach(function(r){var\
+    \ val=cellVal(r,gkey)===''||cellVal(r,gkey)==null?'(\u043F\u0443\u0441\u0442\u043E\
+    )':String(cellVal(r,gkey)),rowKey='root||0:'+val;if(!seen[rowKey]){seen[rowKey]=1;state.collapsed_groups[rowKey]=true;}});}state.page=1;render();});\n\
+    \    $('expand-all').addEventListener('click',function(){state.collapsed_groups={};state.page=1;render();});\n\
+    \n    $('copy-btn').addEventListener('click', function () {\n  var btn = this;\n\
+    \  var rows = getFilteredRows();\n  var cols = state.group_by.concat(state.visible_cols);\n\
+    \n  function excelNumber(value) {\n    if (value === null || value === undefined\
+    \ || String(value).trim() === '') {\n      return '';\n    }\n\n    var normalized\
+    \ = String(value)\n      .trim()\n      .replace(/\\s+/g, '')\n      .replace(',',\
+    \ '.');\n\n    var num = Number(normalized);\n\n    if (isNaN(num)) {\n      return\
+    \ String(value);\n    }\n\n    // \u0414\u043B\u044F \u0440\u0443\u0441\u0441\u043A\
+    \u043E\u0439 \u043B\u043E\u043A\u0430\u043B\u0438 Excel: \u0434\u0435\u0441\u044F\
+    \u0442\u0438\u0447\u043D\u044B\u0439 \u0440\u0430\u0437\u0434\u0435\u043B\u0438\
+    \u0442\u0435\u043B\u044C \u2014 \u0437\u0430\u043F\u044F\u0442\u0430\u044F.\n\
+    \    return String(num).replace('.', ',');\n  }\n\n  var lines = [cols.map(labelOf).join('\\\
+    t')];\n\n  rows.forEach(function (r) {\n    lines.push(\n      cols.map(function\
+    \ (k) {\n        var value = cellVal(r, k);\n\n        if (k === 'work_experience_year')\
+    \ {\n          return excelNumber(value);\n        }\n\n        return value;\n\
+    \      }).join('\\t')\n    );\n  });\n\n  var text = lines.join('\\n');\n\n  function\
+    \ ok() {\n    btn.classList.add('ok');\n    var old = btn.innerHTML;\n    btn.innerHTML\
+    \ = '\u2713 \u0421\u043A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u043D\u043E\
+    ';\n\n    setTimeout(function () {\n      btn.classList.remove('ok');\n      btn.innerHTML\
+    \ = old;\n    }, 1400);\n  }\n\n  if (navigator.clipboard && navigator.clipboard.writeText)\
+    \ {\n    navigator.clipboard.writeText(text).then(ok, function () {\n      fallbackCopy(text,\
+    \ ok);\n    });\n  } else {\n    fallbackCopy(text, ok);\n  }\n});\n\n\n    function\
+    \ fallbackCopy(text,cb){var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');cb();}catch(e){}document.body.removeChild(ta);}\n\
+    \    var gearBtn=$('gear-btn'),ddPanel=$('dd-panel');gearBtn.addEventListener('click',function(e){e.stopPropagation();ddPanel.classList.toggle('open');if(ddPanel.classList.contains('open')){$('dd-search').focus();}});ddPanel.addEventListener('click',function(e){e.stopPropagation();});ROOT.addEventListener('click',function(e){if(!ddPanel.contains(e.target)&&e.target!==gearBtn&&!gearBtn.contains(e.target))ddPanel.classList.remove('open');});\n\
+    \    var ddSearchInput=$('dd-search'),ddSearchClear=$('dd-search-clear');function\
+    \ syncDdSearchClear(){ddSearchClear.style.display=ddSearchInput.value.trim()?'flex':'none';}ddSearchInput.addEventListener('input',function(e){state.dd_search=e.target.value;syncDdSearchClear();buildSettings();});ddSearchClear.addEventListener('click',function(e){e.stopPropagation();ddSearchInput.value='';state.dd_search='';syncDdSearchClear();buildSettings();ddSearchInput.focus();});$('reset-cols').addEventListener('click',function(){state.visible_cols=DEFAULT_COLS.slice();state.group_by=[];state.col_widths={};state.sort_key=null;state.sort_dir=1;state.collapsed_groups={};state.page=1;state.page_size=100;state.dd_search='';ddSearchInput.value='';syncDdSearchClear();render();buildSettings();});\n\
+    \    var _rzTimer=null;window.addEventListener('resize',function(){clearTimeout(_rzTimer);_rzTimer=setTimeout(layoutCols,80);});buildPresets();buildSettings();render();\n\
+    \  } catch (e) {\n    console.error('[det-table] \u041E\u0448\u0438\u0431\u043A\
+    \u0430 \u043C\u043E\u043D\u0442\u0430\u0436\u0430:', e);\n    if (typeof option\
+    \ !== 'undefined' && option) option.graphic = [{ type:'text', style:{ text:'\u041E\
+    \u0448\u0438\u0431\u043A\u0430: '+e.message, x:50, y:50, font:'14px sans-serif',\
+    \ fill:'#c00' } }];\n  }\n})();\n\nif (typeof option === 'undefined' || !option)\
+    \ option = { animation:false, xAxis:{show:false,type:'value'}, yAxis:{show:false,type:'value'},\
+    \ series:[{type:'scatter',data:[]}] };\n"
+  extra_form_data: {}
+query_context: "{\"datasource\":{\"id\":156669,\"type\":\"table\"},\"force\":false,\"\
+  queries\":[{\"filters\":[],\"extras\":{\"having\":\"\",\"where\":\"\"},\"applied_time_extras\"\
+  :{},\"columns\":[\"mdm_employee_rk\",\"packed_b64\",\"total_cnt\",\"warden_first_nm\"\
+  ],\"metrics\":[],\"annotation_layers\":[],\"row_limit\":25000,\"series_limit\":0,\"\
+  order_desc\":true,\"url_params\":{},\"custom_params\":{},\"custom_form_data\":{}}],\"\
+  form_data\":{\"datasource\":\"156669__table\",\"viz_type\":\"react_sanbbox\",\"\
+  slice_id\":726821,\"groupby\":[\"mdm_employee_rk\",\"packed_b64\",\"total_cnt\"\
+  ,\"warden_first_nm\"],\"percent_metrics\":[],\"timeseries_limit_metric\":null,\"\
+  order_by_cols\":[],\"order_desc\":true,\"server_pagination\":false,\"row_limit\"\
+  :\"25000\",\"server_page_length\":10,\"show_totals\":false,\"adhoc_filters\":[],\"\
+  jsx\":\"var CSS = \\\".chart-root{--ink:#0f172a;--muted:#7b8794;--line:#eef1f6;--bg-soft:#f8fafc;--accent:#4f6bed;--accent-2:#7c5cff;--accent-soft:#eef1fe;--hi:#fff3bf;--row-hover:#f6f8ff;--grp-bg:#f2f0ff;font-family:-apple-system,\\\
+  \\\\\"Segoe UI\\\\\\\",Roboto,Arial,sans-serif;color:var(--ink);font-size:13px}.chart-root\
+  \ *{box-sizing:border-box}.chart-root .greeting-bar{margin:0 0 12px 0;padding:16px\
+  \ 18px;background:linear-gradient(135deg,var(--accent-soft),#fff);border:1px solid\
+  \ var(--line);border-radius:14px;box-shadow:0 4px 14px rgba(79,107,237,.08);font-size:15px;color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.chart-root\
+  \ .greeting-bar .greet-left{display:flex;align-items:center;gap:10px}.chart-root\
+  \ .greeting-bar .wave{font-size:20px}.chart-root .greeting-bar b{font-weight:700}.chart-root\
+  \ .main-card{border-radius:12px;box-shadow:inset 0 0 0 1px var(--line)}.chart-root\
+  \ .toolbar{display:flex;flex-direction:column;gap:0;padding:0;border-bottom:1px\
+  \ solid var(--line);background:#fff;border-top-left-radius:12px;border-top-right-radius:12px}.chart-root\
+  \ .tb-row-top{padding:12px 16px;position:relative;z-index:60}.chart-root .tb-row-bottom{padding:8px\
+  \ 16px;background:var(--bg-soft);border-top:1px solid var(--line)}.chart-root .tb-row{display:flex;align-items:center;gap:10px;width:100%}.chart-root\
+  \ .tb-row-top{flex-wrap:nowrap}.chart-root .tb-row-bottom{flex-wrap:wrap;justify-content:space-between}.chart-root\
+  \ .total-badge{display:flex;flex-direction:column;gap:2px;align-items:flex-start;line-height:1.3;font-weight:500;color:var(--muted);font-size:13px;flex:0\
+  \ 0 auto}.chart-root .total-badge .tb-line{white-space:nowrap}.chart-root .total-badge\
+  \ .hl-num{background:#ffe27a;border-radius:3px;padding:0 4px}.chart-root .total-badge\
+  \ .trunc-hint{font-size:11px;font-weight:500;color:#8a6d1f;white-space:normal;line-height:1.3}.chart-root\
+  \ .tb-row-bottom .pager{margin:0}.chart-root .pg-left{display:flex;align-items:center;gap:8px}.chart-root\
+  \ .pg-nav{display:flex;align-items:center;gap:8px}.chart-root .dd-wrap{flex:0 0\
+  \ auto}.chart-root .tb-row-top .btn{flex:0 0 auto}.chart-root .total-badge b{color:var(--ink);font-weight:700;font-size:15px;margin-left:2px}.chart-root\
+  \ .spacer{margin-left:auto}.chart-root .pager{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);white-space:nowrap}.chart-root\
+  \ .pager.hidden{display:none}.chart-root .pg-lbl{font-weight:500}.chart-root .pg-size{height:28px;padding:0\
+  \ 8px;border:1px solid var(--line);border-radius:7px;background:#fff;font-family:inherit;font-size:12.5px;color:var(--ink);cursor:pointer;outline:none}.chart-root\
+  \ .pg-size:focus{border-color:var(--accent);background:#fff}.chart-root .pg-nav{display:flex;align-items:center;gap:6px}.chart-root\
+  \ .pg-btn{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border:1px\
+  \ solid var(--line);background:#fff;border-radius:7px;cursor:pointer;font-size:15px;line-height:1;color:var(--ink);padding:0}.chart-root\
+  \ .pg-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}.chart-root\
+  \ .pg-btn:disabled{opacity:.4;cursor:default}.chart-root .pg-info{min-width:110px;text-align:center;font-weight:600;color:var(--ink);font-size:12.5px}.chart-root\
+  \ .search-box{position:relative;flex:0 1 320px;width:320px;min-width:200px;max-width:360px}.chart-root\
+  \ .search-box input{width:100%;height:34px;padding:0 14px 0 38px;border:1px solid\
+  \ var(--line);border-radius:8px;font-size:13px;outline:none;font-family:inherit;background:var(--bg-soft)}.chart-root\
+  \ .search-box input:focus{border-color:var(--accent);background:#fff;box-shadow:0\
+  \ 0 0 4px var(--accent-soft)}.chart-root .search-box .ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:15px;height:15px;pointer-events:none}.chart-root\
+  \ .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:34px;padding:0\
+  \ 13px;border:1px solid var(--line);background:#fff;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--ink);white-space:nowrap;font-family:inherit}.chart-root\
+  \ .btn:hover{border-color:var(--accent);color:var(--accent)}.chart-root .btn svg{width:15px;height:15px}.chart-root\
+  \ .btn.ok{border-color:#16a34a;color:#16a34a}.chart-root .btn .badge{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-radius:10px;padding:1px\
+  \ 7px;font-size:11px;font-weight:700;min-width:20px;text-align:center}.chart-root\
+  \ .dd-wrap{position:relative}.chart-root .dd-panel{position:fixed;top:116px;left:50%;right:auto;transform:translateX(-50%);z-index:2000;width:min(1180px,calc(100vw\
+  \ - 32px));max-height:calc(100vh - 100px);overflow:auto;background:#fff;border:1px\
+  \ solid var(--line);border-radius:14px;box-shadow:0 12px 40px rgba(15,23,42,.16);display:none}.chart-root\
+  \ .dd-panel.open{display:block}.chart-root .dd-sticky{position:sticky;top:0;z-index:30;background:#fff;box-shadow:0\
+  \ 8px 12px -10px rgba(15,23,42,.45)}.chart-root .dd-head{position:relative;background:#fff;padding:13px\
+  \ 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;z-index:1}.chart-root\
+  \ .dd-head .dd-title{font-weight:700;font-size:13.5px}.chart-root .dd-head .dd-mini{font-size:12px;color:var(--accent);cursor:pointer;font-weight:500}.chart-root\
+  \ .dd-head .dd-mini:hover{text-decoration:underline}.chart-root .dd-search-box{position:relative;background:#fff;padding:10px\
+  \ 16px 12px;border-bottom:1px solid var(--line);z-index:1}.chart-root .dd-search-box-inner{position:relative}.chart-root\
+  \ .dd-search-box input{width:100%;height:32px;padding:0 30px 0 10px;border:1px solid\
+  \ var(--line);border-radius:8px;font-size:12.5px;font-family:inherit;outline:none;box-sizing:border-box;background:var(--bg-soft)}.chart-root\
+  \ .dd-search-box input:focus{border-color:var(--accent);background:#fff}.chart-root\
+  \ .dd-search-clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:14px;line-height:1;display:none;background:var(--line)}.chart-root\
+  \ .dd-search-clear:hover{background:var(--accent);color:#fff}.chart-root .dd-presets{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px\
+  \ 16px;border-bottom:1px solid var(--line);background:#fff;position:relative;z-index:1}.chart-root\
+  \ .dd-presets-label{font-size:11px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin-right:2px}.chart-root\
+  \ .preset-chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0\
+  \ 12px;border:1px solid var(--line);background:var(--bg-soft);border-radius:14px;cursor:pointer;font-size:12px;font-weight:500;color:var(--ink);font-family:inherit;white-space:nowrap}.chart-root\
+  \ .preset-chip:hover{border-color:var(--accent);color:var(--accent)}.chart-root\
+  \ .preset-chip.active{background:linear-gradient(135deg,var(--accent),var(--accent-2));border-color:transparent;color:#fff}.chart-root\
+  \ #dd-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;padding:12px;background:#fff}.chart-root\
+  \ .grp{min-width:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}.chart-root\
+  \ .grp-hd{display:flex;align-items:center;gap:7px;padding:10px 12px;background:var(--bg-soft);cursor:pointer;font-weight:600;font-size:11px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);user-select:none}.chart-root\
+  \ .grp-toggle{flex:0 0 auto;width:15px;height:15px;margin:0;cursor:pointer;accent-color:var(--accent)}.chart-root\
+  \ .grp-hd .caret{transition:transform .15s;font-size:9px;color:var(--accent)}.chart-root\
+  \ .grp.collapsed .caret{transform:rotate(-90deg)}.chart-root .grp.collapsed .grp-body{display:none}.chart-root\
+  \ .grp-cnt{margin-left:auto;font-weight:600;font-size:11px;color:var(--accent);background:var(--accent-soft);border-radius:8px;padding:1px\
+  \ 7px}.chart-root .opt{display:flex;align-items:center;gap:9px;padding:7px 12px;cursor:pointer;font-size:12.5px;border-radius:8px;margin:1px\
+  \ 6px}.chart-root .opt:hover{background:var(--accent-soft)}.chart-root .opt input{margin:0;cursor:pointer;accent-color:var(--accent);width:15px;height:15px}.chart-root\
+  \ .drag-ghost-note{font-size:11px;color:var(--muted);margin-left:2px}.chart-root\
+  \ .group-zone{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:11px\
+  \ 16px;min-height:46px;border-bottom:1px solid var(--line);background:var(--bg-soft)}.chart-root\
+  \ .group-zone.drag-over{background:var(--accent-soft);box-shadow:inset 0 0 0 2px\
+  \ var(--accent)}.chart-root .gz-hint{color:var(--muted);font-size:12px}.chart-root\
+  \ .gz-actions{margin-left:auto;display:flex;gap:14px}.chart-root .gz-link{font-size:12px;color:var(--accent);cursor:pointer;white-space:nowrap;font-weight:500}.chart-root\
+  \ .gz-link:hover{text-decoration:underline}.chart-root .chip{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-radius:20px;padding:5px\
+  \ 7px 5px 13px;font-size:12px;font-weight:500;cursor:grab}.chart-root .chip .x{width:17px;height:17px;border-radius:50%;background:rgba(255,255,255,.28);display:inline-flex;align-items:center;justify-content:center;font-size:11px;line-height:1;cursor:pointer}.chart-root\
+  \ .chip .x:hover{background:rgba(255,255,255,.5)}.chart-root .chip .arw{opacity:.8;font-size:11px}.chart-root\
+  \ .table-scroll{overflow:auto;position:relative;background:#fff;border-bottom-left-radius:12px;border-bottom-right-radius:12px}.chart-root\
+  \ table{border-collapse:separate;border-spacing:0;width:auto;table-layout:fixed}.chart-root\
+  \ thead th{background:var(--bg-soft);text-align:left;padding:0;border-bottom:1px\
+  \ solid var(--line);font-weight:600;font-size:11px;letter-spacing:.3px;text-transform:uppercase;color:var(--muted);white-space:nowrap}.chart-root\
+  \ thead th .th-in{position:relative;display:flex;align-items:center;gap:5px;padding:11px\
+  \ 16px 11px 12px;cursor:grab;overflow:hidden}.chart-root thead th.drag-src{opacity:.4}.chart-root\
+  \ thead th.drag-over-col{box-shadow:inset 3px 0 0 var(--accent)}.chart-root thead\
+  \ th .th-lbl{overflow:hidden;text-overflow:ellipsis;flex:1}.chart-root thead th\
+  \ .grip{color:#cbd2dc;font-size:11px;flex:none}.chart-root thead th .sort-ind{flex:none;font-size:9px;color:var(--accent);width:10px;text-align:center}.chart-root\
+  \ th .resizer{position:absolute;top:0;right:0;width:9px;height:100%;cursor:col-resize;z-index:20}.chart-root\
+  \ th .resizer:hover{background:var(--accent);opacity:.6}.chart-root tbody td{padding:10px\
+  \ 12px;border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;background:#fff}.chart-root\
+  \ tbody tr:hover td{background:var(--row-hover)}.chart-root tbody tr.grp-row td{background:var(--grp-bg);font-weight:600;cursor:pointer;color:var(--ink)}.chart-root\
+  \ tbody tr.grp-row:hover td{background:#e8e5ff}.chart-root .g-caret{display:inline-block;width:12px;font-size:10px;transition:transform\
+  \ .15s}.chart-root tr.grp-row.collapsed .g-caret{transform:rotate(-90deg)}.chart-root\
+  \ .g-badge{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-radius:12px;padding:2px\
+  \ 9px;font-size:11px;margin-left:9px;font-weight:600}.chart-root .hl{background:var(--hi);border-radius:2px;padding:0\
+  \ 1px}.chart-root .empty{padding:40px;text-align:center;color:var(--muted)}@media(max-width:640px){.chart-root\
+  \ .tb-row-top{flex-wrap:wrap}.chart-root .spacer{display:none}.chart-root .search-box{flex:1\
+  \ 1 100%;order:3;max-width:none;width:100%}.chart-root .dd-panel{top:12px;width:calc(100vw\
+  \ - 20px);max-height:calc(100vh - 24px)}.chart-root #dd-groups{grid-template-columns:1fr;padding:8px;gap:8px}}\\\
+  \";\\n\\n// ============================================================================\\\
+  n// \u0414\u0415\u0422\u0410\u041B\u042C\u041D\u0410\u042F \u0422\u0410\u0411\u041B\
+  \u0418\u0426\u0410 v19 \u2014 \u0448\u0438\u0440\u043E\u043A\u0430\u044F \u043D\u0430\
+  \u0441\u0442\u0440\u043E\u0439\u043A\u0430 \u043F\u043E\u043B\u0435\u0439 \u043F\
+  \u043E \u0433\u0440\u0443\u043F\u043F\u0430\u043C\\n// ============================================================================\\\
+  n\\nif (!window.__pvtState) window.__pvtState = {};\\nvar __S = window.__pvtState;\\\
+  n\\nvar COLS_SRC = [\\n  \\\"mdm_employee_rk\\\", \\\"company_hire_dt\\\", \\\"\
+  last_nm\\\", \\\"first_nm\\\", \\\"full_nm\\\",\\n  \\\"birth_dt\\\", \\\"birth_day\\\
+  \", \\\"birth_month\\\", \\\"mdm_employee_age\\\", \\\"age_generation_nm\\\",\\\
+  n  \\\"contact_main_phone_no\\\", \\\"prs_email_address_txt\\\", \\\"employee_document_type_desc\\\
+  \", \\\"citizenship_country_desc\\\", \\\"registration_state_nm\\\",\\n  \\\"registration_city_nm\\\
+  \", \\\"registration_full_address_txt\\\", \\\"residential_state_nm\\\", \\\"city_nm\\\
+  \", \\\"residential_full_address_txt\\\",\\n  \\\"doc_city_nm\\\", \\\"marital_status_desc\\\
+  \", \\\"gender_desc\\\", \\\"education_degree_unique_max\\\", \\\"education_spec_nm\\\
+  \",\\n  \\\"has_children_flg\\\", \\\"location_type\\\", \\\"macroregion_nm\\\"\
+  , \\\"office_desc\\\", \\\"ad_login\\\", \\\"wo_employee_login\\\", \\\"wrk_email_address_txt\\\
+  \",\\n  \\\"clothes_size_code\\\", \\\"party_id\\\", \\\"company_fire_dt\\\", \\\
+  \"t_education_desc\\\", \\\"work_experience_year\\\",\\n  \\\"experience_group_nm\\\
+  \", \\\"active_type_nm\\\", \\\"seniority\\\", \\\"grade\\\", \\\"change_grade_dt_text\\\
+  \",\\n  \\\"change_specialization_dt_text\\\", \\\"change_management_unit_dt_text\\\
+  \", \\\"change_management_head_dt\\\", \\\"summary_score\\\", \\\"employment_relation_type_desc\\\
+  \",\\n  \\\"employee_status_desc\\\", \\\"employee_contract_type_desc\\\", \\\"\
+  legal_position_nm\\\", \\\"employee_main_work_no\\\", \\\"legal_hire_dt\\\",\\n\
+  \  \\\"legal_fire_dt\\\", \\\"lvl1_legal_unit_nm\\\", \\\"lvl2_legal_unit_nm\\\"\
+  , \\\"lvl3_legal_unit_nm\\\", \\\"lvl4_legal_unit_nm\\\",\\n  \\\"lvl5_legal_unit_nm\\\
+  \", \\\"lvl6_legal_unit_nm\\\", \\\"lvl7_legal_unit_nm\\\", \\\"hr_head_nm\\\",\
+  \ \\\"regional_hr_login\\\",\\n  \\\"hr_head_mdm_employee_rk\\\", \\\"code_1c\\\"\
+  , \\\"employee_main_contract_type_nm\\\", \\\"employee_main_contract_end_dt\\\"\
+  , \\\"legal_head_flg\\\",\\n  \\\"employee_main_schedule_nm\\\", \\\"emp_contract_no\\\
+  \", \\\"lvl3_mapped_management_unit_nm\\\", \\\"lvl4_mapped_management_unit_nm\\\
+  \", \\\"lvl5_mapped_management_unit_nm\\\",\\n  \\\"lvl6_mapped_management_unit_nm\\\
+  \", \\\"lvl7_mapped_management_unit_nm\\\", \\\"lvl8_mapped_management_unit_nm\\\
+  \", \\\"lvl9_mapped_management_unit_nm\\\", \\\"lvl10_mapped_management_unit_nm\\\
+  \",\\n  \\\"lvl11_mapped_management_unit_nm\\\", \\\"mapped_management_unit_nm\\\
+  \", \\\"emp_specialization_oper_code\\\", \\\"emp_specialization_it_code\\\", \\\
+  \"emp_stream_desc\\\",\\n  \\\"emp_specialization_desc\\\", \\\"management_head_flg\\\
+  \", \\\"head_lvl_segment\\\", \\\"management_head_nm\\\", \\\"head_login\\\",\\\
+  n  \\\"head_wo_employee_login\\\", \\\"head_wrk_email_address_txt\\\", \\\"management_head_mdm_employee_rk\\\
+  \", \\\"hrbp_nm\\\", \\\"hrbp_login\\\",\\n  \\\"hrbp_mdm_employee_rk\\\", \\\"\
+  hrap_login\\\", \\\"hrap_mdm_employee_rk\\\", \\\"subordination_lvl\\\"\\n];\\n\\\
+  nfunction b64ToUtf8(b64) {\\n  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';\\\
+  n  var lookup = {}; for (var i = 0; i < chars.length; i++) lookup[chars.charAt(i)]\
+  \ = i;\\n  b64 = String(b64).replace(/[^A-Za-z0-9+/]/g, '');\\n  var bytes = [];\\\
+  n  for (var p = 0; p < b64.length; p += 4) {\\n    var e1 = lookup[b64.charAt(p)],\
+  \ e2 = lookup[b64.charAt(p+1)];\\n    var e3 = lookup[b64.charAt(p+2)], e4 = lookup[b64.charAt(p+3)];\\\
+  n    bytes.push((e1 << 2) | (e2 >> 4));\\n    if (b64.charAt(p+2) !== '') bytes.push(((e2\
+  \ & 15) << 4) | (e3 >> 2));\\n    if (b64.charAt(p+3) !== '') bytes.push(((e3 &\
+  \ 3) << 6) | e4);\\n  }\\n  var out = '', k = 0;\\n  while (k < bytes.length) {\\\
+  n    var b = bytes[k++];\\n    if (b < 0x80) out += String.fromCharCode(b);\\n \
+  \   else if (b >= 0xC0 && b < 0xE0) out += String.fromCharCode(((b & 0x1F) << 6)\
+  \ | (bytes[k++] & 0x3F));\\n    else if (b >= 0xE0 && b < 0xF0) out += String.fromCharCode(((b\
+  \ & 0x0F) << 12) | ((bytes[k++] & 0x3F) << 6) | (bytes[k++] & 0x3F));\\n    else\
+  \ { var cp = ((b & 0x07) << 18) | ((bytes[k++] & 0x3F) << 12) | ((bytes[k++] & 0x3F)\
+  \ << 6) | (bytes[k++] & 0x3F); cp -= 0x10000; out += String.fromCharCode(0xD800\
+  \ + (cp >> 10), 0xDC00 + (cp & 0x3FF)); }\\n  }\\n  return out;\\n}\\n\\nfunction\
+  \ parseDate(raw) {\\n  if (raw === null || raw === undefined || raw === '') return\
+  \ null;\\n  if (typeof raw === 'number' || (typeof raw === 'string' && /^\\\\d{9,}$/.test(String(raw).trim())))\
+  \ {\\n    var n = Number(raw), d0 = new Date(n > 1e12 ? n : n * 1000);\\n    if\
+  \ (!isNaN(d0.getTime())) return { year: d0.getUTCFullYear(), month: d0.getUTCMonth(),\
+  \ day: d0.getUTCDate() };\\n  }\\n  var s = String(raw).trim(), m = s.match(/^(\\\
+  \\d{4})-(\\\\d{2})-(\\\\d{2})/);\\n  if (m) return { year: +m[1], month: +m[2] -\
+  \ 1, day: +m[3] };\\n  var d = new Date(s);\\n  if (!isNaN(d.getTime())) return\
+  \ { year: d.getUTCFullYear(), month: d.getUTCMonth(), day: d.getUTCDate() };\\n\
+  \  return null;\\n}\\nfunction pad2(x){ x = String(x); return x.length < 2 ? '0'\
+  \ + x : x; }\\nfunction transformRow(row) {\\n  function iso(d){ return d ? d.year\
+  \ + '-' + pad2(d.month+1) + '-' + pad2(d.day) : ''; }\\n  return {\\n    master_id:\
+  \ String(row.mdm_employee_rk || ''), hiredate: iso(parseDate(row.company_hire_dt)),\
+  \ last_nm: String(row.last_nm || ''), first_nm: String(row.first_nm || ''), full_nm:\
+  \ String(row.full_nm || ''), birth_dt: iso(parseDate(row.birth_dt)), birth_day:\
+  \ String(row.birth_day || ''), birth_month: String(row.birth_month || ''), mdm_employee_age:\
+  \ String(row.mdm_employee_age || ''), age_generation_nm: String(row.age_generation_nm\
+  \ || ''), contact_main_phone_no: String(row.contact_main_phone_no || ''), prs_email_address_txt:\
+  \ String(row.prs_email_address_txt || ''), employee_document_type_desc: String(row.employee_document_type_desc\
+  \ || ''), citizenship_country_desc: String(row.citizenship_country_desc || ''),\
+  \ registration_state_nm: String(row.registration_state_nm || ''), registration_city_nm:\
+  \ String(row.registration_city_nm || ''), registration_full_address_txt: String(row.registration_full_address_txt\
+  \ || ''), residential_state_nm: String(row.residential_state_nm || ''), city_nm:\
+  \ String(row.city_nm || ''), residential_full_address_txt: String(row.residential_full_address_txt\
+  \ || ''), doc_city_nm: String(row.doc_city_nm || ''), marital_status_desc: String(row.marital_status_desc\
+  \ || ''), gender_desc: String(row.gender_desc || ''), education_degree_unique_max:\
+  \ String(row.education_degree_unique_max || ''), education_spec_nm: String(row.education_spec_nm\
+  \ || ''), has_children_flg: String(row.has_children_flg || ''), location_type: String(row.location_type\
+  \ || ''), macroregion_nm: String(row.macroregion_nm || ''), office_desc: String(row.office_desc\
+  \ || ''), ad_login: String(row.ad_login || ''), wo_employee_login: String(row.wo_employee_login\
+  \ || ''), wrk_email_address_txt: String(row.wrk_email_address_txt || ''), clothes_size_code:\
+  \ String(row.clothes_size_code || ''), party_id: String(row.party_id || ''), company_fire_dt:\
+  \ iso(parseDate(row.company_fire_dt)), t_education_desc: String(row.t_education_desc\
+  \ || ''), work_experience_year: String(row.work_experience_year || ''), experience_group_nm:\
+  \ String(row.experience_group_nm || ''), active_type_nm: String(row.active_type_nm\
+  \ || ''), seniority: String(row.seniority || ''), grade: String(row.grade || ''),\
+  \ change_grade_dt_text: String(row.change_grade_dt_text || ''), change_specialization_dt_text:\
+  \ String(row.change_specialization_dt_text || ''), change_management_unit_dt_text:\
+  \ String(row.change_management_unit_dt_text || ''), change_management_head_dt: iso(parseDate(row.change_management_head_dt)),\
+  \ summary_score: String(row.summary_score || ''), employment_relation_type_desc:\
+  \ String(row.employment_relation_type_desc || ''), employee_status_desc: String(row.employee_status_desc\
+  \ || ''), employee_contract_type_desc: String(row.employee_contract_type_desc ||\
+  \ ''), legal_position_nm: String(row.legal_position_nm || ''), employee_main_work_no:\
+  \ String(row.employee_main_work_no || ''), legal_hire_dt: iso(parseDate(row.legal_hire_dt)),\
+  \ legal_fire_dt: iso(parseDate(row.legal_fire_dt)), lvl1_legal_unit_nm: String(row.lvl1_legal_unit_nm\
+  \ || ''), lvl2_legal_unit_nm: String(row.lvl2_legal_unit_nm || ''), lvl3_legal_unit_nm:\
+  \ String(row.lvl3_legal_unit_nm || ''), lvl4_legal_unit_nm: String(row.lvl4_legal_unit_nm\
+  \ || ''), lvl5_legal_unit_nm: String(row.lvl5_legal_unit_nm || ''), lvl6_legal_unit_nm:\
+  \ String(row.lvl6_legal_unit_nm || ''), lvl7_legal_unit_nm: String(row.lvl7_legal_unit_nm\
+  \ || ''), hr_head_nm: String(row.hr_head_nm || ''), regional_hr_login: String(row.regional_hr_login\
+  \ || ''), hr_head_mdm_employee_rk: String(row.hr_head_mdm_employee_rk || ''), code_1c:\
+  \ String(row.code_1c || ''), employee_main_contract_type_nm: String(row.employee_main_contract_type_nm\
+  \ || ''), employee_main_contract_end_dt: iso(parseDate(row.employee_main_contract_end_dt)),\
+  \ legal_head_flg: String(row.legal_head_flg || ''), employee_main_schedule_nm: String(row.employee_main_schedule_nm\
+  \ || ''), emp_contract_no: String(row.emp_contract_no || ''), lvl3_mapped_management_unit_nm:\
+  \ String(row.lvl3_mapped_management_unit_nm || ''), lvl4_mapped_management_unit_nm:\
+  \ String(row.lvl4_mapped_management_unit_nm || ''), lvl5_mapped_management_unit_nm:\
+  \ String(row.lvl5_mapped_management_unit_nm || ''), lvl6_mapped_management_unit_nm:\
+  \ String(row.lvl6_mapped_management_unit_nm || ''), lvl7_mapped_management_unit_nm:\
+  \ String(row.lvl7_mapped_management_unit_nm || ''), lvl8_mapped_management_unit_nm:\
+  \ String(row.lvl8_mapped_management_unit_nm || ''), lvl9_mapped_management_unit_nm:\
+  \ String(row.lvl9_mapped_management_unit_nm || ''), lvl10_mapped_management_unit_nm:\
+  \ String(row.lvl10_mapped_management_unit_nm || ''), lvl11_mapped_management_unit_nm:\
+  \ String(row.lvl11_mapped_management_unit_nm || ''), mapped_management_unit_nm:\
+  \ String(row.mapped_management_unit_nm || ''), emp_specialization_oper_code: String(row.emp_specialization_oper_code\
+  \ || ''), emp_specialization_it_code: String(row.emp_specialization_it_code || ''),\
+  \ emp_stream_desc: String(row.emp_stream_desc || ''), emp_specialization_desc: String(row.emp_specialization_desc\
+  \ || ''), management_head_flg: String(row.management_head_flg || ''), head_lvl_segment:\
+  \ String(row.head_lvl_segment || ''), management_head_nm: String(row.management_head_nm\
+  \ || ''), head_login: String(row.head_login || ''), head_wo_employee_login: String(row.head_wo_employee_login\
+  \ || ''), head_wrk_email_address_txt: String(row.head_wrk_email_address_txt || ''),\
+  \ management_head_mdm_employee_rk: String(row.management_head_mdm_employee_rk ||\
+  \ ''), hrbp_nm: String(row.hrbp_nm || ''), hrbp_login: String(row.hrbp_login ||\
+  \ ''), hrbp_mdm_employee_rk: String(row.hrbp_mdm_employee_rk || ''), hrap_login:\
+  \ String(row.hrap_login || ''), hrap_mdm_employee_rk: String(row.hrap_mdm_employee_rk\
+  \ || ''), subordination_lvl: String(row.subordination_lvl || '')\\n  };\\n}\\n\\\
+  nvar rawData = [];\\nvar TOTAL_CNT = null;\\nvar WARDEN_FIRST_NM = \\\"\\\";\\ntry\
+  \ {\\n  var __src = (typeof data !== 'undefined' && Array.isArray(data)) ? data\
+  \ : [];\\n  var __tc = null;\\n  for (var t = 0; t < __src.length; t++) {\\n   \
+  \ var row0 = __src[t];\\n    if (!row0) continue;\\n    var tv = row0.total_cnt;\\\
+  n    if (tv !== undefined && tv !== null && tv !== '') { var tn = Number(tv); if\
+  \ (!isNaN(tn)) { __tc = (__tc === null) ? tn : Math.max(__tc, tn); } }\\n    if\
+  \ (row0.warden_first_nm !== undefined && row0.warden_first_nm !== null && row0.warden_first_nm\
+  \ !== '' && !WARDEN_FIRST_NM) WARDEN_FIRST_NM = String(row0.warden_first_nm);\\\
+  n  }\\n  TOTAL_CNT = __tc;\\n  var parts = [];\\n  for (var r = 0; r < __src.length;\
+  \ r++) {\\n    var b64 = __src[r].packed_b64 || __src[r][Object.keys(__src[r])[0]];\\\
+  n    if (!b64) continue;\\n    var g = JSON.parse('[' + b64ToUtf8(b64) + ']');\\\
+  n    for (var kk = 0; kk < g.length; kk++) parts.push(g[kk]);\\n  }\\n  rawData\
+  \ = parts.map(function(a){ var o={}; for (var i=0;i<COLS_SRC.length;i++) o[COLS_SRC[i]]=a[i];\
+  \ return o; });\\n} catch (e) { rawData = []; }\\n\\nfunction escSafe(s){ return\
+  \ String(s==null?\\\"\\\":s).replace(/&/g,\\\"&amp;\\\").replace(/</g,\\\"&lt;\\\
+  \").replace(/>/g,\\\"&gt;\\\"); }\\n\\nvar __overlay = null;\\nfunction getOverlay()\
+  \ {\\n  if (__overlay && document.body.contains(__overlay)) return __overlay;\\\
+  n  var hosts = document.querySelectorAll('[_echarts_instance_]');\\n  if (!hosts\
+  \ || hosts.length === 0) return document.body;\\n  var host = hosts[hosts.length\
+  \ - 1];\\n  var cvs = host.querySelectorAll('canvas');\\n  for (var i = 0; i < cvs.length;\
+  \ i++) cvs[i].style.display = 'none';\\n  var prev = host.querySelector('.chart-root');\
+  \ if (prev) prev.remove();\\n  var overlay = document.createElement('div');\\n \
+  \ overlay.className = 'chart-root';\\n  overlay.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;z-index:10;background:#fff;overflow:auto;box-sizing:border-box;';\\\
+  n  try { if (getComputedStyle(host).position === 'static') host.style.position =\
+  \ 'relative'; } catch (e) {}\\n  host.appendChild(overlay);\\n  __overlay = overlay;\\\
+  n  return overlay;\\n}\\n\\n(function(){\\n  try {\\n    var ROOT = getOverlay();\\\
+  n    if (!ROOT) return;\\n    var FIELD_DEFS = \\\"master_id~MasterID~\u0411\u0430\
+  \u0437\u043E\u0432\u043E\u0435;hiredate~\u0414\u0430\u0442\u0430 \u043D\u0430\u0439\
+  \u043C\u0430 \u0432 \u043A\u043E\u043C\u043F\u0430\u043D\u0438\u044E~\u0411\u0430\
+  \u0437\u043E\u0432\u043E\u0435;last_nm~\u0424\u0430\u043C\u0438\u043B\u0438\u044F\
+  ~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;first_nm~\u0418\u043C\u044F\
+  ~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;full_nm~\u041F\u043E\u043B\
+  \u043D\u043E\u0435 \u0424\u0418\u041E~\u0410\u0442\u0440\u0438\u0431\u0443\u0442\
+  \ \u0424\u041B;birth_dt~\u0414\u0430\u0442\u0430 \u0440\u043E\u0436\u0434\u0435\u043D\
+  \u0438\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;birth_day~\u0414\
+  \u0435\u043D\u044C \u0440\u043E\u0436\u0434\u0435\u043D\u0438\u044F~\u0410\u0442\
+  \u0440\u0438\u0431\u0443\u0442 \u0424\u041B;birth_month~\u041C\u0435\u0441\u044F\
+  \u0446 \u0440\u043E\u0436\u0434\u0435\u043D\u0438\u044F~\u0410\u0442\u0440\u0438\
+  \u0431\u0443\u0442 \u0424\u041B;mdm_employee_age~\u0412\u043E\u0437\u0440\u0430\u0441\
+  \u0442~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;age_generation_nm~\u0412\
+  \u043E\u0437\u0440\u0430\u0441\u0442\u043D\u044B\u0435 \u043F\u043E\u043A\u043E\u043B\
+  \u0435\u043D\u0438\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B\
+  ;contact_main_phone_no~\u041D\u043E\u043C\u0435\u0440 \u0442\u0435\u043B\u0435\u0444\
+  \u043E\u043D\u0430~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;prs_email_address_txt~\u041B\
+  \u0438\u0447\u043D\u0430\u044F \u043F\u043E\u0447\u0442\u0430~\u0410\u0442\u0440\
+  \u0438\u0431\u0443\u0442 \u0424\u041B;employee_document_type_desc~\u0422\u0438\u043F\
+  \ \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u0430~\u0410\u0442\u0440\u0438\
+  \u0431\u0443\u0442 \u0424\u041B;citizenship_country_desc~\u0421\u0442\u0440\u0430\
+  \u043D\u0430 \u0433\u0440\u0430\u0436\u0434\u0430\u043D\u0441\u0442\u0432\u0430\
+  ~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;registration_state_nm~\u0420\
+  \u0435\u0433\u0438\u043E\u043D \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\
+  \u0438\u0438~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;registration_city_nm~\u0413\
+  \u043E\u0440\u043E\u0434 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\
+  \u0438~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;registration_full_address_txt~\u041F\
+  \u043E\u043B\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u0440\u0435\u0433\
+  \u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0438~\u0410\u0442\u0440\u0438\u0431\u0443\
+  \u0442 \u0424\u041B;residential_state_nm~\u0420\u0435\u0433\u0438\u043E\u043D \u043F\
+  \u0440\u043E\u0436\u0438\u0432\u0430\u043D\u0438\u044F~\u0410\u0442\u0440\u0438\u0431\
+  \u0443\u0442 \u0424\u041B;city_nm~\u0413\u043E\u0440\u043E\u0434 \u043F\u0440\u043E\
+  \u0436\u0438\u0432\u0430\u043D\u0438\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442\
+  \ \u0424\u041B;residential_full_address_txt~\u041F\u043E\u043B\u043D\u044B\u0439\
+  \ \u0430\u0434\u0440\u0435\u0441 \u043F\u0440\u043E\u0436\u0438\u0432\u0430\u043D\
+  \u0438\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;doc_city_nm~\u0413\
+  \u043E\u0440\u043E\u0434 \u043E\u0442\u043F\u0440\u0430\u0432\u043A\u0438 \u0434\
+  \u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432 \u0438\u0437 1\u0421~\u0410\
+  \u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;marital_status_desc~\u0421\u0435\
+  \u043C\u0435\u0439\u043D\u043E\u0435 \u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\
+  \u0435~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;gender_desc~\u041F\
+  \u043E\u043B~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;education_degree_unique_max~\u0423\
+  \u0440\u043E\u0432\u0435\u043D\u044C \u043E\u0431\u0440\u0430\u0437\u043E\u0432\u0430\
+  \u043D\u0438\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B;education_spec_nm~\u041D\
+  \u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u043E\u0431\u0440\u0430\
+  \u0437\u043E\u0432\u0430\u043D\u0438\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442\
+  \ \u0424\u041B;has_children_flg~\u041D\u0430\u043B\u0438\u0447\u0438\u0435 \u0434\
+  \u0435\u0442\u0435\u0439~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\u041B\
+  ;location_type~\u041B\u043E\u043A\u0430\u0446\u0438\u044F~\u0410\u0442\u0440\u0438\
+  \u0431\u0443\u0442 \u0424\u041B;macroregion_nm~\u041C\u0430\u043A\u0440\u043E\u0440\
+  \u0435\u0433\u0438\u043E\u043D~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0424\
+  \u041B;office_desc~\u041E\u0444\u0438\u0441~\u0410\u0442\u0440\u0438\u0431\u0443\
+  \u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;ad_login~\u041B\
+  \u043E\u0433\u0438\u043D~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u043E\
+  \u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;wo_employee_login~WO \u043B\u043E\
+  \u0433\u0438\u043D~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u043E\u0442\
+  \u0440\u0443\u0434\u043D\u0438\u043A\u0430;wrk_email_address_txt~\u0420\u0430\u0431\
+  \u043E\u0447\u0430\u044F \u043F\u043E\u0447\u0442\u0430~\u0410\u0442\u0440\u0438\
+  \u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430\
+  ;clothes_size_code~\u0420\u0430\u0437\u043C\u0435\u0440 \u043E\u0434\u0435\u0436\
+  \u0434\u044B~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\
+  \u0443\u0434\u043D\u0438\u043A\u0430;party_id~\u041E\u0441\u043D\u043E\u0432\u043D\
+  \u043E\u0439 Siebel_ID~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u043E\u0442\
+  \u0440\u0443\u0434\u043D\u0438\u043A\u0430;company_fire_dt~\u0414\u0430\u0442\u0430\
+  \ \u0443\u0432\u043E\u043B\u044C\u043D\u0435\u043D\u0438\u044F \u0438\u0437 \u043A\
+  \u043E\u043C\u043F\u0430\u043D\u0438\u0438~\u0410\u0442\u0440\u0438\u0431\u0443\u0442\
+  \ \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;t_education_desc~\u041F\
+  \u0440\u0438\u043D\u0430\u0434\u043B\u0435\u0436\u043D\u043E\u0441\u0442\u044C \u043A\
+  \ T-\u043E\u0431\u0440\u0430\u0437\u043E\u0432\u0430\u043D\u0438\u044E~\u0410\u0442\
+  \u0440\u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\
+  \u0430;work_experience_year~\u0421\u0442\u0430\u0436 \u0432 \u0433\u043E\u0434\u0430\
+  \u0445~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\
+  \u0434\u043D\u0438\u043A\u0430;experience_group_nm~\u0413\u0440\u0443\u043F\u043F\
+  \u0430 \u0441\u0442\u0430\u0436\u0430~\u0410\u0442\u0440\u0438\u0431\u0443\u0442\
+  \ \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;active_type_nm~\u0422\
+  \u0438\u043F \u0447\u0438\u0441\u043B\u0435\u043D\u043D\u043E\u0441\u0442\u0438\
+  ~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\
+  \u043D\u0438\u043A\u0430;seniority~\u0423\u0440\u043E\u0432\u0435\u043D\u044C \u043F\
+  \u043E\u0437\u0438\u0446\u0438\u0438~\u0410\u0442\u0440\u0438\u0431\u0443\u0442\
+  \ \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;grade~\u0413\u0440\
+  \u0435\u0439\u0434~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u043E\u0442\
+  \u0440\u0443\u0434\u043D\u0438\u043A\u0430;change_grade_dt_text~\u0414\u0430\u0442\
+  \u0430 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u0430 \u0432 \u0442\u0435\u043A\
+  \u0443\u0449\u0438\u0439 \u0433\u0440\u0435\u0439\u0434~\u0410\u0442\u0440\u0438\
+  \u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430\
+  ;change_specialization_dt_text~\u0414\u0430\u0442\u0430 \u043F\u0435\u0440\u0435\
+  \u0432\u043E\u0434\u0430 \u0432 \u0442\u0435\u043A\u0443\u0449\u0443\u044E \u0441\
+  \u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044E~\u0410\u0442\
+  \u0440\u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\
+  \u0430;change_management_unit_dt_text~\u0414\u0430\u0442\u0430 \u043F\u0435\u0440\
+  \u0435\u0432\u043E\u0434\u0430 \u0432 \u0442\u0435\u043A\u0443\u0449\u0443\u044E\
+  \ \u043A\u043E\u043C\u0430\u043D\u0434\u0443~\u0410\u0442\u0440\u0438\u0431\u0443\
+  \u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430;change_management_head_dt~\u0414\
+  \u0430\u0442\u0430 \u043F\u0435\u0440\u0435\u0432\u043E\u0434\u0430 \u0432 \u0440\
+  \u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F~\u0410\u0442\u0440\
+  \u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430\
+  ;summary_score~\u041E\u0446\u0435\u043D\u043A\u0430 \u0440\u0435\u0432\u044C\u044E\
+  ~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\u0434\
+  \u043D\u0438\u043A\u0430;employment_relation_type_desc~\u0422\u0438\u043F \u0442\
+  \u0440\u0443\u0434\u043E\u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430\
+  ~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;employee_status_desc~\u0421\
+  \u0442\u0430\u0442\u0443\u0441 \u043F\u043E\u0437\u0438\u0446\u0438\u0438~\u0410\
+  \u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;employee_contract_type_desc~\u0422\
+  \u0438\u043F \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0430~\u0410\u0442\u0440\
+  \u0438\u0431\u0443\u0442 \u042E\u0421;legal_position_nm~\u0414\u043E\u043B\u0436\
+  \u043D\u043E\u0441\u0442\u044C~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\
+  \u0421;employee_main_work_no~\u0422\u0430\u0431\u0435\u043B\u044C\u043D\u044B\u0439\
+  \ \u043D\u043E\u043C\u0435\u0440~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\
+  \u0421;legal_hire_dt~\u0414\u0430\u0442\u0430 \u043D\u0430\u0439\u043C\u0430 \u043D\
+  \u0430 \u044E\u0440 \u043F\u043E\u0437\u0438\u0446\u0438\u044E~\u0410\u0442\u0440\
+  \u0438\u0431\u0443\u0442 \u042E\u0421;legal_fire_dt~\u0414\u0430\u0442\u0430 \u0443\
+  \u0432\u043E\u043B\u044C\u043D\u0435\u043D\u0438\u044F \u0441 \u044E\u0440 \u043F\
+  \u043E\u0437\u0438\u0446\u0438\u0438~\u0410\u0442\u0440\u0438\u0431\u0443\u0442\
+  \ \u042E\u0421;lvl1_legal_unit_nm~\u042E\u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\
+  \u044C 1~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;lvl2_legal_unit_nm~\u042E\
+  \u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 2~\u0410\u0442\u0440\u0438\u0431\
+  \u0443\u0442 \u042E\u0421;lvl3_legal_unit_nm~\u042E\u0421 - \u0423\u0440\u043E\u0432\
+  \u0435\u043D\u044C 3~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;lvl4_legal_unit_nm~\u042E\
+  \u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 4~\u0410\u0442\u0440\u0438\u0431\
+  \u0443\u0442 \u042E\u0421;lvl5_legal_unit_nm~\u042E\u0421 - \u0423\u0440\u043E\u0432\
+  \u0435\u043D\u044C 5~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;lvl6_legal_unit_nm~\u042E\
+  \u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 6~\u0410\u0442\u0440\u0438\u0431\
+  \u0443\u0442 \u042E\u0421;lvl7_legal_unit_nm~\u042E\u0421 - \u0423\u0440\u043E\u0432\
+  \u0435\u043D\u044C 7~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;hr_head_nm~\u0424\
+  \u0418 \u0440\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E\u0433\u043E\
+  \ HR~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;regional_hr_login~\u041B\
+  \u043E\u0433\u0438\u043D \u0440\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\
+  \u043E\u0433\u043E HR~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;hr_head_mdm_employee_rk~MasterID\
+  \ \u0440\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u043E\u0433\u043E\
+  \ HR~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;code_1c~\u041A\u043E\
+  \u0434 \u044E\u043D\u0438\u0442\u0430 \u0438\u0437 1\u0421~\u0410\u0442\u0440\u0438\
+  \u0431\u0443\u0442 \u042E\u0421;employee_main_contract_type_nm~\u0421\u0440\u043E\
+  \u0447\u043D\u044B\u0439/\u0431\u0435\u0441\u0441\u0440\u043E\u0447\u043D\u044B\u0439\
+  \ \u0422\u0414~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;employee_main_contract_end_dt~\u0414\
+  \u0430\u0442\u0430 \u043E\u043A\u043E\u043D\u0447\u0430\u043D\u0438\u044F \u0422\
+  \u0414~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;legal_head_flg~\u0424\
+  \u043B\u0430\u0433 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\
+  \u044F \u042E\u0421~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;employee_main_schedule_nm~\u0428\
+  \u0442\u0430\u0442\u043D\u043E\u0435 \u0440\u0430\u0441\u043F\u0438\u0441\u0430\u043D\
+  \u0438\u0435~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421;emp_contract_no~\u041D\
+  \u043E\u043C\u0435\u0440 \u0442\u0440\u0443\u0434\u043E\u0432\u043E\u0433\u043E\
+  \ \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0430~\u0410\u0442\u0440\u0438\u0431\
+  \u0443\u0442 \u042E\u0421;lvl3_mapped_management_unit_nm~\u0423\u0421 - \u0423\u0440\
+  \u043E\u0432\u0435\u043D\u044C 3~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\
+  \u0421;lvl4_mapped_management_unit_nm~\u0423\u0421 - \u0423\u0440\u043E\u0432\u0435\
+  \u043D\u044C 4~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;lvl5_mapped_management_unit_nm~\u0423\
+  \u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 5~\u0410\u0442\u0440\u0438\u0431\
+  \u0443\u0442 \u0423\u0421;lvl6_mapped_management_unit_nm~\u0423\u0421 - \u0423\u0440\
+  \u043E\u0432\u0435\u043D\u044C 6~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\
+  \u0421;lvl7_mapped_management_unit_nm~\u0423\u0421 - \u0423\u0440\u043E\u0432\u0435\
+  \u043D\u044C 7~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;lvl8_mapped_management_unit_nm~\u0423\
+  \u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 8~\u0410\u0442\u0440\u0438\u0431\
+  \u0443\u0442 \u0423\u0421;lvl9_mapped_management_unit_nm~\u0423\u0421 - \u0423\u0440\
+  \u043E\u0432\u0435\u043D\u044C 9~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\
+  \u0421;lvl10_mapped_management_unit_nm~\u0423\u0421 - \u0423\u0440\u043E\u0432\u0435\
+  \u043D\u044C 10~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;lvl11_mapped_management_unit_nm~\u0423\
+  \u0421 - \u0423\u0440\u043E\u0432\u0435\u043D\u044C 11~\u0410\u0442\u0440\u0438\u0431\
+  \u0443\u0442 \u0423\u0421;mapped_management_unit_nm~\u042E\u043D\u0438\u0442 \u0423\
+  \u0421~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;emp_specialization_oper_code~HQ|Line|Support~\u0410\
+  \u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;emp_specialization_it_code~IT|nonIT~\u0410\
+  \u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;emp_stream_desc~\u0421\u0442\u0440\
+  \u0438\u043C~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;emp_specialization_desc~\u0421\
+  \u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044F~\u0410\u0442\
+  \u0440\u0438\u0431\u0443\u0442 \u0423\u0421;management_head_flg~\u0424\u043B\u0430\
+  \u0433 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F\
+  \ \u0423\u0421~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;head_lvl_segment~\u0421\
+  \u0435\u0433\u043C\u0435\u043D\u0442 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\
+  \u0442\u0435\u043B\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421\
+  ;management_head_nm~\u0424\u0418 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\
+  \u0442\u0435\u043B\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421\
+  ;head_login~\u041B\u043E\u0433\u0438\u043D \u0440\u0443\u043A\u043E\u0432\u043E\u0434\
+  \u0438\u0442\u0435\u043B\u044F~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\
+  \u0421;head_wo_employee_login~WO \u043B\u043E\u0433\u0438\u043D \u0440\u0443\u043A\
+  \u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F~\u0410\u0442\u0440\u0438\u0431\
+  \u0443\u0442 \u0423\u0421;head_wrk_email_address_txt~\u041F\u043E\u0447\u0442\u0430\
+  \ \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F~\u0410\
+  \u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;management_head_mdm_employee_rk~MasterID\
+  \ \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F~\u0410\
+  \u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;hrbp_nm~\u0424\u0418 HRBP~\u0410\
+  \u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;hrbp_login~\u041B\u043E\u0433\u0438\
+  \u043D HRBP~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;hrbp_mdm_employee_rk~MasterID\
+  \ HRBP~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421;hrap_login~\u041B\
+  \u043E\u0433\u0438\u043D HRAP~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421\
+  ;hrap_mdm_employee_rk~MasterID HRAP~\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\
+  \u0421;subordination_lvl~\u041F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435\
+  \ \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430 \u0432 \u0441\u0442\
+  \u0440\u0443\u043A\u0442\u0443\u0440\u0435~\u0410\u0442\u0440\u0438\u0431\u0443\u0442\
+  \ \u0423\u0421\\\".split(\\\";\\\").map(function(s){var p=s.split(\\\"~\\\");return\
+  \ {key:p[0],label:p[1],group:p[2]};});\\n    var DEFAULT_COLS = [\\\"master_id\\\
+  \",\\\"hiredate\\\"];\\n    var LOCKED_COLS = [\\\"master_id\\\",\\\"hiredate\\\"\
+  ];\\n    var PRESETS = [\\n      {\\n        name: \\\"\u041F\u0435\u0440\u0441\u043E\
+  \u043D\u0430\u043B\u043A\u0430\\\",\\n        cols: [\\n          \\\"master_id\\\
+  \",\\\"full_nm\\\",\\\"birth_dt\\\",\\\"mdm_employee_age\\\",\\\"age_generation_nm\\\
+  \",\\\"company_fire_dt\\\",\\n          \\\"work_experience_year\\\",\\\"contact_main_phone_no\\\
+  \",\\\"prs_email_address_txt\\\",\\\"registration_state_nm\\\",\\n          \\\"\
+  registration_city_nm\\\",\\\"registration_full_address_txt\\\",\\\"residential_state_nm\\\
+  \",\\\"city_nm\\\",\\n          \\\"residential_full_address_txt\\\",\\\"doc_city_nm\\\
+  \",\\\"education_degree_unique_max\\\",\\\"education_spec_nm\\\",\\n          \\\
+  \"office_desc\\\",\\\"ad_login\\\",\\\"wrk_email_address_txt\\\",\\\"active_type_nm\\\
+  \",\\\"employment_relation_type_desc\\\",\\n          \\\"employee_status_desc\\\
+  \",\\\"employee_contract_type_desc\\\",\\\"hiredate\\\",\\\"regional_hr_login\\\"\
+  ,\\n          \\\"employee_main_contract_type_nm\\\",\\\"employee_main_contract_end_dt\\\
+  \",\\\"legal_position_nm\\\",\\n          \\\"lvl3_mapped_management_unit_nm\\\"\
+  ,\\\"lvl4_mapped_management_unit_nm\\\",\\\"lvl5_mapped_management_unit_nm\\\",\\\
+  n          \\\"lvl6_mapped_management_unit_nm\\\",\\\"lvl7_mapped_management_unit_nm\\\
+  \",\\\"lvl8_mapped_management_unit_nm\\\",\\n          \\\"lvl9_mapped_management_unit_nm\\\
+  \",\\\"lvl10_mapped_management_unit_nm\\\",\\\"lvl11_mapped_management_unit_nm\\\
+  \",\\n          \\\"mapped_management_unit_nm\\\",\\\"subordination_lvl\\\",\\\"\
+  emp_specialization_oper_code\\\",\\\"emp_specialization_it_code\\\",\\n        \
+  \  \\\"emp_stream_desc\\\",\\\"emp_specialization_desc\\\",\\\"management_head_flg\\\
+  \",\\\"head_lvl_segment\\\",\\\"management_head_nm\\\",\\n          \\\"head_login\\\
+  \",\\\"hrbp_nm\\\",\\\"hrbp_login\\\",\\\"hrap_login\\\",\\\"change_management_unit_dt_text\\\
+  \",\\n          \\\"change_management_head_dt\\\",\\\"change_specialization_dt_text\\\
+  \",\\\"has_children_flg\\\"\\n        ]\\n      },\\n      {\\n        name: \\\"\
+  \u0420\u0430\u0431\u043E\u0447\u0438\u0435 \u0434\u0430\u043D\u043D\u044B\u0435\\\
+  \",\\n        cols: [\\n          \\\"master_id\\\",\\\"employee_main_work_no\\\"\
+  ,\\\"full_nm\\\",\\\"legal_position_nm\\\",\\\"grade\\\",\\\"management_head_flg\\\
+  \",\\n          \\\"birth_dt\\\",\\\"mdm_employee_age\\\",\\\"company_fire_dt\\\"\
+  ,\\\"work_experience_year\\\",\\\"registration_state_nm\\\",\\n          \\\"registration_city_nm\\\
+  \",\\\"residential_state_nm\\\",\\\"city_nm\\\",\\\"doc_city_nm\\\",\\\"office_desc\\\
+  \",\\\"ad_login\\\",\\n          \\\"wrk_email_address_txt\\\",\\\"active_type_nm\\\
+  \",\\\"t_education_desc\\\",\\\"employment_relation_type_desc\\\",\\n          \\\
+  \"employee_status_desc\\\",\\\"employee_contract_type_desc\\\",\\\"hiredate\\\"\
+  ,\\\"lvl1_legal_unit_nm\\\",\\n          \\\"lvl2_legal_unit_nm\\\",\\\"lvl3_legal_unit_nm\\\
+  \",\\\"lvl4_legal_unit_nm\\\",\\\"lvl5_legal_unit_nm\\\",\\n          \\\"lvl6_legal_unit_nm\\\
+  \",\\\"lvl7_legal_unit_nm\\\",\\\"code_1c\\\",\\\"employee_main_schedule_nm\\\"\
+  ,\\\"hr_head_nm\\\",\\n          \\\"regional_hr_login\\\",\\\"employee_main_contract_type_nm\\\
+  \",\\\"employee_main_contract_end_dt\\\",\\n          \\\"lvl3_mapped_management_unit_nm\\\
+  \",\\\"lvl4_mapped_management_unit_nm\\\",\\\"lvl5_mapped_management_unit_nm\\\"\
+  ,\\n          \\\"lvl6_mapped_management_unit_nm\\\",\\\"lvl7_mapped_management_unit_nm\\\
+  \",\\\"lvl8_mapped_management_unit_nm\\\",\\n          \\\"lvl9_mapped_management_unit_nm\\\
+  \",\\\"lvl10_mapped_management_unit_nm\\\",\\\"lvl11_mapped_management_unit_nm\\\
+  \",\\n          \\\"mapped_management_unit_nm\\\",\\\"subordination_lvl\\\",\\\"\
+  emp_specialization_oper_code\\\",\\\"emp_specialization_it_code\\\",\\n        \
+  \  \\\"emp_stream_desc\\\",\\\"emp_specialization_desc\\\",\\\"head_lvl_segment\\\
+  \",\\\"management_head_nm\\\",\\n          \\\"head_wrk_email_address_txt\\\",\\\
+  \"head_login\\\",\\\"hrbp_nm\\\",\\\"hrbp_login\\\",\\\"hrap_login\\\",\\\"change_grade_dt_text\\\
+  \",\\n          \\\"seniority\\\",\\\"change_management_unit_dt_text\\\",\\\"change_management_head_dt\\\
+  \",\\\"change_specialization_dt_text\\\",\\n          \\\"summary_score\\\"\\n \
+  \       ]\\n      }\\n    ];\\n    var DATE_KEYS = { hiredate:1, birth_dt:1, company_fire_dt:1,\
+  \ change_management_head_dt:1, legal_hire_dt:1, legal_fire_dt:1, employee_main_contract_end_dt:1\
+  \ };\\n    var COL_MIN_W = 160;\\n    var data = rawData.map(transformRow);\\n \
+  \   function fmtDate(iso){ if(!iso) return ''; var p=String(iso).split('-'); return\
+  \ p.length===3 ? p[2]+'.'+p[1]+'.'+p[0] : iso; }\\n    function cellVal(row,k){\
+  \ return DATE_KEYS[k] ? fmtDate(row[k]) : (row[k]==null?'':row[k]); }\\n    ROOT.innerHTML\
+  \ = '<style>' + CSS + '</style>' + (WARDEN_FIRST_NM ? '<div class=\\\"greeting-bar\\\
+  \"><span class=\\\"greet-left\\\"><span class=\\\"wave\\\">\U0001F44B</span>\u041F\
+  \u0440\u0438\u0432\u0435\u0442, <b>' + escSafe(WARDEN_FIRST_NM) + '</b>!</span></div>'\
+  \ : '') + '<div class=\\\"main-card\\\"><div class=\\\"toolbar\\\"><div class=\\\
+  \"tb-row tb-row-top\\\"><div class=\\\"total-badge\\\" id=\\\"total-badge\\\"><span\
+  \ class=\\\"tb-line\\\">\u041F\u043E\u043A\u0430\u0437\u0430\u043D\u043E \u0441\u043E\
+  \u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432: <b>0</b></span></div><div\
+  \ class=\\\"spacer\\\"></div><div class=\\\"search-box\\\"><svg class=\\\"ico\\\"\
+  \ viewBox=\\\"0 0 24 24\\\" fill=\\\"none\\\" stroke=\\\"#6b7a8d\\\" stroke-width=\\\
+  \"2\\\"><circle cx=\\\"11\\\" cy=\\\"11\\\" r=\\\"7\\\"/><line x1=\\\"21\\\" y1=\\\
+  \"21\\\" x2=\\\"16.5\\\" y2=\\\"16.5\\\"/></svg><input type=\\\"text\\\" id=\\\"\
+  search\\\" placeholder=\\\"\u041F\u043E\u0438\u0441\u043A \u043F\u043E \u0442\u0430\
+  \u0431\u043B\u0438\u0446\u0435\u2026\\\" autocomplete=\\\"off\\\"></div><button\
+  \ class=\\\"btn\\\" id=\\\"copy-btn\\\" title=\\\"\u0421\u043A\u043E\u043F\u0438\
+  \u0440\u043E\u0432\u0430\u0442\u044C \u0432\u0438\u0434\u0438\u043C\u044B\u0435\
+  \ \u0441\u0442\u0440\u043E\u043A\u0438\\\"><svg viewBox=\\\"0 0 24 24\\\" fill=\\\
+  \"none\\\" stroke=\\\"currentColor\\\" stroke-width=\\\"2\\\"><rect x=\\\"9\\\"\
+  \ y=\\\"9\\\" width=\\\"11\\\" height=\\\"11\\\" rx=\\\"2\\\"/><path d=\\\"M5 15V5a2\
+  \ 2 0 0 1 2-2h8\\\"/></svg>\u041A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u0442\
+  \u044C</button><div class=\\\"dd-wrap\\\"><button class=\\\"btn\\\" id=\\\"gear-btn\\\
+  \" title=\\\"\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430 \u0442\u0430\
+  \u0431\u043B\u0438\u0446\u044B\\\"><svg viewBox=\\\"0 0 24 24\\\" fill=\\\"none\\\
+  \" stroke=\\\"currentColor\\\" stroke-width=\\\"2\\\"><circle cx=\\\"12\\\" cy=\\\
+  \"12\\\" r=\\\"3\\\"/><path d=\\\"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0\
+  \ 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2\
+  \ 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1\
+  \ 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0\
+  \ 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65\
+  \ 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0\
+  \ 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65\
+  \ 0 0 0 .33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51\
+  \ 1z\\\"/></svg>\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430 \u0442\u0430\
+  \u0431\u043B\u0438\u0446\u044B <span class=\\\"badge\\\" id=\\\"col-badge\\\">0</span></button><div\
+  \ class=\\\"dd-panel\\\" id=\\\"dd-panel\\\"><div class=\\\"dd-sticky\\\"><div class=\\\
+  \"dd-head\\\"><span class=\\\"dd-title\\\">\u041F\u043E\u043B\u044F \u0442\u0430\
+  \u0431\u043B\u0438\u0446\u044B</span><span class=\\\"dd-mini\\\" id=\\\"reset-cols\\\
+  \">\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C</span></div><div class=\\\"\
+  dd-search-box\\\"><div class=\\\"dd-search-box-inner\\\"><input type=\\\"text\\\"\
+  \ id=\\\"dd-search\\\" placeholder=\\\"\u041F\u043E\u0438\u0441\u043A \u043F\u043E\
+  \ \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u044E \u043F\u043E\u043B\u044F\u2026\
+  \\\" autocomplete=\\\"off\\\"><span id=\\\"dd-search-clear\\\" class=\\\"dd-search-clear\\\
+  \" title=\\\"\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C\\\">\u2715</span></div></div><div\
+  \ class=\\\"dd-presets\\\" id=\\\"dd-presets\\\"></div></div><div id=\\\"dd-groups\\\
+  \"></div></div></div></div><div class=\\\"tb-row tb-row-bottom\\\" id=\\\"pager\\\
+  \"><div class=\\\"pg-left\\\"><span class=\\\"pg-lbl\\\">\u0421\u0442\u0440\u043E\
+  \u043A \u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0435:</span><select\
+  \ id=\\\"pg-size\\\" class=\\\"pg-size\\\"><option value=\\\"10\\\">10</option><option\
+  \ value=\\\"50\\\">50</option><option value=\\\"100\\\">100</option><option value=\\\
+  \"500\\\">500</option></select></div><div class=\\\"pg-nav\\\"><span class=\\\"\
+  pg-info\\\" id=\\\"pg-info\\\"></span><button id=\\\"pg-prev\\\" class=\\\"pg-btn\\\
+  \" title=\\\"\u041D\u0430\u0437\u0430\u0434\\\">\u2039</button><button id=\\\"pg-next\\\
+  \" class=\\\"pg-btn\\\" title=\\\"\u0412\u043F\u0435\u0440\u0451\u0434\\\">\u203A\
+  </button></div></div></div><div class=\\\"group-zone\\\" id=\\\"group-zone\\\"><span\
+  \ class=\\\"gz-hint\\\" id=\\\"gz-hint\\\">\u041F\u0435\u0440\u0435\u0442\u0430\u0449\
+  \u0438\u0442\u0435 \u0437\u0430\u0433\u043E\u043B\u043E\u0432\u043E\u043A \u043A\
+  \u043E\u043B\u043E\u043D\u043A\u0438 \u0441\u044E\u0434\u0430, \u0447\u0442\u043E\
+  \u0431\u044B \u0441\u0433\u0440\u0443\u043F\u043F\u0438\u0440\u043E\u0432\u0430\u0442\
+  \u044C \u2192</span><div class=\\\"gz-actions\\\" id=\\\"gz-actions\\\" style=\\\
+  \"display:none\\\"><span class=\\\"gz-link\\\" id=\\\"collapse-all\\\">\u0421\u0432\
+  \u0435\u0440\u043D\u0443\u0442\u044C \u0432\u0441\u0435</span><span class=\\\"gz-link\\\
+  \" id=\\\"expand-all\\\">\u0420\u0430\u0437\u0432\u0435\u0440\u043D\u0443\u0442\u044C\
+  \ \u0432\u0441\u0435</span></div></div><div class=\\\"table-scroll\\\"><table id=\\\
+  \"tbl\\\"><thead id=\\\"thead\\\"></thead><tbody id=\\\"tbody\\\"></tbody></table></div></div>';\\\
+  n\\n    function $(id){ return ROOT.querySelector('#'+id); }\\n    if (!__S.detTable)\
+  \ __S.detTable = { visible_cols: DEFAULT_COLS.slice(), group_by: [], search:\\\"\
+  \\\", col_widths:{}, collapsed_groups:{}, dd_group_collapsed:{}, sort_key:null,\
+  \ sort_dir:1, page_size:100, page:1, dd_search:\\\"\\\" };\\n    var state = __S.detTable;\\\
+  n    if(state.page_size==null) state.page_size=100;\\n    if(state.page==null) state.page=1;\\\
+  n    var DEF_BY_KEY = {}; FIELD_DEFS.forEach(function(f){ DEF_BY_KEY[f.key]=f; });\\\
+  n    function labelOf(k){ return DEF_BY_KEY[k] ? DEF_BY_KEY[k].label : k; }\\n \
+  \   function fmtNum(n){ return String(n).replace(/\\\\B(?=(\\\\d{3})+(?!\\\\d))/g,\
+  \ ' '); }\\n    function esc(s){ return String(s==null?\\\"\\\":s).replace(/&/g,\\\
+  \"&amp;\\\").replace(/</g,\\\"&lt;\\\").replace(/>/g,\\\"&gt;\\\"); }\\n    function\
+  \ highlight(txt,q){ txt=String(txt==null?\\\"\\\":txt); if(!q) return esc(txt);\
+  \ var lo=txt.toLowerCase(), i=lo.indexOf(q), out=\\\"\\\", last=0; while(i!==-1){\
+  \ out+=esc(txt.slice(last,i))+'<span class=\\\"hl\\\">'+esc(txt.slice(i,i+q.length))+'</span>';\
+  \ last=i+q.length; i=lo.indexOf(q,last); } out+=esc(txt.slice(last)); return out;\
+  \ }\\n    function cmpVals(a,b){ var na=parseFloat(a), nb=parseFloat(b); var aNum=(a!==\\\
+  \"\\\"&&a!=null&&!isNaN(na)&&/^-?\\\\d/.test(String(a))); var bNum=(b!==\\\"\\\"\
+  &&b!=null&&!isNaN(nb)&&/^-?\\\\d/.test(String(b))); if(aNum&&bNum) return na-nb;\
+  \ return String(a==null?\\\"\\\":a).localeCompare(String(b==null?\\\"\\\":b),\\\"\
+  ru\\\"); }\\n    function getFilteredRows(){ var q=state.search.trim().toLowerCase(),\
+  \ rows; if(!q) rows=data.slice(); else { var cols=state.visible_cols.concat(state.group_by);\
+  \ rows=data.filter(function(row){ for(var i=0;i<cols.length;i++){ var v=cellVal(row,cols[i]);\
+  \ if(v!=null && String(v).toLowerCase().indexOf(q)!==-1) return true; } return false;\
+  \ }); } if(state.sort_key){ var k=state.sort_key, dir=state.sort_dir; rows.sort(function(x,y){\
+  \ return dir*cmpVals(cellVal(x,k),cellVal(y,k)); }); } return rows; }\\n    function\
+  \ totalToShow(filteredLen){ var searching = state.search.trim() !== \\\"\\\"; var\
+  \ loaded = data.length; var dbTotal = (TOTAL_CNT !== null && !isNaN(TOTAL_CNT))\
+  \ ? TOTAL_CNT : loaded; return { shown: filteredLen, loaded: loaded, total: dbTotal,\
+  \ truncated: dbTotal > loaded, searching: searching }; }\\n    function renderTotalBadge(filteredLen){\
+  \ var ti = totalToShow(filteredLen), badge = $('total-badge'); if(ti.truncated)\
+  \ badge.innerHTML='<span class=\\\"tb-line\\\">\u041F\u043E\u043A\u0430\u0437\u0430\
+  \u043D\u043E <b class=\\\"hl-num\\\">'+fmtNum(ti.shown)+'</b> \u0438\u0437 <b>'+fmtNum(ti.total)+'</b>\
+  \ \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432</span><span\
+  \ class=\\\"trunc-hint\\\">\u0412 \u0442\u0430\u0431\u043B\u0438\u0446\u0443 \u043F\
+  \u043E\u043F\u0430\u043B\u0438 \u043D\u0435 \u0432\u0441\u0435. \u041E\u0442\u0444\
+  \u0438\u043B\u044C\u0442\u0440\u0443\u0439\u0442\u0435 \u0441\u043F\u0438\u0441\u043E\
+  \u043A, \u0447\u0442\u043E\u0431\u044B \u0432 \u043D\u0435\u0433\u043E \u0432\u043E\
+  \u0448\u043B\u0438 \u0432\u0441\u0435 \u043D\u0443\u0436\u043D\u044B\u0435 \u0441\
+  \u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0438.</span>'; else badge.innerHTML='<span\
+  \ class=\\\"tb-line\\\">'+(ti.searching ? '\u041D\u0430\u0439\u0434\u0435\u043D\u043E\
+  : ' : '\u0412\u0441\u0435\u0433\u043E \u0441\u043E\u0442\u0440\u0443\u0434\u043D\
+  \u0438\u043A\u043E\u0432 \u0432 \u0441\u043F\u0438\u0441\u043A\u0435: ')+'<b>'+fmtNum(ti.shown)+'</b></span>';\
+  \ }\\n    function isSelectableField(f){ return LOCKED_COLS.indexOf(f.key)===-1;\
+  \ }\\n    function buildSettings(){\\n      var q = state.dd_search.trim().toLowerCase(),\
+  \ groups=[], seen={};\\n      FIELD_DEFS.forEach(function(f){ if(!isSelectableField(f))\
+  \ return; if(!seen[f.group]){ seen[f.group]=[]; groups.push(f.group); } seen[f.group].push(f);\
+  \ });\\n      var box=$('dd-groups'); box.innerHTML=\\\"\\\";\\n      groups.forEach(function(gName){\\\
+  n        var flds=seen[gName], visibleFlds=q ? flds.filter(function(f){ return f.label.toLowerCase().indexOf(q)!==-1;\
+  \ }) : flds;\\n        if(visibleFlds.length===0) return;\\n        var selectedCount=flds.filter(function(f){\
+  \ return state.visible_cols.indexOf(f.key)!==-1; }).length;\\n        var allSelected=selectedCount===flds.length,\
+  \ partlySelected=selectedCount>0&&!allSelected;\\n        var g=document.createElement(\\\
+  \"div\\\"); g.className=\\\"grp\\\"+(state.dd_group_collapsed[gName]&&!q?\\\" collapsed\\\
+  \":\\\"\\\");\\n        var hd=document.createElement(\\\"div\\\"); hd.className=\\\
+  \"grp-hd\\\";\\n        hd.innerHTML='<input class=\\\"grp-toggle\\\" type=\\\"\
+  checkbox\\\" '+(allSelected?'checked':'')+'><span class=\\\"caret\\\">\u25BC</span><span>'+esc(gName)+'</span><span\
+  \ class=\\\"grp-cnt\\\">'+selectedCount+'/'+flds.length+'</span>';\\n        var\
+  \ groupCb=hd.querySelector('.grp-toggle'); groupCb.indeterminate=partlySelected;\\\
+  n        groupCb.onclick=function(e){ e.stopPropagation(); };\\n        groupCb.onchange=function(){\\\
+  n          var shouldSelect=groupCb.checked;\\n          flds.forEach(function(f){\\\
+  n            var pos=state.visible_cols.indexOf(f.key);\\n            if(shouldSelect\
+  \ && pos===-1) state.visible_cols.push(f.key);\\n            if(!shouldSelect &&\
+  \ pos!==-1) state.visible_cols.splice(pos,1);\\n          });\\n          state.page=1;\
+  \ render(); buildSettings();\\n        };\\n        hd.onclick=function(e){ if(e.target===groupCb)\
+  \ return; state.dd_group_collapsed[gName]=!state.dd_group_collapsed[gName]; g.classList.toggle(\\\
+  \"collapsed\\\"); };\\n        g.appendChild(hd);\\n        var body=document.createElement(\\\
+  \"div\\\"); body.className=\\\"grp-body\\\";\\n        visibleFlds.forEach(function(f){\\\
+  n          var opt=document.createElement(\\\"label\\\"); opt.className=\\\"opt\\\
+  \";\\n          var checked=state.visible_cols.indexOf(f.key)!==-1, inGroup=state.group_by.indexOf(f.key)!==-1;\\\
+  n          opt.innerHTML='<input type=\\\"checkbox\\\" '+(checked?\\\"checked\\\"\
+  :\\\"\\\")+(inGroup?\\\" disabled\\\":\\\"\\\")+'><span class=\\\"opt-lbl\\\">'+highlight(f.label,q)+'</span>'+(inGroup?'\
+  \ <span class=\\\"drag-ghost-note\\\">(\u0432 \u0433\u0440\u0443\u043F\u043F\u0438\
+  \u0440\u043E\u0432\u043A\u0435)</span>':'');\\n          var cb=opt.querySelector(\\\
+  \"input\\\");\\n          cb.onchange=function(){ if(cb.checked){ if(state.visible_cols.indexOf(f.key)===-1)\
+  \ state.visible_cols.push(f.key); } else state.visible_cols=state.visible_cols.filter(function(k){return\
+  \ k!==f.key;}); state.page=1; render(); buildSettings(); };\\n          body.appendChild(opt);\\\
+  n        });\\n        g.appendChild(body); box.appendChild(g);\\n      });\\n \
+  \     if(box.children.length===0) box.innerHTML='<div class=\\\"empty\\\" style=\\\
+  \"padding:24px 16px;\\\">\u041F\u043E\u043B\u044F \u043D\u0435 \u043D\u0430\u0439\
+  \u0434\u0435\u043D\u044B \u043F\u043E \u0437\u0430\u043F\u0440\u043E\u0441\u0443\
+  \ \xAB'+esc(state.dd_search)+'\xBB</div>';\\n    }\\n    function updatePresetHighlight(){\
+  \ var bar=$('dd-presets'); if(!bar) return; var chips=bar.querySelectorAll('.preset-chip');\
+  \ Array.prototype.slice.call(chips).forEach(function(c){ c.classList.remove('active');\
+  \ }); PRESETS.forEach(function(p,i){ var match=p.cols.length===state.visible_cols.length\
+  \ && p.cols.every(function(k){ return state.visible_cols.indexOf(k)!==-1; }); if(match){\
+  \ var c=chips[i]; if(c) c.classList.add('active'); } }); }\\n    function applyPreset(p){\
+  \ var cols=p.cols.slice(); LOCKED_COLS.forEach(function(k){ if(cols.indexOf(k)===-1)\
+  \ cols.unshift(k); }); state.visible_cols=cols; state.group_by=[]; state.sort_key=null;\
+  \ state.sort_dir=1; state.collapsed_groups={}; state.page=1; state.search=''; var\
+  \ si=$('search'); if(si) si.value=''; render(); buildSettings(); updatePresetHighlight();\
+  \ }\\n    function buildPresets(){ var bar=$('dd-presets'); if(!bar) return; bar.innerHTML='<span\
+  \ class=\\\"dd-presets-label\\\">\u041F\u0440\u0435\u0441\u0435\u0442\u044B</span>';\
+  \ PRESETS.forEach(function(p){ var b=document.createElement('button'); b.type='button';\
+  \ b.className='preset-chip'; b.textContent=p.name; b.onclick=function(){ applyPreset(p);\
+  \ }; bar.appendChild(b); }); updatePresetHighlight(); }\\n    function ensureLocked(){\
+  \ LOCKED_COLS.forEach(function(k){ if(state.visible_cols.indexOf(k)===-1) state.visible_cols.unshift(k);\
+  \ state.group_by=state.group_by.filter(function(g){return g!==k;}); }); }\\n   \
+  \ function render(){ ensureLocked(); updatePresetHighlight(); var rows=getFilteredRows();\
+  \ renderTotalBadge(rows.length); $('col-badge').textContent=state.visible_cols.length;\
+  \ var grouped=state.group_by.length>0, ps=state.page_size; if(!grouped){ var total=rows.length,\
+  \ maxPage=Math.max(1,Math.ceil(total/ps)); if(state.page>maxPage) state.page=maxPage;\
+  \ if(state.page<1) state.page=1; var startI=(state.page-1)*ps; renderPager(total,false);\
+  \ renderGroupZone(); renderHead(); renderBody(rows.slice(startI,startI+ps)); return;\
+  \ } var flat=buildGroupedFlat(rows), total2=flat.length, maxPage2=Math.max(1,Math.ceil(total2/ps));\
+  \ if(state.page>maxPage2) state.page=maxPage2; if(state.page<1) state.page=1; var\
+  \ startI2=(state.page-1)*ps; renderPager(total2,false); renderGroupZone(); renderHead();\
+  \ renderBodyGrouped(flat,startI2,startI2+ps); }\\n    function buildGroupedFlat(rows){\
+  \ var flat=[], allKeys=[]; function walk(subset,level,pathKey,ancestors){ var gkey=state.group_by[level],\
+  \ map={}, order=[]; subset.forEach(function(r){ var val=cellVal(r,gkey)===\\\"\\\
+  \"||cellVal(r,gkey)==null?\\\"(\u043F\u0443\u0441\u0442\u043E)\\\":String(cellVal(r,gkey));\
+  \ if(!map[val]){map[val]=[];order.push(val);} map[val].push(r); }); order.sort(function(a,b){return\
+  \ cmpVals(a,b);}); order.forEach(function(val){ var members=map[val], rowKey=pathKey+\\\
+  \"||\\\"+level+\\\":\\\"+val, collapsed=!!state.collapsed_groups[rowKey], hdr={type:\\\
+  \"header\\\",gkey:gkey,val:val,members:members,level:level,rowKey:rowKey,collapsed:collapsed,ancestors:ancestors};\
+  \ allKeys.push(rowKey); flat.push(hdr); if(collapsed) return; var nextAnc=ancestors.concat([hdr]);\
+  \ if(level+1<state.group_by.length) walk(members,level+1,rowKey,nextAnc); else members.forEach(function(row){flat.push({type:\\\
+  \"data\\\",row:row,level:level+1,ancestors:nextAnc});}); }); } walk(rows,0,\\\"\
+  root\\\",[]); ALL_GROUP_KEYS=allKeys; return flat; }\\n    function renderPager(total){\
+  \ var pager=$('pager'); if(!pager) return; pager.classList.remove(\\\"hidden\\\"\
+  ); var sel=$('pg-size'); if(sel&&sel.value!=String(state.page_size)) sel.value=String(state.page_size);\
+  \ var ps=state.page_size,maxPage=Math.max(1,Math.ceil(total/ps)),startI=total===0?0:(state.page-1)*ps+1,endI=Math.min(state.page*ps,total);\
+  \ $('pg-info').textContent=startI+\\\"\u2013\\\"+endI+\\\" \u0438\u0437 \\\"+total;\
+  \ $('pg-prev').disabled=(state.page<=1); $('pg-next').disabled=(state.page>=maxPage);\
+  \ }\\n    function renderGroupZone(){ var z=$('group-zone'),hint=$('gz-hint'),actions=$('gz-actions');\
+  \ Array.prototype.slice.call(z.querySelectorAll(\\\".chip\\\")).forEach(function(c){c.remove();});\
+  \ if(state.group_by.length===0){hint.style.display=\\\"\\\";actions.style.display=\\\
+  \"none\\\";return;} hint.style.display=\\\"none\\\";actions.style.display=\\\"flex\\\
+  \";state.group_by.forEach(function(k,idx){var chip=document.createElement(\\\"span\\\
+  \");chip.className=\\\"chip\\\";chip.innerHTML=(idx>0?'<span class=\\\"arw\\\">\u2192\
+  </span> ':'')+esc(labelOf(k))+' <span class=\\\"x\\\" title=\\\"\u0423\u0431\u0440\
+  \u0430\u0442\u044C\\\">\u2715</span>';chip.querySelector(\\\".x\\\").onclick=function(e){e.stopPropagation();state.group_by=state.group_by.filter(function(x){return\
+  \ x!==k;});if(state.visible_cols.indexOf(k)===-1)state.visible_cols.push(k);state.page=1;render();buildSettings();};z.insertBefore(chip,actions);});\
+  \ }\\n    function colW(k){return state.col_widths[k]||COL_MIN_W;}\\n    function\
+  \ layoutCols(){var tbl=$('tbl'),cg=ROOT.querySelector('#colgroup');if(!tbl||!cg)return;var\
+  \ cols=cg.children,keys=state.visible_cols;if(keys.length===0)return;var natural=0;keys.forEach(function(k){natural+=colW(k);});var\
+  \ avail=ROOT.querySelector('.table-scroll').clientWidth;if(natural<=avail){var per=(avail-natural)/keys.length;keys.forEach(function(k,i){if(cols[i])cols[i].style.width=(colW(k)+per)+'px';});tbl.style.width=avail+'px';}else{keys.forEach(function(k,i){if(cols[i])cols[i].style.width=colW(k)+'px';});tbl.style.width=natural+'px';}}\\\
+  n    function syncCols(){layoutCols();}\\n    function renderHead(){var tbl=$('tbl'),oldCg=ROOT.querySelector('#colgroup');if(oldCg)oldCg.remove();var\
+  \ cg=document.createElement('colgroup');cg.id='colgroup';state.visible_cols.forEach(function(k){var\
+  \ c=document.createElement('col');c.style.width=colW(k)+'px';cg.appendChild(c);});tbl.insertBefore(cg,tbl.firstChild);var\
+  \ thead=$('thead');thead.innerHTML='';var tr=document.createElement('tr');state.visible_cols.forEach(function(k){var\
+  \ th=document.createElement('th');th.setAttribute('data-col',k);var ind=state.sort_key===k?(state.sort_dir===1?'\u25B2\
+  ':'\u25BC'):'';th.innerHTML='<div class=\\\"th-in\\\" draggable=\\\"true\\\"><span\
+  \ class=\\\"grip\\\">\u22EE\u22EE</span><span class=\\\"th-lbl\\\">'+esc(labelOf(k))+'</span><span\
+  \ class=\\\"sort-ind\\\">'+ind+'</span><div class=\\\"resizer\\\"></div></div>';attachColDnd(th,k);attachResizer(th,k);attachSort(th,k);tr.appendChild(th);});thead.appendChild(tr);layoutCols();}\\\
+  n    function renderBody(rows){var tbody=$('tbody');tbody.innerHTML='';var q=state.search.trim().toLowerCase(),cols=state.visible_cols;if(cols.length===0){tbody.innerHTML='<tr><td\
+  \ class=\\\"empty\\\">\u041D\u0435\u0442 \u0432\u044B\u0431\u0440\u0430\u043D\u043D\
+  \u044B\u0445 \u043A\u043E\u043B\u043E\u043D\u043E\u043A. \u041E\u0442\u043A\u0440\
+  \u043E\u0439\u0442\u0435 \xAB\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430\
+  \ \u0442\u0430\u0431\u043B\u0438\u0446\u044B\xBB.</td></tr>';return;}if(rows.length===0){tbody.innerHTML='<tr><td\
+  \ class=\\\"empty\\\" colspan=\\\"'+cols.length+'\\\">\u041D\u0438\u0447\u0435\u0433\
+  \u043E \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u043E \u043F\u043E \u0437\
+  \u0430\u043F\u0440\u043E\u0441\u0443 \xAB'+esc(state.search)+'\xBB</td></tr>';return;}var\
+  \ frag=document.createDocumentFragment();rows.forEach(function(row){var tr=document.createElement('tr');cols.forEach(function(k){var\
+  \ td=document.createElement('td');td.innerHTML=highlight(cellVal(row,k),q);tr.appendChild(td);});frag.appendChild(tr);});tbody.appendChild(frag);}\\\
+  n    var ALL_GROUP_KEYS=[];\\n    function renderBodyGrouped(flat,startI,endI){var\
+  \ tbody=$('tbody');tbody.innerHTML='';var q=state.search.trim().toLowerCase(),cols=state.visible_cols;if(cols.length===0){tbody.innerHTML='<tr><td\
+  \ class=\\\"empty\\\">\u041D\u0435\u0442 \u0432\u044B\u0431\u0440\u0430\u043D\u043D\
+  \u044B\u0445 \u043A\u043E\u043B\u043E\u043D\u043E\u043A. \u041E\u0442\u043A\u0440\
+  \u043E\u0439\u0442\u0435 \xAB\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430\
+  \ \u0442\u0430\u0431\u043B\u0438\u0446\u044B\xBB.</td></tr>';return;}if(flat.length===0){tbody.innerHTML='<tr><td\
+  \ class=\\\"empty\\\" colspan=\\\"'+cols.length+'\\\">\u041D\u0438\u0447\u0435\u0433\
+  \u043E \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u043E \u043F\u043E \u0437\
+  \u0430\u043F\u0440\u043E\u0441\u0443 \xAB'+esc(state.search)+'\xBB</td></tr>';return;}var\
+  \ frag=document.createDocumentFragment();function makeHeader(h){var tr=document.createElement('tr');tr.className='grp-row'+(h.collapsed?'\
+  \ collapsed':'');var td=document.createElement('td');td.setAttribute('colspan',cols.length||1);td.style.paddingLeft=(10+h.level*22)+'px';td.innerHTML='<span\
+  \ class=\\\"g-caret\\\">\u25BC</span> <b>'+esc(labelOf(h.gkey))+':</b> '+highlight(String(h.val),q)+'<span\
+  \ class=\\\"g-badge\\\">'+h.members.length+' \u0447\u0435\u043B.</span>';td.onclick=function(){state.collapsed_groups[h.rowKey]=!state.collapsed_groups[h.rowKey];render();};tr.appendChild(td);return\
+  \ tr;}function makeDataRow(it){var dtr=document.createElement('tr');cols.forEach(function(k,ci){var\
+  \ dtd=document.createElement('td');if(ci===0)dtd.style.paddingLeft=(10+it.level*22)+'px';dtd.innerHTML=highlight(cellVal(it.row,k),q);dtr.appendChild(dtd);});return\
+  \ dtr;}var printed={};for(var i=startI;i<endI&&i<flat.length;i++){var it=flat[i];if(it.type==='header'){printed[it.rowKey]=1;frag.appendChild(makeHeader(it));}else{for(var\
+  \ ai=0;ai<it.ancestors.length;ai++){var a=it.ancestors[ai];if(!printed[a.rowKey]){printed[a.rowKey]=1;frag.appendChild(makeHeader(a));}}frag.appendChild(makeDataRow(it));}}tbody.appendChild(frag);}\\\
+  n    function attachSort(th,k){var lbl=th.querySelector('.th-lbl');lbl.style.cursor='pointer';lbl.addEventListener('click',function(e){e.stopPropagation();if(state.sort_key===k)state.sort_dir=-state.sort_dir;else{state.sort_key=k;state.sort_dir=1;}state.page=1;render();});}\\\
+  n    var dragKey=null;\\n    function attachColDnd(th,k){var handle=th.querySelector('.th-in');handle.addEventListener('dragstart',function(e){dragKey=k;th.classList.add('drag-src');e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',k);}catch(err){}});handle.addEventListener('dragend',function(){dragKey=null;th.classList.remove('drag-src');Array.prototype.slice.call(ROOT.querySelectorAll('.drag-over-col')).forEach(function(el){el.classList.remove('drag-over-col');});});th.addEventListener('dragover',function(e){e.preventDefault();th.classList.add('drag-over-col');e.dataTransfer.dropEffect='move';});th.addEventListener('dragleave',function(){th.classList.remove('drag-over-col');});th.addEventListener('drop',function(e){e.preventDefault();th.classList.remove('drag-over-col');if(!dragKey||dragKey===k)return;var\
+  \ arr=state.visible_cols,from=arr.indexOf(dragKey);if(from===-1||arr.indexOf(k)===-1)return;arr.splice(from,1);arr.splice(arr.indexOf(k),0,dragKey);render();});}\\\
+  n    var gz=$('group-zone');gz.addEventListener('dragover',function(e){e.preventDefault();gz.classList.add('drag-over');e.dataTransfer.dropEffect='move';});gz.addEventListener('dragleave',function(){gz.classList.remove('drag-over');});gz.addEventListener('drop',function(e){e.preventDefault();gz.classList.remove('drag-over');if(!dragKey)return;if(LOCKED_COLS.indexOf(dragKey)!==-1){dragKey=null;return;}state.visible_cols=state.visible_cols.filter(function(x){return\
+  \ x!==dragKey;});if(state.group_by.indexOf(dragKey)===-1)state.group_by.push(dragKey);state.page=1;render();buildSettings();});\\\
+  n    function attachResizer(th,k){var rz=th.querySelector('.resizer');rz.setAttribute('draggable','false');rz.addEventListener('dragstart',function(e){e.preventDefault();e.stopPropagation();});rz.addEventListener('click',function(e){e.stopPropagation();});rz.addEventListener('mousedown',function(e){e.preventDefault();e.stopPropagation();var\
+  \ startX=e.clientX,startW=colW(k);document.body.style.cursor='col-resize';document.body.style.userSelect='none';function\
+  \ move(ev){var w=Math.max(COL_MIN_W,startW+(ev.clientX-startX));state.col_widths[k]=w;syncCols();}function\
+  \ up(){document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',up);document.body.style.cursor='';document.body.style.userSelect='';}document.addEventListener('mousemove',move);document.addEventListener('mouseup',up);});}\\\
+  n    $('search').addEventListener('input',function(e){state.search=e.target.value;state.page=1;render();});\\\
+  n    $('pg-size').addEventListener('change',function(e){state.page_size=parseInt(e.target.value,10)||100;state.page=1;render();});\\\
+  n    $('pg-prev').addEventListener('click',function(){if(state.page>1){state.page--;render();}});\\\
+  n    $('pg-next').addEventListener('click',function(){state.page++;render();});\\\
+  n    $('collapse-all').addEventListener('click',function(){var rows=getFilteredRows(),gkey=state.group_by[0],seen={};if(gkey!=null){rows.forEach(function(r){var\
+  \ val=cellVal(r,gkey)===''||cellVal(r,gkey)==null?'(\u043F\u0443\u0441\u0442\u043E\
+  )':String(cellVal(r,gkey)),rowKey='root||0:'+val;if(!seen[rowKey]){seen[rowKey]=1;state.collapsed_groups[rowKey]=true;}});}state.page=1;render();});\\\
+  n    $('expand-all').addEventListener('click',function(){state.collapsed_groups={};state.page=1;render();});\\\
+  n\\n    $('copy-btn').addEventListener('click', function () {\\n  var btn = this;\\\
+  n  var rows = getFilteredRows();\\n  var cols = state.group_by.concat(state.visible_cols);\\\
+  n\\n  function excelNumber(value) {\\n    if (value === null || value === undefined\
+  \ || String(value).trim() === '') {\\n      return '';\\n    }\\n\\n    var normalized\
+  \ = String(value)\\n      .trim()\\n      .replace(/\\\\s+/g, '')\\n      .replace(',',\
+  \ '.');\\n\\n    var num = Number(normalized);\\n\\n    if (isNaN(num)) {\\n   \
+  \   return String(value);\\n    }\\n\\n    // \u0414\u043B\u044F \u0440\u0443\u0441\
+  \u0441\u043A\u043E\u0439 \u043B\u043E\u043A\u0430\u043B\u0438 Excel: \u0434\u0435\
+  \u0441\u044F\u0442\u0438\u0447\u043D\u044B\u0439 \u0440\u0430\u0437\u0434\u0435\u043B\
+  \u0438\u0442\u0435\u043B\u044C \u2014 \u0437\u0430\u043F\u044F\u0442\u0430\u044F\
+  .\\n    return String(num).replace('.', ',');\\n  }\\n\\n  var lines = [cols.map(labelOf).join('\\\
+  \\t')];\\n\\n  rows.forEach(function (r) {\\n    lines.push(\\n      cols.map(function\
+  \ (k) {\\n        var value = cellVal(r, k);\\n\\n        if (k === 'work_experience_year')\
+  \ {\\n          return excelNumber(value);\\n        }\\n\\n        return value;\\\
+  n      }).join('\\\\t')\\n    );\\n  });\\n\\n  var text = lines.join('\\\\n');\\\
+  n\\n  function ok() {\\n    btn.classList.add('ok');\\n    var old = btn.innerHTML;\\\
+  n    btn.innerHTML = '\u2713 \u0421\u043A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\
+  \u043D\u043E';\\n\\n    setTimeout(function () {\\n      btn.classList.remove('ok');\\\
+  n      btn.innerHTML = old;\\n    }, 1400);\\n  }\\n\\n  if (navigator.clipboard\
+  \ && navigator.clipboard.writeText) {\\n    navigator.clipboard.writeText(text).then(ok,\
+  \ function () {\\n      fallbackCopy(text, ok);\\n    });\\n  } else {\\n    fallbackCopy(text,\
+  \ ok);\\n  }\\n});\\n\\n\\n    function fallbackCopy(text,cb){var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');cb();}catch(e){}document.body.removeChild(ta);}\\\
+  n    var gearBtn=$('gear-btn'),ddPanel=$('dd-panel');gearBtn.addEventListener('click',function(e){e.stopPropagation();ddPanel.classList.toggle('open');if(ddPanel.classList.contains('open')){$('dd-search').focus();}});ddPanel.addEventListener('click',function(e){e.stopPropagation();});ROOT.addEventListener('click',function(e){if(!ddPanel.contains(e.target)&&e.target!==gearBtn&&!gearBtn.contains(e.target))ddPanel.classList.remove('open');});\\\
+  n    var ddSearchInput=$('dd-search'),ddSearchClear=$('dd-search-clear');function\
+  \ syncDdSearchClear(){ddSearchClear.style.display=ddSearchInput.value.trim()?'flex':'none';}ddSearchInput.addEventListener('input',function(e){state.dd_search=e.target.value;syncDdSearchClear();buildSettings();});ddSearchClear.addEventListener('click',function(e){e.stopPropagation();ddSearchInput.value='';state.dd_search='';syncDdSearchClear();buildSettings();ddSearchInput.focus();});$('reset-cols').addEventListener('click',function(){state.visible_cols=DEFAULT_COLS.slice();state.group_by=[];state.col_widths={};state.sort_key=null;state.sort_dir=1;state.collapsed_groups={};state.page=1;state.page_size=100;state.dd_search='';ddSearchInput.value='';syncDdSearchClear();render();buildSettings();});\\\
+  n    var _rzTimer=null;window.addEventListener('resize',function(){clearTimeout(_rzTimer);_rzTimer=setTimeout(layoutCols,80);});buildPresets();buildSettings();render();\\\
+  n  } catch (e) {\\n    console.error('[det-table] \u041E\u0448\u0438\u0431\u043A\
+  \u0430 \u043C\u043E\u043D\u0442\u0430\u0436\u0430:', e);\\n    if (typeof option\
+  \ !== 'undefined' && option) option.graphic = [{ type:'text', style:{ text:'\u041E\
+  \u0448\u0438\u0431\u043A\u0430: '+e.message, x:50, y:50, font:'14px sans-serif',\
+  \ fill:'#c00' } }];\\n  }\\n})();\\n\\nif (typeof option === 'undefined' || !option)\
+  \ option = { animation:false, xAxis:{show:false,type:'value'}, yAxis:{show:false,type:'value'},\
+  \ series:[{type:'scatter',data:[]}] };\\n\",\"extra_form_data\":{},\"force\":false,\"\
+  result_format\":\"json\",\"result_type\":\"full\"},\"result_format\":\"json\",\"\
+  result_type\":\"full\"}"
+cache_timeout: null
+uuid: d93c0b97-e685-4b0e-8007-157651b2955f
+version: 1.0.0
+dataset_uuid: becfc4e4-f6b8-4c1c-bfae-835e82a25bed
