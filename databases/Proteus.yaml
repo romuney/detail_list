@@ -1,0 +1,16 @@
+database_name: Proteus
+sqlalchemy_uri: clickhousedb://proteus_dwh_proteus_reader:XXXXXXXXXX@proteus-clickhouse-select.t-tech.team:443/prod_proteus
+cache_timeout: null
+expose_in_sqllab: true
+allow_run_async: false
+allow_ctas: false
+allow_cvas: false
+allow_dml: false
+allow_file_upload: false
+extra:
+  allows_virtual_table_explore: true
+  allow_query_settings: true
+  enable_data_access_control: true
+  is_internal_db: true
+uuid: b440d42e-8073-440b-a9f0-88f367df3b29
+version: 1.0.0

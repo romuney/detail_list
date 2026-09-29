@@ -1,0 +1,693 @@
+table_name: vacancy_daily_virt
+main_dttm_col: max_date
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: null
+schema: prod_proteus
+sql: "\n  with (\n     select max(max_date) from prod_proteus.vacancy_daily\n) as\
+  \ max_date_source\n\n, max_issue_cnt as\n(select\n param_1\n,param_2\n, date_trunc('month',issue_day)\
+  \ as issue_mont\n, count(distinct issue_full_nm) as issue_cnt\nfrom {{dataset(33339)}}\n\
+  group by \n  param_1\n, param_2 \n, issue_mont\norder by issue_cnt desc\nlimit 1\n\
+  )\n\n, agg_table as (\nselect \n param_1\n,param_2\n, max_date\n, count(distinct\
+  \ issue_full_nm) filter (where   \n   {% if filter_values('select_metric')|first\
+  \ == 'YTD' %}  \n       ytd\n   {% elif filter_values('select_metric')|first ==\
+  \ 'PYTD' %} \n      pytd\n   {% elif filter_values('select_metric')|first == 'PY'\
+  \ %} \n      py\n   {% elif filter_values('select_metric')|first == 'MTD' %}\n \
+  \     mtd\n   {% elif filter_values('select_metric')|first == 'MTD_Y_1' %}\n   \
+  \   mtd_y_1\n   {% elif filter_values('select_metric')|first == 'last_12_m' %}\n\
+  \      last_12_m\n   {% else %}\n       ytd\n   {% endif %} =1) as sort_element\n\
+  , count(distinct issue_full_nm) filter (where ytd=1) as ytd_cnt\n, count(distinct\
+  \ issue_full_nm) filter (where mtd=1) as MTD_cnt\n, count(distinct issue_full_nm)\
+  \ filter (where pytd=1) as pytd_cnt\n, count(distinct issue_full_nm) filter (where\
+  \ py=1) as py_cnt\n, count(distinct issue_full_nm) filter (where mtd_y_1=1) as mtd_y_1_cnt\n\
+  , count(distinct issue_full_nm) filter (where last_12_m=1) as last_12_m\n,count(distinct\
+  \ issue_full_nm) filter (where \"1_elem_py\"=1)*max(toUInt64(\"1_elem_py\")) as\
+  \  \"1_element_py\"\n,count(distinct issue_full_nm) filter (where \"2_elem_py\"\
+  =1)*max(toUInt64(\"2_elem_py\")) as  \"2_element_py\"\n,count(distinct issue_full_nm)\
+  \ filter (where \"3_elem_py\"=1)*max(toUInt64(\"3_elem_py\")) as  \"3_element_py\"\
+  \n,count(distinct issue_full_nm) filter (where \"4_elem_py\"=1)*max(toUInt64(\"\
+  4_elem_py\")) as  \"4_element_py\"\n,count(distinct issue_full_nm) filter (where\
+  \ \"5_elem_py\"=1)*max(toUInt64(\"5_elem_py\")) as  \"5_element_py\"\n,count(distinct\
+  \ issue_full_nm) filter (where \"6_elem_py\"=1)*max(toUInt64(\"6_elem_py\")) as\
+  \  \"6_element_py\"\n,count(distinct issue_full_nm) filter (where \"7_elem_py\"\
+  =1)*max(toUInt64(\"7_elem_py\")) as  \"7_element_py\"\n,count(distinct issue_full_nm)\
+  \ filter (where \"8_elem_py\"=1)*max(toUInt64(\"8_elem_py\")) as  \"8_element_py\"\
+  \n,count(distinct issue_full_nm) filter (where \"9_elem_py\"=1)*max(toUInt64(\"\
+  9_elem_py\")) as  \"9_element_py\"\n,count(distinct issue_full_nm) filter (where\
+  \ \"10_elem_py\"=1)*max(toUInt64(\"10_elem_py\")) as \"10_element_py\"\n,count(distinct\
+  \ issue_full_nm) filter (where \"11_elem_py\"=1)*max(toUInt64(\"11_elem_py\")) as\
+  \ \"11_element_py\"\n,count(distinct issue_full_nm) filter (where \"12_elem_py\"\
+  =1)*max(toUInt64(\"12_elem_py\")) as \"12_element_py\"\n,count(distinct issue_full_nm)\
+  \ filter (where \"1_elem\"=1)*max(toUInt64(\"1_elem\")) as   \"1_element\"\n,count(distinct\
+  \ issue_full_nm) filter (where \"2_elem\"=1)*max(toUInt64(\"2_elem\")) as   \"2_element\"\
+  \n,count(distinct issue_full_nm) filter (where \"3_elem\"=1)*max(toUInt64(\"3_elem\"\
+  )) as   \"3_element\"\n,count(distinct issue_full_nm) filter (where \"4_elem\"=1)*max(toUInt64(\"\
+  4_elem\")) as   \"4_element\"\n,count(distinct issue_full_nm) filter (where \"5_elem\"\
+  =1)*max(toUInt64(\"5_elem\")) as   \"5_element\"\n,count(distinct issue_full_nm)\
+  \ filter (where \"6_elem\"=1)*max(toUInt64(\"6_elem\")) as   \"6_element\"\n,count(distinct\
+  \ issue_full_nm) filter (where \"7_elem\"=1)*max(toUInt64(\"7_elem\")) as   \"7_element\"\
+  \n,count(distinct issue_full_nm) filter (where \"8_elem\"=1)*max(toUInt64(\"8_elem\"\
+  )) as   \"8_element\"\n,count(distinct issue_full_nm) filter (where \"9_elem\"=1)*max(toUInt64(\"\
+  9_elem\")) as   \"9_element\"\n,count(distinct issue_full_nm) filter (where \"10_elem\"\
+  =1)*max(toUInt64(\"10_elem\")) as \"10_element\"\n,count(distinct issue_full_nm)\
+  \ filter (where \"11_elem\"=1)*max(toUInt64(\"11_elem\")) as \"11_element\"\n,count(distinct\
+  \ issue_full_nm) filter (where \"12_elem\"=1)*max(toUInt64(\"12_elem\")) as \"12_element\"\
+  \n,count(distinct issue_full_nm) filter (where \"1_elem_plan\" =1)*max(toUInt64(\"\
+  1_elem_plan\")) as \"1_element_plan\"\n,count(distinct issue_full_nm) filter (where\
+  \ \"2_elem_plan\" =1)*max(toUInt64(\"2_elem_plan\")) as \"2_element_plan\"\nfrom\
+  \ {{dataset(33339)}}\ngroup by \n   param_1\n, param_2\n, max_date)\n\n, union_table\
+  \ as(\n\nselect \n1 as sort_header\n, param_1\n, param_2\n, max_date\n, sort_element\n\
+  , ytd_cnt\n, MTD_cnt\n, pytd_cnt\n, py_cnt\n, mtd_y_1_cnt\n, last_12_m\n, \"1_element_py\"\
+  \n, \"2_element_py\"\n, \"3_element_py\"\n, \"4_element_py\"\n, \"5_element_py\"\
+  \n, \"6_element_py\"\n, \"7_element_py\"\n, \"8_element_py\"\n, \"9_element_py\"\
+  \n, \"10_element_py\"\n, \"11_element_py\"\n, \"12_element_py\"\n, \"1_element\"\
+  \n, \"2_element\"\n, \"3_element\"\n, \"4_element\"\n, \"5_element\"\n, \"6_element\"\
+  \n, \"7_element\"\n, \"8_element\"\n, \"9_element\"\n, \"10_element\"\n, \"11_element\"\
+  \n, \"12_element\"\n, \"1_element_plan\"\n, \"2_element_plan\"\n, (select issue_cnt\
+  \ from max_issue_cnt) as max_cell\n, sum(sort_element) OVER(PARTITION BY param_1)\
+  \ as order_param_1\n, sum(sort_element) OVER(PARTITION BY param_2, param_1) as order_param_2\n\
+  from agg_table\n\nunion all\n\nselect \n2 as sort_header\n, 'Total' as param_1\n\
+  ,  null as param_2\n,  null as max_date\n,  null as sort_element\n, sum(ytd_cnt)\n\
+  , sum(MTD_cnt)\n, sum(pytd_cnt)\n, sum(py_cnt)\n, sum(mtd_y_1_cnt)\n, sum(last_12_m)\n\
+  , sum(\"1_element_py\")\n, sum(\"2_element_py\")\n, sum(\"3_element_py\")\n, sum(\"\
+  4_element_py\")\n, sum(\"5_element_py\")\n, sum(\"6_element_py\")\n, sum(\"7_element_py\"\
+  )\n, sum(\"8_element_py\")\n, sum(\"9_element_py\")\n, sum(\"10_element_py\") \n\
+  , sum(\"11_element_py\") \n, sum(\"12_element_py\") \n, sum(\"1_element\") \n, sum(\"\
+  2_element\") \n, sum(\"3_element\") \n, sum(\"4_element\") \n, sum(\"5_element\"\
+  ) \n, sum(\"6_element\") \n, sum(\"7_element\") \n, sum(\"8_element\") \n, sum(\"\
+  9_element\") \n, sum(\"10_element\") \n, sum(\"11_element\") \n, sum(\"12_element\"\
+  )\n, sum(\"1_element_plan\")\n, sum(\"2_element_plan\")\n--, sum(if(subtractMonths(date_trunc('month',max_date_source),23)\
+  \ >= subtractYears(date_trunc('year',max_date_source),1), 24_element, null)) as\
+  \ 24_element\n, toUInt64(null) as max_cell\n, toUInt64(null) as order_param_1\n\
+  , toUInt64(null) as order_param_2\nfrom agg_table\n\nunion all\n\nselect\n0 as sort_header\n\
+  ,null\n,null\n,null\n,null\n,null\n,null\n,null\n,null\n,null\n,null\n, toUnixTimestamp(subtractYears(date_trunc('year',max_date_source),1))*1000\
+  \ as \"1_element_py\"\n, toUnixTimestamp(addMonths(subtractYears(date_trunc('year',max_date_source),1),1))*1000\
+  \ aS \"2_element_py\"\n, toUnixTimestamp(addMonths(subtractYears(date_trunc('year',max_date_source),1),2))*1000\
+  \ aS \"3_element_py\"\n, toUnixTimestamp(addMonths(subtractYears(date_trunc('year',max_date_source),1),3))*1000\
+  \ aS \"4_element_py\"\n, toUnixTimestamp(addMonths(subtractYears(date_trunc('year',max_date_source),1),4))*1000\
+  \ aS \"5_element_py\"\n, toUnixTimestamp(addMonths(subtractYears(date_trunc('year',max_date_source),1),5))*1000\
+  \ aS \"6_element_py\"\n, toUnixTimestamp(addMonths(subtractYears(date_trunc('year',max_date_source),1),6))*1000\
+  \ aS \"7_element_py\"\n, toUnixTimestamp(addMonths(subtractYears(date_trunc('year',max_date_source),1),7))*1000\
+  \ aS \"8_element_py\"\n, toUnixTimestamp(addMonths(subtractYears(date_trunc('year',max_date_source),1),8))*1000\
+  \ aS \"9_element_py\"\n, toUnixTimestamp(addMonths(subtractYears(date_trunc('year',max_date_source),1),9))*1000\
+  \ aS \"10_element_py\"\n, toUnixTimestamp(addMonths(subtractYears(date_trunc('year',max_date_source),1),10))*1000\
+  \ aS \"11_element_py\"\n, toUnixTimestamp(addMonths(subtractYears(date_trunc('year',max_date_source),1),11))*1000\
+  \ aS \"12_element_py\"\n, toUnixTimestamp(date_trunc('year',max_date_source))*1000\
+  \ as \"1_element\"\n, if(addMonths(date_trunc('year',max_date_source),1) <= date_trunc('month',max_date_source),toUnixTimestamp(addMonths(date_trunc('year',max_date_source),1))*1000,null)\
+  \ as \"2_element\"\n, if(addMonths(date_trunc('year',max_date_source),2) <= date_trunc('month',max_date_source),toUnixTimestamp(addMonths(date_trunc('year',max_date_source),2))*1000,null)\
+  \ as \"3_element\"\n, if(addMonths(date_trunc('year',max_date_source),3) <= date_trunc('month',max_date_source),toUnixTimestamp(addMonths(date_trunc('year',max_date_source),3))*1000,null)\
+  \ as \"4_element\"\n, if(addMonths(date_trunc('year',max_date_source),4) <= date_trunc('month',max_date_source),toUnixTimestamp(addMonths(date_trunc('year',max_date_source),4))*1000,null)\
+  \ as \"5_element\"\n, if(addMonths(date_trunc('year',max_date_source),5) <= date_trunc('month',max_date_source),toUnixTimestamp(addMonths(date_trunc('year',max_date_source),5))*1000,null)\
+  \ as \"6_element\"\n, if(addMonths(date_trunc('year',max_date_source),6) <= date_trunc('month',max_date_source),toUnixTimestamp(addMonths(date_trunc('year',max_date_source),6))*1000,null)\
+  \ as \"7_element\"\n, if(addMonths(date_trunc('year',max_date_source),7) <= date_trunc('month',max_date_source),toUnixTimestamp(addMonths(date_trunc('year',max_date_source),7))*1000,null)\
+  \ as \"8_element\"\n, if(addMonths(date_trunc('year',max_date_source),8) <= date_trunc('month',max_date_source),toUnixTimestamp(addMonths(date_trunc('year',max_date_source),8))*1000,null)\
+  \ as \"9_element\"\n, if(addMonths(date_trunc('year',max_date_source),9) <= date_trunc('month',max_date_source),toUnixTimestamp(addMonths(date_trunc('year',max_date_source),9))*1000,null)\
+  \ as \"10_element\"\n, if(addMonths(date_trunc('year',max_date_source),10) <= date_trunc('month',max_date_source),toUnixTimestamp(addMonths(date_trunc('year',max_date_source),10))*1000,null)\
+  \ as \"11_element\"\n, if(addMonths(date_trunc('year',max_date_source),11) <= date_trunc('month',max_date_source),toUnixTimestamp(addMonths(date_trunc('year',max_date_source),11))*1000,null)\
+  \ as \"12_element\"\n, toUnixTimestamp(date_trunc('month',max_date_source))*1000\
+  \ as \"1_element_plan\"\n, toUnixTimestamp(addMonths(date_trunc('month',max_date_source),1))*1000\
+  \ as \"2_element_plan\"\n, toUInt64(null)\n, toUInt64(null)\n, toUInt64(null)\n\
+  )\nselect \n* \n, row_number() OVER (PARTITION BY param_1 ORDER BY order_param_1\
+  \ DESC, param_1,  order_param_2 DESC, param_2) AS row_param_1\n, row_number() OVER\
+  \ (PARTITION BY param_2, param_1 ORDER BY order_param_1 DESC, param_1,  order_param_2\
+  \ DESC, param_2) AS row_param_2\n, row_number() OVER (ORDER BY order_param_1 DESC,\
+  \ param_1,  order_param_2 DESC, param_2) AS rank_param_1\nfrom union_table"
+params: null
+template_params: {}
+filter_select_enabled: false
+fetch_values_predicate: null
+extra: null
+uuid: 45ada09d-53d2-4df1-8b78-6864c6971cfe
+metrics:
+- metric_name: count
+  verbose_name: COUNT(*)
+  metric_type: null
+  expression: COUNT(*)
+  description: null
+  d3format: null
+  extra:
+    warning_markdown: ''
+  warning_text: null
+columns:
+- column_name: 10_element_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 10_element
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 11_element_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 11_element
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: last_12_m
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 12_element_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 12_element
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: mtd_y_1_cnt
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: order_param_1
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 1_element_plan
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 1_element_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 1_element
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: param_1
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: order_param_2
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 2_element_plan
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 2_element_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 2_element
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: param_2
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Nothing)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 3_element_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 3_element
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 4_element_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 4_element
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 5_element_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 5_element
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 6_element_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 6_element
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 7_element_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 7_element
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 8_element_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 8_element
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 9_element_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 9_element
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: MTD_cnt
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: max_cell
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: pytd_cnt
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: ytd_cnt
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: py_cnt
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: sort_element
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(UInt64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: max_date
+  verbose_name: null
+  is_dttm: true
+  is_active: null
+  type: Nullable(DateTime)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: rank_param_1
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: UInt64
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: row_param_1
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: UInt64
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: row_param_2
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: UInt64
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: sort_header
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: UInt8
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+version: 1.0.0
+database_uuid: f3cf662e-9267-42ad-85d9-a009bacb4736

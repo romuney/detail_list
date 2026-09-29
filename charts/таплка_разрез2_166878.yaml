@@ -1,0 +1,141 @@
+slice_name: "\u0442\u0430\u043F\u043B\u043A\u0430_\u0440\u0430\u0437\u0440\u0435\u0437\
+  2"
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 33339__table
+  viz_type: table
+  slice_id: 166878
+  query_mode: aggregate
+  groupby:
+  - param_2
+  time_grain_sqla: P1D
+  temporal_columns_lookup:
+    closed_plan_day: true
+    max_date: true
+    created_dt: true
+    resolution_dttm: true
+    issue_day: true
+    hire_dt_planned: true
+  metrics:
+  - expressionType: SQL
+    sqlExpression: "count( distinct issue_full_nm) filter ( where type_hrs='\u0437\
+      \u0430\u043A\u0440\u044B\u0442\u044B\u0435')"
+    column: null
+    aggregate: null
+    datasourceWarning: false
+    hasCustomLabel: true
+    label: "\u0417\u0430\u043A\u0440\u044B\u0442\u044B\u0435"
+    optionName: metric_fswfdbihxmh_p3qhiugd9cm
+  - expressionType: SQL
+    sqlExpression: count (distinct issue_full_nm) filter (where ytd_planned=1)
+    column: null
+    aggregate: null
+    datasourceWarning: false
+    hasCustomLabel: true
+    label: "\u0411\u0443\u0434\u0443\u0449\u0438\u0435"
+    optionName: metric_u8xwt5l2xh_glcf5s4n5pb
+  all_columns: []
+  percent_metrics: []
+  adhoc_filters:
+  - clause: WHERE
+    comparator: No filter
+    datasourceWarning: false
+    expressionType: SIMPLE
+    filterOptionName: filter_k89czgnh5m_ssu1vl6e3oi
+    isExtra: false
+    isNew: false
+    operator: TEMPORAL_RANGE
+    sqlExpression: null
+    subject: processed_dttm
+  - clause: WHERE
+    comparator: No filter
+    datasourceWarning: false
+    expressionType: SIMPLE
+    filterOptionName: filter_lb7pv1mv3jl_7x8mu4q0w1r
+    isExtra: false
+    isNew: false
+    operator: TEMPORAL_RANGE
+    operatorId: TEMPORAL_RANGE
+    sqlExpression: null
+    subject: closed_plan_day
+  timeseries_limit_metric: null
+  order_by_cols: []
+  server_pagination: false
+  row_limit: 1000
+  server_page_length: 10
+  order_desc: true
+  show_totals: false
+  page_length: null
+  include_search: false
+  show_cell_bars: true
+  allow_rearrange_columns: false
+  align_pn: false
+  color_pn: true
+  column_config:
+    closed_hrs:
+      d3NumberFormat: ~g
+    param_2:
+      columnWidth: 170
+      truncateLongCells: true
+    "\u0411\u0443\u0434\u0443\u0449\u0438\u0435":
+      d3NumberFormat: ~g
+  conditional_formatting: []
+  table_timestamp_format: smart_date
+  extra_form_data: {}
+  dashboards:
+  - 13198
+query_context: "{\"datasource\":{\"id\":33339,\"type\":\"table\"},\"force\":false,\"\
+  queries\":[{\"filters\":[{\"col\":\"processed_dttm\",\"op\":\"TEMPORAL_RANGE\",\"\
+  val\":\"No filter\"},{\"col\":\"closed_plan_day\",\"op\":\"TEMPORAL_RANGE\",\"val\"\
+  :\"No filter\"}],\"extras\":{\"time_grain_sqla\":\"P1D\",\"having\":\"\",\"where\"\
+  :\"\"},\"applied_time_extras\":{},\"columns\":[\"param_2\"],\"metrics\":[{\"expressionType\"\
+  :\"SQL\",\"sqlExpression\":\"count( distinct issue_full_nm) filter ( where type_hrs='\u0437\
+  \u0430\u043A\u0440\u044B\u0442\u044B\u0435')\",\"column\":null,\"aggregate\":null,\"\
+  datasourceWarning\":false,\"hasCustomLabel\":true,\"label\":\"\u0417\u0430\u043A\
+  \u0440\u044B\u0442\u044B\u0435\",\"optionName\":\"metric_fswfdbihxmh_p3qhiugd9cm\"\
+  },{\"expressionType\":\"SQL\",\"sqlExpression\":\"count (distinct issue_full_nm)\
+  \ filter (where ytd_planned=1)\",\"column\":null,\"aggregate\":null,\"datasourceWarning\"\
+  :false,\"hasCustomLabel\":true,\"label\":\"\u0411\u0443\u0434\u0443\u0449\u0438\u0435\
+  \",\"optionName\":\"metric_u8xwt5l2xh_glcf5s4n5pb\"}],\"orderby\":[[{\"expressionType\"\
+  :\"SQL\",\"sqlExpression\":\"count( distinct issue_full_nm) filter ( where type_hrs='\u0437\
+  \u0430\u043A\u0440\u044B\u0442\u044B\u0435')\",\"column\":null,\"aggregate\":null,\"\
+  datasourceWarning\":false,\"hasCustomLabel\":true,\"label\":\"\u0417\u0430\u043A\
+  \u0440\u044B\u0442\u044B\u0435\",\"optionName\":\"metric_fswfdbihxmh_p3qhiugd9cm\"\
+  },false]],\"annotation_layers\":[],\"row_limit\":1000,\"series_limit\":0,\"order_desc\"\
+  :true,\"url_params\":{},\"custom_params\":{},\"custom_form_data\":{},\"post_processing\"\
+  :[]}],\"form_data\":{\"datasource\":\"33339__table\",\"viz_type\":\"table\",\"slice_id\"\
+  :166878,\"query_mode\":\"aggregate\",\"groupby\":[\"param_2\"],\"time_grain_sqla\"\
+  :\"P1D\",\"temporal_columns_lookup\":{\"closed_plan_day\":true,\"max_date\":true,\"\
+  created_dt\":true,\"resolution_dttm\":true,\"issue_day\":true,\"hire_dt_planned\"\
+  :true},\"metrics\":[{\"expressionType\":\"SQL\",\"sqlExpression\":\"count( distinct\
+  \ issue_full_nm) filter ( where type_hrs='\u0437\u0430\u043A\u0440\u044B\u0442\u044B\
+  \u0435')\",\"column\":null,\"aggregate\":null,\"datasourceWarning\":false,\"hasCustomLabel\"\
+  :true,\"label\":\"\u0417\u0430\u043A\u0440\u044B\u0442\u044B\u0435\",\"optionName\"\
+  :\"metric_fswfdbihxmh_p3qhiugd9cm\"},{\"expressionType\":\"SQL\",\"sqlExpression\"\
+  :\"count (distinct issue_full_nm) filter (where ytd_planned=1)\",\"column\":null,\"\
+  aggregate\":null,\"datasourceWarning\":false,\"hasCustomLabel\":true,\"label\":\"\
+  \u0411\u0443\u0434\u0443\u0449\u0438\u0435\",\"optionName\":\"metric_u8xwt5l2xh_glcf5s4n5pb\"\
+  }],\"all_columns\":[],\"percent_metrics\":[],\"adhoc_filters\":[{\"clause\":\"WHERE\"\
+  ,\"comparator\":\"No filter\",\"datasourceWarning\":false,\"expressionType\":\"\
+  SIMPLE\",\"filterOptionName\":\"filter_k89czgnh5m_ssu1vl6e3oi\",\"isExtra\":false,\"\
+  isNew\":false,\"operator\":\"TEMPORAL_RANGE\",\"sqlExpression\":null,\"subject\"\
+  :\"processed_dttm\"},{\"clause\":\"WHERE\",\"comparator\":\"No filter\",\"datasourceWarning\"\
+  :false,\"expressionType\":\"SIMPLE\",\"filterOptionName\":\"filter_lb7pv1mv3jl_7x8mu4q0w1r\"\
+  ,\"isExtra\":false,\"isNew\":false,\"operator\":\"TEMPORAL_RANGE\",\"operatorId\"\
+  :\"TEMPORAL_RANGE\",\"sqlExpression\":null,\"subject\":\"closed_plan_day\"}],\"\
+  timeseries_limit_metric\":null,\"order_by_cols\":[],\"server_pagination\":false,\"\
+  row_limit\":1000,\"server_page_length\":10,\"order_desc\":true,\"show_totals\":false,\"\
+  page_length\":null,\"include_search\":false,\"show_cell_bars\":true,\"allow_rearrange_columns\"\
+  :false,\"align_pn\":false,\"color_pn\":true,\"column_config\":{\"closed_hrs\":{\"\
+  d3NumberFormat\":\"~g\"},\"param_2\":{\"columnWidth\":170,\"truncateLongCells\"\
+  :true},\"\u0411\u0443\u0434\u0443\u0449\u0438\u0435\":{\"d3NumberFormat\":\"~g\"\
+  }},\"conditional_formatting\":[],\"table_timestamp_format\":\"smart_date\",\"extra_form_data\"\
+  :{},\"dashboards\":[13198],\"force\":false,\"result_format\":\"json\",\"result_type\"\
+  :\"full\"},\"result_format\":\"json\",\"result_type\":\"full\"}"
+cache_timeout: null
+uuid: d8011efe-244e-4574-86fc-928e623d5e7b
+version: 1.0.0
+dataset_uuid: a8f582f1-b4ea-43cd-9a2e-0701f692e4ec

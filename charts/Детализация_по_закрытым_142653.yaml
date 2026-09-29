@@ -1,0 +1,237 @@
+slice_name: "\u0414\u0435\u0442\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044F \u043F\
+  \u043E \u0437\u0430\u043A\u0440\u044B\u0442\u044B\u043C"
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 33339__table
+  viz_type: table
+  slice_id: 142653
+  query_mode: aggregate
+  groupby:
+  - closed_plan_day
+  - datasourceWarning: false
+    expressionType: SQL
+    label: HRS
+    sqlExpression: CONCAT('<a href="','https://jira2.tcsbank.ru/browse/', issue_full_nm,'"
+      target="_blank">',toString(issue_full_nm),'</a>')
+  - datasourceWarning: false
+    expressionType: SQL
+    label: Candy
+    sqlExpression: "CONCAT('<a href=\"','https://candy.tbank.ru/candidates/', candidateid,'\"\
+      \ target=\"_blank\">','\u043A\u0430\u043D\u0434\u0438\u0434\u0430\u0442','</a>')"
+  - it_flg
+  - expressionType: SQL
+    label: "\u0413\u0440\u0443\u043F\u043F\u0430 \u0441\u043F\u0435\u0446\u0438\u0430\
+      \u043B\u0438\u0437\u0430\u0446\u0438\u0439"
+    sqlExpression: specialization_group_mapping
+  - specialization_group
+  - specialization
+  - ad_login_recruit
+  - search_type
+  - datasourceWarning: false
+    expressionType: SQL
+    label: "\u0417\u0430\u043A\u0430\u0437\u0447\u0438\u043A"
+    sqlExpression: customer
+  - datasourceWarning: false
+    expressionType: SQL
+    label: "\u041B\u043E\u0433\u0438\u043D \u0437\u0430\u043A\u0430\u0437\u0447\u0438\
+      \u043A\u0430"
+    sqlExpression: customer_ad_login
+  - mapping_channel_name
+  - first_event_recrut_ad_login
+  - search_reason
+  - datasourceWarning: false
+    expressionType: SQL
+    label: "\u0418\u0441\u0442\u043E\u0447\u043D\u0438\u043A \u0437\u0430\u043A\u0440\
+      \u044B\u0442\u0438\u044F(Jira)"
+    sqlExpression: close_source_adj
+  - datasourceWarning: false
+    expressionType: SQL
+    label: "\u0418\u0441\u0442\u043E\u0447\u043D\u0438\u043A \u0437\u0430\u043A\u0440\
+      \u044B\u0442\u0438\u044F(Candy)"
+    sqlExpression: source_type
+  - finalist_level_candy
+  - datasourceWarning: false
+    expressionType: SQL
+    label: "\u043B\u043E\u0433\u0438\u043D \u0441\u043E\u0442\u0440\u0443\u0434\u043D\
+      \u0438\u043A\u0430"
+    sqlExpression: ad_login_emp
+  - datasourceWarning: false
+    expressionType: SQL
+    label: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C \u0441\u043F\u0435\u0446\u0438\
+      \u0430\u043B\u0438\u0441\u0442\u0430"
+    sqlExpression: lvl_position_adj
+  - resource_level_5_nm
+  - resource_level_4_nm
+  - close_type
+  - type_hrs
+  - resource_level_6_nm
+  time_grain_sqla: P1D
+  temporal_columns_lookup:
+    closed_plan_day: true
+    max_date: true
+    created_dt: true
+    resolution_dttm: true
+    issue_day: true
+    hire_dt_planned: true
+  all_columns: []
+  percent_metrics: []
+  adhoc_filters:
+  - clause: WHERE
+    comparator: No filter
+    datasourceWarning: false
+    expressionType: SIMPLE
+    filterOptionName: filter_vnbk8j6ys8n_9h3gqolyp9f
+    isExtra: false
+    isNew: false
+    operator: TEMPORAL_RANGE
+    operatorId: TEMPORAL_RANGE
+    sqlExpression: null
+    subject: closed_plan_day
+  timeseries_limit_metric: null
+  order_by_cols: []
+  server_pagination: false
+  row_limit: 10000
+  server_page_length: 10
+  order_desc: true
+  show_totals: false
+  page_length: null
+  include_search: true
+  show_cell_bars: true
+  allow_rearrange_columns: false
+  align_pn: false
+  color_pn: true
+  column_config:
+    HRS:
+      columnWidth: 75
+      truncateLongCells: true
+    ad_login_recruit:
+      truncateLongCells: true
+    close_type:
+      columnWidth: 100
+      truncateLongCells: true
+    mapping_channel_name:
+      columnWidth: 100
+      truncateLongCells: true
+    resource_level_4_nm:
+      columnWidth: 130
+      truncateLongCells: true
+    resource_level_5_nm:
+      columnWidth: 130
+      truncateLongCells: true
+    resource_level_6_nm:
+      columnWidth: 130
+      truncateLongCells: true
+    search_reason:
+      truncateLongCells: true
+    search_type:
+      truncateLongCells: true
+    specialization:
+      columnWidth: 100
+      truncateLongCells: true
+    specialization_group:
+      columnWidth: 100
+      truncateLongCells: true
+    "\u0413\u0440\u0443\u043F\u043F\u0430 \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u0439":
+      columnWidth: 100
+      truncateLongCells: true
+    "\u0417\u0430\u043A\u0430\u0437\u0447\u0438\u043A":
+      truncateLongCells: true
+    "\u0418\u0441\u0442\u043E\u0447\u043D\u0438\u043A \u0437\u0430\u043A\u0440\u044B\u0442\u0438\u044F(Candy)":
+      truncateLongCells: true
+  conditional_formatting: []
+  table_timestamp_format: smart_date
+  extra_form_data: {}
+query_context: "{\"datasource\":{\"id\":33339,\"type\":\"table\"},\"force\":false,\"\
+  queries\":[{\"filters\":[{\"col\":\"closed_plan_day\",\"op\":\"TEMPORAL_RANGE\"\
+  ,\"val\":\"No filter\"}],\"extras\":{\"time_grain_sqla\":\"P1D\",\"having\":\"\"\
+  ,\"where\":\"\"},\"applied_time_extras\":{},\"columns\":[{\"timeGrain\":\"P1D\"\
+  ,\"columnType\":\"BASE_AXIS\",\"sqlExpression\":\"closed_plan_day\",\"label\":\"\
+  closed_plan_day\",\"expressionType\":\"SQL\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"HRS\",\"sqlExpression\":\"CONCAT('<a href=\\\"','https://jira2.tcsbank.ru/browse/',\
+  \ issue_full_nm,'\\\" target=\\\"_blank\\\">',toString(issue_full_nm),'</a>')\"\
+  },{\"datasourceWarning\":false,\"expressionType\":\"SQL\",\"label\":\"Candy\",\"\
+  sqlExpression\":\"CONCAT('<a href=\\\"','https://candy.tbank.ru/candidates/', candidateid,'\\\
+  \" target=\\\"_blank\\\">','\u043A\u0430\u043D\u0434\u0438\u0434\u0430\u0442','</a>')\"\
+  },\"it_flg\",{\"expressionType\":\"SQL\",\"label\":\"\u0413\u0440\u0443\u043F\u043F\
+  \u0430 \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u0439\
+  \",\"sqlExpression\":\"specialization_group_mapping\"},\"specialization_group\"\
+  ,\"specialization\",\"ad_login_recruit\",\"search_type\",{\"datasourceWarning\"\
+  :false,\"expressionType\":\"SQL\",\"label\":\"\u0417\u0430\u043A\u0430\u0437\u0447\
+  \u0438\u043A\",\"sqlExpression\":\"customer\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"\u041B\u043E\u0433\u0438\u043D \u0437\u0430\u043A\u0430\u0437\
+  \u0447\u0438\u043A\u0430\",\"sqlExpression\":\"customer_ad_login\"},\"mapping_channel_name\"\
+  ,\"first_event_recrut_ad_login\",\"search_reason\",{\"datasourceWarning\":false,\"\
+  expressionType\":\"SQL\",\"label\":\"\u0418\u0441\u0442\u043E\u0447\u043D\u0438\u043A\
+  \ \u0437\u0430\u043A\u0440\u044B\u0442\u0438\u044F(Jira)\",\"sqlExpression\":\"\
+  close_source_adj\"},{\"datasourceWarning\":false,\"expressionType\":\"SQL\",\"label\"\
+  :\"\u0418\u0441\u0442\u043E\u0447\u043D\u0438\u043A \u0437\u0430\u043A\u0440\u044B\
+  \u0442\u0438\u044F(Candy)\",\"sqlExpression\":\"source_type\"},\"finalist_level_candy\"\
+  ,{\"datasourceWarning\":false,\"expressionType\":\"SQL\",\"label\":\"\u043B\u043E\
+  \u0433\u0438\u043D \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430\"\
+  ,\"sqlExpression\":\"ad_login_emp\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"\u0423\u0440\u043E\u0432\u0435\u043D\u044C \u0441\u043F\u0435\
+  \u0446\u0438\u0430\u043B\u0438\u0441\u0442\u0430\",\"sqlExpression\":\"lvl_position_adj\"\
+  },\"resource_level_5_nm\",\"resource_level_4_nm\",\"close_type\",\"type_hrs\",\"\
+  resource_level_6_nm\"],\"metrics\":[],\"orderby\":[],\"annotation_layers\":[],\"\
+  row_limit\":10000,\"series_limit\":0,\"order_desc\":true,\"url_params\":{},\"custom_params\"\
+  :{},\"custom_form_data\":{},\"post_processing\":[]}],\"form_data\":{\"datasource\"\
+  :\"33339__table\",\"viz_type\":\"table\",\"slice_id\":142653,\"query_mode\":\"aggregate\"\
+  ,\"groupby\":[\"closed_plan_day\",{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"HRS\",\"sqlExpression\":\"CONCAT('<a href=\\\"','https://jira2.tcsbank.ru/browse/',\
+  \ issue_full_nm,'\\\" target=\\\"_blank\\\">',toString(issue_full_nm),'</a>')\"\
+  },{\"datasourceWarning\":false,\"expressionType\":\"SQL\",\"label\":\"Candy\",\"\
+  sqlExpression\":\"CONCAT('<a href=\\\"','https://candy.tbank.ru/candidates/', candidateid,'\\\
+  \" target=\\\"_blank\\\">','\u043A\u0430\u043D\u0434\u0438\u0434\u0430\u0442','</a>')\"\
+  },\"it_flg\",{\"expressionType\":\"SQL\",\"label\":\"\u0413\u0440\u0443\u043F\u043F\
+  \u0430 \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u0439\
+  \",\"sqlExpression\":\"specialization_group_mapping\"},\"specialization_group\"\
+  ,\"specialization\",\"ad_login_recruit\",\"search_type\",{\"datasourceWarning\"\
+  :false,\"expressionType\":\"SQL\",\"label\":\"\u0417\u0430\u043A\u0430\u0437\u0447\
+  \u0438\u043A\",\"sqlExpression\":\"customer\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"\u041B\u043E\u0433\u0438\u043D \u0437\u0430\u043A\u0430\u0437\
+  \u0447\u0438\u043A\u0430\",\"sqlExpression\":\"customer_ad_login\"},\"mapping_channel_name\"\
+  ,\"first_event_recrut_ad_login\",\"search_reason\",{\"datasourceWarning\":false,\"\
+  expressionType\":\"SQL\",\"label\":\"\u0418\u0441\u0442\u043E\u0447\u043D\u0438\u043A\
+  \ \u0437\u0430\u043A\u0440\u044B\u0442\u0438\u044F(Jira)\",\"sqlExpression\":\"\
+  close_source_adj\"},{\"datasourceWarning\":false,\"expressionType\":\"SQL\",\"label\"\
+  :\"\u0418\u0441\u0442\u043E\u0447\u043D\u0438\u043A \u0437\u0430\u043A\u0440\u044B\
+  \u0442\u0438\u044F(Candy)\",\"sqlExpression\":\"source_type\"},\"finalist_level_candy\"\
+  ,{\"datasourceWarning\":false,\"expressionType\":\"SQL\",\"label\":\"\u043B\u043E\
+  \u0433\u0438\u043D \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430\"\
+  ,\"sqlExpression\":\"ad_login_emp\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"\u0423\u0440\u043E\u0432\u0435\u043D\u044C \u0441\u043F\u0435\
+  \u0446\u0438\u0430\u043B\u0438\u0441\u0442\u0430\",\"sqlExpression\":\"lvl_position_adj\"\
+  },\"resource_level_5_nm\",\"resource_level_4_nm\",\"close_type\",\"type_hrs\",\"\
+  resource_level_6_nm\"],\"time_grain_sqla\":\"P1D\",\"temporal_columns_lookup\":{\"\
+  closed_plan_day\":true,\"max_date\":true,\"created_dt\":true,\"resolution_dttm\"\
+  :true,\"issue_day\":true,\"hire_dt_planned\":true},\"all_columns\":[],\"percent_metrics\"\
+  :[],\"adhoc_filters\":[{\"clause\":\"WHERE\",\"comparator\":\"No filter\",\"datasourceWarning\"\
+  :false,\"expressionType\":\"SIMPLE\",\"filterOptionName\":\"filter_vnbk8j6ys8n_9h3gqolyp9f\"\
+  ,\"isExtra\":false,\"isNew\":false,\"operator\":\"TEMPORAL_RANGE\",\"operatorId\"\
+  :\"TEMPORAL_RANGE\",\"sqlExpression\":null,\"subject\":\"closed_plan_day\"}],\"\
+  timeseries_limit_metric\":null,\"order_by_cols\":[],\"server_pagination\":false,\"\
+  row_limit\":10000,\"server_page_length\":10,\"order_desc\":true,\"show_totals\"\
+  :false,\"page_length\":null,\"include_search\":true,\"show_cell_bars\":true,\"allow_rearrange_columns\"\
+  :false,\"align_pn\":false,\"color_pn\":true,\"column_config\":{\"HRS\":{\"columnWidth\"\
+  :75,\"truncateLongCells\":true},\"ad_login_recruit\":{\"truncateLongCells\":true},\"\
+  close_type\":{\"columnWidth\":100,\"truncateLongCells\":true},\"mapping_channel_name\"\
+  :{\"columnWidth\":100,\"truncateLongCells\":true},\"resource_level_4_nm\":{\"columnWidth\"\
+  :130,\"truncateLongCells\":true},\"resource_level_5_nm\":{\"columnWidth\":130,\"\
+  truncateLongCells\":true},\"resource_level_6_nm\":{\"columnWidth\":130,\"truncateLongCells\"\
+  :true},\"search_reason\":{\"truncateLongCells\":true},\"search_type\":{\"truncateLongCells\"\
+  :true},\"specialization\":{\"columnWidth\":100,\"truncateLongCells\":true},\"specialization_group\"\
+  :{\"columnWidth\":100,\"truncateLongCells\":true},\"\u0413\u0440\u0443\u043F\u043F\
+  \u0430 \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u0439\
+  \":{\"columnWidth\":100,\"truncateLongCells\":true},\"\u0417\u0430\u043A\u0430\u0437\
+  \u0447\u0438\u043A\":{\"truncateLongCells\":true},\"\u0418\u0441\u0442\u043E\u0447\
+  \u043D\u0438\u043A \u0437\u0430\u043A\u0440\u044B\u0442\u0438\u044F(Candy)\":{\"\
+  truncateLongCells\":true}},\"conditional_formatting\":[],\"table_timestamp_format\"\
+  :\"smart_date\",\"extra_form_data\":{},\"force\":false,\"result_format\":\"json\"\
+  ,\"result_type\":\"full\"},\"result_format\":\"json\",\"result_type\":\"full\"}"
+cache_timeout: null
+uuid: 0498fd4c-db87-4d6f-a76d-4c042d94a235
+version: 1.0.0
+dataset_uuid: a8f582f1-b4ea-43cd-9a2e-0701f692e4ec

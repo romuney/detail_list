@@ -1,0 +1,1748 @@
+table_name: vacancy_daily_calc
+main_dttm_col: closed_plan_day
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: null
+schema: prod_proteus
+sql: "{% macro apply_filters(fields) %}\n  {% for field in fields %}\n    {% set filter_val\
+  \ = filter_values(field) %}\n    {{ ' and ' + field + ' in ' + filter_val|where_in\
+  \ if filter_val else '' }}\n  {% endfor %}\n{% endmacro %}\n\n\n\n{% set filters\
+  \ = [\n  'specialization_group'\n  ,'specialization'\n  ,'mapping_channel_name'\n\
+  \  ,'group_mapping_channel_name'\n  ,'mapping_channel_name_for_digest'\n  ,'search_type'\
+  \ \n  ,'search_reason' \n  ,'ad_login_recruit' \n  ,'mapping_group_name_history'\
+  \ \n  ,'it_flg'\n  , 'emp_specialization_oper_code'\n  ,'tcr_candy' \n  ,'customer'\n\
+  \  , 'specialization_group_mapping'\n  , 'close_source_adj'\n  , 'close_type'\n\
+  \  , 'close_source'\n  , 'respond_source_nm'\n  , 'source_type'\n  , 'lvl_position_adj'\n\
+  \  , 'finalist_level_candy'\n  , 'location'\n  , 'offer_contract_type_cd'\n  , 'mapping_employee_type'\n\
+  \  , 'first_event_recrut_ad_login'\n  \n,'lvl1_functional_unit_nm_kp'\n,'lvl2_functional_unit_nm_kp'\n\
+  ,'lvl3_functional_unit_nm'\n,'lvl4_functional_unit_nm'\n,'lvl5_functional_unit_nm'\n\
+  ,'lvl6_functional_unit_nm'\n,'lvl7_functional_unit_nm'\n,'lvl8_functional_unit_nm'\n\
+  ,'lvl9_functional_unit_nm'\n,'lvl10_functional_unit_nm'\n,'lvl11_functional_unit_nm'\n\
+  ,'lvl12_functional_unit_nm'\n\n, 'resource_level_3_nm'\n, 'resource_level_4_nm'\n\
+  , 'resource_level_5_nm'\n, 'resource_level_6_nm'\n, 'resource_level_7_nm'\n, 'resource_level_8_nm'\n\
+  , 'resource_level_9_nm'\n, 'resource_level_10_nm'\n, 'resource_level_11_nm'\n, 'current_empl_status'\n\
+  \n\n] %}\nwith (select groupArray((ad_login, ad_group))\n  from prod_proteus.sign_on_rls\n\
+  \  where ad_login = '{{  cache_key_wrapper(current_username()) }}'\n  ) as warden_array\n\
+  select *\n--, case when '{{cache_key_wrapper(current_username()) }}' in  ('v.sklyarenko',\
+  \ 'y.k.bobkova')\n       --then finalist_level_candy else '\u043D\u0435\u0442 \u0434\
+  \u0430\u043D\u043D\u044B\u0445' end as finalist_level_candy1\n, case when warden_array[1].2\
+  \ = 'super_user' then toString(finalist_grade_candy)\n       when warden_array[1].2\
+  \ in ('stream-leads')\n              and specialization_group != '\u0423\u043F\u0440\
+  \u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\
+  \u043B\u043E\u043C'\n       then toString(finalist_grade_candy) else '\u043D\u0435\
+  \u0442 \u0434\u0430\u043D\u043D\u044B\u0445' end as finalist_grade_candy1\n, toString(date_trunc('month',\
+  \ closed_plan_day)) as issue_month\n, toString(toYear(closed_plan_day)) as issue_year\n\
+  , {% if filter_values('select_param')|first == '\u0421\u043F\u0435\u0446\u0438\u0430\
+  \u043B\u0438\u0437\u0430\u0446\u0438\u044F' %}  \n       specialization\n      \
+  \ {% elif filter_values('select_param')|first == '\u0421\u0442\u0440\u0438\u043C\
+  ' %}  \n       specialization_group\n       {% elif filter_values('select_param')|first\
+  \ == '\u041B\u043E\u043A\u0430\u0446\u0438\u044F' %} \n       location\n       {%\
+  \ elif filter_values('select_param')|first == '\u0413\u0440\u0443\u043F\u043F\u0430\
+  \ \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u0439\
+  ' %} \n       specialization_group_mapping\n       {% elif filter_values('select_param')|first\
+  \ == '\u041A\u0430\u043D\u0430\u043B' %}\n       mapping_channel_name\n       {%\
+  \ elif filter_values('select_param')|first == '\u0413\u0440\u0443\u043F\u043F\u0430\
+  \ \u043A\u0430\u043D\u0430\u043B\u043E\u0432' %}\n       group_mapping_channel_name\n\
+  \       {% elif filter_values('select_param')|first == '\u041A\u0430\u043D\u0430\
+  \u043B+Hiring Events' %}\n       mapping_channel_name_he\n       {% elif filter_values('select_param')|first\
+  \ == 'HQ/Line/Support' %} \n       emp_specialization_oper_code\n       {% elif\
+  \ filter_values('select_param')|first == '\u0423\u0440\u043E\u0432\u0435\u043D\u044C\
+  \ \u0444\u0438\u043D\u0430\u043B\u0438\u0441\u0442\u0430' %}\n       finalist_level_candy\
+  \ \n       {% elif filter_values('select_param')|first == '\u0423\u0440\u043E\u0432\
+  \u0435\u043D\u044C \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0441\u0442\u0430\
+  ' %}\n       lvl_position_adj \n       {% elif filter_values('select_param')|first\
+  \ == '\u0413\u0440\u0435\u0439\u0434 \u0444\u0438\u043D\u0430\u043B\u0438\u0441\u0442\
+  \u0430' %}\n       case when warden_array[1].2 = 'super_user' then toString(finalist_grade_candy)\n\
+  \       when warden_array[1].2 in ('stream-leads') and specialization_group != '\u0423\
+  \u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u043F\u0435\u0440\u0441\u043E\
+  \u043D\u0430\u043B\u043E\u043C'\n       then toString(finalist_grade_candy) else\
+  \ '\u043D\u0435\u0442 \u0434\u0430\u043D\u043D\u044B\u0445' end\n       {% elif\
+  \ filter_values('select_param')|first == 'IT/Digital/NonIT' %}\n       it_flg\n\
+  \       {% elif filter_values('select_param')|first == '\u041F\u0440\u0438\u0447\
+  \u0438\u043D\u0430 \u043F\u043E\u0438\u0441\u043A\u0430' %}\n       search_reason\n\
+  \       {% elif filter_values('select_param')|first == '\u0422\u0438\u043F \u043F\
+  \u043E\u0438\u0441\u043A\u0430' %}\n       search_type\n       {% elif filter_values('select_param')|first\
+  \ == '\u0422\u0438\u043F \u0437\u0430\u043A\u0440\u044B\u0442\u0438\u044F' %}\n\
+  \       close_type\n       {% elif filter_values('select_param')|first == '\u0420\
+  \u0435\u043A\u0440\u0443\u0442\u0435\u0440' %}\n       ad_login_recruit\n      \
+  \ {% elif filter_values('select_param')|first == '\u0413\u0440\u0443\u043F\u043F\
+  \u0430 \u0440\u0435\u043A\u0440\u0443\u0442\u0435\u0440\u043E\u0432' %}\n      \
+  \ mapping_group_name_history\n       {% elif filter_values('select_param')|first\
+  \ == '\u0413\u0440\u0443\u043F\u043F\u0430 \u0440\u0435\u043A\u0440\u0443\u0442\u0435\
+  \u0440\u043E\u0432+\u0421\u043E\u0440\u0441\u0435\u0440\u044B' %}\n       mapping_group_name_with_sorcerer\n\
+  \       {% elif filter_values('select_param')|first == '\u0422\u0426\u0420' %}\n\
+  \       tcr_candy\n       {% elif filter_values('select_param')|first == '\u0411\
+  \u0430\u043A\u0435\u0442\u044B' %}\n       bucket\n       {% elif filter_values('select_param')|first\
+  \ == '\u0414\u0435\u0442\u0430\u043B\u044C\u043D\u044B\u0439 \u0438\u0441\u0442\u043E\
+  \u0447\u043D\u0438\u043A' %}\n       respond_source_nm\n       {% elif filter_values('select_param')|first\
+  \ == '\u0423\u0421-\u0443\u0440\u043E\u0432\u0435\u043D\u044C 2' %}\n       resource_level_2_nm\n\
+  \       {% elif filter_values('select_param')|first == '\u0423\u0421-\u0443\u0440\
+  \u043E\u0432\u0435\u043D\u044C 3' %}\n        resource_level_3_nm\n       {% elif\
+  \ filter_values('select_param')|first == '\u0423\u0421-\u0443\u0440\u043E\u0432\u0435\
+  \u043D\u044C 4' %}\n        resource_level_4_nm\n       {% elif filter_values('select_param')|first\
+  \ == '\u0423\u0421-\u0443\u0440\u043E\u0432\u0435\u043D\u044C 5' %}\n        resource_level_5_nm\n\
+  \       {% elif filter_values('select_param')|first == '\u0423\u0421-\u0443\u0440\
+  \u043E\u0432\u0435\u043D\u044C 6' %}\n        resource_level_6_nm\n       {% elif\
+  \ filter_values('select_param')|first == '\u0423\u0421-\u0443\u0440\u043E\u0432\u0435\
+  \u043D\u044C 7' %}\n        resource_level_7_nm\n       {% elif filter_values('select_param')|first\
+  \ == '\u0423\u0421-\u0443\u0440\u043E\u0432\u0435\u043D\u044C 8' %}\n        resource_level_8_nm\n\
+  \       {% elif filter_values('select_param')|first == '\u0423\u0421-\u0443\u0440\
+  \u043E\u0432\u0435\u043D\u044C 9' %}\n        resource_level_9_nm\n       {% elif\
+  \ filter_values('select_param')|first == '\u0423\u0421-\u0443\u0440\u043E\u0432\u0435\
+  \u043D\u044C 10' %}\n        resource_level_10_nm\n       {% elif filter_values('select_param')|first\
+  \ == '\u0423\u0421-\u0443\u0440\u043E\u0432\u0435\u043D\u044C 11' %}\n        resource_level_11_nm\n\
+  \       {% elif filter_values('select_param')|first == '\u041A\u041F-\u0443\u0440\
+  \u043E\u0432\u0435\u043D\u044C 1' %}\n        lvl1_functional_unit_nm_kp\n     \
+  \  {% elif filter_values('select_param')|first == '\u041A\u041F-\u0443\u0440\u043E\
+  \u0432\u0435\u043D\u044C 2' %}\n        lvl2_functional_unit_nm_kp\n        {% elif\
+  \ filter_values('select_param')|first == '\u041A\u041F-\u0443\u0440\u043E\u0432\u0435\
+  \u043D\u044C 3' %}\n        lvl3_functional_unit_nm\n        {% elif filter_values('select_param')|first\
+  \ == '\u041A\u041F-\u0443\u0440\u043E\u0432\u0435\u043D\u044C 4' %}\n        lvl4_functional_unit_nm\n\
+  \        {% elif filter_values('select_param')|first == '\u041A\u041F-\u0443\u0440\
+  \u043E\u0432\u0435\u043D\u044C 5' %}\n        lvl5_functional_unit_nm\n        {%\
+  \ elif filter_values('select_param')|first == '\u041A\u041F-\u0443\u0440\u043E\u0432\
+  \u0435\u043D\u044C 6' %}\n        lvl6_functional_unit_nm\n        {% elif filter_values('select_param')|first\
+  \ == '\u041A\u041F-\u0443\u0440\u043E\u0432\u0435\u043D\u044C 7' %}\n        lvl7_functional_unit_nm\n\
+  \        {% elif filter_values('select_param')|first == '\u041A\u041F-\u0443\u0440\
+  \u043E\u0432\u0435\u043D\u044C 8' %}\n        lvl8_functional_unit_nm\n        {%\
+  \ elif filter_values('select_param')|first == '\u041A\u041F-\u0443\u0440\u043E\u0432\
+  \u0435\u043D\u044C 9' %}\n        lvl9_functional_unit_nm\n        {% elif filter_values('select_param')|first\
+  \ == '\u041A\u041F-\u0443\u0440\u043E\u0432\u0435\u043D\u044C 10' %}\n        lvl10_functional_unit_nm\n\
+  \        {% elif filter_values('select_param')|first == '\u041A\u041F-\u0443\u0440\
+  \u043E\u0432\u0435\u043D\u044C 11' %}\n        lvl11_functional_unit_nm\n      \
+  \  {% elif filter_values('select_param')|first == '\u041A\u041F-\u0443\u0440\u043E\
+  \u0432\u0435\u043D\u044C 12' %}\n        lvl12_functional_unit_nm\n       {% else\
+  \ %}\n       specialization_group\n       {% endif %} as param_1\n  ,{% if filter_values('select_param_2')|first\
+  \ == '\u0421\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044F\
+  ' %}  \n       specialization\n       {% elif filter_values('select_param_2')|first\
+  \ == '\u0421\u0442\u0440\u0438\u043C' %}  \n       specialization_group\n      \
+  \ {% elif filter_values('select_param_2')|first == '\u041B\u043E\u043A\u0430\u0446\
+  \u0438\u044F' %} \n       location\n       {% elif filter_values('select_param_2')|first\
+  \ == '\u0413\u0440\u0443\u043F\u043F\u0430 \u0441\u043F\u0435\u0446\u0438\u0430\u043B\
+  \u0438\u0437\u0430\u0446\u0438\u0439' %} \n       specialization_group_mapping\n\
+  \       {% elif filter_values('select_param_2')|first == '\u041A\u0430\u043D\u0430\
+  \u043B' %}\n       mapping_channel_name\n       {% elif filter_values('select_param_2')|first\
+  \ == '\u0413\u0440\u0443\u043F\u043F\u0430 \u043A\u0430\u043D\u0430\u043B\u043E\u0432\
+  ' %}\n       group_mapping_channel_name\n       {% elif filter_values('select_param_2')|first\
+  \ == '\u041A\u0430\u043D\u0430\u043B+Hiring Events' %}\n       mapping_channel_name_he\n\
+  \       {% elif filter_values('select_param2')|first == 'HQ/Line/Support' %} \n\
+  \       emp_specialization_oper_code\n       {% elif filter_values('select_param_2')|first\
+  \ == '\u0423\u0440\u043E\u0432\u0435\u043D\u044C \u0444\u0438\u043D\u0430\u043B\u0438\
+  \u0441\u0442\u0430' %}\n       finalist_level_candy\n       {% elif filter_values('select_param2')|first\
+  \ == '\u0423\u0440\u043E\u0432\u0435\u043D\u044C \u0441\u043F\u0435\u0446\u0438\u0430\
+  \u043B\u0438\u0441\u0442\u0430' %}\n       lvl_position_adj \n       {% elif filter_values('select_param_2')|first\
+  \ == '\u0413\u0440\u0435\u0439\u0434 \u0444\u0438\u043D\u0430\u043B\u0438\u0441\u0442\
+  \u0430' %}\n       case when warden_array[1].2 = 'super_user' then toString(finalist_grade_candy)\n\
+  \       when warden_array[1].2 in ('stream-leads') and specialization_group != '\u0423\
+  \u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u043F\u0435\u0440\u0441\u043E\
+  \u043D\u0430\u043B\u043E\u043C'\n       then toString(finalist_grade_candy) else\
+  \ '\u043D\u0435\u0442 \u0434\u0430\u043D\u043D\u044B\u0445' end\n       {% elif\
+  \ filter_values('select_param_2')|first == 'IT/Digital/NonIT' %}\n       it_flg\n\
+  \       {% elif filter_values('select_param_2')|first == '\u041F\u0440\u0438\u0447\
+  \u0438\u043D\u0430 \u043F\u043E\u0438\u0441\u043A\u0430' %}\n       search_reason\n\
+  \       {% elif filter_values('select_param_2')|first == '\u0422\u0438\u043F \u043F\
+  \u043E\u0438\u0441\u043A\u0430' %}\n       search_type\n       {% elif filter_values('select_param_2')|first\
+  \ == '\u0422\u0438\u043F \u0437\u0430\u043A\u0440\u044B\u0442\u0438\u044F' %}\n\
+  \       close_type\n       {% elif filter_values('select_param_2')|first == '\u0420\
+  \u0435\u043A\u0440\u0443\u0442\u0435\u0440' %}\n       ad_login_recruit\n      \
+  \ {% elif filter_values('select_param_2')|first == '\u0413\u0440\u0443\u043F\u043F\
+  \u0430 \u0440\u0435\u043A\u0440\u0443\u0442\u0435\u0440\u043E\u0432' %}\n      \
+  \ mapping_group_name_history\n       {% elif filter_values('select_param_2')|first\
+  \ == '\u0413\u0440\u0443\u043F\u043F\u0430 \u0440\u0435\u043A\u0440\u0443\u0442\u0435\
+  \u0440\u043E\u0432+\u0421\u043E\u0440\u0441\u0435\u0440\u044B' %}\n       mapping_group_name_with_sorcerer\n\
+  \       {% elif filter_values('select_param_2')|first == '\u0422\u0426\u0420' %}\n\
+  \       tcr_candy\n       {% elif filter_values('select_param_2')|first == '\u0411\
+  \u0430\u043A\u0435\u0442\u044B' %}\n       bucket\n       {% elif filter_values('select_param_2')|first\
+  \ == '\u0414\u0435\u0442\u0430\u043B\u044C\u043D\u044B\u0439 \u0438\u0441\u0442\u043E\
+  \u0447\u043D\u0438\u043A' %}\n       respond_source_nm\n       {% elif filter_values('select_param_2')|first\
+  \ == '\u0423\u0421-\u0443\u0440\u043E\u0432\u0435\u043D\u044C 2' %}\n       resource_level_2_nm\n\
+  \       {% elif filter_values('select_param_2')|first == '\u0423\u0421-\u0443\u0440\
+  \u043E\u0432\u0435\u043D\u044C 3' %}\n        resource_level_3_nm\n       {% elif\
+  \ filter_values('select_param_2')|first == '\u0423\u0421-\u0443\u0440\u043E\u0432\
+  \u0435\u043D\u044C 4' %}\n        resource_level_4_nm\n       {% elif filter_values('select_param_2')|first\
+  \ == '\u0423\u0421-\u0443\u0440\u043E\u0432\u0435\u043D\u044C 5' %}\n        resource_level_5_nm\n\
+  \       {% elif filter_values('select_param_2')|first == '\u0423\u0421-\u0443\u0440\
+  \u043E\u0432\u0435\u043D\u044C 6' %}\n        resource_level_6_nm\n       {% elif\
+  \ filter_values('select_param_2')|first == '\u0423\u0421-\u0443\u0440\u043E\u0432\
+  \u0435\u043D\u044C 7' %}\n        resource_level_7_nm\n       {% elif filter_values('select_param_2')|first\
+  \ == '\u0423\u0421-\u0443\u0440\u043E\u0432\u0435\u043D\u044C 8' %}\n        resource_level_8_nm\n\
+  \       {% elif filter_values('select_param_2')|first == '\u0423\u0421-\u0443\u0440\
+  \u043E\u0432\u0435\u043D\u044C 9' %}\n        resource_level_9_nm\n       {% elif\
+  \ filter_values('select_param_2')|first == '\u0423\u0421-\u0443\u0440\u043E\u0432\
+  \u0435\u043D\u044C 10' %}\n        resource_level_10_nm\n       {% elif filter_values('select_param_2')|first\
+  \ == '\u0423\u0421-\u0443\u0440\u043E\u0432\u0435\u043D\u044C 11' %}\n        resource_level_11_nm\n\
+  \        \n        {% elif filter_values('select_param_2')|first == '\u041A\u041F\
+  -\u0443\u0440\u043E\u0432\u0435\u043D\u044C 1' %}\n        lvl1_functional_unit_nm_kp\n\
+  \       {% elif filter_values('select_param_2')|first == '\u041A\u041F-\u0443\u0440\
+  \u043E\u0432\u0435\u043D\u044C 2' %}\n        lvl2_functional_unit_nm_kp\n     \
+  \   {% elif filter_values('select_param_2')|first == '\u041A\u041F-\u0443\u0440\u043E\
+  \u0432\u0435\u043D\u044C 3' %}\n        lvl3_functional_unit_nm\n        {% elif\
+  \ filter_values('select_param_2')|first == '\u041A\u041F-\u0443\u0440\u043E\u0432\
+  \u0435\u043D\u044C 4' %}\n        lvl4_functional_unit_nm\n        {% elif filter_values('select_param_2')|first\
+  \ == '\u041A\u041F-\u0443\u0440\u043E\u0432\u0435\u043D\u044C 5' %}\n        lvl5_functional_unit_nm\n\
+  \        {% elif filter_values('select_param_2')|first == '\u041A\u041F-\u0443\u0440\
+  \u043E\u0432\u0435\u043D\u044C 6' %}\n        lvl6_functional_unit_nm\n        {%\
+  \ elif filter_values('select_param_2')|first == '\u041A\u041F-\u0443\u0440\u043E\
+  \u0432\u0435\u043D\u044C 7' %}\n        lvl7_functional_unit_nm\n        {% elif\
+  \ filter_values('select_param_2')|first == '\u041A\u041F-\u0443\u0440\u043E\u0432\
+  \u0435\u043D\u044C 8' %}\n        lvl8_functional_unit_nm\n        {% elif filter_values('select_param_2')|first\
+  \ == '\u041A\u041F-\u0443\u0440\u043E\u0432\u0435\u043D\u044C 9' %}\n        lvl9_functional_unit_nm\n\
+  \        {% elif filter_values('select_param_2')|first == '\u041A\u041F-\u0443\u0440\
+  \u043E\u0432\u0435\u043D\u044C 10' %}\n        lvl10_functional_unit_nm\n      \
+  \  {% elif filter_values('select_param_2')|first == '\u041A\u041F-\u0443\u0440\u043E\
+  \u0432\u0435\u043D\u044C 11' %}\n        lvl11_functional_unit_nm\n        {% elif\
+  \ filter_values('select_param_2')|first == '\u041A\u041F-\u0443\u0440\u043E\u0432\
+  \u0435\u043D\u044C 12' %}\n        lvl12_functional_unit_nm\n       {% else %}\n\
+  \       null\n       {% endif %} as param_2\nfrom prod_proteus.vacancy_daily\nwhere\n\
+  \    true\n    {{ apply_filters(filters) }}\n    {% if filter_values('unic_lables_filter')|length\
+  \ %}\nand hasAny(splitByString(',',\nassumeNotNull(labels)), {{filter_values('unic_lables_filter')}})\
+  \ \n{% endif %}"
+params: null
+template_params: {}
+filter_select_enabled: false
+fetch_values_predicate: null
+extra: null
+uuid: a8f582f1-b4ea-43cd-9a2e-0701f692e4ec
+metrics:
+- metric_name: closed_hrs
+  verbose_name: "\u0417\u0430\u043A\u0440\u044B\u0442\u044B\u0435"
+  metric_type: null
+  expression: "count (distinct issue_full_nm) \nfilter (where ytd=1 or py=1)"
+  description: null
+  d3format: null
+  extra:
+    warning_markdown: ''
+  warning_text: null
+columns:
+- column_name: resource_level_3_nm
+  verbose_name: "\u0423\u0421 - \u0443\u0440\u043E\u0432\u0435\u043D\u044C 3"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: resource_level_4_nm
+  verbose_name: "\u0423\u0421 - \u0443\u0440\u043E\u0432\u0435\u043D\u044C 4"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: resource_level_5_nm
+  verbose_name: "\u0423\u0421 - \u0443\u0440\u043E\u0432\u0435\u043D\u044C 5"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: resource_level_6_nm
+  verbose_name: "\u0423\u0421 - \u0443\u0440\u043E\u0432\u0435\u043D\u044C 6"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: resource_level_7_nm
+  verbose_name: "\u0423\u0421 - \u0443\u0440\u043E\u0432\u0435\u043D\u044C 7"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: resource_level_8_nm
+  verbose_name: "\u0423\u0421 - \u0443\u0440\u043E\u0432\u0435\u043D\u044C 8"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: finalist_level_candy
+  verbose_name: "\u0443\u0440\u043E\u0432\u0435\u043D\u044C \u0444\u0438\u043D\u0430\
+    \u043B\u0438\u0441\u0442\u0430 candy"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: param_1
+  verbose_name: "\u0420\u0430\u0437\u0440\u0435\u0437 1"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: param_2
+  verbose_name: "\u0420\u0430\u0437\u0440\u0435\u0437 2"
+  is_dttm: false
+  is_active: null
+  type: Nullable(Nothing)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: created_dt
+  verbose_name: "\u0414\u0430\u0442\u0430 \u0441\u043E\u0437\u0434\u0430\u043D\u0438\
+    \u044F"
+  is_dttm: true
+  is_active: null
+  type: Nullable(DateTime)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: resolution_dttm
+  verbose_name: "\u0414\u0430\u0442\u0430 \u0437\u0430\u043A\u0440\u044B\u0442\u0438\
+    \u044F"
+  is_dttm: true
+  is_active: null
+  type: Nullable(DateTime)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: closed_plan_day
+  verbose_name: "\u0414\u0430\u0442\u0430 \u0437\u0430\u043A\u0440\u044B\u0442\u0438\
+    \u044F"
+  is_dttm: true
+  is_active: null
+  type: Nullable(Date)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: type_hrs
+  verbose_name: "\u0422\u0438\u043F HRS"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: close_source_detail
+  verbose_name: "\u0414\u0435\u0442\u0430\u043B\u044C\u043D\u044B\u0439 \u0438\u0441\
+    \u0442\u043E\u0447\u043D\u0438\u043A"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: close_source_adj
+  verbose_name: "\u0418\u0441\u0442\u043E\u0447\u043D\u0438\u043A \u0437\u0430\u043A\
+    \u0440\u044B\u0442\u0438\u044F"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: search_reason
+  verbose_name: "\u041F\u0440\u0438\u0447\u0438\u043D\u0430 \u043F\u043E\u0438\u0441\
+    \u043A\u0430"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: search_type
+  verbose_name: "\u0422\u0438\u043F \u043F\u043E\u0438\u0441\u043A\u0430"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: close_type
+  verbose_name: "\u0422\u0438\u043F \u0437\u0430\u043A\u0440\u044B\u0442\u0438\u044F"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: mapping_group_name_with_sorcerer
+  verbose_name: "\u0441\u043E\u0440\u0441\u0435\u0440\u0441"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: first_event_recrut_ad_login
+  verbose_name: "\u0421\u043E\u0440\u0441\u0435\u0440"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: mapping_channel_name
+  verbose_name: "\u041A\u0430\u043D\u0430\u043B"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: finalist_level_adj
+  verbose_name: ''
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: ad_login_recruit
+  verbose_name: "\u0420\u0435\u043A\u0440\u0443\u0442\u0435\u0440"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: specialization_group
+  verbose_name: "\u0421\u0442\u0440\u0438\u043C"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: tcr_candy
+  verbose_name: "\u041E\u0444\u0444\u0438\u0441"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: issue_year
+  verbose_name: "\u0413\u043E\u0434"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: issue_month
+  verbose_name: "\u041C\u0435\u0441\u044F\u0446"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: specialization
+  verbose_name: "\u0421\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\
+    \u0438\u044F"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: bucket
+  verbose_name: "\u0411\u0430\u043A\u0435\u0442"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: customer
+  verbose_name: "\u041D\u0430\u043D\u0438\u043C\u0430\u044E\u0449\u0438\u0439"
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 10_elem_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 10_elem
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: lvl10_functional_unit_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: resource_level_10_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 11_elem_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 11_elem
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: lvl11_functional_unit_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: resource_level_11_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: last_12_m
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 12_elem_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 12_elem
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 1_elem_plan
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: mtd_y_1
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 1_elem_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 1_elem
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: lvl12_functional_unit_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: close_flg
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int16)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: lvl1_functional_unit_nm_kp
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: finalist_grade_candy1
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 2_elem_plan
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 2_elem_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 2_elem
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 3_elem_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 3_elem
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 4_elem_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 4_elem
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 5_elem_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 5_elem
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 6_elem_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 6_elem
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 7_elem_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 7_elem
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 8_elem_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 8_elem
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 9_elem_py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: 9_elem
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: ytd_planned
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: mtd
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: pytd
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: ytd
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: py
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int32)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: lvl2_functional_unit_nm_kp
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: resource_level_2_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: lvl3_functional_unit_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: importance
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Float64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: lvl4_functional_unit_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: lvl5_functional_unit_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: lvl6_functional_unit_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: lvl7_functional_unit_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: lvl8_functional_unit_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: lvl9_functional_unit_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: resource_level_9_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: max_date
+  verbose_name: null
+  is_dttm: true
+  is_active: null
+  type: Nullable(DateTime)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: hire_dt_planned
+  verbose_name: null
+  is_dttm: true
+  is_active: null
+  type: Nullable(Date)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: issue_day
+  verbose_name: null
+  is_dttm: true
+  is_active: null
+  type: Nullable(Date)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: mapping_channel_name_for_digest
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: mapping_channel_name_he
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: group_mapping_channel_name
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: close_source_detail_adj
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: emp_specialization_oper_code
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: mapping_group_name_history
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: offer_contract_type_cd
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: finalist_grade_candy
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: specialization_group_mapping
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: status_name_chng
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: management_position_rk
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: mapping_group_name
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: customer_ad_login
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: current_empl_status
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: ad_login_emp
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: lvl_position_adj
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: mapping_employee_type
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: respond_source_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: issue_full_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: status_name
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: contractor_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: candy_link
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: customer_email
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: assignee_login
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: close_source
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: source_type
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: city_list
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: it_flg
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: candidateid
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: labels
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: location
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: link
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+version: 1.0.0
+database_uuid: f3cf662e-9267-42ad-85d9-a009bacb4736

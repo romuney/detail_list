@@ -1,0 +1,78 @@
+slice_name: "\u0442\u0430\u043F\u043B\u043A\u0430 \u0433\u043E\u0434"
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 33339__table
+  viz_type: table
+  slice_id: 262800
+  query_mode: aggregate
+  groupby:
+  - issue_year
+  time_grain_sqla: P1Y
+  temporal_columns_lookup:
+    closed_plan_day: true
+    max_date: true
+    created_dt: true
+    resolution_dttm: true
+    issue_day: true
+    hire_dt_planned: true
+  all_columns: []
+  percent_metrics: []
+  adhoc_filters:
+  - clause: WHERE
+    comparator: No filter
+    datasourceWarning: false
+    expressionType: SIMPLE
+    filterOptionName: filter_3h2fyhifd0a_pva52f0wxys
+    isExtra: false
+    isNew: false
+    operator: TEMPORAL_RANGE
+    sqlExpression: null
+    subject: resolution_dttm
+  - clause: WHERE
+    comparator: No filter
+    datasourceWarning: false
+    expressionType: SIMPLE
+    filterOptionName: filter_bilxhmgck17_c7cdkvyibol
+    isExtra: false
+    isNew: false
+    operator: TEMPORAL_RANGE
+    operatorId: TEMPORAL_RANGE
+    sqlExpression: null
+    subject: closed_plan_day
+  timeseries_limit_metric:
+    aggregate: null
+    column: null
+    datasourceWarning: false
+    expressionType: SQL
+    hasCustomLabel: false
+    label: issue_year
+    optionName: metric_0oqqcdt6ff3q_2ud6hjtyxko
+    sqlExpression: issue_year
+  order_by_cols: []
+  server_pagination: false
+  row_limit: 1000
+  server_page_length: 10
+  order_desc: true
+  show_totals: false
+  page_length: null
+  include_search: false
+  show_cell_bars: false
+  allow_rearrange_columns: false
+  align_pn: false
+  color_pn: false
+  conditional_formatting: []
+  table_timestamp_format: smart_date
+  extra_form_data: {}
+  dashboards:
+  - 13198
+query_context: '{"datasource":{"id":33339,"type":"table"},"force":false,"queries":[{"filters":[{"col":"resolution_dttm","op":"TEMPORAL_RANGE","val":"No
+  filter"},{"col":"closed_plan_day","op":"TEMPORAL_RANGE","val":"No filter"}],"extras":{"time_grain_sqla":"P1Y","having":"","where":""},"applied_time_extras":{},"columns":["issue_year"],"metrics":[],"orderby":[[{"aggregate":null,"column":null,"datasourceWarning":false,"expressionType":"SQL","hasCustomLabel":false,"label":"issue_year","optionName":"metric_0oqqcdt6ff3q_2ud6hjtyxko","sqlExpression":"issue_year"},false]],"annotation_layers":[],"row_limit":1000,"series_limit":0,"series_limit_metric":{"aggregate":null,"column":null,"datasourceWarning":false,"expressionType":"SQL","hasCustomLabel":false,"label":"issue_year","optionName":"metric_0oqqcdt6ff3q_2ud6hjtyxko","sqlExpression":"issue_year"},"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{},"post_processing":[]}],"form_data":{"datasource":"33339__table","viz_type":"table","slice_id":262800,"query_mode":"aggregate","groupby":["issue_year"],"time_grain_sqla":"P1Y","temporal_columns_lookup":{"closed_plan_day":true,"max_date":true,"created_dt":true,"resolution_dttm":true,"issue_day":true,"hire_dt_planned":true},"all_columns":[],"percent_metrics":[],"adhoc_filters":[{"clause":"WHERE","comparator":"No
+  filter","datasourceWarning":false,"expressionType":"SIMPLE","filterOptionName":"filter_3h2fyhifd0a_pva52f0wxys","isExtra":false,"isNew":false,"operator":"TEMPORAL_RANGE","sqlExpression":null,"subject":"resolution_dttm"},{"clause":"WHERE","comparator":"No
+  filter","datasourceWarning":false,"expressionType":"SIMPLE","filterOptionName":"filter_bilxhmgck17_c7cdkvyibol","isExtra":false,"isNew":false,"operator":"TEMPORAL_RANGE","operatorId":"TEMPORAL_RANGE","sqlExpression":null,"subject":"closed_plan_day"}],"timeseries_limit_metric":{"aggregate":null,"column":null,"datasourceWarning":false,"expressionType":"SQL","hasCustomLabel":false,"label":"issue_year","optionName":"metric_0oqqcdt6ff3q_2ud6hjtyxko","sqlExpression":"issue_year"},"order_by_cols":[],"server_pagination":false,"row_limit":1000,"server_page_length":10,"order_desc":true,"show_totals":false,"page_length":null,"include_search":false,"show_cell_bars":false,"allow_rearrange_columns":false,"align_pn":false,"color_pn":false,"conditional_formatting":[],"table_timestamp_format":"smart_date","extra_form_data":{},"dashboards":[13198],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: 7d58ff1b-3763-41d9-9e33-7b4ce7d167bc
+version: 1.0.0
+dataset_uuid: a8f582f1-b4ea-43cd-9a2e-0701f692e4ec

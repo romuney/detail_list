@@ -1,0 +1,16 @@
+database_name: Proteus CROSS
+sqlalchemy_uri: clickhousedb://proteus_dwh3_proteus_reader:XXXXXXXXXX@proteus-clickhouse-select.t-tech.team:443/prod_proteus
+cache_timeout: null
+expose_in_sqllab: true
+allow_run_async: false
+allow_ctas: false
+allow_cvas: false
+allow_dml: false
+allow_file_upload: false
+extra:
+  allows_virtual_table_explore: true
+  allow_query_settings: true
+  enable_data_access_control: true
+  is_internal_db: true
+uuid: f3cf662e-9267-42ad-85d9-a009bacb4736
+version: 1.0.0

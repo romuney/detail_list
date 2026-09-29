@@ -1,0 +1,123 @@
+slice_name: "\u0442\u0430\u043F\u043B\u043A\u0430_\u0442\u0438\u043F_hrs"
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 33339__table
+  viz_type: table
+  slice_id: 167575
+  query_mode: aggregate
+  groupby:
+  - type_hrs
+  time_grain_sqla: P1D
+  temporal_columns_lookup:
+    closed_plan_day: true
+    max_date: true
+    created_dt: true
+    resolution_dttm: true
+    issue_day: true
+    hire_dt_planned: true
+  metrics:
+  - expressionType: SQL
+    sqlExpression: 'count(distinct issue_full_nm) '
+    column: null
+    aggregate: null
+    datasourceWarning: false
+    hasCustomLabel: true
+    label: "\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E HRS"
+    optionName: metric_y1hrmluri19_44ne33i949w
+  all_columns: []
+  percent_metrics: []
+  adhoc_filters:
+  - expressionType: SIMPLE
+    subject: closed_plan_day
+    operator: TEMPORAL_RANGE
+    operatorId: TEMPORAL_RANGE
+    comparator: No filter
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_1fr87548onz_iqaxh0om9s
+  timeseries_limit_metric:
+    aggregate: null
+    column: null
+    datasourceWarning: false
+    expressionType: SQL
+    hasCustomLabel: false
+    label: "CASE when type_hrs = '\u0437\u0430\u043A\u0440\u044B\u0442\u044B\u0435\
+      ' then 1 e..."
+    optionName: metric_hxq2xfbe58_qeaecc7dtr
+    sqlExpression: "CASE when type_hrs = '\u0437\u0430\u043A\u0440\u044B\u0442\u044B\
+      \u0435' then 1 else 2 END"
+  order_by_cols: []
+  server_pagination: false
+  row_limit: 1000
+  server_page_length: 10
+  order_desc: false
+  show_totals: false
+  page_length: null
+  include_search: false
+  show_cell_bars: true
+  allow_rearrange_columns: false
+  align_pn: false
+  color_pn: true
+  column_config:
+    "\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E HRS":
+      d3NumberFormat: ~g
+  conditional_formatting: []
+  table_timestamp_format: smart_date
+  extra_form_data: {}
+  dashboards:
+  - 13198
+query_context: "{\"datasource\":{\"id\":33339,\"type\":\"table\"},\"force\":false,\"\
+  queries\":[{\"filters\":[{\"col\":\"closed_plan_day\",\"op\":\"TEMPORAL_RANGE\"\
+  ,\"val\":\"No filter\"}],\"extras\":{\"time_grain_sqla\":\"P1D\",\"having\":\"\"\
+  ,\"where\":\"\"},\"applied_time_extras\":{},\"columns\":[\"type_hrs\"],\"metrics\"\
+  :[{\"expressionType\":\"SQL\",\"sqlExpression\":\"count(distinct issue_full_nm)\
+  \ \",\"column\":null,\"aggregate\":null,\"datasourceWarning\":false,\"hasCustomLabel\"\
+  :true,\"label\":\"\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E HRS\"\
+  ,\"optionName\":\"metric_y1hrmluri19_44ne33i949w\"}],\"orderby\":[[{\"aggregate\"\
+  :null,\"column\":null,\"datasourceWarning\":false,\"expressionType\":\"SQL\",\"\
+  hasCustomLabel\":false,\"label\":\"CASE when type_hrs = '\u0437\u0430\u043A\u0440\
+  \u044B\u0442\u044B\u0435' then 1 e...\",\"optionName\":\"metric_hxq2xfbe58_qeaecc7dtr\"\
+  ,\"sqlExpression\":\"CASE when type_hrs = '\u0437\u0430\u043A\u0440\u044B\u0442\u044B\
+  \u0435' then 1 else 2 END\"},true]],\"annotation_layers\":[],\"row_limit\":1000,\"\
+  series_limit\":0,\"series_limit_metric\":{\"aggregate\":null,\"column\":null,\"\
+  datasourceWarning\":false,\"expressionType\":\"SQL\",\"hasCustomLabel\":false,\"\
+  label\":\"CASE when type_hrs = '\u0437\u0430\u043A\u0440\u044B\u0442\u044B\u0435\
+  ' then 1 e...\",\"optionName\":\"metric_hxq2xfbe58_qeaecc7dtr\",\"sqlExpression\"\
+  :\"CASE when type_hrs = '\u0437\u0430\u043A\u0440\u044B\u0442\u044B\u0435' then\
+  \ 1 else 2 END\"},\"order_desc\":false,\"url_params\":{},\"custom_params\":{},\"\
+  custom_form_data\":{},\"post_processing\":[]}],\"form_data\":{\"datasource\":\"\
+  33339__table\",\"viz_type\":\"table\",\"slice_id\":167575,\"query_mode\":\"aggregate\"\
+  ,\"groupby\":[\"type_hrs\"],\"time_grain_sqla\":\"P1D\",\"temporal_columns_lookup\"\
+  :{\"closed_plan_day\":true,\"max_date\":true,\"created_dt\":true,\"resolution_dttm\"\
+  :true,\"issue_day\":true,\"hire_dt_planned\":true},\"metrics\":[{\"expressionType\"\
+  :\"SQL\",\"sqlExpression\":\"count(distinct issue_full_nm) \",\"column\":null,\"\
+  aggregate\":null,\"datasourceWarning\":false,\"hasCustomLabel\":true,\"label\":\"\
+  \u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E HRS\",\"optionName\"\
+  :\"metric_y1hrmluri19_44ne33i949w\"}],\"all_columns\":[],\"percent_metrics\":[],\"\
+  adhoc_filters\":[{\"expressionType\":\"SIMPLE\",\"subject\":\"closed_plan_day\"\
+  ,\"operator\":\"TEMPORAL_RANGE\",\"operatorId\":\"TEMPORAL_RANGE\",\"comparator\"\
+  :\"No filter\",\"clause\":\"WHERE\",\"sqlExpression\":null,\"isExtra\":false,\"\
+  isNew\":false,\"datasourceWarning\":false,\"filterOptionName\":\"filter_1fr87548onz_iqaxh0om9s\"\
+  }],\"timeseries_limit_metric\":{\"aggregate\":null,\"column\":null,\"datasourceWarning\"\
+  :false,\"expressionType\":\"SQL\",\"hasCustomLabel\":false,\"label\":\"CASE when\
+  \ type_hrs = '\u0437\u0430\u043A\u0440\u044B\u0442\u044B\u0435' then 1 e...\",\"\
+  optionName\":\"metric_hxq2xfbe58_qeaecc7dtr\",\"sqlExpression\":\"CASE when type_hrs\
+  \ = '\u0437\u0430\u043A\u0440\u044B\u0442\u044B\u0435' then 1 else 2 END\"},\"order_by_cols\"\
+  :[],\"server_pagination\":false,\"row_limit\":1000,\"server_page_length\":10,\"\
+  order_desc\":false,\"show_totals\":false,\"page_length\":null,\"include_search\"\
+  :false,\"show_cell_bars\":true,\"allow_rearrange_columns\":false,\"align_pn\":false,\"\
+  color_pn\":true,\"column_config\":{\"\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\
+  \u0432\u043E HRS\":{\"d3NumberFormat\":\"~g\"}},\"conditional_formatting\":[],\"\
+  table_timestamp_format\":\"smart_date\",\"extra_form_data\":{},\"dashboards\":[13198],\"\
+  force\":false,\"result_format\":\"json\",\"result_type\":\"full\"},\"result_format\"\
+  :\"json\",\"result_type\":\"full\"}"
+cache_timeout: null
+uuid: a2f7e178-b065-4b10-9d4c-b50f2e775504
+version: 1.0.0
+dataset_uuid: a8f582f1-b4ea-43cd-9a2e-0701f692e4ec

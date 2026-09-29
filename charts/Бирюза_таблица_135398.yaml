@@ -1,0 +1,730 @@
+slice_name: "\u0411\u0438\u0440\u044E\u0437\u0430 \u0442\u0430\u0431\u043B\u0438\u0446\
+  \u0430"
+description: null
+certified_by: null
+certification_details: null
+viz_type: handlebars
+params:
+  datasource: 32802__table
+  viz_type: handlebars
+  slice_id: 135398
+  query_mode: aggregate
+  groupby:
+  - sort_header
+  - param_1
+  - param_2
+  - 1_element
+  - 2_element
+  - 3_element
+  - 4_element
+  - 5_element
+  - 6_element
+  - 7_element
+  - 8_element
+  - 9_element
+  - 10_element
+  - 11_element
+  - 12_element
+  - ytd_cnt
+  - max_cell
+  - rank_param_1
+  - row_param_1
+  - row_param_2
+  - expressionType: SQL
+    label: param_nm
+    sqlExpression: '{{filter_values(''select_param'')}}[1]'
+  - label: param_nm_2
+    sqlExpression: "{% if filter_values('select_param_2') is defined %}\n  {% if filter_values('select_param_2')|first\
+      \ != undefined %}\n     {{filter_values('select_param_2')}}[1]\n  {% else %}\n\
+      \    ''\n  {% endif %}\n{% else %}\n  ''\n{% endif %}"
+    expressionType: SQL
+  - MTD_cnt
+  - mtd_y_1_cnt
+  - py_cnt
+  - pytd_cnt
+  - 1_element_py
+  - 2_element_py
+  - 3_element_py
+  - 4_element_py
+  - 5_element_py
+  - 6_element_py
+  - 7_element_py
+  - 8_element_py
+  - 9_element_py
+  - 10_element_py
+  - 11_element_py
+  - 12_element_py
+  - expressionType: SQL
+    label: max_column
+    sqlExpression: "greatest(\ncoalesce(1_element, 0),   \ncoalesce(2_element, 0),\
+      \   \ncoalesce(3_element, 0),   \ncoalesce(4_element, 0),   \ncoalesce(5_element,\
+      \ 0),   \ncoalesce(6_element, 0),   \ncoalesce(7_element, 0),   \ncoalesce(8_element,\
+      \ 0),   \ncoalesce(9_element, 0),   \ncoalesce(10_element, 0),   \ncoalesce(11_element,\
+      \ 0),   \ncoalesce(12_element, 0),  \ncoalesce(1_element_py, 0),   \ncoalesce(2_element_py,\
+      \ 0),   \ncoalesce(3_element_py, 0),   \ncoalesce(4_element_py, 0),   \ncoalesce(5_element_py,\
+      \ 0),   \ncoalesce(6_element_py, 0),   \ncoalesce(7_element_py, 0),   \ncoalesce(8_element_py,\
+      \ 0),   \ncoalesce(9_element_py, 0),   \ncoalesce(10_element_py, 0),   \ncoalesce(11_element_py,\
+      \ 0),   \ncoalesce(12_element_py, 0),\ncoalesce(1_element_plan, 0),\ncoalesce(2_element_plan,\
+      \ 0))"
+  - last_12_m
+  - 1_element_plan
+  - 2_element_plan
+  metrics: []
+  all_columns: []
+  percent_metrics: []
+  timeseries_limit_metric:
+    aggregate: null
+    column: null
+    datasourceWarning: false
+    expressionType: SQL
+    hasCustomLabel: false
+    label: sort_header, rank_param_1
+    optionName: metric_m1p9iy8w04_alpbhmldia9
+    sqlExpression: sort_header, rank_param_1
+  order_by_cols: []
+  order_desc: false
+  server_pagination: false
+  row_limit: 5000
+  server_page_length: 200
+  include_time: false
+  show_totals: false
+  adhoc_filters:
+  - expressionType: SIMPLE
+    subject: max_date
+    operator: TEMPORAL_RANGE
+    comparator: No filter
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_019f0losb57p_hurk0cyp0dm
+  handlebarsTemplate: "<style>\n:root{\n   --max_width_right:{{data.[1].1element}};\n\
+    \    --color_chart:rgb(106, 212, 221);\n    --color_chart1:rgb(160, 106, 221);\n\
+    }\n</style>\n<table>\n  <thead>\n    <div class=\"chart-header\">\n        <span\
+    \ class=\"header-title\">\n            \u0410\u043D\u0430\u043B\u0438\u0437 \u0437\
+    \u0430\u043A\u0440\u044B\u0442\u044B\u0445 \u0432\u0430\u043A\u0430\u043D\u0441\
+    \u0438\u0439\n        </span>\n        <div class=\"header-legend\">\n       \
+    \     <div class=\"legend-value legend-done \">\u0417\u0430\u043A\u0440\u044B\u0442\
+    \u044B\u0435</div>\n            <div class=\"legend-value legend-plan\">\u0411\
+    \u0443\u0434\u0443\u0449\u0438\u0435</div>\n        </div>\n    </div>\n  {{#each\
+    \ data}}\n    {{#if (eq this.sort_header 2)}}\n    <tr class=\"top_row\">  \n\
+    \    <th class=\"top_cell  header_label_param_total\"><span>{{param_1}}</span></th>\
+    \  \n    <th class=\"top_cell header_label_total\"></th> \n    <th class=\"top_cell\
+    \ header_label_total\"><span>{{MTD_cnt}}</span></th>  \n    <th class=\"top_cell\
+    \ header_label_total\"><span>{{mtd_y_1_cnt}}</span></th>  \n    <th class=\"top_cell\
+    \ header_label_total\"><span>{{ytd_cnt}}</span></th>  \n    <th class=\"top_cell\
+    \ header_label_total\"><span>{{py_cnt}}</span></th>  \n    <th class=\"top_cell\
+    \ header_label_total\"><span>{{pytd_cnt}}</span></th>  \n    <th class=\"top_cell\
+    \ header_label_total\"><span>{{last_12_m}}</span></th>  \n    <th class=\"top_barchart_cell\"\
+    ><div class = \"top_barchart\" style=\"height:calc(90%*{{1_element_py}}/{{max_column}})\"\
+    ><div class = \"text_bar\">{{1_element_py}}</div></div></th>  \n    <th class=\"\
+    top_barchart_cell\"><div class = \"top_barchart\" style=\"height:calc(90%*{{2_element_py}}/{{max_column}})\"\
+    ><div class = \"text_bar\">{{2_element_py}}</div></div></th>  \n    <th class=\"\
+    top_barchart_cell\"><div class = \"top_barchart\" style=\"height:calc(90%*{{3_element_py}}/{{max_column}})\"\
+    ><div class = \"text_bar\">{{3_element_py}}</div></div></th>  \n    <th class=\"\
+    top_barchart_cell\"><div class = \"top_barchart\" style=\"height:calc(90%*{{4_element_py}}/{{max_column}})\"\
+    ><div class = \"text_bar\">{{4_element_py}}</div></div></th>  \n    <th class=\"\
+    top_barchart_cell\"><div class = \"top_barchart\" style=\"height:calc(90%*{{5_element_py}}/{{max_column}})\"\
+    ><div class = \"text_bar\">{{5_element_py}}</div></div></th>  \n    <th class=\"\
+    top_barchart_cell\"><div class = \"top_barchart\" style=\"height:calc(90%*{{6_element_py}}/{{max_column}})\"\
+    ><div class = \"text_bar\">{{6_element_py}}</div></div></th>  \n    <th class=\"\
+    top_barchart_cell\"><div class = \"top_barchart\" style=\"height:calc(90%*{{7_element_py}}/{{max_column}})\"\
+    ><div class = \"text_bar\">{{7_element_py}}</div></div></th>  \n    <th class=\"\
+    top_barchart_cell\"><div class = \"top_barchart\" style=\"height:calc(90%*{{8_element_py}}/{{max_column}})\"\
+    ><div class = \"text_bar\">{{8_element_py}}</div></div></th>  \n    <th class=\"\
+    top_barchart_cell\"><div class = \"top_barchart\" style=\"height:calc(90%*{{9_element_py}}/{{max_column}})\"\
+    ><div class = \"text_bar\">{{9_element_py}}</div></div></th>  \n    <th class=\"\
+    top_barchart_cell\"><div class = \"top_barchart\" style=\"height:calc(90%*{{10_element_py}}/{{max_column}})\"\
+    ><div class = \"text_bar\">{{10_element_py}}</div></div></th>  \n    <th class=\"\
+    top_barchart_cell\"><div class = \"top_barchart\" style=\"height:calc(90%*{{11_element_py}}/{{max_column}})\"\
+    ><div class = \"text_bar\">{{11_element_py}}</div></div></th>  \n    <th class=\"\
+    top_barchart_cell\"><div class = \"top_barchart\" style=\"height:calc(90%*{{12_element_py}}/{{max_column}})\"\
+    ><div class = \"text_bar\">{{12_element_py}}</div></div></th>   \n    {{#unless\
+    \ (eq this.1_element null)}}  \n    <th class=\"top_barchart_cell\">  \n     \
+    \ <div class=\"top_barchart\" style=\"height:calc(90%*{{1_element}}/{{max_column}})\"\
+    ><div class=\"text_bar\">{{1_element}}</div></div>  \n    </th>  \n     {{/unless}}\
+    \  \n     {{#unless (eq this.2_element null)}}  \n         <th class=\"top_barchart_cell\"\
+    >  \n           <div class=\"top_barchart\" style=\"height:calc(90%*{{2_element}}/{{max_column}})\"\
+    ><div class=\"text_bar\">{{2_element}}</div></div>  \n         </th>  \n     {{/unless}}\
+    \  \n     {{#unless (eq this.3_element null)}}  \n         <th class=\"top_barchart_cell\"\
+    >  \n           <div class=\"top_barchart\" style=\"height:calc(90%*{{3_element}}/{{max_column}})\"\
+    ><div class=\"text_bar\">{{3_element}}</div></div>  \n         </th>  \n     {{/unless}}\
+    \  \n     {{#unless (eq this.4_element null)}}  \n         <th class=\"top_barchart_cell\"\
+    >  \n           <div class=\"top_barchart\" style=\"height:calc(90%*{{4_element}}/{{max_column}})\"\
+    ><div class=\"text_bar\">{{4_element}}</div></div>  \n         </th>  \n     {{/unless}}\
+    \  \n     {{#unless (eq this.5_element null)}}  \n         <th class=\"top_barchart_cell\"\
+    >  \n           <div class=\"top_barchart\" style=\"height:calc(90%*{{5_element}}/{{max_column}})\"\
+    ><div class=\"text_bar\">{{5_element}}</div></div>  \n         </th>  \n     {{/unless}}\
+    \  \n     {{#unless (eq this.6_element null)}}  \n         <th class=\"top_barchart_cell\"\
+    >  \n           <div class=\"top_barchart\" style=\"height:calc(90%*{{6_element}}/{{max_column}})\"\
+    ><div class=\"text_bar\">{{6_element}}</div></div>  \n         </th>  \n     {{/unless}}\
+    \  \n     {{#unless (eq this.7_element null)}}  \n         <th class=\"top_barchart_cell\"\
+    >  \n           <div class=\"top_barchart\" style=\"height:calc(90%*{{7_element}}/{{max_column}})\"\
+    ><div class=\"text_bar\">{{7_element}}</div></div>  \n         </th>  \n     {{/unless}}\
+    \  \n     {{#unless (eq this.8_element null)}}  \n         <th class=\"top_barchart_cell\"\
+    >  \n           <div class=\"top_barchart\" style=\"height:calc(90%*{{8_element}}/{{max_column}})\"\
+    ><div class=\"text_bar\">{{8_element}}</div></div>  \n         </th>  \n     {{/unless}}\
+    \  \n     {{#unless (eq this.9_element null)}}  \n         <th class=\"top_barchart_cell\"\
+    >  \n           <div class=\"top_barchart\" style=\"height:calc(90%*{{9_element}}/{{max_column}})\"\
+    ><div class=\"text_bar\">{{9_element}}</div></div>  \n         </th>  \n     {{/unless}}\
+    \  \n     {{#unless (eq this.10_element null)}}  \n         <th class=\"top_barchart_cell\"\
+    >  \n           <div class=\"top_barchart\" style=\"height:calc(90%*{{10_element}}/{{max_column}})\"\
+    ><div class=\"text_bar\">{{10_element}}</div></div>  \n         </th>  \n    \
+    \ {{/unless}}  \n     {{#unless (eq this.11_element null)}}  \n         <th class=\"\
+    top_barchart_cell\">  \n           <div class=\"top_barchart\" style=\"height:calc(90%*{{11_element}}/{{max_column}})\"\
+    ><div class=\"text_bar\">{{11_element}}</div></div>  \n         </th>  \n    \
+    \ {{/unless}}  \n     {{#unless (eq this.12_element null)}}  \n         <th class=\"\
+    top_barchart_cell\">  \n           <div class=\"top_barchart\" style=\"height:calc(90%*{{12_element}}/{{max_column}})\"\
+    ><div class=\"text_bar\">{{12_element}}</div></div>  \n         </th>  \n    \
+    \ {{/unless}}\n    {{#unless (eq this.1_element_plan null)}}  \n     <th class=\"\
+    top_barchart_cell\">  \n       <div class=\"top_barchart1\" style=\"height:calc(90%*{{1_element_plan}}/{{max_column}})\"\
+    ><div class=\"text_bar\">{{1_element_plan}}</div></div>  \n     </th>  \n    \
+    \  {{/unless}}\n      {{#unless (eq this.2_element_plan null)}}  \n     <th class=\"\
+    top_barchart_cell\">  \n       <div class=\"top_barchart1\" style=\"height:calc(90%*{{2_element_plan}}/{{max_column}})\"\
+    ><div class=\"text_bar\">{{2_element_plan}}</div></div>  \n     </th>  \n    \
+    \  {{/unless}}  \n</tr>\n    {{/if}}\n  {{/each}} \n  </thead>  \n  <thead>\n\
+    \    {{#each data}}\n    {{#if (eq this.sort_header 0)}}\n    <tr class=\"sticky-header\"\
+    >\n      <th><p class=\"header_label header_label_param\">{{this.param_nm}}</p></th>\n\
+    \      <th><p class=\"header_label header_label_param\">{{this.param_nm_2}}</p></th>\n\
+    \      <th><p class=\"header_label header_label_metric\">MTD</p></th>\n      <th><p\
+    \ class=\"header_label header_label_metric\">MTD Y-1</p></th>\n      <th><p class=\"\
+    header_label header_label_metric\">YTD</p></th>\n      <th><p class=\"header_label\
+    \ header_label_metric\">PY</p></th>\n      <th><p class=\"header_label header_label_metric\"\
+    >PYTD</p></th>\n      <th><p class=\"header_label header_label_metric\">Last12M</p></th>\n\
+    \      <th class=\"border_left_year\"><p class=\"header_label\">{{formatDate 'YYYY'\
+    \ this.1_element_py}}</p></th>  \n      <th><p class=\"header_label header_label_month\"\
+    >{{formatDate 'MMM' this.2_element_py}}</p></th>  \n      <th><p class=\"header_label\
+    \ header_label_month\">{{formatDate 'MMM' this.3_element_py}}</p></th>  \n   \
+    \   <th><p class=\"header_label header_label_month\">{{formatDate 'MMM' this.4_element_py}}</p></th>\
+    \  \n      <th><p class=\"header_label header_label_month\">{{formatDate 'MMM'\
+    \ this.5_element_py}}</p></th>  \n      <th><p class=\"header_label header_label_month\"\
+    >{{formatDate 'MMM' this.6_element_py}}</p></th>  \n      <th><p class=\"header_label\
+    \ header_label_month\">{{formatDate 'MMM' this.7_element_py}}</p></th>  \n   \
+    \   <th><p class=\"header_label header_label_month\">{{formatDate 'MMM' this.8_element_py}}</p></th>\
+    \  \n      <th><p class=\"header_label header_label_month\">{{formatDate 'MMM'\
+    \ this.9_element_py}}</p></th>  \n      <th><p class=\"header_label header_label_month\"\
+    >{{formatDate 'MMM' this.10_element_py}}</p></th>  \n      <th><p class=\"header_label\
+    \ header_label_month\">{{formatDate 'MMM' this.11_element_py}}</p></th>  \n  \
+    \    <th><p class=\"header_label header_label_month\">{{formatDate 'MMM' this.12_element_py}}</p></th>\
+    \  \n      <th class=\"border_left_year\"><p class=\"header_label\">{{formatDate\
+    \ 'YYYY' this.1_element}}</p></th> \n      {{#unless (eq this.2_element null)}}\
+    \  \n      <th><p class=\"header_label header_label_month\">{{formatDate 'MMM'\
+    \ this.2_element}}</p></th>  \n      {{/unless}}\n      {{#unless (eq this.3_element\
+    \ null)}}  \n          <th><p class=\"header_label header_label_month\">{{formatDate\
+    \ 'MMM' this.3_element}}</p></th>  \n      {{/unless}}  \n      {{#unless (eq\
+    \ this.4_element null)}}  \n          <th><p class=\"header_label header_label_month\"\
+    >{{formatDate 'MMM' this.4_element}}</p></th>  \n      {{/unless}}  \n      {{#unless\
+    \ (eq this.5_element null)}}  \n          <th><p class=\"header_label header_label_month\"\
+    >{{formatDate 'MMM' this.5_element}}</p></th>  \n      {{/unless}}  \n      {{#unless\
+    \ (eq this.6_element null)}}  \n          <th><p class=\"header_label header_label_month\"\
+    >{{formatDate 'MMM' this.6_element}}</p></th>  \n      {{/unless}}  \n      {{#unless\
+    \ (eq this.7_element null)}}  \n          <th><p class=\"header_label header_label_month\"\
+    >{{formatDate 'MMM' this.7_element}}</p></th>  \n      {{/unless}}  \n      {{#unless\
+    \ (eq this.8_element null)}}  \n          <th><p class=\"header_label header_label_month\"\
+    >{{formatDate 'MMM' this.8_element}}</p></th>  \n      {{/unless}}  \n      {{#unless\
+    \ (eq this.9_element null)}}  \n          <th><p class=\"header_label header_label_month\"\
+    >{{formatDate 'MMM' this.9_element}}</p></th>  \n      {{/unless}}  \n      {{#unless\
+    \ (eq this.10_element null)}}  \n          <th><p class=\"header_label header_label_month\"\
+    >{{formatDate 'MMM' this.10_element}}</p></th>  \n      {{/unless}}  \n      {{#unless\
+    \ (eq this.11_element null)}}  \n          <th><p class=\"header_label header_label_month\"\
+    >{{formatDate 'MMM' this.11_element}}</p></th>  \n      {{/unless}}  \n      {{#unless\
+    \ (eq this.12_element null)}}  \n          <th><p class=\"header_label header_label_month\"\
+    >{{formatDate 'MMM' this.12_element}}</p></th>  \n      {{/unless}}\n      {{#unless\
+    \ (eq this.1_element_plan null)}}  \n          <th class=\"border_left_year\"\
+    ><p class=\"header_label header_label_month\">{{formatDate 'MMM' this.1_element_plan}}</p></th>\
+    \  \n      {{/unless}}\n       {{#unless (eq this.2_element_plan null)}}  \n \
+    \         <th><p class=\"header_label header_label_month\">{{formatDate 'MMM'\
+    \ this.2_element_plan}}</p></th>  \n      {{/unless}}\n      </tr>\n      {{/if}}\n\
+    \     {{/each}}\n  </thead>\n  <tbody>\n    {{#each data}}\n    {{#if (eq this.sort_header\
+    \ 1)}}\n      <tr class=\"main_tr\">\n        <td class=\"header_table\"\n   \
+    \     {{#unless (eq row_param_1 1)}}\n        style=\"color:white; border: none\n\
+    \        {{/unless}}\"\n        >{{param_1}}</td>\n        <td class=\"header_table\"\
+    \n        {{#unless (eq row_param_2 1)}}\n        style=\"color:white; border:\
+    \ none\n        {{/unless}}\"\n        >{{param_2}}</td>\n        <td class=\"\
+    body_cell\"><span>{{MTD_cnt}}</span></td>\n        <td class=\"body_cell\"><span>{{mtd_y_1_cnt}}</span></td>\n\
+    \        <td class=\"body_cell\"><span>{{ytd_cnt}}</span></td>\n        <td class=\"\
+    body_cell\"><span>{{py_cnt}}</span></td>\n        <td class=\"body_cell\"><span>{{pytd_cnt}}</span></td>\n\
+    \        <td class=\"body_cell\"><span>{{last_12_m}}</span></td>\n        <td\
+    \ class=\"body_cell border_left_year\"><span>{{1_element_py}}</span><div class\
+    \ =\"psevdo_cell\" style=\"opacity: calc({{1_element_py}}/{{max_cell}}); \"></div></td>\n\
+    <td class=\"body_cell\"><span>{{2_element_py}}</span>  \n    <div class=\"psevdo_cell\"\
+    \ style=\"opacity: calc({{2_element_py}}/{{max_cell}});\"></div>  \n</td>   \n\
+    <td class=\"body_cell\"><span>{{3_element_py}}</span>  \n    <div class=\"psevdo_cell\"\
+    \ style=\"opacity: calc({{3_element_py}}/{{max_cell}});\"></div>  \n</td>  \n\
+    <td class=\"body_cell\"><span>{{4_element_py}}</span>  \n    <div class=\"psevdo_cell\"\
+    \ style=\"opacity: calc({{4_element_py}}/{{max_cell}});\"></div>  \n</td>    \n\
+    <td class=\"body_cell\"><span>{{5_element_py}}</span>  \n    <div class=\"psevdo_cell\"\
+    \ style=\"opacity: calc({{5_element_py}}/{{max_cell}});\"></div>  \n</td>  \n\
+    <td class=\"body_cell\"><span>{{6_element_py}}</span>  \n    <div class=\"psevdo_cell\"\
+    \ style=\"opacity: calc({{6_element_py}}/{{max_cell}});\"></div>  \n</td>   \n\
+    <td class=\"body_cell\"><span>{{7_element_py}}</span>  \n    <div class=\"psevdo_cell\"\
+    \ style=\"opacity: calc({{7_element_py}}/{{max_cell}});\"></div>  \n</td>   \n\
+    <td class=\"body_cell\"><span>{{8_element_py}}</span>  \n    <div class=\"psevdo_cell\"\
+    \ style=\"opacity: calc({{8_element_py}}/{{max_cell}});\"></div>  \n</td>  \n\
+    <td class=\"body_cell\"><span>{{9_element_py}}</span>  \n    <div class=\"psevdo_cell\"\
+    \ style=\"opacity: calc({{9_element_py}}/{{max_cell}});\"></div>  \n</td>   \n\
+    <td class=\"body_cell\"><span>{{10_element_py}}</span>  \n    <div class=\"psevdo_cell\"\
+    \ style=\"opacity: calc({{10_element_py}}/{{max_cell}});\"></div>  \n</td>   \n\
+    <td class=\"body_cell\"><span>{{11_element_py}}</span>  \n    <div class=\"psevdo_cell\"\
+    \ style=\"opacity: calc({{11_element_py}}/{{max_cell}});\"></div>  \n</td>  \n\
+    <td class=\"body_cell\"><span>{{12_element_py}}</span>  \n    <div class=\"psevdo_cell\"\
+    \ style=\"opacity: calc({{12_element_py}}/{{max_cell}});\"></div>  \n</td>\n<td\
+    \ class=\"body_cell border_left_year\"><span>{{1_element}}</span><div class =\"\
+    psevdo_cell\" style=\"opacity: calc({{1_element}}/{{max_cell}});\"></div></td>\
+    \        \n{{#unless (eq this.2_element null)}}  \n    <td class=\"body_cell\"\
+    ><span>{{2_element}}</span><div class=\"psevdo_cell\" style=\"opacity: calc({{2_element}}/{{max_cell}});\"\
+    ></div></td>  \n{{/unless}}  \n{{#unless (eq this.3_element null)}}  \n    <td\
+    \ class=\"body_cell\"><span>{{3_element}}</span><div class=\"psevdo_cell\" style=\"\
+    opacity: calc({{3_element}}/{{max_cell}});\"></div></td>  \n{{/unless}}  \n{{#unless\
+    \ (eq this.4_element null)}}  \n    <td class=\"body_cell\"><span>{{4_element}}</span><div\
+    \ class=\"psevdo_cell\" style=\"opacity: calc({{4_element}}/{{max_cell}});\"></div></td>\
+    \  \n{{/unless}}  \n{{#unless (eq this.5_element null)}}  \n    <td class=\"body_cell\"\
+    ><span>{{5_element}}</span><div class=\"psevdo_cell\" style=\"opacity: calc({{5_element}}/{{max_cell}});\"\
+    ></div></td>  \n{{/unless}}  \n{{#unless (eq this.6_element null)}}  \n    <td\
+    \ class=\"body_cell\"><span>{{6_element}}</span><div class=\"psevdo_cell\" style=\"\
+    opacity: calc({{6_element}}/{{max_cell}});\"></div></td>  \n{{/unless}}  \n{{#unless\
+    \ (eq this.7_element null)}}  \n    <td class=\"body_cell\"><span>{{7_element}}</span><div\
+    \ class=\"psevdo_cell\" style=\"opacity: calc({{7_element}}/{{max_cell}});\"></div></td>\
+    \  \n{{/unless}}  \n{{#unless (eq this.8_element null)}}  \n    <td class=\"body_cell\"\
+    ><span>{{8_element}}</span><div class=\"psevdo_cell\" style=\"opacity: calc({{8_element}}/{{max_cell}});\"\
+    ></div></td>  \n{{/unless}}\n{{#unless (eq this.9_element null)}}  \n    <td class=\"\
+    body_cell\"><span>{{9_element}}</span><div class=\"psevdo_cell\" style=\"opacity:\
+    \ calc({{9_element}}/{{max_cell}});\"></div>  \n    </td>  \n{{/unless}}  \n{{#unless\
+    \ (eq this.10_element null)}}  \n    <td class=\"body_cell\"><span>{{10_element}}</span><div\
+    \ class=\"psevdo_cell\" style=\"opacity: calc({{10_element}}/{{max_cell}});\"\
+    ></div>\n    </td>  \n{{/unless}}  \n{{#unless (eq this.11_element null)}}  \n\
+    \    <td class=\"body_cell\"><span>{{11_element}}</span><div class=\"psevdo_cell\"\
+    \ style=\"opacity: calc({{11_element}}/{{max_cell}});\"></div></td>  \n{{/unless}}\
+    \  \n{{#unless (eq this.12_element null)}}  \n    <td class=\"body_cell\"><span>{{12_element}}</span><div\
+    \ class=\"psevdo_cell\" style=\"opacity: calc({{12_element}}/{{max_cell}});\"\
+    ></div>  \n    </td>  \n{{/unless}}\n{{#unless (eq this.1_element_plan null)}}\
+    \  \n    <td class=\"body_cell border_left_year\"><span>{{1_element_plan}}</span><div\
+    \ class=\"psevdo_cell1\" style=\"opacity: calc({{1_element_plan}}/{{max_cell}});\"\
+    ></div>  \n    </td> \n{{/unless}}\n  {{#unless (eq this.2_element_plan null)}}\
+    \  \n    <td class=\"body_cell\"><span>{{2_element_plan}}</span><div class=\"\
+    psevdo_cell1\" style=\"opacity: calc({{2_element_plan}}/{{max_cell}});\"></div>\
+    \  \n    </td> \n{{/unless}}\n        </tr>\n    {{/if}}\n    {{/each}}\n  </tbody>\n\
+    </table>"
+  styleTemplate: "#chart-id-135398 .chart-header {\n  display: flex;\n  justify-content:\
+    \ space-between;\n  height: 24px;\n  margin-bottom: 30px;\n  width:100%;\n}\n\
+    #chart-id-135398 .header-title {\n  font-size: 14px;\n  font-weight: bold;\n}\n\
+    #chart-id-135398 .header-legend {\n  display: flex;\n  gap: 10px;\n}\n#chart-id-135398\
+    \ .legend-value {\n  font-size: 10px;\n  align-content: center;\n  text-align:\
+    \ center;\n  padding: 0 6px 0 6px;\n  border-radius: 4px;\n  opacity: 0.8;\n}\n\
+    #chart-id-135398 .legend-done {\n  background-color: var(--color_chart);\n}\n\
+    #chart-id-135398 .legend-plan {\n  background-color: var(--color_chart1);\n  color:white;\n\
+    }\n  \n.body_cell, .top_cell {  \n  position: relative;  \n  overflow: visible;\
+    \  \n  opacity: 0.9;  \n  text-align: right;  \n  padding: 4px 8px 4px 0;  \n\
+    }  \n.border_left_year {  \n  border-left: 1px solid rgba(55, 58, 64, 0.5);  \n\
+    }  \n.tooltip_cell {  \n  position: absolute;  \n  top: 35px;  \n  width: 175px;\
+    \  \n  padding: 10px;  \n  background-color: white;  \n  border-radius: 4px; \
+    \ \n  visibility: hidden;  \n  opacity: 0;  \n  display: none;  \n  z-index: 1;\
+    \  \n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);  \n  right: 0;  \n  text-align:\
+    \ left;  \n}  \n.tooltip_cell td {  \n  height: 18px;  \n  border: 0 !important;\
+    \  \n}  \n.tooltip_bold {  \n  font-weight: bold;  \n  text-align: right;  \n\
+    }  \n.psevdo_cell {  \n  position: absolute;  \n  top: 0;  \n  left: 0;  \n  width:\
+    \ 100%;  \n  height: 100%;  \n  background-color: var(--color_chart);  \n  z-index:\
+    \ -1;  \n} \n.psevdo_cell1 {  \n    position: absolute;  \n    top: 0;  \n   \
+    \ left: 0;  \n    width: 100%;  \n    height: 100%;  \n    background-color: var(--color_chart1);\
+    \  \n    z-index: -1;  \n  }  \n.body_cell:hover .tooltip_cell {  \n  visibility:\
+    \ visible;  \n  opacity: 1;  \n  display: block;  \n}  \n.body_cell:hover {  \n\
+    \  background-color: var(--color_chart);  \n}  \n.description-left {  \n  vertical-align:\
+    \ top;  \n  padding: 10px;  \n  border: 2px dashed rgb(219, 219, 219);  \n  border-radius:\
+    \ 10px;  \n  min-width: 300px;  \n  height: 100%;  \n}  \n.top_barchart_cell {\
+    \  \n  position: relative;  \n  height: 120px;  \n  min-width: 35px;  \n}  \n\
+    .top_barchart {  \n  width: 80%;  \n  left: 50%;  \n  transform: translateX(-50%);\
+    \  \n  position: absolute;  \n  bottom: 0;  \n  background-color: var(--color_chart);\
+    \  \n  opacity: 0.7;  \n  transition: opacity 0.5s ease;  \n}  \n.top_barchart1{\
+    \  \n  width: 80%;  \n  left: 50%;  \n  transform: translateX(-50%);  \n  position:\
+    \ absolute;  \n  bottom: 0;  \n  background-color: var(--color_chart1);  \n  opacity:\
+    \ 0.7;  \n  transition: opacity 0.5s ease;  \n}  \n#chart-id-135398 table {  \n\
+    \  width: 99%;  \n  font-size: 11px;  \n}  \n.header_label {  \n  overflow: hidden;\
+    \  \n  text-overflow: ellipsis;  \n  white-space: normal;  \n  word-wrap: break-word;\
+    \  \n  padding: 0 4px;  \n  display: flex;  \n  justify-content: center;  \n \
+    \ position: relative;  \n}  \n.header_label_month {  \n  color: rgba(104, 109,\
+    \ 118, 0.8);  \n}  \n.header_label_total {  \n  font-size: 12px;  \n}  \n.header_label_param_total,\
+    \ .header_label_param {  \n  padding-left: 8px;  \n  text-align: left;  \n  font-size:\
+    \ 12px;  \n}  \n.header_label_metric {  \n  min-width: 60px;  \n  justify-content:\
+    \ end;  \n}  \n.sort_label, .sort_label_select {  \n  text-align: center;  \n\
+    \  color: grey;  \n}  \n.sort_label {  \n  font-weight: normal;  \n  font-size:\
+    \ 10px;  \n}  \n.sort_label_select {  \n  font-weight: bold;  \n  font-size: 12px;\
+    \  \n  color: rgb(74, 36, 157);  \n}  \n.sort_label_select::after {  \n  content:\
+    \ '\u2193';  \n}  \n#chart-id-135398 table tr:not(.top_row):hover, .top_barchart:hover,\
+    \ .right_barchart:hover, .body_cell:hover {  \n  box-shadow: 0 4px 8px rgba(0,\
+    \ 0, 0, 0.2);  \n  transition: none;  \n  opacity: 1;  \n}  \n#chart-id-135398\
+    \ table .header_table {  \n  text-align: left;  \n  padding: 2px 8px;  \n  max-width:\
+    \ 150px;  \n  min-width: 60px;  \n  white-space: nowrap;  \n  overflow: hidden;\
+    \  \n  text-overflow: ellipsis;  \n}  \n#chart-id-135398 table .header_table:hover\
+    \ {  \n  white-space: normal;  \n}  \n#chart-id-135398 table th:not(.top_barchart_cell,\
+    \ .top_cell), #chart-id-135398 td:not(.top_barchart_cell, .sub_td) {  \n  border-top:\
+    \ 0.5px solid rgb(219, 219, 219);  \n}  \n#chart-id-135398 table th {  \n  vertical-align:\
+    \ bottom;  \n}  \n.text_bar {  \n  bottom: 20px;  \n  font-size: 11px;  \n  position:\
+    \ relative;  \n  text-align: center;  \n}  \n.right_barchart_cell {  \n  width:\
+    \ 200px;  \n  border: 0.5px solid white;  \n}  \n.right_barchart {  \n  background-color:\
+    \ var(--color_chart);  \n  height: 20px;  \n  position: relative;  \n  margin-left:\
+    \ 4px;  \n  transition: opacity 0.5s ease;  \n  opacity: 0.7;  \n}  \n.text_bar_right\
+    \ {  \n  position: absolute;  \n  right: -55px;  \n  top: 0.5px;  \n  width: 50px;\
+    \  \n  text-align: left;  \n}  \n.sticky-header {  \n  position: sticky;  \n \
+    \ top: -20px;  \n  background-color: rgb(238, 238, 238);  \n  z-index: 1;  \n\
+    \  height: 35px;  \n  overflow: visible;  \n  border-top: 1px solid rgba(55, 58,\
+    \ 64, 0.4);  \n  border-bottom: 1px solid rgba(55, 58, 64, 0.4);  \n}"
+  extra_form_data: {}
+  dashboards:
+  - 13198
+query_context: "{\"datasource\":{\"id\":32802,\"type\":\"table\"},\"force\":false,\"\
+  queries\":[{\"filters\":[{\"col\":\"max_date\",\"op\":\"TEMPORAL_RANGE\",\"val\"\
+  :\"No filter\"}],\"extras\":{\"having\":\"\",\"where\":\"\"},\"applied_time_extras\"\
+  :{},\"columns\":[\"sort_header\",\"param_1\",\"param_2\",\"1_element\",\"2_element\"\
+  ,\"3_element\",\"4_element\",\"5_element\",\"6_element\",\"7_element\",\"8_element\"\
+  ,\"9_element\",\"10_element\",\"11_element\",\"12_element\",\"ytd_cnt\",\"max_cell\"\
+  ,\"rank_param_1\",\"row_param_1\",\"row_param_2\",{\"expressionType\":\"SQL\",\"\
+  label\":\"param_nm\",\"sqlExpression\":\"{{filter_values('select_param')}}[1]\"\
+  },{\"label\":\"param_nm_2\",\"sqlExpression\":\"{% if filter_values('select_param_2')\
+  \ is defined %}\\n  {% if filter_values('select_param_2')|first != undefined %}\\\
+  n     {{filter_values('select_param_2')}}[1]\\n  {% else %}\\n    ''\\n  {% endif\
+  \ %}\\n{% else %}\\n  ''\\n{% endif %}\",\"expressionType\":\"SQL\"},\"MTD_cnt\"\
+  ,\"mtd_y_1_cnt\",\"py_cnt\",\"pytd_cnt\",\"1_element_py\",\"2_element_py\",\"3_element_py\"\
+  ,\"4_element_py\",\"5_element_py\",\"6_element_py\",\"7_element_py\",\"8_element_py\"\
+  ,\"9_element_py\",\"10_element_py\",\"11_element_py\",\"12_element_py\",{\"expressionType\"\
+  :\"SQL\",\"label\":\"max_column\",\"sqlExpression\":\"greatest(\\ncoalesce(1_element,\
+  \ 0),   \\ncoalesce(2_element, 0),   \\ncoalesce(3_element, 0),   \\ncoalesce(4_element,\
+  \ 0),   \\ncoalesce(5_element, 0),   \\ncoalesce(6_element, 0),   \\ncoalesce(7_element,\
+  \ 0),   \\ncoalesce(8_element, 0),   \\ncoalesce(9_element, 0),   \\ncoalesce(10_element,\
+  \ 0),   \\ncoalesce(11_element, 0),   \\ncoalesce(12_element, 0),  \\ncoalesce(1_element_py,\
+  \ 0),   \\ncoalesce(2_element_py, 0),   \\ncoalesce(3_element_py, 0),   \\ncoalesce(4_element_py,\
+  \ 0),   \\ncoalesce(5_element_py, 0),   \\ncoalesce(6_element_py, 0),   \\ncoalesce(7_element_py,\
+  \ 0),   \\ncoalesce(8_element_py, 0),   \\ncoalesce(9_element_py, 0),   \\ncoalesce(10_element_py,\
+  \ 0),   \\ncoalesce(11_element_py, 0),   \\ncoalesce(12_element_py, 0),\\ncoalesce(1_element_plan,\
+  \ 0),\\ncoalesce(2_element_plan, 0))\"},\"last_12_m\",\"1_element_plan\",\"2_element_plan\"\
+  ],\"metrics\":[],\"orderby\":[[{\"aggregate\":null,\"column\":null,\"datasourceWarning\"\
+  :false,\"expressionType\":\"SQL\",\"hasCustomLabel\":false,\"label\":\"sort_header,\
+  \ rank_param_1\",\"optionName\":\"metric_m1p9iy8w04_alpbhmldia9\",\"sqlExpression\"\
+  :\"sort_header, rank_param_1\"},true]],\"annotation_layers\":[],\"row_limit\":5000,\"\
+  series_limit\":0,\"series_limit_metric\":{\"aggregate\":null,\"column\":null,\"\
+  datasourceWarning\":false,\"expressionType\":\"SQL\",\"hasCustomLabel\":false,\"\
+  label\":\"sort_header, rank_param_1\",\"optionName\":\"metric_m1p9iy8w04_alpbhmldia9\"\
+  ,\"sqlExpression\":\"sort_header, rank_param_1\"},\"order_desc\":false,\"url_params\"\
+  :{},\"custom_params\":{},\"custom_form_data\":{}}],\"form_data\":{\"datasource\"\
+  :\"32802__table\",\"viz_type\":\"handlebars\",\"slice_id\":135398,\"query_mode\"\
+  :\"aggregate\",\"groupby\":[\"sort_header\",\"param_1\",\"param_2\",\"1_element\"\
+  ,\"2_element\",\"3_element\",\"4_element\",\"5_element\",\"6_element\",\"7_element\"\
+  ,\"8_element\",\"9_element\",\"10_element\",\"11_element\",\"12_element\",\"ytd_cnt\"\
+  ,\"max_cell\",\"rank_param_1\",\"row_param_1\",\"row_param_2\",{\"expressionType\"\
+  :\"SQL\",\"label\":\"param_nm\",\"sqlExpression\":\"{{filter_values('select_param')}}[1]\"\
+  },{\"label\":\"param_nm_2\",\"sqlExpression\":\"{% if filter_values('select_param_2')\
+  \ is defined %}\\n  {% if filter_values('select_param_2')|first != undefined %}\\\
+  n     {{filter_values('select_param_2')}}[1]\\n  {% else %}\\n    ''\\n  {% endif\
+  \ %}\\n{% else %}\\n  ''\\n{% endif %}\",\"expressionType\":\"SQL\"},\"MTD_cnt\"\
+  ,\"mtd_y_1_cnt\",\"py_cnt\",\"pytd_cnt\",\"1_element_py\",\"2_element_py\",\"3_element_py\"\
+  ,\"4_element_py\",\"5_element_py\",\"6_element_py\",\"7_element_py\",\"8_element_py\"\
+  ,\"9_element_py\",\"10_element_py\",\"11_element_py\",\"12_element_py\",{\"expressionType\"\
+  :\"SQL\",\"label\":\"max_column\",\"sqlExpression\":\"greatest(\\ncoalesce(1_element,\
+  \ 0),   \\ncoalesce(2_element, 0),   \\ncoalesce(3_element, 0),   \\ncoalesce(4_element,\
+  \ 0),   \\ncoalesce(5_element, 0),   \\ncoalesce(6_element, 0),   \\ncoalesce(7_element,\
+  \ 0),   \\ncoalesce(8_element, 0),   \\ncoalesce(9_element, 0),   \\ncoalesce(10_element,\
+  \ 0),   \\ncoalesce(11_element, 0),   \\ncoalesce(12_element, 0),  \\ncoalesce(1_element_py,\
+  \ 0),   \\ncoalesce(2_element_py, 0),   \\ncoalesce(3_element_py, 0),   \\ncoalesce(4_element_py,\
+  \ 0),   \\ncoalesce(5_element_py, 0),   \\ncoalesce(6_element_py, 0),   \\ncoalesce(7_element_py,\
+  \ 0),   \\ncoalesce(8_element_py, 0),   \\ncoalesce(9_element_py, 0),   \\ncoalesce(10_element_py,\
+  \ 0),   \\ncoalesce(11_element_py, 0),   \\ncoalesce(12_element_py, 0),\\ncoalesce(1_element_plan,\
+  \ 0),\\ncoalesce(2_element_plan, 0))\"},\"last_12_m\",\"1_element_plan\",\"2_element_plan\"\
+  ],\"metrics\":[],\"all_columns\":[],\"percent_metrics\":[],\"timeseries_limit_metric\"\
+  :{\"aggregate\":null,\"column\":null,\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"hasCustomLabel\":false,\"label\":\"sort_header, rank_param_1\",\"optionName\"\
+  :\"metric_m1p9iy8w04_alpbhmldia9\",\"sqlExpression\":\"sort_header, rank_param_1\"\
+  },\"order_by_cols\":[],\"order_desc\":false,\"server_pagination\":false,\"row_limit\"\
+  :5000,\"server_page_length\":200,\"include_time\":false,\"show_totals\":false,\"\
+  adhoc_filters\":[{\"expressionType\":\"SIMPLE\",\"subject\":\"max_date\",\"operator\"\
+  :\"TEMPORAL_RANGE\",\"comparator\":\"No filter\",\"clause\":\"WHERE\",\"sqlExpression\"\
+  :null,\"isExtra\":false,\"isNew\":false,\"datasourceWarning\":false,\"filterOptionName\"\
+  :\"filter_019f0losb57p_hurk0cyp0dm\"}],\"handlebarsTemplate\":\"<style>\\n:root{\\\
+  n   --max_width_right:{{data.[1].1element}};\\n    --color_chart:rgb(106, 212, 221);\\\
+  n    --color_chart1:rgb(160, 106, 221);\\n}\\n</style>\\n<table>\\n  <thead>\\n\
+  \    <div class=\\\"chart-header\\\">\\n        <span class=\\\"header-title\\\"\
+  >\\n            \u0410\u043D\u0430\u043B\u0438\u0437 \u0437\u0430\u043A\u0440\u044B\
+  \u0442\u044B\u0445 \u0432\u0430\u043A\u0430\u043D\u0441\u0438\u0439\\n        </span>\\\
+  n        <div class=\\\"header-legend\\\">\\n            <div class=\\\"legend-value\
+  \ legend-done \\\">\u0417\u0430\u043A\u0440\u044B\u0442\u044B\u0435</div>\\n   \
+  \         <div class=\\\"legend-value legend-plan\\\">\u0411\u0443\u0434\u0443\u0449\
+  \u0438\u0435</div>\\n        </div>\\n    </div>\\n  {{#each data}}\\n    {{#if\
+  \ (eq this.sort_header 2)}}\\n    <tr class=\\\"top_row\\\">  \\n    <th class=\\\
+  \"top_cell  header_label_param_total\\\"><span>{{param_1}}</span></th>  \\n    <th\
+  \ class=\\\"top_cell header_label_total\\\"></th> \\n    <th class=\\\"top_cell\
+  \ header_label_total\\\"><span>{{MTD_cnt}}</span></th>  \\n    <th class=\\\"top_cell\
+  \ header_label_total\\\"><span>{{mtd_y_1_cnt}}</span></th>  \\n    <th class=\\\"\
+  top_cell header_label_total\\\"><span>{{ytd_cnt}}</span></th>  \\n    <th class=\\\
+  \"top_cell header_label_total\\\"><span>{{py_cnt}}</span></th>  \\n    <th class=\\\
+  \"top_cell header_label_total\\\"><span>{{pytd_cnt}}</span></th>  \\n    <th class=\\\
+  \"top_cell header_label_total\\\"><span>{{last_12_m}}</span></th>  \\n    <th class=\\\
+  \"top_barchart_cell\\\"><div class = \\\"top_barchart\\\" style=\\\"height:calc(90%*{{1_element_py}}/{{max_column}})\\\
+  \"><div class = \\\"text_bar\\\">{{1_element_py}}</div></div></th>  \\n    <th class=\\\
+  \"top_barchart_cell\\\"><div class = \\\"top_barchart\\\" style=\\\"height:calc(90%*{{2_element_py}}/{{max_column}})\\\
+  \"><div class = \\\"text_bar\\\">{{2_element_py}}</div></div></th>  \\n    <th class=\\\
+  \"top_barchart_cell\\\"><div class = \\\"top_barchart\\\" style=\\\"height:calc(90%*{{3_element_py}}/{{max_column}})\\\
+  \"><div class = \\\"text_bar\\\">{{3_element_py}}</div></div></th>  \\n    <th class=\\\
+  \"top_barchart_cell\\\"><div class = \\\"top_barchart\\\" style=\\\"height:calc(90%*{{4_element_py}}/{{max_column}})\\\
+  \"><div class = \\\"text_bar\\\">{{4_element_py}}</div></div></th>  \\n    <th class=\\\
+  \"top_barchart_cell\\\"><div class = \\\"top_barchart\\\" style=\\\"height:calc(90%*{{5_element_py}}/{{max_column}})\\\
+  \"><div class = \\\"text_bar\\\">{{5_element_py}}</div></div></th>  \\n    <th class=\\\
+  \"top_barchart_cell\\\"><div class = \\\"top_barchart\\\" style=\\\"height:calc(90%*{{6_element_py}}/{{max_column}})\\\
+  \"><div class = \\\"text_bar\\\">{{6_element_py}}</div></div></th>  \\n    <th class=\\\
+  \"top_barchart_cell\\\"><div class = \\\"top_barchart\\\" style=\\\"height:calc(90%*{{7_element_py}}/{{max_column}})\\\
+  \"><div class = \\\"text_bar\\\">{{7_element_py}}</div></div></th>  \\n    <th class=\\\
+  \"top_barchart_cell\\\"><div class = \\\"top_barchart\\\" style=\\\"height:calc(90%*{{8_element_py}}/{{max_column}})\\\
+  \"><div class = \\\"text_bar\\\">{{8_element_py}}</div></div></th>  \\n    <th class=\\\
+  \"top_barchart_cell\\\"><div class = \\\"top_barchart\\\" style=\\\"height:calc(90%*{{9_element_py}}/{{max_column}})\\\
+  \"><div class = \\\"text_bar\\\">{{9_element_py}}</div></div></th>  \\n    <th class=\\\
+  \"top_barchart_cell\\\"><div class = \\\"top_barchart\\\" style=\\\"height:calc(90%*{{10_element_py}}/{{max_column}})\\\
+  \"><div class = \\\"text_bar\\\">{{10_element_py}}</div></div></th>  \\n    <th\
+  \ class=\\\"top_barchart_cell\\\"><div class = \\\"top_barchart\\\" style=\\\"height:calc(90%*{{11_element_py}}/{{max_column}})\\\
+  \"><div class = \\\"text_bar\\\">{{11_element_py}}</div></div></th>  \\n    <th\
+  \ class=\\\"top_barchart_cell\\\"><div class = \\\"top_barchart\\\" style=\\\"height:calc(90%*{{12_element_py}}/{{max_column}})\\\
+  \"><div class = \\\"text_bar\\\">{{12_element_py}}</div></div></th>   \\n    {{#unless\
+  \ (eq this.1_element null)}}  \\n    <th class=\\\"top_barchart_cell\\\">  \\n \
+  \     <div class=\\\"top_barchart\\\" style=\\\"height:calc(90%*{{1_element}}/{{max_column}})\\\
+  \"><div class=\\\"text_bar\\\">{{1_element}}</div></div>  \\n    </th>  \\n    \
+  \ {{/unless}}  \\n     {{#unless (eq this.2_element null)}}  \\n         <th class=\\\
+  \"top_barchart_cell\\\">  \\n           <div class=\\\"top_barchart\\\" style=\\\
+  \"height:calc(90%*{{2_element}}/{{max_column}})\\\"><div class=\\\"text_bar\\\"\
+  >{{2_element}}</div></div>  \\n         </th>  \\n     {{/unless}}  \\n     {{#unless\
+  \ (eq this.3_element null)}}  \\n         <th class=\\\"top_barchart_cell\\\"> \
+  \ \\n           <div class=\\\"top_barchart\\\" style=\\\"height:calc(90%*{{3_element}}/{{max_column}})\\\
+  \"><div class=\\\"text_bar\\\">{{3_element}}</div></div>  \\n         </th>  \\\
+  n     {{/unless}}  \\n     {{#unless (eq this.4_element null)}}  \\n         <th\
+  \ class=\\\"top_barchart_cell\\\">  \\n           <div class=\\\"top_barchart\\\"\
+  \ style=\\\"height:calc(90%*{{4_element}}/{{max_column}})\\\"><div class=\\\"text_bar\\\
+  \">{{4_element}}</div></div>  \\n         </th>  \\n     {{/unless}}  \\n     {{#unless\
+  \ (eq this.5_element null)}}  \\n         <th class=\\\"top_barchart_cell\\\"> \
+  \ \\n           <div class=\\\"top_barchart\\\" style=\\\"height:calc(90%*{{5_element}}/{{max_column}})\\\
+  \"><div class=\\\"text_bar\\\">{{5_element}}</div></div>  \\n         </th>  \\\
+  n     {{/unless}}  \\n     {{#unless (eq this.6_element null)}}  \\n         <th\
+  \ class=\\\"top_barchart_cell\\\">  \\n           <div class=\\\"top_barchart\\\"\
+  \ style=\\\"height:calc(90%*{{6_element}}/{{max_column}})\\\"><div class=\\\"text_bar\\\
+  \">{{6_element}}</div></div>  \\n         </th>  \\n     {{/unless}}  \\n     {{#unless\
+  \ (eq this.7_element null)}}  \\n         <th class=\\\"top_barchart_cell\\\"> \
+  \ \\n           <div class=\\\"top_barchart\\\" style=\\\"height:calc(90%*{{7_element}}/{{max_column}})\\\
+  \"><div class=\\\"text_bar\\\">{{7_element}}</div></div>  \\n         </th>  \\\
+  n     {{/unless}}  \\n     {{#unless (eq this.8_element null)}}  \\n         <th\
+  \ class=\\\"top_barchart_cell\\\">  \\n           <div class=\\\"top_barchart\\\"\
+  \ style=\\\"height:calc(90%*{{8_element}}/{{max_column}})\\\"><div class=\\\"text_bar\\\
+  \">{{8_element}}</div></div>  \\n         </th>  \\n     {{/unless}}  \\n     {{#unless\
+  \ (eq this.9_element null)}}  \\n         <th class=\\\"top_barchart_cell\\\"> \
+  \ \\n           <div class=\\\"top_barchart\\\" style=\\\"height:calc(90%*{{9_element}}/{{max_column}})\\\
+  \"><div class=\\\"text_bar\\\">{{9_element}}</div></div>  \\n         </th>  \\\
+  n     {{/unless}}  \\n     {{#unless (eq this.10_element null)}}  \\n         <th\
+  \ class=\\\"top_barchart_cell\\\">  \\n           <div class=\\\"top_barchart\\\"\
+  \ style=\\\"height:calc(90%*{{10_element}}/{{max_column}})\\\"><div class=\\\"text_bar\\\
+  \">{{10_element}}</div></div>  \\n         </th>  \\n     {{/unless}}  \\n     {{#unless\
+  \ (eq this.11_element null)}}  \\n         <th class=\\\"top_barchart_cell\\\">\
+  \  \\n           <div class=\\\"top_barchart\\\" style=\\\"height:calc(90%*{{11_element}}/{{max_column}})\\\
+  \"><div class=\\\"text_bar\\\">{{11_element}}</div></div>  \\n         </th>  \\\
+  n     {{/unless}}  \\n     {{#unless (eq this.12_element null)}}  \\n         <th\
+  \ class=\\\"top_barchart_cell\\\">  \\n           <div class=\\\"top_barchart\\\"\
+  \ style=\\\"height:calc(90%*{{12_element}}/{{max_column}})\\\"><div class=\\\"text_bar\\\
+  \">{{12_element}}</div></div>  \\n         </th>  \\n     {{/unless}}\\n    {{#unless\
+  \ (eq this.1_element_plan null)}}  \\n     <th class=\\\"top_barchart_cell\\\">\
+  \  \\n       <div class=\\\"top_barchart1\\\" style=\\\"height:calc(90%*{{1_element_plan}}/{{max_column}})\\\
+  \"><div class=\\\"text_bar\\\">{{1_element_plan}}</div></div>  \\n     </th>  \\\
+  n      {{/unless}}\\n      {{#unless (eq this.2_element_plan null)}}  \\n     <th\
+  \ class=\\\"top_barchart_cell\\\">  \\n       <div class=\\\"top_barchart1\\\" style=\\\
+  \"height:calc(90%*{{2_element_plan}}/{{max_column}})\\\"><div class=\\\"text_bar\\\
+  \">{{2_element_plan}}</div></div>  \\n     </th>  \\n      {{/unless}}  \\n</tr>\\\
+  n    {{/if}}\\n  {{/each}} \\n  </thead>  \\n  <thead>\\n    {{#each data}}\\n \
+  \   {{#if (eq this.sort_header 0)}}\\n    <tr class=\\\"sticky-header\\\">\\n  \
+  \    <th><p class=\\\"header_label header_label_param\\\">{{this.param_nm}}</p></th>\\\
+  n      <th><p class=\\\"header_label header_label_param\\\">{{this.param_nm_2}}</p></th>\\\
+  n      <th><p class=\\\"header_label header_label_metric\\\">MTD</p></th>\\n   \
+  \   <th><p class=\\\"header_label header_label_metric\\\">MTD Y-1</p></th>\\n  \
+  \    <th><p class=\\\"header_label header_label_metric\\\">YTD</p></th>\\n     \
+  \ <th><p class=\\\"header_label header_label_metric\\\">PY</p></th>\\n      <th><p\
+  \ class=\\\"header_label header_label_metric\\\">PYTD</p></th>\\n      <th><p class=\\\
+  \"header_label header_label_metric\\\">Last12M</p></th>\\n      <th class=\\\"border_left_year\\\
+  \"><p class=\\\"header_label\\\">{{formatDate 'YYYY' this.1_element_py}}</p></th>\
+  \  \\n      <th><p class=\\\"header_label header_label_month\\\">{{formatDate 'MMM'\
+  \ this.2_element_py}}</p></th>  \\n      <th><p class=\\\"header_label header_label_month\\\
+  \">{{formatDate 'MMM' this.3_element_py}}</p></th>  \\n      <th><p class=\\\"header_label\
+  \ header_label_month\\\">{{formatDate 'MMM' this.4_element_py}}</p></th>  \\n  \
+  \    <th><p class=\\\"header_label header_label_month\\\">{{formatDate 'MMM' this.5_element_py}}</p></th>\
+  \  \\n      <th><p class=\\\"header_label header_label_month\\\">{{formatDate 'MMM'\
+  \ this.6_element_py}}</p></th>  \\n      <th><p class=\\\"header_label header_label_month\\\
+  \">{{formatDate 'MMM' this.7_element_py}}</p></th>  \\n      <th><p class=\\\"header_label\
+  \ header_label_month\\\">{{formatDate 'MMM' this.8_element_py}}</p></th>  \\n  \
+  \    <th><p class=\\\"header_label header_label_month\\\">{{formatDate 'MMM' this.9_element_py}}</p></th>\
+  \  \\n      <th><p class=\\\"header_label header_label_month\\\">{{formatDate 'MMM'\
+  \ this.10_element_py}}</p></th>  \\n      <th><p class=\\\"header_label header_label_month\\\
+  \">{{formatDate 'MMM' this.11_element_py}}</p></th>  \\n      <th><p class=\\\"\
+  header_label header_label_month\\\">{{formatDate 'MMM' this.12_element_py}}</p></th>\
+  \  \\n      <th class=\\\"border_left_year\\\"><p class=\\\"header_label\\\">{{formatDate\
+  \ 'YYYY' this.1_element}}</p></th> \\n      {{#unless (eq this.2_element null)}}\
+  \  \\n      <th><p class=\\\"header_label header_label_month\\\">{{formatDate 'MMM'\
+  \ this.2_element}}</p></th>  \\n      {{/unless}}\\n      {{#unless (eq this.3_element\
+  \ null)}}  \\n          <th><p class=\\\"header_label header_label_month\\\">{{formatDate\
+  \ 'MMM' this.3_element}}</p></th>  \\n      {{/unless}}  \\n      {{#unless (eq\
+  \ this.4_element null)}}  \\n          <th><p class=\\\"header_label header_label_month\\\
+  \">{{formatDate 'MMM' this.4_element}}</p></th>  \\n      {{/unless}}  \\n     \
+  \ {{#unless (eq this.5_element null)}}  \\n          <th><p class=\\\"header_label\
+  \ header_label_month\\\">{{formatDate 'MMM' this.5_element}}</p></th>  \\n     \
+  \ {{/unless}}  \\n      {{#unless (eq this.6_element null)}}  \\n          <th><p\
+  \ class=\\\"header_label header_label_month\\\">{{formatDate 'MMM' this.6_element}}</p></th>\
+  \  \\n      {{/unless}}  \\n      {{#unless (eq this.7_element null)}}  \\n    \
+  \      <th><p class=\\\"header_label header_label_month\\\">{{formatDate 'MMM' this.7_element}}</p></th>\
+  \  \\n      {{/unless}}  \\n      {{#unless (eq this.8_element null)}}  \\n    \
+  \      <th><p class=\\\"header_label header_label_month\\\">{{formatDate 'MMM' this.8_element}}</p></th>\
+  \  \\n      {{/unless}}  \\n      {{#unless (eq this.9_element null)}}  \\n    \
+  \      <th><p class=\\\"header_label header_label_month\\\">{{formatDate 'MMM' this.9_element}}</p></th>\
+  \  \\n      {{/unless}}  \\n      {{#unless (eq this.10_element null)}}  \\n   \
+  \       <th><p class=\\\"header_label header_label_month\\\">{{formatDate 'MMM'\
+  \ this.10_element}}</p></th>  \\n      {{/unless}}  \\n      {{#unless (eq this.11_element\
+  \ null)}}  \\n          <th><p class=\\\"header_label header_label_month\\\">{{formatDate\
+  \ 'MMM' this.11_element}}</p></th>  \\n      {{/unless}}  \\n      {{#unless (eq\
+  \ this.12_element null)}}  \\n          <th><p class=\\\"header_label header_label_month\\\
+  \">{{formatDate 'MMM' this.12_element}}</p></th>  \\n      {{/unless}}\\n      {{#unless\
+  \ (eq this.1_element_plan null)}}  \\n          <th class=\\\"border_left_year\\\
+  \"><p class=\\\"header_label header_label_month\\\">{{formatDate 'MMM' this.1_element_plan}}</p></th>\
+  \  \\n      {{/unless}}\\n       {{#unless (eq this.2_element_plan null)}}  \\n\
+  \          <th><p class=\\\"header_label header_label_month\\\">{{formatDate 'MMM'\
+  \ this.2_element_plan}}</p></th>  \\n      {{/unless}}\\n      </tr>\\n      {{/if}}\\\
+  n     {{/each}}\\n  </thead>\\n  <tbody>\\n    {{#each data}}\\n    {{#if (eq this.sort_header\
+  \ 1)}}\\n      <tr class=\\\"main_tr\\\">\\n        <td class=\\\"header_table\\\
+  \"\\n        {{#unless (eq row_param_1 1)}}\\n        style=\\\"color:white; border:\
+  \ none\\n        {{/unless}}\\\"\\n        >{{param_1}}</td>\\n        <td class=\\\
+  \"header_table\\\"\\n        {{#unless (eq row_param_2 1)}}\\n        style=\\\"\
+  color:white; border: none\\n        {{/unless}}\\\"\\n        >{{param_2}}</td>\\\
+  n        <td class=\\\"body_cell\\\"><span>{{MTD_cnt}}</span></td>\\n        <td\
+  \ class=\\\"body_cell\\\"><span>{{mtd_y_1_cnt}}</span></td>\\n        <td class=\\\
+  \"body_cell\\\"><span>{{ytd_cnt}}</span></td>\\n        <td class=\\\"body_cell\\\
+  \"><span>{{py_cnt}}</span></td>\\n        <td class=\\\"body_cell\\\"><span>{{pytd_cnt}}</span></td>\\\
+  n        <td class=\\\"body_cell\\\"><span>{{last_12_m}}</span></td>\\n        <td\
+  \ class=\\\"body_cell border_left_year\\\"><span>{{1_element_py}}</span><div class\
+  \ =\\\"psevdo_cell\\\" style=\\\"opacity: calc({{1_element_py}}/{{max_cell}}); \\\
+  \"></div></td>\\n<td class=\\\"body_cell\\\"><span>{{2_element_py}}</span>  \\n\
+  \    <div class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{2_element_py}}/{{max_cell}});\\\
+  \"></div>  \\n</td>   \\n<td class=\\\"body_cell\\\"><span>{{3_element_py}}</span>\
+  \  \\n    <div class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{3_element_py}}/{{max_cell}});\\\
+  \"></div>  \\n</td>  \\n<td class=\\\"body_cell\\\"><span>{{4_element_py}}</span>\
+  \  \\n    <div class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{4_element_py}}/{{max_cell}});\\\
+  \"></div>  \\n</td>    \\n<td class=\\\"body_cell\\\"><span>{{5_element_py}}</span>\
+  \  \\n    <div class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{5_element_py}}/{{max_cell}});\\\
+  \"></div>  \\n</td>  \\n<td class=\\\"body_cell\\\"><span>{{6_element_py}}</span>\
+  \  \\n    <div class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{6_element_py}}/{{max_cell}});\\\
+  \"></div>  \\n</td>   \\n<td class=\\\"body_cell\\\"><span>{{7_element_py}}</span>\
+  \  \\n    <div class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{7_element_py}}/{{max_cell}});\\\
+  \"></div>  \\n</td>   \\n<td class=\\\"body_cell\\\"><span>{{8_element_py}}</span>\
+  \  \\n    <div class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{8_element_py}}/{{max_cell}});\\\
+  \"></div>  \\n</td>  \\n<td class=\\\"body_cell\\\"><span>{{9_element_py}}</span>\
+  \  \\n    <div class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{9_element_py}}/{{max_cell}});\\\
+  \"></div>  \\n</td>   \\n<td class=\\\"body_cell\\\"><span>{{10_element_py}}</span>\
+  \  \\n    <div class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{10_element_py}}/{{max_cell}});\\\
+  \"></div>  \\n</td>   \\n<td class=\\\"body_cell\\\"><span>{{11_element_py}}</span>\
+  \  \\n    <div class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{11_element_py}}/{{max_cell}});\\\
+  \"></div>  \\n</td>  \\n<td class=\\\"body_cell\\\"><span>{{12_element_py}}</span>\
+  \  \\n    <div class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{12_element_py}}/{{max_cell}});\\\
+  \"></div>  \\n</td>\\n<td class=\\\"body_cell border_left_year\\\"><span>{{1_element}}</span><div\
+  \ class =\\\"psevdo_cell\\\" style=\\\"opacity: calc({{1_element}}/{{max_cell}});\\\
+  \"></div></td>        \\n{{#unless (eq this.2_element null)}}  \\n    <td class=\\\
+  \"body_cell\\\"><span>{{2_element}}</span><div class=\\\"psevdo_cell\\\" style=\\\
+  \"opacity: calc({{2_element}}/{{max_cell}});\\\"></div></td>  \\n{{/unless}}  \\\
+  n{{#unless (eq this.3_element null)}}  \\n    <td class=\\\"body_cell\\\"><span>{{3_element}}</span><div\
+  \ class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{3_element}}/{{max_cell}});\\\
+  \"></div></td>  \\n{{/unless}}  \\n{{#unless (eq this.4_element null)}}  \\n   \
+  \ <td class=\\\"body_cell\\\"><span>{{4_element}}</span><div class=\\\"psevdo_cell\\\
+  \" style=\\\"opacity: calc({{4_element}}/{{max_cell}});\\\"></div></td>  \\n{{/unless}}\
+  \  \\n{{#unless (eq this.5_element null)}}  \\n    <td class=\\\"body_cell\\\"><span>{{5_element}}</span><div\
+  \ class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{5_element}}/{{max_cell}});\\\
+  \"></div></td>  \\n{{/unless}}  \\n{{#unless (eq this.6_element null)}}  \\n   \
+  \ <td class=\\\"body_cell\\\"><span>{{6_element}}</span><div class=\\\"psevdo_cell\\\
+  \" style=\\\"opacity: calc({{6_element}}/{{max_cell}});\\\"></div></td>  \\n{{/unless}}\
+  \  \\n{{#unless (eq this.7_element null)}}  \\n    <td class=\\\"body_cell\\\"><span>{{7_element}}</span><div\
+  \ class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{7_element}}/{{max_cell}});\\\
+  \"></div></td>  \\n{{/unless}}  \\n{{#unless (eq this.8_element null)}}  \\n   \
+  \ <td class=\\\"body_cell\\\"><span>{{8_element}}</span><div class=\\\"psevdo_cell\\\
+  \" style=\\\"opacity: calc({{8_element}}/{{max_cell}});\\\"></div></td>  \\n{{/unless}}\\\
+  n{{#unless (eq this.9_element null)}}  \\n    <td class=\\\"body_cell\\\"><span>{{9_element}}</span><div\
+  \ class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{9_element}}/{{max_cell}});\\\
+  \"></div>  \\n    </td>  \\n{{/unless}}  \\n{{#unless (eq this.10_element null)}}\
+  \  \\n    <td class=\\\"body_cell\\\"><span>{{10_element}}</span><div class=\\\"\
+  psevdo_cell\\\" style=\\\"opacity: calc({{10_element}}/{{max_cell}});\\\"></div>\\\
+  n    </td>  \\n{{/unless}}  \\n{{#unless (eq this.11_element null)}}  \\n    <td\
+  \ class=\\\"body_cell\\\"><span>{{11_element}}</span><div class=\\\"psevdo_cell\\\
+  \" style=\\\"opacity: calc({{11_element}}/{{max_cell}});\\\"></div></td>  \\n{{/unless}}\
+  \  \\n{{#unless (eq this.12_element null)}}  \\n    <td class=\\\"body_cell\\\"\
+  ><span>{{12_element}}</span><div class=\\\"psevdo_cell\\\" style=\\\"opacity: calc({{12_element}}/{{max_cell}});\\\
+  \"></div>  \\n    </td>  \\n{{/unless}}\\n{{#unless (eq this.1_element_plan null)}}\
+  \  \\n    <td class=\\\"body_cell border_left_year\\\"><span>{{1_element_plan}}</span><div\
+  \ class=\\\"psevdo_cell1\\\" style=\\\"opacity: calc({{1_element_plan}}/{{max_cell}});\\\
+  \"></div>  \\n    </td> \\n{{/unless}}\\n  {{#unless (eq this.2_element_plan null)}}\
+  \  \\n    <td class=\\\"body_cell\\\"><span>{{2_element_plan}}</span><div class=\\\
+  \"psevdo_cell1\\\" style=\\\"opacity: calc({{2_element_plan}}/{{max_cell}});\\\"\
+  ></div>  \\n    </td> \\n{{/unless}}\\n        </tr>\\n    {{/if}}\\n    {{/each}}\\\
+  n  </tbody>\\n</table>\",\"styleTemplate\":\"#chart-id-135398 .chart-header {\\\
+  n  display: flex;\\n  justify-content: space-between;\\n  height: 24px;\\n  margin-bottom:\
+  \ 30px;\\n  width:100%;\\n}\\n#chart-id-135398 .header-title {\\n  font-size: 14px;\\\
+  n  font-weight: bold;\\n}\\n#chart-id-135398 .header-legend {\\n  display: flex;\\\
+  n  gap: 10px;\\n}\\n#chart-id-135398 .legend-value {\\n  font-size: 10px;\\n  align-content:\
+  \ center;\\n  text-align: center;\\n  padding: 0 6px 0 6px;\\n  border-radius: 4px;\\\
+  n  opacity: 0.8;\\n}\\n#chart-id-135398 .legend-done {\\n  background-color: var(--color_chart);\\\
+  n}\\n#chart-id-135398 .legend-plan {\\n  background-color: var(--color_chart1);\\\
+  n  color:white;\\n}\\n  \\n.body_cell, .top_cell {  \\n  position: relative;  \\\
+  n  overflow: visible;  \\n  opacity: 0.9;  \\n  text-align: right;  \\n  padding:\
+  \ 4px 8px 4px 0;  \\n}  \\n.border_left_year {  \\n  border-left: 1px solid rgba(55,\
+  \ 58, 64, 0.5);  \\n}  \\n.tooltip_cell {  \\n  position: absolute;  \\n  top: 35px;\
+  \  \\n  width: 175px;  \\n  padding: 10px;  \\n  background-color: white;  \\n \
+  \ border-radius: 4px;  \\n  visibility: hidden;  \\n  opacity: 0;  \\n  display:\
+  \ none;  \\n  z-index: 1;  \\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);  \\n \
+  \ right: 0;  \\n  text-align: left;  \\n}  \\n.tooltip_cell td {  \\n  height: 18px;\
+  \  \\n  border: 0 !important;  \\n}  \\n.tooltip_bold {  \\n  font-weight: bold;\
+  \  \\n  text-align: right;  \\n}  \\n.psevdo_cell {  \\n  position: absolute;  \\\
+  n  top: 0;  \\n  left: 0;  \\n  width: 100%;  \\n  height: 100%;  \\n  background-color:\
+  \ var(--color_chart);  \\n  z-index: -1;  \\n} \\n.psevdo_cell1 {  \\n    position:\
+  \ absolute;  \\n    top: 0;  \\n    left: 0;  \\n    width: 100%;  \\n    height:\
+  \ 100%;  \\n    background-color: var(--color_chart1);  \\n    z-index: -1;  \\\
+  n  }  \\n.body_cell:hover .tooltip_cell {  \\n  visibility: visible;  \\n  opacity:\
+  \ 1;  \\n  display: block;  \\n}  \\n.body_cell:hover {  \\n  background-color:\
+  \ var(--color_chart);  \\n}  \\n.description-left {  \\n  vertical-align: top; \
+  \ \\n  padding: 10px;  \\n  border: 2px dashed rgb(219, 219, 219);  \\n  border-radius:\
+  \ 10px;  \\n  min-width: 300px;  \\n  height: 100%;  \\n}  \\n.top_barchart_cell\
+  \ {  \\n  position: relative;  \\n  height: 120px;  \\n  min-width: 35px;  \\n}\
+  \  \\n.top_barchart {  \\n  width: 80%;  \\n  left: 50%;  \\n  transform: translateX(-50%);\
+  \  \\n  position: absolute;  \\n  bottom: 0;  \\n  background-color: var(--color_chart);\
+  \  \\n  opacity: 0.7;  \\n  transition: opacity 0.5s ease;  \\n}  \\n.top_barchart1{\
+  \  \\n  width: 80%;  \\n  left: 50%;  \\n  transform: translateX(-50%);  \\n  position:\
+  \ absolute;  \\n  bottom: 0;  \\n  background-color: var(--color_chart1);  \\n \
+  \ opacity: 0.7;  \\n  transition: opacity 0.5s ease;  \\n}  \\n#chart-id-135398\
+  \ table {  \\n  width: 99%;  \\n  font-size: 11px;  \\n}  \\n.header_label {  \\\
+  n  overflow: hidden;  \\n  text-overflow: ellipsis;  \\n  white-space: normal; \
+  \ \\n  word-wrap: break-word;  \\n  padding: 0 4px;  \\n  display: flex;  \\n  justify-content:\
+  \ center;  \\n  position: relative;  \\n}  \\n.header_label_month {  \\n  color:\
+  \ rgba(104, 109, 118, 0.8);  \\n}  \\n.header_label_total {  \\n  font-size: 12px;\
+  \  \\n}  \\n.header_label_param_total, .header_label_param {  \\n  padding-left:\
+  \ 8px;  \\n  text-align: left;  \\n  font-size: 12px;  \\n}  \\n.header_label_metric\
+  \ {  \\n  min-width: 60px;  \\n  justify-content: end;  \\n}  \\n.sort_label, .sort_label_select\
+  \ {  \\n  text-align: center;  \\n  color: grey;  \\n}  \\n.sort_label {  \\n  font-weight:\
+  \ normal;  \\n  font-size: 10px;  \\n}  \\n.sort_label_select {  \\n  font-weight:\
+  \ bold;  \\n  font-size: 12px;  \\n  color: rgb(74, 36, 157);  \\n}  \\n.sort_label_select::after\
+  \ {  \\n  content: '\u2193';  \\n}  \\n#chart-id-135398 table tr:not(.top_row):hover,\
+  \ .top_barchart:hover, .right_barchart:hover, .body_cell:hover {  \\n  box-shadow:\
+  \ 0 4px 8px rgba(0, 0, 0, 0.2);  \\n  transition: none;  \\n  opacity: 1;  \\n}\
+  \  \\n#chart-id-135398 table .header_table {  \\n  text-align: left;  \\n  padding:\
+  \ 2px 8px;  \\n  max-width: 150px;  \\n  min-width: 60px;  \\n  white-space: nowrap;\
+  \  \\n  overflow: hidden;  \\n  text-overflow: ellipsis;  \\n}  \\n#chart-id-135398\
+  \ table .header_table:hover {  \\n  white-space: normal;  \\n}  \\n#chart-id-135398\
+  \ table th:not(.top_barchart_cell, .top_cell), #chart-id-135398 td:not(.top_barchart_cell,\
+  \ .sub_td) {  \\n  border-top: 0.5px solid rgb(219, 219, 219);  \\n}  \\n#chart-id-135398\
+  \ table th {  \\n  vertical-align: bottom;  \\n}  \\n.text_bar {  \\n  bottom: 20px;\
+  \  \\n  font-size: 11px;  \\n  position: relative;  \\n  text-align: center;  \\\
+  n}  \\n.right_barchart_cell {  \\n  width: 200px;  \\n  border: 0.5px solid white;\
+  \  \\n}  \\n.right_barchart {  \\n  background-color: var(--color_chart);  \\n \
+  \ height: 20px;  \\n  position: relative;  \\n  margin-left: 4px;  \\n  transition:\
+  \ opacity 0.5s ease;  \\n  opacity: 0.7;  \\n}  \\n.text_bar_right {  \\n  position:\
+  \ absolute;  \\n  right: -55px;  \\n  top: 0.5px;  \\n  width: 50px;  \\n  text-align:\
+  \ left;  \\n}  \\n.sticky-header {  \\n  position: sticky;  \\n  top: -20px;  \\\
+  n  background-color: rgb(238, 238, 238);  \\n  z-index: 1;  \\n  height: 35px; \
+  \ \\n  overflow: visible;  \\n  border-top: 1px solid rgba(55, 58, 64, 0.4);  \\\
+  n  border-bottom: 1px solid rgba(55, 58, 64, 0.4);  \\n}\",\"extra_form_data\":{},\"\
+  dashboards\":[13198],\"force\":false,\"result_format\":\"json\",\"result_type\"\
+  :\"full\"},\"result_format\":\"json\",\"result_type\":\"full\"}"
+cache_timeout: null
+uuid: 7deb0e31-10db-4d1c-954d-a4e7520a5554
+version: 1.0.0
+dataset_uuid: 45ada09d-53d2-4df1-8b78-6864c6971cfe
