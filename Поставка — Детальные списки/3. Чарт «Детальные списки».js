@@ -24,9 +24,10 @@
 // датасета (meta). Файлы поставки отличаются только строкой ns: у чарта «Детальные списки
 // КП» — 'dlk'. Так у двух чартов на одном дашборде свои состояние, стили и тултип.
 // Данные — датасет proteus/detail-list.data.sql: строки разных ролей (role), пять колонок.
-// Чарт эмитит кросс-фильтры САМ СЕБЕ (самовлияние включено): фильтры, колонки, сортировку,
-// лимит, нужные части ответа. Страницы, поиск по таблице, сортировка загруженного,
-// группировка и «Копировать» — без запроса.
+// Чарт эмитит кросс-фильтры САМ СЕБЕ (самовлияние включено): фильтры, сортировку, лимит,
+// нужные части ответа. Строки приходят со всеми колонками: колонки, страницы, поиск по
+// таблице, сортировка загруженного, группировка и «Копировать» — без запроса. Фильтры — на
+// полке слева (как нативные фильтры Proteus): выбор копится и уходит одной «Применить».
 var CFG = {
   ns: 'dl',
   mode: 'snapshot',            // снимок на дату данных; период выбирается фильтром «Период»
@@ -47,28 +48,34 @@ var CFG = {
   // Ответа с меткой запроса нет столько — чарт не фильтрует сам себя (или запрос завис).
   pendingWarnMs: 30000,
   mask: '⛔', maskText: '⛔️ Нет доступа к данным',
-  // Структуры: вкладки выбора юнита. root — уровень корня дерева.
+  // Структуры: отдельный фильтр на полке у каждой — дерево всех уровней и поиск (вместо
+  // «Кросс-фильтр по УС» и «Уровень 3…13» нативных фильтров); max — сколько узлов можно выбрать.
   trees: [
-    { key: 'mu', label: 'УС', name: 'Управленческая структура', max: 50 },
-    { key: 'lu', label: 'ЮС', name: 'Юридическая структура', max: 50 },
-    { key: 'kp', label: 'КП', name: 'Каталог продуктов', max: 20 }
+    { key: 'mu', label: 'Юнит УС', name: 'Управленческая структура', max: 50 },
+    { key: 'lu', label: 'Юнит ЮС', name: 'Юридическая структура', max: 50 },
+    { key: 'kp', label: 'Продукт КП', name: 'Каталог продуктов', max: 20 }
   ],
-  // Атрибуты фильтров — логическими группами; подписи — как у нативных фильтров борда 7241.
-  facetGroups: [
-    { name: 'Сотрудник', keys: ['active_type_nm', 'employment_relation_type_desc', 'employee_contract_type_desc',
-      'employee_main_contract_type_nm', 'legal_position_nm', 'subordination_lvl', 'company_fire_flg', 't_education_desc'] },
-    { name: 'Специализация', keys: ['emp_specialization_oper_code', 'emp_specialization_it_code', 'emp_stream_desc', 'emp_specialization_desc'] },
-    { name: 'Руководители и HR', keys: ['management_head_flg', 'head_lvl_segment', 'hrbp_login', 'regional_hr_login'] },
-    { name: 'География', keys: ['location_type', 'macroregion_nm', 'residential_state_nm', 'city_nm', 'office_desc', 'tcr_exist_flg'] },
-    { name: 'Найм и Росбанк', keys: ['mapping_channel_name', 'respond_source_nm', 'rb_flg', 'rb_migration_flg'] }
+  // Полка фильтров — разделы и порядок нативных фильтров борда 7241 (к ним привыкли пользователи).
+  // per, ids, emp, tcr, mu, lu, kp — фильтры чарта; остальные ключи — атрибуты (значения — из датасета).
+  shelf: [
+    { name: 'Основные', keys: ['per', 'ids', 'emp', 'active_type_nm', 'employment_relation_type_desc', 'employee_contract_type_desc',
+      'residential_state_nm', 'office_desc', 'emp_specialization_oper_code', 'emp_specialization_it_code', 'emp_stream_desc',
+      'emp_specialization_desc'] },
+    { name: 'Управленческая', keys: ['mu', 'management_head_flg', 'hrbp_login'] },
+    { name: 'Юридическая', keys: ['lu', 'regional_hr_login', 'employee_main_contract_type_nm', 'tcr'] },
+    { name: 'Атрибуты найма', keys: ['mapping_channel_name', 'respond_source_nm'] },
+    { name: 'Каталог продуктов', keys: ['kp'] },
+    { name: 'Региональные атрибуты', keys: ['location_type', 'macroregion_nm', 'city_nm', 'tcr_exist_flg'] },
+    { name: 'Другие атрибуты', keys: ['t_education_desc', 'company_fire_flg', 'rb_flg', 'rb_migration_flg', 'legal_position_nm',
+      'subordination_lvl', 'head_lvl_segment'] }
   ],
   facetLabels: {
     active_type_nm: 'Тип численности', employment_relation_type_desc: 'Тип оформления', employee_contract_type_desc: 'Тип договора',
-    employee_main_contract_type_nm: 'Тип договора (штат)', legal_position_nm: 'Должность', subordination_lvl: 'Положение в структуре',
+    employee_main_contract_type_nm: 'Тип договора (штат)', legal_position_nm: 'Должность', subordination_lvl: 'Положение сотрудника в структуре',
     company_fire_flg: 'Уволен на отчётную дату', t_education_desc: 'T-образование',
     emp_specialization_oper_code: 'HQ | Line | Support', emp_specialization_it_code: 'IT | non-IT', emp_stream_desc: 'Стрим',
     emp_specialization_desc: 'Специализация', management_head_flg: 'Флаг руководителя УС', head_lvl_segment: 'Сегмент руководителя',
-    hrbp_login: 'Логин HRBP', regional_hr_login: 'Логин рег. HR', location_type: 'Локация', macroregion_nm: 'Макрорегион',
+    hrbp_login: 'Логин HRBP', regional_hr_login: 'Логин рег HR', location_type: 'Локация', macroregion_nm: 'Макрорегион',
     residential_state_nm: 'Регион', city_nm: 'Город', office_desc: 'Офис', tcr_exist_flg: 'В локации хаба',
     mapping_channel_name: 'Источник привлечения', respond_source_nm: 'Детализированный источник', rb_flg: 'Росбанк',
     rb_migration_flg: 'Росбанк (MNA)'
@@ -194,7 +201,10 @@ var CFG = {
     loading: 'Обновляю список…',
     notApplied: 'Ответа на запрос нет 30 секунд. Если так на каждом действии — чарт не фильтрует сам себя: в JSON-метаданных дашборда у этого чарта crossFilters.scope.excluded не должен содержать сам чарт (инструкция поставки, п. 4.5).',
     noAccess: 'Для вашего логина нет строки в таблице доступа warden — список недоступен.',
-    noCf: 'Фильтры не применились: в этом окружении нет applyCrossFilter (откройте чарт на дашборде).'
+    noCf: 'Фильтры не применились: в этом окружении нет applyCrossFilter (откройте чарт на дашборде).',
+    // Под фильтрами больше, чем помещается в таблицу (последний из limits).
+    over: 'Под фильтрами больше {max} сотрудников — все в таблицу не поместятся. Сузьте фильтры слева, чтобы загрузились все данные.',
+    part: 'В таблице первые {got} из {total}.'
   },
   // Токены — профиль виджетов Proteus Adoption, как в HRBP HUB: текст, линии, акцент #2b6cff.
   colors: {
@@ -211,7 +221,7 @@ var CFG = {
     micro: 9.5, cap: 10.5, note: 11.5, control: 12, body: 12.5, title: 14.5
   },
   // Отступы — шкала 2…16 профиля; строка таблицы списка — плотная (данных много).
-  spacing: { gutter: 16, gap: 12, rowH: 32, colMin: 70, colMax: 640 }
+  spacing: { gutter: 16, gap: 12, rowH: 32, colMin: 70, colMax: 640, shelfW: 280, shelfOffW: 44 }
 };
 
 // ---------- БЛОК 2: ВХОД + СОСТОЯНИЕ + ХЕЛПЕРЫ ----------
@@ -225,13 +235,13 @@ if (!window.__pvtState) window.__pvtState = {};
 var __S = window.__pvtState;
 var STATE0 = {
   tip: null,
-  open: '',              // открытый поповер: per | emp | tcr | struct | flt | ids | cols | group | lim | ''
+  open: '',              // открытый поповер: per | emp | tcr | mu | lu | kp | f:<атрибут> | ids | cols | group | lim | ''
   q: '',                 // строка поиска открытого поповера
   qT: null,              // таймер поиска в датасете
   stage: null,           // набранные, но не применённые фильтры — копия applied() с правками
-  tree: '',              // вкладка «Структуры»: mu | lu | kp ('' — по режиму чарта)
   treeOpen: {},          // раскрытые узлы: 'mu:id' → true / false
-  fAttr: '',             // атрибут, открытый в «Фильтрах»
+  shelfOff: false,       // полка фильтров свёрнута
+  shelfFold: {},         // свёрнутые разделы полки: номер раздела → true
   idKind: 'rk',          // вкладка «Сотрудников»
   colDraft: null,        // черновик колонок в поповере «Колонки»
   colQ: '',              // поиск по названиям колонок
@@ -249,8 +259,7 @@ var STATE0 = {
   cache: null,           // части ответов по подписи фильтров: rows / f / t / s
   names: {},             // подписи выбранных узлов: 'mu:id' → {name, path}
   keep: null,            // прокрутка до запроса — вернуть после ответа
-  copied: '',
-  narrow: false
+  copied: ''
 };
 if (!__S[CFG.ns]) __S[CFG.ns] = {};
 // Ключи, которых нет в состоянии прошлой версии скрипта (страницу не перезагружали), — по умолчанию.
@@ -345,7 +354,7 @@ function splitEq(list, keys) {
 var ID_KEYS = [];
 for (var ik = 0; ik < CFG.idKinds.length; ik++) ID_KEYS.push(CFG.idKinds[ik].key);
 // Подпись фильтров — всё, от чего зависят значения фильтров и деревья; подпись строк — плюс
-// колонки, сортировка и лимит. По ним части ответов из кэша подходят к эху нового ответа.
+// сортировка и лимит. По ним части ответов из кэша подходят к эху нового ответа.
 function fsigOf(o) {
   var s = 'p:' + (o.per === 'date' ? 'date:' + (o.dt || '') : 'last') + '|e:' + (o.emp || CFG.emp[0]) + '|t:' + (o.tcr || '');
   var ks = [];
@@ -356,7 +365,7 @@ function fsigOf(o) {
   for (var k = 0; k < ID_KEYS.length; k++) s += '|' + ID_KEYS[k] + ':' + sigList((o.id || {})[ID_KEYS[k]]);
   return s;
 }
-function rsigOf(o) { return fsigOf(o) + '|c:' + (o.cols || []).join(',') + '|s:' + (o.sort || '') + '|l:' + (o.lim || ''); }
+function rsigOf(o) { return fsigOf(o) + '|s:' + (o.sort || '') + '|l:' + (o.lim || ''); }
 
 // Ответ датасета → модель. Части ответа кладутся в state.cache со своей подписью: ответ «только
 // значения фильтров» или «только поиск» берёт строки из кэша, если они под тем же запросом.
@@ -525,9 +534,10 @@ function anyFilter(o) {
   return o.per === 'date' || o.emp !== CFG.emp[0] || !!o.tcr || fltCount(o) > 0 || o.mu.length > 0 || o.lu.length > 0 ||
     o.kp.length > 0 || idCount(o) > 0;
 }
-// Колонки показа: выбор пользователя (порядок) или эхо; группировка — отдельно, над строками.
+// Колонки показа: выбор пользователя (порядок) или по умолчанию; группировка — отдельно, над
+// строками. Строки приходят со всеми колонками (эхо cols) — показ колонки запроса не требует.
 function colOrder() {
-  var base = state.columnOrder || applied().cols || CFG.defaultCols, out = [];
+  var base = state.columnOrder || CFG.defaultCols, out = [];
   for (var i = 0; i < base.length; i++) if (FIELD_BY[base[i]] && !inArr(state.groupBy, base[i])) out.push(base[i]);
   for (var l = LOCKED.length - 1; l >= 0; l--) if (!inArr(out, LOCKED[l]) && !inArr(state.groupBy, LOCKED[l])) out.unshift(LOCKED[l]);
   return uniq(out);
@@ -537,22 +547,17 @@ function displayCols() {
   for (var i = 0; i < o.length; i++) if (loaded(o[i])) out.push(o[i]);
   return out;
 }
-// Колонки запроса: закреплённые, группировка, показ. Расчётным полям КП нужна аллокация:
-// сумме — сама доля (alloc), числу аллокаций — строка на аллокацию (любое поле аллокации).
-function reqCols(order) {
-  var o = LOCKED.concat(state.groupBy, order || colOrder()), out = [], perRow = false;
-  for (var i = 0; i < o.length; i++) {
-    if (isVirtual(o[i])) continue;
-    if (FIELD_BY[o[i]]) out.push(o[i]);
-    if (inArr(CFG.allocKeys, o[i])) perRow = true;
-  }
-  if ((inArr(o, 'sum_alloc') || (inArr(o, 'alloc_count') && !perRow)) && !inArr(out, 'alloc')) out.push('alloc');
-  return uniq(out);
+// У КП строка на аллокацию; показана хоть одна колонка аллокации — блок сотрудника в несколько
+// строк, иначе — одна строка на сотрудника.
+function perRowCols(cols) {
+  for (var i = 0; i < cols.length; i++) if (isAllocKey(cols[i]) && !isVirtual(cols[i])) return true;
+  return false;
 }
-function viewNow() { var ap = applied(); return { cols: reqCols(), sort: ap.sort, lim: ap.lim }; }
+// Запрос: фильтры + сортировка и лимит строк (колонки не запрашиваются — приходят все).
+function viewNow() { var ap = applied(); return { sort: ap.sort, lim: ap.lim }; }
 function reqOf(f, view, pt) {
   var o = copyF(f);
-  o.cols = view.cols; o.sort = view.sort; o.lim = view.lim; o.pt = pt || ['r']; o.q = '';
+  o.sort = view.sort; o.lim = view.lim; o.pt = pt || ['r']; o.q = '';
   return o;
 }
 // Маска кросс-фильтра. Носитель = основа + meta.cf ('_f' | '_kf'); value = [] не шлём никогда.
@@ -577,7 +582,6 @@ function maskOf(o) {
   }
   add('id', ids);
   if (o.q) add('q', [o.q]);
-  if (o.cols && o.cols.join(',') !== CFG.defaultCols.join(',')) add('cols', o.cols);
   if (o.sort && o.sort !== 'master_id:asc') add('sort', [o.sort]);
   if (o.lim && +o.lim !== CFG.limits[0]) add('lim', [String(o.lim)]);
   if (o.pt && !(o.pt.length === 1 && o.pt[0] === 'r')) add('pt', o.pt);
@@ -787,7 +791,7 @@ function buildCSS() {
   var SHL = '0 8px 28px rgba(20,28,45,.16)';
   return [
     '<style>',
-    P + '-root{width:100%;height:100%;box-sizing:border-box;'
+    P + '-root{position:relative;width:100%;height:100%;box-sizing:border-box;'
             + 'font-family:' + CFG.fonts.family + ';'
             + 'font-size:' + F.body + 'px;color:' + C.ink + ';background:' + C.bg + ';display:flex;flex-direction:column;min-height:560px;}',
     P + '-root *{box-sizing:border-box;font-family:inherit;}',
@@ -806,18 +810,45 @@ function buildCSS() {
     P + '-tip ' + P + '-t-x{display:block;font-size:' + F.note + 'px;font-weight:400;color:' + C.ink2 + ';line-height:1.4;}',
     P + '-tip ' + P + '-t-n{display:block;font-size:' + F.cap + 'px;line-height:1.35;font-weight:400;color:' + C.muted + ';margin-top:5px;}',
 
-    // ---- шапка: имя, дата данных, строка фильтров, чипы ----
+    // ---- шапка: имя, дата данных ----
     P + '-head{background:' + C.card + ';border-bottom:1px solid ' + C.line + ';flex:0 0 auto;}',
-    P + '-htop{display:flex;align-items:center;gap:10px;padding:10px 16px 0;flex-wrap:wrap;}',
+    P + '-htop{display:flex;align-items:center;gap:10px;padding:10px 16px;flex-wrap:wrap;min-height:48px;}',
     P + '-logo{font-weight:600;font-size:' + F.title + 'px;white-space:nowrap;color:' + C.ink + ';}',
     P + '-logo small{color:' + C.muted + ';font-weight:400;font-size:' + F.note + 'px;margin-left:8px;}',
     P + '-sp{flex:1;}',
     P + '-badge{display:inline-flex;align-items:center;gap:6px;color:' + C.muted + ';font-weight:400;font-size:' + F.note + 'px;white-space:nowrap;}',
     P + '-badge b{color:' + C.ink2 + ';font-weight:500;}',
     P + '-badge+' + P + '-badge{padding-left:10px;border-left:1px solid ' + C.line + ';}',
-    P + '-fbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 16px 12px;}',
-    P + '-fsep{width:1px;height:20px;background:' + C.line + ';margin:0 4px;}',
-    P + '-abox{display:inline-flex;align-items:center;gap:8px;}',
+    // ---- полка фильтров слева (как нативные фильтры Proteus): разделы, фильтр — подпись и
+    // выпадашка во всю ширину, «Применить» внизу всегда на виду; сворачивается в полоску ----
+    P + '-body{flex:1 1 auto;min-height:0;display:flex;align-items:stretch;}',
+    P + '-shelf{flex:0 0 ' + S.shelfW + 'px;width:' + S.shelfW + 'px;min-height:0;display:flex;flex-direction:column;background:' + C.card + ';border-right:1px solid ' + C.line + ';}',
+    P + '-shh{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:12px 10px 10px 16px;border-bottom:1px solid ' + C.line2 + ';}',
+    P + '-sht{flex:1;font-size:' + F.title + 'px;font-weight:600;color:' + C.ink + ';display:flex;align-items:center;gap:8px;}',
+    P + '-shl{flex:1 1 auto;min-height:0;overflow:auto;padding:0 16px 14px;}',
+    P + '-shs{display:flex;align-items:center;gap:6px;margin:14px 0 2px;padding-top:12px;border-top:1px solid ' + C.line2 + ';font-size:' + F.cap + 'px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:' + C.muted + ';cursor:pointer;user-select:none;}',
+    P + '-shs:hover{color:' + C.ink2 + ';}',
+    P + '-shs' + P + '-first{border-top:0;margin-top:4px;}',
+    P + '-shs>span:first-of-type{flex:1;}',
+    P + '-fi{margin-top:10px;}',
+    P + '-fil{display:block;font-size:' + F.note + 'px;font-weight:500;color:' + C.ink2 + ';margin:0 0 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}',
+    P + '-shelf ' + P + '-dd{display:block;}',
+    P + '-shelf ' + P + '-ddb{width:100%;max-width:none;}',
+    P + '-shelf ' + P + '-ddv{flex:1;max-width:none;text-align:left;}',
+    P + '-ph{color:' + C.muted2 + ';font-weight:400;}',
+    P + '-shf{flex:0 0 auto;display:flex;flex-direction:column;gap:6px;padding:10px 16px 12px;border-top:1px solid ' + C.line + ';background:' + C.card + ';}',
+    P + '-shf ' + P + '-btn{justify-content:center;width:100%;}',
+    P + '-shfr{display:flex;gap:6px;}',
+    P + '-shfr ' + P + '-btn{flex:1 1 0;min-width:0;}',
+    // свёрнутая полка: полоска с воронкой, числом фильтров и подписью
+    P + '-shelf' + P + '-off{flex-basis:' + S.shelfOffW + 'px;width:' + S.shelfOffW + 'px;align-items:center;padding:10px 0;cursor:pointer;}',
+    P + '-shelf' + P + '-off:hover{background:' + C.hover + ';}',
+    P + '-sho{display:flex;flex-direction:column;align-items:center;gap:8px;border:0;background:transparent;color:' + C.ink2 + ';cursor:pointer;padding:4px 0;font-size:' + F.control + 'px;font-weight:500;}',
+    P + '-sho:hover{color:' + C.act + ';}',
+    P + '-shv{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;}',
+    // поповер фильтра полки — в слое корня справа от полки (полка прокручивается и обрезала бы его)
+    P + '-play{position:absolute;left:0;top:0;z-index:60;}',
+    P + '-play>' + P + '-pop{position:static;}',
     P + '-dd{position:relative;display:inline-block;}',
     P + '-ddb{display:inline-flex;align-items:center;gap:6px;height:34px;border:1px solid ' + C.line + ';background:' + C.card + ';border-radius:9px;padding:0 12px;font-size:' + F.control + 'px;font-weight:500;color:' + C.ink2 + ';cursor:pointer;white-space:nowrap;max-width:340px;}',
     P + '-ddb:hover{border-color:#d8dce4;}',
@@ -832,12 +863,6 @@ function buildCSS() {
     P + '-x{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:rgba(43,95,208,.14);color:' + C.blueTx + ';font-size:11px;line-height:1;cursor:pointer;flex:0 0 auto;}',
     P + '-x:hover{background:rgba(43,95,208,.3);}',
     P + '-cnt{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 5px;border-radius:999px;background:' + C.act + ';color:#fff;font-size:10px;font-weight:500;}',
-    // чипы применённого / набранного: структура, атрибуты, списки сотрудников
-    P + '-chips{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:0 16px 12px;margin-top:-4px;}',
-    P + '-chip{display:inline-flex;align-items:center;gap:6px;height:24px;max-width:420px;padding:0 4px 0 10px;border:1px solid #dbe6fd;border-radius:999px;background:' + C.blueBg + ';color:' + C.blueTx + ';font-size:' + F.note + 'px;font-weight:500;white-space:nowrap;}',
-    P + '-chip' + P + '-chg{border-style:dashed;border-color:' + C.act + ';background:' + C.card + ';}',
-    P + '-chl{color:#5b83dc;font-weight:400;}',
-    P + '-chv{overflow:hidden;text-overflow:ellipsis;min-width:0;}',
 
     // ---- поповеры ----
     P + '-pop{position:absolute;top:calc(100% + 4px);left:0;z-index:40;background:' + C.card + ';border:1px solid ' + C.line + ';border-radius:9px;box-shadow:' + SHL + ';width:300px;padding:10px;cursor:default;text-align:left;outline:none;white-space:normal;}',
@@ -885,15 +910,8 @@ function buildCSS() {
     P + '-tpath{display:block;color:' + C.muted + ';font-size:' + F.cap + 'px;font-weight:400;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}',
     P + '-tin{display:inline-block;font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.3px;padding:1px 5px;border-radius:4px;background:' + C.blueBg + ';color:' + C.blueTx + ';margin-left:6px;vertical-align:1px;white-space:nowrap;}',
     P + '-thint{color:' + C.act + ';font-size:' + F.note + 'px;padding:4px 9px 4px 0;}',
-    // «Фильтры»: слева атрибуты по группам, справа значения
-    P + '-pop' + P + '-fpop{width:680px;display:flex;gap:10px;padding:10px 10px 10px 6px;}',
-    P + '-fl{width:230px;flex:0 0 auto;max-height:470px;overflow:auto;border-right:1px solid ' + C.line2 + ';padding-right:6px;}',
-    P + '-fr{flex:1;min-width:0;display:flex;flex-direction:column;}',
-    P + '-fr ' + P + '-list{max-height:360px;}',
-    P + '-fa{display:flex;align-items:center;gap:6px;padding:6px 9px;border-radius:7px;cursor:pointer;font-size:' + F.control + 'px;color:' + C.ink2 + ';}',
-    P + '-fa:hover{background:#f4f6f9;}',
-    P + '-fa' + P + '-cur{background:' + C.blueBg + ';color:' + C.blueTx + ';font-weight:500;}',
-    P + '-fa ' + P + '-optt{flex:1;}',
+    // значения атрибута
+    P + '-pop' + P + '-fpop{width:360px;}',
     // «Сотрудники»: вставка списка
     P + '-ta{display:block;width:100%;height:150px;resize:vertical;border:1px solid ' + C.line + ';border-radius:9px;padding:8px 10px;font-size:' + F.control + 'px;line-height:1.45;color:' + C.ink + ';font-family:ui-monospace,Menlo,Consolas,monospace;margin:8px 0 6px;}',
     P + '-ta:focus{outline:none;border-color:' + C.act + ';}',
@@ -934,16 +952,19 @@ function buildCSS() {
     P + '-info:hover{border-color:' + C.act + ';color:' + C.act + ';}',
 
     // ---- уведомления и загрузка ----
-    P + '-notes{padding:0 16px;flex:0 0 auto;}',
+    P + '-notes{flex:0 0 auto;}',
     P + '-note{font-size:' + F.note + 'px;color:' + C.ink2 + ';background:' + C.card + ';border:1px dashed ' + C.line + ';border-radius:9px;padding:10px 14px;margin-top:12px;line-height:1.5;}',
     P + '-note' + P + '-warn{border-style:solid;border-color:#f3d58f;background:#fff8e6;color:' + C.warnTx + ';}',
     P + '-load{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:' + F.note + 'px;font-weight:500;color:' + C.act + ';}',
     P + '-load i{flex:1;height:3px;border-radius:2px;background:linear-gradient(90deg,' + C.act + ',#9dbbff,' + C.act + ');opacity:.7;}',
     P + '-busy ' + P + '-tbox{opacity:.55;transition:opacity .2s;}',
+    // под фильтрами больше, чем загружено: сузить фильтры или загрузить всех
+    P + '-tnote{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 16px;border-bottom:1px solid ' + C.line + ';background:' + C.blueBg + ';color:' + C.blueTx + ';font-size:' + F.note + 'px;line-height:1.45;}',
+    P + '-tnote' + P + '-warn{background:#fff8e6;color:' + C.warnTx + ';}',
 
     // ---- таблица: панель во всю оставшуюся высоту, прокрутка внутри ----
-    P + '-main{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;padding:12px 16px 16px;}',
-    P + '-tpan{flex:1 1 auto;min-height:380px;display:flex;flex-direction:column;background:' + C.card + ';border-radius:12px;box-shadow:' + SH + ';min-width:0;}',
+    P + '-main{flex:1 1 auto;min-width:0;min-height:0;display:flex;flex-direction:column;padding:0 16px 16px;}',
+    P + '-tpan{flex:1 1 auto;min-height:380px;display:flex;flex-direction:column;background:' + C.card + ';border-radius:12px;box-shadow:' + SH + ';min-width:0;margin-top:12px;}',
     P + '-ttools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 12px 10px 16px;border-bottom:1px solid ' + C.line + ';}',
     P + '-tcount{font-size:' + F.body + 'px;color:' + C.ink2 + ';white-space:nowrap;}',
     P + '-tcount b{font-size:' + F.title + 'px;font-weight:600;color:' + C.ink + ';font-variant-numeric:tabular-nums;}',
@@ -1013,22 +1034,16 @@ function ddButton(o) {
     + '</button>';
 }
 var NOTE_STAGE = 'Выбрано, но ещё не применено — кнопка «Применить».';
-function perText(o) { return o.per === 'date' && o.dt ? 'на ' + fmtDate(o.dt) : 'последний день'; }
-function perDDHTML() {
-  var P = CFG.ns, st = staged(), ap = applied(), chg = inArr(diffKeys(ap, st), 'per');
-  var s = '<div class="' + P + '-dd" data-scope="per">' + ddButton({ key: 'per', label: 'Период:', value: perText(st), set: st.per === 'date', chg: chg,
-    clear: st.per === 'date' ? 'per' : '', tip: { title: 'Период', text: st.per === 'date' ? 'Сотрудники на ' + fmtDate(st.dt) + ' — по таблице на выбранную дату.'
-      : 'Сотрудники на последний день данных (' + fmtDate(MODEL.m.data_dt) + ').', note: chg ? NOTE_STAGE : '' } });
-  if (state.open === 'per') {
-    s += '<div class="' + P + '-pop" tabindex="-1"><div class="' + P + '-poph"><span>Период</span></div>'
-      + '<div class="' + P + '-opt' + (st.per !== 'date' ? ' ' + P + '-cur' : '') + '" data-action="setper" data-key="last"><span class="' + P + '-rd"></span>'
-      + '<span class="' + P + '-optt">Последний день</span><span class="' + P + '-optn">' + esc(fmtDate(MODEL.m.data_dt)) + '</span></div>'
-      + '<div class="' + P + '-blk">На дату</div>'
-      + (MODEL.dates.length > 8 ? hSearch('per', 'Дата, например 31.08') : '')
-      + '<div class="' + P + '-list" data-plist="per">' + perListHTML() + '</div>'
-      + '<div class="' + P + '-popf"><span>Применится кнопкой «Применить»</span></div></div>';
-  }
-  return s + '</div>';
+function perText(o) { return o.per === 'date' && o.dt ? 'На ' + fmtDate(o.dt) : 'Последний день' + (MODEL.m.data_dt ? ' · ' + fmtDate(MODEL.m.data_dt) : ''); }
+function perPopHTML() {
+  var P = CFG.ns, st = staged();
+  return '<div class="' + P + '-pop" tabindex="-1"><div class="' + P + '-poph"><span>Период</span></div>'
+    + '<div class="' + P + '-opt' + (st.per !== 'date' ? ' ' + P + '-cur' : '') + '" data-action="setper" data-key="last"><span class="' + P + '-rd"></span>'
+    + '<span class="' + P + '-optt">Последний день</span><span class="' + P + '-optn">' + esc(fmtDate(MODEL.m.data_dt)) + '</span></div>'
+    + '<div class="' + P + '-blk">На дату</div>'
+    + (MODEL.dates.length > 8 ? hSearch('per', 'Дата, например 31.08') : '')
+    + '<div class="' + P + '-list" data-plist="per">' + perListHTML() + '</div>'
+    + '<div class="' + P + '-popf"><span>Применится кнопкой «Применить»</span></div></div>';
 }
 function perListHTML() {
   var P = CFG.ns, st = staged(), q = trim(state.q), s = '', n = 0;
@@ -1041,20 +1056,15 @@ function perListHTML() {
   }
   return n ? s : '<div class="' + P + '-nores">' + (MODEL.dates.length ? 'Такой даты нет' : 'Дат в справочнике нет') + '</div>';
 }
-function choiceDDHTML(key, label, list, cur, allLabel, tipText) {
-  var P = CFG.ns, ap = applied(), chg = inArr(diffKeys(ap, staged()), key), isDef = key === 'emp' ? cur === CFG.emp[0] : !cur;
-  var s = '<div class="' + P + '-dd" data-scope="' + key + '">' + ddButton({ key: key, label: label, value: cur ? String(cur).toLowerCase() : allLabel,
-    set: !isDef, chg: chg, clear: isDef ? '' : key, tip: { title: label.replace(':', ''), text: tipText, note: chg ? NOTE_STAGE : '' } });
-  if (state.open === key) {
-    s += '<div class="' + P + '-pop" tabindex="-1"><div class="' + P + '-poph"><span>' + esc(label.replace(':', '')) + '</span></div>';
-    var opts = (key === 'tcr' ? [''] : []).concat(list);
-    for (var i = 0; i < opts.length; i++) {
-      s += '<div class="' + P + '-opt' + ((opts[i] || '') === (cur || '') ? ' ' + P + '-cur' : '') + '" data-action="set1" data-key="' + key + '" data-v="' + esc(opts[i]) + '">'
-        + '<span class="' + P + '-rd"></span><span class="' + P + '-optt">' + esc(opts[i] || allLabel) + '</span></div>';
-    }
-    s += '<div class="' + P + '-popf"><span>Применится кнопкой «Применить»</span></div></div>';
+// «Численность» и «Тип ЮЛ»: один вариант из списка.
+function choicePopHTML(key) {
+  var P = CFG.ns, cur = staged()[key] || '', list = key === 'emp' ? CFG.emp : [''].concat(CFG.tcr);
+  var s = '<div class="' + P + '-pop" tabindex="-1"><div class="' + P + '-poph"><span>' + esc(key === 'emp' ? 'Численность' : 'Тип ЮЛ') + '</span></div>';
+  for (var i = 0; i < list.length; i++) {
+    s += '<div class="' + P + '-opt' + (list[i] === cur ? ' ' + P + '-cur' : '') + '" data-action="set1" data-key="' + key + '" data-v="' + esc(list[i]) + '">'
+      + '<span class="' + P + '-rd"></span><span class="' + P + '-optt">' + esc(list[i] || 'Все') + '</span></div>';
   }
-  return s + '</div>';
+  return s + '<div class="' + P + '-popf"><span>Применится кнопкой «Применить»</span></div></div>';
 }
 // Имя выбранного узла: из дерева, находок, подписей датасета (роль s) или запомненное при выборе.
 function nodeName(tk, v) {
@@ -1073,81 +1083,129 @@ function nodePath(tk, v) {
   return x && x.path ? x.path + ' › ' + nodeName(tk, v) : nodeName(tk, v);
 }
 function treeDef(tk) { for (var i = 0; i < CFG.trees.length; i++) if (CFG.trees[i].key === tk) return CFG.trees[i]; return CFG.trees[0]; }
-function structDDHTML() {
-  var P = CFG.ns, st = staged(), ap = applied(), dk = diffKeys(ap, st), parts = [], names = [], chg = false, n = 0;
-  for (var i = 0; i < CFG.trees.length; i++) {
-    var tk = CFG.trees[i].key, sel = st[tk] || [];
-    if (inArr(dk, tk)) chg = true;
-    if (!sel.length) continue;
-    n += sel.length;
-    parts.push(CFG.trees[i].label + (sel.length > 1 ? ' · ' + sel.length : ': ' + nodeName(tk, sel[0])));
-    for (var j = 0; j < sel.length && names.length < 6; j++) names.push(CFG.trees[i].label + ': ' + nodePath(tk, sel[j]));
-  }
-  var s = '<div class="' + P + '-dd" data-scope="struct">' + ddButton({ key: 'struct', label: 'Структура:', value: n ? parts.join(', ') : 'вся', set: n > 0, chg: chg,
-    tip: { title: 'Структура', text: n ? names.join('; ') : 'УС, ЮС и КП — одним выбором: дерево и поиск по названию на любом уровне.',
-      note: chg ? NOTE_STAGE : 'Сотрудник попадает в список, если его юнит внутри выбранного (любого из отмеченных).' } });
-  if (state.open === 'struct') s += structPopHTML();
-  return s + '</div>';
+function isTreeKey(k) { return k === 'mu' || k === 'lu' || k === 'kp'; }
+// Открытый поповер полки: дерево структуры или атрибут ('f:<атрибут>').
+function openTree() { return isTreeKey(state.open) ? state.open : ''; }
+function openAttr() {
+  var o = String(state.open || '');
+  return o.indexOf('f:') === 0 && CFG.facetLabels.hasOwnProperty(o.slice(2)) ? o.slice(2) : '';
 }
-function fltDDHTML() {
-  var P = CFG.ns, st = staged(), n = fltCount(st), dk = diffKeys(applied(), st), chg = false, names = [];
-  for (var i = 0; i < dk.length; i++) if (dk[i].indexOf('flt:') === 0) chg = true;
-  for (var a in st.flt) if (st.flt.hasOwnProperty(a) && st.flt[a].length) names.push(CFG.facetLabels[a] || a);
-  var s = '<div class="' + P + '-dd" data-scope="flt">' + ddButton({ key: 'flt', label: '', html: 'Фильтры' + (n ? ' <span class="' + P + '-cnt">' + n + '</span>' : ''),
-    set: n > 0, chg: chg, tip: { title: 'Фильтры по атрибутам', text: n ? names.join(', ') : 'Тип численности, специализация, руководители и HR, география, найм — у каждого значения число сотрудников при остальных фильтрах.',
-      note: chg ? NOTE_STAGE : '' } });
-  if (state.open === 'flt') s += fltPopHTML();
-  return s + '</div>';
+
+// ---- полка фильтров: разделы, у фильтра — подпись и выпадашка во всю ширину ----
+// Значения и деревья грузятся, когда фильтр открывают; выбор копится до «Применить».
+function shelfKey(k) { return k === 'per' || k === 'ids' || k === 'emp' || k === 'tcr' || isTreeKey(k) ? k : 'f:' + k; }
+function shortList(list) { return list.length ? list[0] + (list.length > 1 ? ' +' + (list.length - 1) : '') : ''; }
+// Фильтр задан (в набранном) — для числа на полке и в свёрнутом разделе.
+function shelfSet(st, k) {
+  if (k === 'per') return st.per === 'date';
+  if (k === 'emp') return (st.emp || CFG.emp[0]) !== CFG.emp[0];
+  if (k === 'tcr') return !!st.tcr;
+  if (k === 'ids') return idCount(st) > 0;
+  if (isTreeKey(k)) return (st[k] || []).length > 0;
+  return ((st.flt || {})[k] || []).length > 0;
 }
-function idsDDHTML() {
-  var P = CFG.ns, st = staged(), n = idCount(st), chg = inArr(diffKeys(applied(), st), 'id'), parts = [];
-  for (var i = 0; i < CFG.idKinds.length; i++) {
-    var c = (st.id[CFG.idKinds[i].key] || []).length;
-    if (c) parts.push(CFG.idKinds[i].label + ' · ' + c);
+function shelfCount(st) {
+  var n = 0;
+  for (var g = 0; g < CFG.shelf.length; g++) for (var i = 0; i < CFG.shelf[g].keys.length; i++) if (shelfSet(st, CFG.shelf[g].keys[i])) n++;
+  return n;
+}
+function ctlHTML(o) {
+  var P = CFG.ns;
+  return '<div class="' + P + '-fi"><span class="' + P + '-fil">' + esc(o.label) + '</span><div class="' + P + '-dd" data-scope="' + esc(o.key) + '">'
+    + ddButton({ key: o.key, value: o.value, html: o.ph ? '<span class="' + P + '-ph">' + esc(o.value) + '</span>' : '', set: o.set, chg: o.chg,
+      clear: o.set ? o.clear : '', tip: o.tip }) + '</div></div>';
+}
+function shelfCtl(k, st, dk) {
+  var note = '';
+  if (k === 'per') {
+    note = inArr(dk, 'per') ? NOTE_STAGE : '';
+    return ctlHTML({ key: 'per', label: 'Период', value: perText(st), set: st.per === 'date', chg: !!note, clear: 'per',
+      tip: { title: 'Период', text: st.per === 'date' ? 'Сотрудники на ' + fmtDate(st.dt) + ' — по таблице на выбранную дату.'
+        : 'Сотрудники на последний день данных (' + fmtDate(MODEL.m.data_dt) + ').', note: note } });
   }
-  var s = '<div class="' + P + '-dd" data-scope="ids">' + ddButton({ key: 'ids', label: 'Сотрудники:', value: n ? parts.join(', ') : 'все', set: n > 0, chg: chg,
-    clear: n ? 'id' : '', tip: { title: 'Сотрудники по списку', text: 'MasterID, логины, табельные или Siebel ID — вставкой списка.', note: chg ? NOTE_STAGE : '' } });
-  if (state.open === 'ids') s += idsPopHTML();
-  return s + '</div>';
+  if (k === 'emp' || k === 'tcr') {
+    note = inArr(dk, k) ? NOTE_STAGE : '';
+    var cur = st[k] || '', set = shelfSet(st, k);
+    return ctlHTML({ key: k, label: k === 'emp' ? 'Численность' : 'Тип ЮЛ', value: k === 'emp' ? (cur || CFG.emp[0]) : (cur || 'Все'), ph: k === 'tcr' && !cur,
+      set: set, chg: !!note, clear: k, tip: { title: k === 'emp' ? 'Численность' : 'Тип ЮЛ',
+        text: k === 'emp' ? 'Юридическая — по юрлицу; активная — по активной численности.' : 'Только сотрудники ТЦР выбранного типа.', note: note } });
+  }
+  if (k === 'ids') {
+    note = inArr(dk, 'id') ? NOTE_STAGE : '';
+    var parts = [];
+    for (var i = 0; i < CFG.idKinds.length; i++) {
+      var c = ((st.id || {})[CFG.idKinds[i].key] || []).length;
+      if (c) parts.push(CFG.idKinds[i].label + ' · ' + fmtInt(c));
+    }
+    return ctlHTML({ key: 'ids', label: 'Сотрудники по списку', value: parts.length ? parts.join(', ') : 'MasterID, логин, табельный, Siebel ID',
+      ph: !parts.length, set: parts.length > 0, chg: !!note, clear: 'id',
+      tip: { title: 'Сотрудники по списку', text: 'MasterID, логины, табельные или Siebel ID — вставкой списка.', note: note } });
+  }
+  if (isTreeKey(k)) {
+    var d = treeDef(k), sel = st[k] || [], nm = [], pt = [];
+    note = inArr(dk, k) ? NOTE_STAGE : '';
+    for (var j = 0; j < sel.length; j++) { nm.push(nodeName(k, sel[j])); if (pt.length < 8) pt.push(nodePath(k, sel[j])); }
+    return ctlHTML({ key: k, label: d.label, value: sel.length ? shortList(nm) : 'Вся структура', ph: !sel.length, set: sel.length > 0, chg: !!note, clear: k,
+      tip: { title: d.name, text: sel.length ? pt.join('; ') + (sel.length > pt.length ? '; …' : '') : 'Дерево всех уровней и поиск юнита по названию.',
+        note: note || 'Сотрудник попадает в список, если его юнит внутри выбранного (любого из отмеченных).' } });
+  }
+  var vals = (st.flt || {})[k] || [], lb = [];
+  note = inArr(dk, 'flt:' + k) ? NOTE_STAGE : '';
+  for (var v = 0; v < vals.length; v++) lb.push(valLabel(k, vals[v]));
+  return ctlHTML({ key: 'f:' + k, label: CFG.facetLabels[k] || k, value: vals.length ? shortList(lb) : 'Все', ph: !vals.length, set: vals.length > 0,
+    chg: !!note, clear: 'flt:' + k, tip: vals.length || note ? { title: CFG.facetLabels[k] || k, text: lb.slice(0, 30).join(', ') + (lb.length > 30 ? '…' : ''), note: note } : null });
+}
+// Список полки: разделы можно свернуть; у раздела — число заданных в нём фильтров.
+function shelfListHTML() {
+  var P = CFG.ns, st = staged(), dk = diffKeys(applied(), st), s = '';
+  for (var g = 0; g < CFG.shelf.length; g++) {
+    var sec = CFG.shelf[g], fold = !!state.shelfFold[g], n = 0;
+    for (var i = 0; i < sec.keys.length; i++) if (shelfSet(st, sec.keys[i])) n++;
+    s += '<div class="' + P + '-shs' + (g ? '' : ' ' + P + '-first') + '" role="button" tabindex="0" data-action="sfold" data-key="' + g + '" aria-expanded="' + (fold ? 'false' : 'true') + '">'
+      + '<span>' + esc(sec.name) + '</span>' + (n ? '<span class="' + P + '-cnt">' + n + '</span>' : '') + '<span class="' + P + '-ddc">' + (fold ? '▸' : '▾') + '</span></div>';
+    if (fold) continue;
+    for (var j = 0; j < sec.keys.length; j++) s += shelfCtl(sec.keys[j], st, dk);
+  }
+  return s;
 }
 function applyBoxHTML() {
   var P = CFG.ns, n = stageDiff(), s = '';
   s += '<button class="' + P + '-btn ' + P + '-pri" data-action="apply"' + (n && !state.pend ? '' : ' disabled')
     + tip({ title: 'Применить фильтры', text: n ? 'Изменено фильтров: ' + n + '. Список пересчитается одним запросом.' : 'Выберите значения фильтров — они применятся все сразу.' })
     + '>' + (state.pend && state.pend.kind === 'apply' ? 'Применяю…' : 'Применить' + (n ? ' · ' + n : '')) + '</button>';
-  if (n) s += '<button class="' + P + '-btn ' + P + '-ghost" data-action="unstage">Отменить</button>';
-  if (n || anyFilter(applied())) s += '<button class="' + P + '-btn ' + P + '-ghost" data-action="reset"'
-    + tip({ title: 'Сбросить', text: 'Снять все фильтры сразу, без «Применить». Колонки, сортировка и лимит остаются.' }) + '>Сбросить</button>';
+  if (n || anyFilter(applied())) {
+    s += '<div class="' + P + '-shfr">'
+      + (n ? '<button class="' + P + '-btn ' + P + '-ghost" data-action="unstage"' + tip({ title: 'Отменить', text: 'Вернуть фильтры, которые применены сейчас.' }) + '>Отменить</button>' : '')
+      + (anyFilter(applied()) || n ? '<button class="' + P + '-btn ' + P + '-ghost" data-action="reset"'
+        + tip({ title: 'Сбросить все', text: 'Снять все фильтры сразу, без «Применить». Колонки, сортировка и лимит остаются.' }) + '>Сбросить все</button>' : '')
+      + '</div>';
+  }
   return s;
 }
-// Чипы: структура, атрибуты и списки сотрудников — что набрано; пунктир — ещё не применено.
-function chipsHTML() {
-  var P = CFG.ns, st = staged(), ap = applied(), dk = diffKeys(ap, st), s = '';
-  function chip(key, label, vals, tipText) {
-    var shown = vals.slice(0, 2).join(', ') + (vals.length > 2 ? ' +' + (vals.length - 2) : '');
-    s += '<span class="' + P + '-chip' + (inArr(dk, key) || (key.indexOf('id:') === 0 && inArr(dk, 'id')) ? ' ' + P + '-chg' : '') + '"'
-      + tip({ title: label, text: tipText || vals.join(', ') }) + '><span class="' + P + '-chl">' + esc(label) + ':</span>'
-      + '<span class="' + P + '-chv">' + esc(shown) + '</span>'
-      + '<span class="' + P + '-x" role="button" tabindex="0" aria-label="Снять" data-action="chipx" data-key="' + esc(key) + '">×</span></span>';
+var FUNNEL_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">'
+  + '<path d="M3 5h18l-7 8.5V19l-4 2v-7.5z"/></svg>';
+function shelfHTML() {
+  var P = CFG.ns, n = shelfCount(applied()), chg = stageDiff();
+  if (state.shelfOff) {
+    return '<div class="' + P + '-shelf ' + P + '-off" data-shelf="1" data-action="shelf"' + tip({ title: 'Фильтры', text: n ? 'Применено фильтров: ' + n + '. Нажмите, чтобы открыть полку.' : 'Нажмите, чтобы открыть полку фильтров.' }) + '>'
+      + '<button class="' + P + '-sho" aria-label="Показать фильтры" aria-expanded="false">' + FUNNEL_SVG
+      + (n ? '<span class="' + P + '-cnt">' + n + '</span>' : '') + '<span class="' + P + '-shv">Фильтры' + (chg ? ' · не применено' : '') + '</span></button></div>';
   }
-  for (var i = 0; i < CFG.trees.length; i++) {
-    var tk = CFG.trees[i].key, sel = st[tk] || [], nm = [], pt = [];
-    for (var j = 0; j < sel.length; j++) { nm.push(nodeName(tk, sel[j])); pt.push(nodePath(tk, sel[j])); }
-    if (sel.length) chip(tk, CFG.trees[i].label, nm, pt.join('; '));
-  }
-  for (var g = 0; g < CFG.facetGroups.length; g++) {
-    var keys = CFG.facetGroups[g].keys;
-    for (var k = 0; k < keys.length; k++) {
-      var vals = st.flt[keys[k]] || [], lb = [];
-      for (var v = 0; v < vals.length; v++) lb.push(valLabel(keys[k], vals[v]));
-      if (vals.length) chip('flt:' + keys[k], CFG.facetLabels[keys[k]] || keys[k], lb);
-    }
-  }
-  for (var d = 0; d < CFG.idKinds.length; d++) {
-    var ids = st.id[CFG.idKinds[d].key] || [];
-    if (ids.length) chip('id:' + CFG.idKinds[d].key, CFG.idKinds[d].label, [fmtInt(ids.length) + ' шт.'], ids.slice(0, 30).join(', ') + (ids.length > 30 ? '…' : ''));
-  }
-  return s ? '<div class="' + P + '-chips" data-chips="1">' + s + '</div>' : '<div data-chips="1"></div>';
+  return '<div class="' + P + '-shelf" data-shelf="1"><div class="' + P + '-shh"><span class="' + P + '-sht">Фильтры'
+    + (n ? '<span class="' + P + '-cnt">' + n + '</span>' : '') + '</span>'
+    + '<button class="' + P + '-ib" data-action="shelf" aria-label="Свернуть фильтры" aria-expanded="true"' + tip({ title: 'Свернуть', text: 'Спрятать полку фильтров — таблице больше места.' }) + '>«</button></div>'
+    + '<div class="' + P + '-shl" data-shelfl="1">' + shelfListHTML() + '</div>'
+    + '<div class="' + P + '-shf" data-abox="1">' + applyBoxHTML() + '</div></div>';
+}
+// Поповер фильтра полки — в слое корня: полка прокручивается и обрезала бы его. Место задаёт placePop.
+function layerHTML() {
+  var P = CFG.ns, o = state.open, pop = '';
+  if (o === 'per') pop = perPopHTML();
+  else if (o === 'emp' || o === 'tcr') pop = choicePopHTML(o);
+  else if (openTree()) pop = structPopHTML(o);
+  else if (openAttr()) pop = fltPopHTML(openAttr());
+  else if (o === 'ids') pop = idsPopHTML();
+  return pop ? '<div class="' + P + '-play" data-play="1" data-scope="' + esc(o) + '">' + pop + '</div>' : '';
 }
 function headHTML() {
   var P = CFG.ns, m = MODEL.m, s = '<div class="' + P + '-head">';
@@ -1155,16 +1213,8 @@ function headHTML() {
   if (m.data_dt) s += '<span class="' + P + '-badge"' + tip({ title: 'Данные', text: 'Последний день в таблице списка: ' + fmtDay(m.data_dt) + '.' }) + '>Данные на <b>' + esc(fmtDay(m.data_dt)) + '</b></span>';
   if (m.first_nm) s += '<span class="' + P + '-badge">Привет, <b>' + esc(m.first_nm) + '</b></span>';
   s += '<span class="' + P + '-sp"></span><span class="' + P + '-info"' + tip({ title: 'Как работать',
-    text: 'Фильтры копятся и уходят одной кнопкой «Применить». В таблицу приходят первые сотрудники под фильтрами (5 000, можно до 25 000) — страницы, поиск по таблице, сортировка загруженного, группировка и «Копировать» работают без запроса.',
-    note: 'Новые колонки загружаются одним запросом; скрытые колонки не грузятся вовсе. Значения фильтров и структура загружаются, когда их открывают.' }) + '>i</span></div>';
-  if (MODEL.ok) {
-    s += '<div class="' + P + '-fbar">' + perDDHTML()
-      + choiceDDHTML('emp', 'Численность:', CFG.emp, staged().emp, 'юридическая', 'Юридическая — по юрлицу; активная — по активной численности.')
-      + choiceDDHTML('tcr', 'Тип ЮЛ:', CFG.tcr, staged().tcr, 'все', 'Только сотрудники ТЦР выбранного типа.')
-      + '<span class="' + P + '-fsep"></span>' + structDDHTML() + fltDDHTML() + idsDDHTML()
-      + '<span class="' + P + '-abox" data-abox="1">' + applyBoxHTML() + '</span></div>';
-    s += chipsHTML();
-  }
+    text: 'Фильтры — на полке слева: выбор копится и уходит одной кнопкой «Применить». В таблицу приходят первые сотрудники под фильтрами (5 000, можно до 25 000) сразу со всеми колонками — колонки, страницы, поиск по таблице, группировка и «Копировать» работают без запроса.',
+    note: 'Под фильтрами больше 25 000 — сузьте фильтры, чтобы загрузились все. Значения фильтров и структура загружаются, когда их открывают.' }) + '>i</span></div>';
   return s + '</div>';
 }
 function noticesHTML() {
@@ -1177,11 +1227,8 @@ function noticesHTML() {
   return s ? '<div class="' + P + '-notes">' + s + '</div>' : '';
 }
 
-// ---- «Структура»: УС / ЮС / КП одним выбором — дерево, поиск на любом уровне ----
-function treeKey() {
-  var t = state.tree;
-  return t === 'mu' || t === 'lu' || t === 'kp' ? t : (MODE === 'kp' ? 'kp' : 'mu');
-}
+// ---- Структуры УС / ЮС / КП: дерево всех уровней, поиск на любом уровне ----
+function treeKey() { return openTree() || (MODE === 'kp' ? 'kp' : 'mu'); }
 function treeOf(tk) {
   var c = MODEL.trees[tk];
   if (!c) return null;
@@ -1326,15 +1373,10 @@ function treeCountText(tk) {
   var n = (staged()[tk] || []).length, d = treeDef(tk);
   return (n ? 'Выбрано: ' + n + ' из ' + d.max : 'Ничего не выбрано — вся структура') + ' · применится кнопкой «Применить»';
 }
-function structPopHTML() {
-  var P = CFG.ns, tk = treeKey(), st = staged(), T = treeOf(tk), s = '<div class="' + P + '-pop ' + P + '-wide" tabindex="-1">';
-  s += '<div class="' + P + '-poph"><span>' + esc(treeDef(tk).name) + '</span><span class="' + P + '-seg">';
-  for (var i = 0; i < CFG.trees.length; i++) {
-    var t = CFG.trees[i], n = (st[t.key] || []).length;
-    s += '<button class="' + P + '-segb' + (t.key === tk ? ' ' + P + '-on' : '') + '" data-action="ttab" data-key="' + t.key + '" role="tab" aria-selected="' + (t.key === tk ? 'true' : 'false') + '">'
-      + esc(t.label) + (n ? '<i>' + n + '</i>' : '') + '</button>';
-  }
-  s += '</span></div>';
+function structPopHTML(tk) {
+  var P = CFG.ns, st = staged(), T = treeOf(tk), s = '<div class="' + P + '-pop ' + P + '-wide" tabindex="-1">';
+  s += '<div class="' + P + '-poph"><span>' + esc(treeDef(tk).name) + '</span>'
+    + (T ? '<span class="' + P + '-muted">' + fmtInt(T.total) + ' ' + plural(T.total, 'юнит', 'юнита', 'юнитов') + '</span>' : '') + '</div>';
   s += hSearch('struct', T && !T.full ? 'Поиск юнита по всей структуре (от 2 букв)' : 'Поиск юнита по названию');
   s += '<div class="' + P + '-list" data-plist="struct">' + treeListHTML() + '</div>';
   s += '<div class="' + P + '-popf"><span data-pcount="1">' + treeCountText(tk) + '</span>'
@@ -1342,8 +1384,8 @@ function structPopHTML() {
   return s + '</div>';
 }
 
-// ---- «Фильтры»: атрибуты по группам слева, значения справа ----
-function fltAttr() { return CFG.facetLabels.hasOwnProperty(state.fAttr) ? state.fAttr : CFG.facetGroups[0].keys[0]; }
+// ---- Атрибуты: значения со счётчиками при остальных фильтрах, поиск ----
+function fltAttr() { return openAttr() || CFG.shelf[0].keys[3]; }
 function facetVals(attr) {
   var fc = MODEL.facets, list = fc ? (fc.vals[attr] || []) : [], out = [], seen = {};
   for (var i = 0; i < list.length; i++) { out.push(list[i]); seen['~' + list[i].v] = 1; }
@@ -1385,25 +1427,14 @@ function fltValsHTML(attr) {
   if (!q && nv > got) s += '<div class="' + P + '-nores">Показаны ' + fmtInt(got) + ' из ' + fmtInt(nv) + ' значений — остальные найдёт поиск</div>';
   return s;
 }
-function fltPopHTML() {
-  var P = CFG.ns, st = staged(), cur = fltAttr(), fc = MODEL.facets, s = '<div class="' + P + '-pop ' + P + '-fpop" tabindex="-1"><div class="' + P + '-fl">';
-  for (var g = 0; g < CFG.facetGroups.length; g++) {
-    s += '<div class="' + P + '-blk">' + esc(CFG.facetGroups[g].name) + '</div>';
-    var keys = CFG.facetGroups[g].keys;
-    for (var k = 0; k < keys.length; k++) {
-      var n = (st.flt[keys[k]] || []).length;
-      s += '<div class="' + P + '-fa' + (keys[k] === cur ? ' ' + P + '-cur' : '') + '" data-action="fattr" data-key="' + keys[k] + '" role="tab" aria-selected="' + (keys[k] === cur ? 'true' : 'false') + '">'
-        + '<span class="' + P + '-optt">' + esc(CFG.facetLabels[keys[k]]) + '</span>' + (n ? '<span class="' + P + '-cnt">' + n + '</span>' : '') + '</div>';
-    }
-  }
-  var nv = fc ? (fc.nv[cur] || 0) : 0;
-  s += '</div><div class="' + P + '-fr"><div class="' + P + '-poph"><span>' + esc(CFG.facetLabels[cur]) + '</span>'
+function fltPopHTML(cur) {
+  var P = CFG.ns, fc = MODEL.facets, nv = fc ? (fc.nv[cur] || 0) : 0;
+  return '<div class="' + P + '-pop ' + P + '-fpop" tabindex="-1"><div class="' + P + '-poph"><span>' + esc(CFG.facetLabels[cur]) + '</span>'
     + (fc ? '<span class="' + P + '-muted">' + fmtInt(nv) + ' ' + plural(nv, 'значение', 'значения', 'значений') + '</span>' : '') + '</div>'
     + hSearch('flt', 'Поиск значения')
     + '<div class="' + P + '-list" data-plist="flt">' + fltValsHTML(cur) + '</div>'
     + '<div class="' + P + '-popf"><span data-pcount="1">' + fltCountText(cur) + '</span>'
-    + '<button class="' + P + '-btn ' + P + '-ghost" data-action="fclear" data-key="' + cur + '">Очистить</button></div></div></div>';
-  return s;
+    + ((staged().flt[cur] || []).length ? '<button class="' + P + '-btn ' + P + '-ghost" data-action="fclear" data-key="' + cur + '">Очистить</button>' : '') + '</div></div>';
 }
 
 // ---- «Сотрудники»: списки MasterID / логинов / табельных / Siebel ID ----
@@ -1456,7 +1487,7 @@ function limDDHTML() {
       s += '<div class="' + P + '-opt' + (CFG.limits[i] === ap.lim ? ' ' + P + '-cur' : '') + '" data-action="setlim" data-key="' + CFG.limits[i] + '">'
         + '<span class="' + P + '-rd"></span><span class="' + P + '-optt">' + fmtInt(CFG.limits[i]) + '</span></div>';
     }
-    s += '<div class="' + P + '-popf"><span>Сразу, одним запросом. Колонок меньше — загрузка быстрее.</span></div></div>';
+    s += '<div class="' + P + '-popf"><span>Сразу, одним запросом, со всеми колонками.</span></div></div>';
   }
   return s + '</div>';
 }
@@ -1491,15 +1522,11 @@ function colGridHTML() {
   }
   return s || '<div class="' + P + '-nores">Таких колонок нет</div>';
 }
-function colCountText() {
-  var draft = state.colDraft || colOrder(), miss = 0;
-  for (var i = 0; i < draft.length; i++) if (!loaded(draft[i])) miss++;
-  return 'Выбрано: ' + draft.length + (miss ? ' · ' + miss + ' ' + plural(miss, 'новая загрузится', 'новые загрузятся', 'новых загрузятся') + ' одним запросом' : ' · без запроса');
-}
+function colCountText() { return 'Выбрано: ' + (state.colDraft || colOrder()).length + ' · все колонки уже загружены — без запроса'; }
 function colsDDHTML() {
   var P = CFG.ns, n = colOrder().length, s = '<div class="' + P + '-dd" data-scope="cols">'
     + ddButton({ key: 'cols', label: '', html: 'Колонки <span class="' + P + '-cnt">' + n + '</span>',
-      tip: { title: 'Колонки таблицы', text: 'Грузятся только показанные колонки. Добавить — одним запросом; убрать — сразу, без запроса.' } });
+      tip: { title: 'Колонки таблицы', text: 'Строки загружены со всеми колонками: показать, убрать и переставить — сразу, без запроса.' } });
   if (state.open === 'cols') {
     var draft = state.colDraft || colOrder();
     s += '<div class="' + P + '-pop ' + P + '-cpop ' + P + '-rt" tabindex="-1"><div class="' + P + '-poph"><span>Колонки таблицы</span>'
@@ -1561,9 +1588,10 @@ function cellHTML(key, v, q) {
   if (key === 'my_link' && /^https?:\/\//i.test(v)) return '<a class="' + P + '-a" href="' + esc(v) + '" target="_blank" rel="noopener noreferrer">майти ↗</a>';
   return hl(cellText(key, v), q);
 }
-function blockHTML(b, cols, q) {
-  var P = CFG.ns, s = '<tbody class="' + P + '-bk">';
-  for (var r = b.i; r < b.i + b.n; r++) {
+// Блок сотрудника: у КП со показанными колонками аллокации — строка на аллокацию, иначе одна.
+function blockHTML(b, cols, q, perRow) {
+  var P = CFG.ns, s = '<tbody class="' + P + '-bk">', bn = perRow ? b.n : 1;
+  for (var r = b.i; r < b.i + bn; r++) {
     s += '<tr' + (r > b.i ? ' class="' + P + '-sub"' : '') + '>';
     for (var c = 0; c < cols.length; c++) {
       var key = cols[c], per = isAllocKey(key) && !isVirtual(key);
@@ -1571,7 +1599,7 @@ function blockHTML(b, cols, q) {
       var v = isVirtual(key) ? blockVal(b, key) : cellRaw(ROWS.rows[r], key), cls = [];
       if (c === 0) cls.push(P + '-c0');
       if (keyType(key) === 'num') cls.push(P + '-num');
-      s += '<td' + (cls.length ? ' class="' + cls.join(' ') + '"' : '') + (b.n > 1 && !per ? ' rowspan="' + b.n + '"' : '') + '>' + cellHTML(key, v, q) + '</td>';
+      s += '<td' + (cls.length ? ' class="' + cls.join(' ') + '"' : '') + (bn > 1 && !per ? ' rowspan="' + bn + '"' : '') + '>' + cellHTML(key, v, q) + '</td>';
     }
     s += '</tr>';
   }
@@ -1589,7 +1617,7 @@ function tableInnerHTML(V) {
     + (state.pend ? '' : 'Ответ пришёл без строк списка — обновите страницу.') + '</div>';
   if (!ROWS.blocks.length) return '<div class="' + P + '-empty"><b>Никого не нашлось</b>Под выбранные фильтры не попал ни один сотрудник.</div>';
   if (!V.idx.length) return '<div class="' + P + '-empty"><b>Ничего не найдено</b>По запросу «' + esc(state.search) + '» в загруженных строках ничего нет.</div>';
-  var cols = V.cols, q = lower(trim(state.search)), sn = sortNow(), pgs = pageSlice(V), W = 0, s = '<colgroup>';
+  var cols = V.cols, q = lower(trim(state.search)), sn = sortNow(), pgs = pageSlice(V), per = perRowCols(cols), W = 0, s = '<colgroup>';
   for (var c = 0; c < cols.length; c++) { var w = colW(cols[c]); W += w; s += '<col style="width:' + w + 'px">'; }
   s += '</colgroup><thead><tr>';
   for (var h = 0; h < cols.length; h++) {
@@ -1614,10 +1642,10 @@ function tableInnerHTML(V) {
           + '<span class="' + P + '-gc">' + (fold ? '▸' : '▾') + '</span><span class="' + P + '-gl">' + esc(labelOf(gk)) + ':</span>'
           + (isMasked(g.v) ? '<span class="' + P + '-mask">⛔ нет доступа</span>' : esc(cellText(gk, g.v) || '(пусто)'))
           + '<span class="' + P + '-gn">' + fmtInt(g.n) + '</span></td></tr></tbody>';
-      } else s += blockHTML(bl[it.b], cols, q);
+      } else s += blockHTML(bl[it.b], cols, q, per);
     }
   } else {
-    for (var j = pgs.from; j < pgs.to; j++) s += blockHTML(bl[V.idx[j]], cols, q);
+    for (var j = pgs.from; j < pgs.to; j++) s += blockHTML(bl[V.idx[j]], cols, q, per);
   }
   return '<table class="' + P + '-t" style="width:' + W + 'px">' + s + '</table>';
 }
@@ -1649,6 +1677,16 @@ function countHTML(V) {
   if (sn.local) sub.push('сортировка загруженных');
   return s + (sub.length ? '<span class="' + P + '-tsub"> · ' + esc(sub.join(' · ')) + '</span>' : '');
 }
+// Загружены не все под фильтрами: больше последнего лимита — сузить фильтры; иначе — загрузить всех.
+function limNoteHTML() {
+  var P = CFG.ns, t = MODEL.total, got = ROWS ? ROWS.blocks.length : 0, max = CFG.limits[CFG.limits.length - 1];
+  if (!ROWS || got >= t) return '';
+  if (t > max) return '<div class="' + P + '-tnote ' + P + '-warn" data-tnote="1">' + esc(CFG.text.over.replace('{max}', fmtInt(max))) + '</div>';
+  var lim = max;
+  for (var i = 0; i < CFG.limits.length; i++) if (CFG.limits[i] >= t) { lim = CFG.limits[i]; break; }
+  return '<div class="' + P + '-tnote" data-tnote="1"><span>' + esc(CFG.text.part.replace('{got}', fmtInt(got)).replace('{total}', fmtInt(t))) + '</span>'
+    + '<button class="' + P + '-lnk" data-action="setlim" data-key="' + lim + '">Загрузить всех — ' + fmtInt(t) + '</button></div>';
+}
 function tableHTML() {
   var P = CFG.ns, V = viewRows(), s = '<div class="' + P + '-tpan">';
   s += '<div class="' + P + '-ttools"><span class="' + P + '-tcount" data-tcount="1">' + countHTML(V) + '</span>' + limDDHTML()
@@ -1658,6 +1696,7 @@ function tableHTML() {
     + '<button class="' + P + '-btn' + (state.copied ? ' ' + P + '-ok' : '') + '" data-action="copy"' + (ROWS && V && V.idx.length ? '' : ' disabled')
     + tip({ title: 'Копировать', text: 'Все загруженные строки (с учётом поиска по таблице), в текущем порядке строк и колонок — для вставки в Excel.' })
     + '>' + COPY_SVG + '<span data-copytx="1">' + esc(state.copied || 'Копировать') + '</span></button></div>';
+  s += limNoteHTML();
   s += '<div class="' + P + '-tbox" data-tbox="1">' + tableInnerHTML(V) + '</div>';
   s += '<div class="' + P + '-pager" data-pager="1">' + pagerHTML(V) + '</div></div>';
   return s;
@@ -1677,8 +1716,8 @@ function buildHTML() {
   var h = [];
   h.push('<div class="' + P + '-root' + (state.pend && state.pend.kind !== 'search' && state.pend.kind !== 'part' && state.pend.kind !== 'kids' ? ' ' + P + '-busy' : '') + '">');
   h.push(headHTML());
-  h.push(noticesHTML());
-  if (MODEL.ok) h.push('<div class="' + P + '-main">' + tableHTML() + '</div>');
+  h.push('<div class="' + P + '-body">' + (MODEL.ok ? shelfHTML() : '') + '<div class="' + P + '-main">' + noticesHTML() + (MODEL.ok ? tableHTML() : '') + '</div></div>');
+  if (MODEL.ok) h.push(layerHTML());
   h.push('</div>');
   return buildCSS() + h.join('');
 }
@@ -1775,18 +1814,42 @@ function buildHTML() {
     // Любой addEventListener внутри render() ЗАПРЕЩЁН — он создаёт дубли.
     // Прокрутку таблицы, списка поповера и самого overlay храним.
     function scrollOf() {
-      var tb = overlay.querySelector('[data-tbox]'), pl = overlay.querySelector('[data-plist]');
-      return { ov: overlay.scrollTop, tt: tb ? tb.scrollTop : 0, tl: tb ? tb.scrollLeft : 0, pl: pl ? pl.scrollTop : 0, pk: state.open };
+      var tb = overlay.querySelector('[data-tbox]'), pl = overlay.querySelector('[data-plist]'), sh = overlay.querySelector('[data-shelfl]');
+      return { ov: overlay.scrollTop, tt: tb ? tb.scrollTop : 0, tl: tb ? tb.scrollLeft : 0, pl: pl ? pl.scrollTop : 0, pk: state.open, sh: sh ? sh.scrollTop : 0 };
     }
     function scrollTo(k, withTable) {
       if (!k) return;
       overlay.scrollTop = k.ov;
-      var tb = overlay.querySelector('[data-tbox]'), pl = overlay.querySelector('[data-plist]');
+      var tb = overlay.querySelector('[data-tbox]'), pl = overlay.querySelector('[data-plist]'), sh = overlay.querySelector('[data-shelfl]');
       if (tb && withTable) { tb.scrollTop = k.tt; tb.scrollLeft = k.tl; }
+      if (sh) sh.scrollTop = k.sh;
       if (pl && k.pk === state.open) pl.scrollTop = k.pl;
+      placePop();
     }
-    // Поповер не вылезает за край ячейки: сдвиг внутрь и ширина не больше ячейки.
+    // Поповер фильтра полки — справа от полки, вровень со своим фильтром, в видимой части виджета;
+    // места справа мало — под фильтром. Остальные поповеры не вылезают за край: сдвиг внутрь.
+    function placeLayer(lay) {
+      var btn = overlay.querySelector('[data-shelf] [data-pop="' + state.open + '"]'), root = lay.parentNode, pop = lay.firstChild;
+      if (!btn || !root || !pop) return;
+      var R = root.getBoundingClientRect(), b = btn.getBoundingClientRect(), o = overlay.getBoundingClientRect();
+      var sh = overlay.querySelector('[data-shelf]'), x0 = sh ? sh.getBoundingClientRect().right + 6 : b.right + 8;
+      var room = o.right - 8 - x0, left, top;
+      pop.style.width = '';
+      if (room >= 300) {
+        if (pop.offsetWidth > room) pop.style.width = room + 'px';
+        left = x0; top = b.top;
+      } else {
+        if (pop.offsetWidth > o.width - 16) pop.style.width = Math.max(260, o.width - 16) + 'px';
+        left = Math.max(o.left + 8, Math.min(b.left, o.right - 8 - pop.offsetWidth)); top = b.bottom + 4;
+      }
+      var h = pop.offsetHeight, lo = Math.max(o.top, 0) + 8, hi = Math.min(o.bottom, window.innerHeight) - 8;
+      if (top + h > hi) top = Math.max(lo, hi - h);
+      lay.style.left = Math.round(left - R.left) + 'px';
+      lay.style.top = Math.round(top - R.top) + 'px';
+    }
     function placePop() {
+      var lay = overlay.querySelector('[data-play]');
+      if (lay) { placeLayer(lay); return; }
       var pop = overlay.querySelector('.' + CFG.ns + '-pop');
       if (!pop) return;
       var o = overlay.getBoundingClientRect();
@@ -1799,7 +1862,6 @@ function buildHTML() {
     function render() {
       var k = scrollOf(), had = overlay.contains(document.activeElement);
       overlay.innerHTML = buildHTML();
-      placePop();
       scrollTo(k, true);
       // Фокус был в виджете (чекбокс в поповере) и пропал с пересборкой — в поповер: Esc и клавиши работают.
       if (had && state.open && !overlay.contains(document.activeElement)) {
@@ -1824,16 +1886,16 @@ function buildHTML() {
       var box = overlay.querySelector('[data-plist]');
       if (!box) return;
       if (state.open === 'per') box.innerHTML = perListHTML();
-      else if (state.open === 'struct') box.innerHTML = treeListHTML();
-      else if (state.open === 'flt') box.innerHTML = fltValsHTML(fltAttr());
+      else if (openTree()) box.innerHTML = treeListHTML();
+      else if (openAttr()) box.innerHTML = fltValsHTML(openAttr());
       else if (state.open === 'cols') box.innerHTML = colGridHTML();
     }
-    // Набранное без пересборки поповера: кнопка «Применить», чипы, подпись списка сотрудников.
+    // Набранное без пересборки поповера (ввод списка сотрудников): полка, «Применить», подпись списка.
     function refreshStage() {
       var ab = overlay.querySelector('[data-abox]');
       if (ab) ab.innerHTML = applyBoxHTML();
-      var ch = overlay.querySelector('[data-chips]');
-      if (ch) ch.outerHTML = chipsHTML();
+      var sh = overlay.querySelector('[data-shelfl]');
+      if (sh) { var top = sh.scrollTop; sh.innerHTML = shelfListHTML(); sh.scrollTop = top; }
       var inf = overlay.querySelector('[data-idinfo]');
       if (inf) inf.innerHTML = idInfoHTML();
     }
@@ -1892,7 +1954,7 @@ function buildHTML() {
       if (state.drag || state.resizing) return;
       var el = trigger(e.target, 'data-tip');
       // Кнопка с раскрытым поповером подсказку не показывает: меню и так перед глазами.
-      if (el && el.getAttribute('aria-expanded') === 'true') el = null;
+      if (el && el.getAttribute('aria-haspopup') && el.getAttribute('aria-expanded') === 'true') el = null;
       var html = el ? el.getAttribute('data-tip') || '' : '';
       if (!html) {
         var td = cellOf(e.target);
@@ -1937,8 +1999,6 @@ function buildHTML() {
       if (o.keepPop) focusPop();
       applyCrossFilter(maskOf(next));
     }
-    // Запрос под применённые фильтры и те же колонки, сортировку и лимит (строки — из кэша).
-    function appliedView() { var ap = applied(); return { cols: ap.cols, sort: ap.sort, lim: ap.lim }; }
     function needPart(p) { return p === 'f' ? !MODEL.facets : !MODEL.trees[p]; }
     // Значения фильтров и деревья — когда их открывают; один раз на набор фильтров.
     function loadPart(p, force) {
@@ -1949,23 +2009,23 @@ function buildHTML() {
       state.partTried[key] = 1;
       var pt = [p];
       if (state.pend && state.pend.kind === 'part') pt = uniq(state.pend.pt.concat(pt));
-      emit(reqOf(applied(), appliedView(), pt), { keepPop: true, kind: 'part' });
+      emit(reqOf(applied(), viewNow(), pt), { keepPop: true, kind: 'part' });
     }
     function ensureParts() {
-      if (state.open === 'struct') loadPart(treeKey());
-      else if (state.open === 'flt') loadPart('f');
+      if (openTree()) loadPart(openTree());
+      else if (openAttr()) loadPart('f');
     }
     // Поиск в датасете — после паузы в наборе или по Enter, если загружено не всё.
     function searchNeeded() {
       var q = trim(state.q);
       if (q.length < CFG.searchMin) return '';
-      if (state.open === 'struct') {
-        var tk = treeKey(), T = treeOf(tk);
+      if (openTree()) {
+        var tk = openTree(), T = treeOf(tk);
         if (!T || T.full || searchEcho(tk + '=')) return '';
         return tk + '=' + q.slice(0, 60);
       }
-      if (state.open === 'flt') {
-        var a = fltAttr(), fc = MODEL.facets;
+      if (openAttr()) {
+        var a = openAttr(), fc = MODEL.facets;
         if (!fc || (fc.nv[a] || 0) <= (fc.vals[a] || []).length || searchEcho('f:' + a + '=')) return '';
         return 'f:' + a + '=' + q.slice(0, 60);
       }
@@ -1979,7 +2039,7 @@ function buildHTML() {
         state.qT = null;
         var q2 = searchNeeded();
         if (!q2) return;
-        var n = reqOf(applied(), appliedView(), ['q']);
+        var n = reqOf(applied(), viewNow(), ['q']);
         n.q = q2;
         emit(n, { keepPop: true, kind: 'search' });
       };
@@ -1987,7 +2047,7 @@ function buildHTML() {
     }
     function loadKids(tk, x) {
       if (kidsPending(tk, x)) return;
-      var n = reqOf(applied(), appliedView(), ['q']);
+      var n = reqOf(applied(), viewNow(), ['q']);
       n.q = tk + '>' + (tk === 'kp' ? x.path : x.id);
       emit(n, { keepPop: true, kind: 'kids', node: tk + ':' + x.id });
     }
@@ -2130,8 +2190,10 @@ function buildHTML() {
         return;
       }
       if (act === 'loadpart') { loadPart(key, true); return; }
-      // Структура: вкладки, раскрытие, дети узла по запросу, очистка.
-      if (act === 'ttab') { state.tree = key; state.q = ''; render(); focusPop(); ensureParts(); return; }
+      // Полка: свернуть / развернуть целиком и по разделам — только вид.
+      if (act === 'shelf') { state.shelfOff = !state.shelfOff; state.open = ''; state.q = ''; dropTip(); render(); return; }
+      if (act === 'sfold') { state.shelfFold[key] = !state.shelfFold[key]; dropTip(); render(); return; }
+      // Структура: раскрытие, дети узла по запросу, очистка.
       if (act === 'tw' || act === 'tkids') {
         var T = treeOf(key), x = T ? T.by[id] : null;
         if (!x) return;
@@ -2148,20 +2210,11 @@ function buildHTML() {
         return;
       }
       if (act === 'tclear') { stageEdit(function (st) { st[key] = []; }); render(); return; }
-      // Фильтры по атрибутам.
-      if (act === 'fattr') {
-        state.fAttr = key;
-        state.q = '';
-        if (state.qT) { clearTimeout(state.qT); state.qT = null; }
-        render();
-        focusPop();
-        return;
-      }
       if (act === 'fclear') { stageEdit(function (st) { delete st.flt[key]; }); render(); return; }
       // Сотрудники по списку.
       if (act === 'idk') { state.idKind = key; state.idBad = 0; render(); focusPop(); return; }
       if (act === 'idclear') { state.idBad = 0; stageEdit(function (st) { st.id[key] = []; }); render(); focusPop(); return; }
-      // Колонки: черновик в поповере; «Показать» — без запроса, если всё уже загружено.
+      // Колонки: черновик в поповере; «Показать» — без запроса (строки пришли со всеми колонками).
       if (act === 'preset') {
         var pr = CFG.presets[+key];
         if (pr) state.colDraft = presetCols(pr);
@@ -2170,14 +2223,11 @@ function buildHTML() {
       }
       if (act === 'colreset') { state.colDraft = LOCKED.concat(CFG.defaultCols); state.colDraft = uniq(state.colDraft); render(); return; }
       if (act === 'colapply') {
-        var draft = uniq(state.colDraft || colOrder()), miss = false;
-        for (var d = 0; d < draft.length; d++) if (!loaded(draft[d])) miss = true;
+        var draft = uniq(state.colDraft || colOrder());
         state.columnOrder = draft;
         state.open = ''; state.q = ''; state.colDraft = null;
         if (state.sortKey && !inArr(draft, state.sortKey) && !inArr(state.groupBy, state.sortKey)) { state.sortKey = ''; state.sortDir = ''; }
-        if (!miss) { render(); return; }
-        var ap = applied();
-        emit(reqOf(ap, { cols: reqCols(draft), sort: ap.sort, lim: ap.lim }, ['r']), { kind: 'rows' });
+        render();
         return;
       }
       if (act === 'setlim') {
@@ -2185,7 +2235,7 @@ function buildHTML() {
         state.open = '';
         if (lim === ap2.lim) { render(); return; }
         state.page = 0;
-        emit(reqOf(ap2, { cols: reqCols(), sort: ap2.sort, lim: lim }, ['r']), { kind: 'rows' });
+        emit(reqOf(ap2, { sort: ap2.sort, lim: lim }, ['r']), { kind: 'rows' });
         return;
       }
       // Сортировка: все сотрудники загружены — в памяти; иначе — на сервере (первые N в новом порядке).
@@ -2202,7 +2252,7 @@ function buildHTML() {
         }
         state.sortKey = ''; state.sortDir = '';
         var ap3 = applied();
-        emit(reqOf(ap3, { cols: reqCols(), sort: dir ? key + ':' + dir : 'master_id:asc', lim: ap3.lim }, ['r']), { kind: 'rows' });
+        emit(reqOf(ap3, { sort: dir ? key + ':' + dir : 'master_id:asc', lim: ap3.lim }, ['r']), { kind: 'rows' });
         return;
       }
       if (act === 'grp') { state.collapsedGroups[key] = !state.collapsedGroups[key]; refreshTable(); return; }
@@ -2295,12 +2345,6 @@ function buildHTML() {
         state.groupBy = gl;
         state.collapsedGroups = {};
         state.page = 0;
-        // Колонка группировки уходит в заголовки групп; если её нет в строках — одним запросом.
-        if (t.checked && !loaded(gk)) {
-          var ap = applied();
-          emit(reqOf(ap, { cols: reqCols(), sort: ap.sort, lim: ap.lim }, ['r']), { kind: 'rows', keepPop: true });
-          return;
-        }
         render();
         return;
       }
@@ -2435,6 +2479,10 @@ function buildHTML() {
     overlay.addEventListener('dragover', onDragOver);
     overlay.addEventListener('drop', onDrop);
     overlay.addEventListener('dragend', onDragEnd);
+    // Полка прокрутилась — поповер её фильтра едет следом (scroll не всплывает: перехват).
+    overlay.addEventListener('scroll', function (e) {
+      if (state.open && e.target && e.target.getAttribute && e.target.getAttribute('data-shelfl') !== null) placePop();
+    }, true);
 
     // Глобальные слушатели переживают перезапуск скрипта и накапливаются.
     // Старый снимаем ЯВНО, ссылку держим в state. Escape вешай здесь же,
@@ -2488,7 +2536,7 @@ function buildHTML() {
     // Ответ без строк под этот запрос (страницу обновили на запросе «частью») — дослать строки один раз.
     if (MODEL.ok && !ROWS && !state.pend && state.heal !== MODEL.rsig) {
       state.heal = MODEL.rsig;
-      emit(reqOf(applied(), appliedView(), ['r']), { kind: 'rows', keepPop: true });
+      emit(reqOf(applied(), viewNow(), ['r']), { kind: 'rows', keepPop: true });
     } else ensureParts();
 
     // ResizeObserver только правит габариты. НЕ вызывать render() — зациклит.
@@ -2497,6 +2545,7 @@ function buildHTML() {
       if (state.ro && state.ro.disconnect) state.ro.disconnect();
       var ro = new ResizeObserver(function() {
         overlay.style.width = '100%'; overlay.style.height = '100%';
+        if (state.open) placePop();
       });
       ro.observe(host);
       state.ro = ro;

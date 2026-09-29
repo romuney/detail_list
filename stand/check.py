@@ -12,8 +12,8 @@
 2. Независимый расчёт (SQL, собранный здесь, не Jinja датасета): счётчики значений фильтров
    «при остальных фильтрах», счётчики узлов деревьев, окрестность дерева, поиск.
    Флаг «есть дети» у узлов, число узлов дерева, дети узла по запросу, подписи выбранных узлов.
-3. Части ответа (по умолчанию — только meta и строки), сортировка, лимит, пачки, эхо, строка на
-   сотрудника у КП без колонок аллокации, носители другого чарта не действуют, враждебный ввод,
+3. Части ответа (по умолчанию — только meta и строки), все поля реестра в строках, сортировка,
+   лимит, пачки, эхо, строка на аллокацию у КП, носители другого чарта не действуют, враждебный ввод,
    AlwaysTrue при сохранении датасета, нет строки в warden, режимы ClickHouse 24.8 (старый
    анализатор, prefer_column_name_to_alias, join_use_nulls, group_by_use_nulls).
 """
@@ -100,7 +100,7 @@ def compare(name, old_flt, new_flt, user, mode, order):
     m = d['meta']['m']
     ok(name + ': всего сотрудников', int(m['total']) == len(old), (m['total'], len(old)))
     idx = {c: i for i, c in enumerate(d['cols'])}
-    ok(name + ': колонки как запрошены', d['cols'] == keys, d['cols'][:5])
+    ok(name + ': все поля реестра', d['cols'] == keys, d['cols'][:5])
     new_by = {}
     for r in d['rows']:
         new_by.setdefault(int(r[idx['master_id']]), []).append(r)
@@ -338,21 +338,31 @@ def independent(mode, stream, mu, lu):
 
 
 # ---------- 3. поведение ----------
+def first_rows(d, i):
+    """Значения колонки сотрудника по порядку ответа: у КП — из первой строки блока (как читает чарт)."""
+    seen, out = set(), []
+    for r in d['rows']:
+        if r[0] not in seen:
+            seen.add(r[0])
+            out.append(r[i])
+    return out
+
+
 def behaviour(mode, stream):
     print('— части ответа, сортировка, лимит, эхо, ввод, доступ, режимы ClickHouse: %s' % mode)
     d, rows, _ = run_new({}, 'a.user', mode)
-    ok('%s: по умолчанию — только meta и строки' % mode, d['roles'] == {'meta', 'r'} and len(d['rows']) == 5000, d['roles'])
+    ok('%s: по умолчанию — только meta и строки' % mode, d['roles'] == {'meta', 'r'} and len(set(r[0] for r in d['rows'])) == 5000,
+       d['roles'])
     d, rows, _ = run_new({'pt_f': ['f']}, 'a.user', mode)
     ok('%s: часть f — meta и значения фильтров' % mode, d['roles'] == {'meta', 'f'} and d['meta']['a']['pt'] == ['f'], d['roles'])
     d, rows, _ = run_new({'pt_f': ['q', 'bogus']}, 'a.user', mode)
     ok('%s: q без строки поиска — только meta' % mode, d['roles'] == {'meta'} and d['meta']['a']['pt'] == ['q'], d['roles'])
-    d, rows, _ = run_new({'cols_f': ['full_nm', 'grade'], 'lim_f': ['10000']}, 'hr.super', mode)
+    d, rows, _ = run_new({'lim_f': ['10000']}, 'hr.super', mode)
     emp = len(set(r[0] for r in d['rows']))
-    ok('%s: без колонок аллокации — строка на сотрудника' % mode, emp == 10000 and len(d['rows']) == 10000, (emp, len(d['rows'])))
-    if mode == 'kp':
-        d, rows, _ = run_new({'cols_f': ['full_nm', 'kp1'], 'lim_f': ['10000']}, 'hr.super', mode)
-        emp = len(set(r[0] for r in d['rows']))
-        ok('kp: с уровнем КП — строка на аллокацию', emp == 10000 and len(d['rows']) > 10000, (emp, len(d['rows'])))
+    if mode == 'us':
+        ok('us: строка на сотрудника', emp == 10000 and len(d['rows']) == 10000, (emp, len(d['rows'])))
+    else:
+        ok('kp: строка на аллокацию', emp == 10000 and len(d['rows']) > 10000, (emp, len(d['rows'])))
     # размер запроса: списки — константами WITH; худший случай (2 000 логинов + 500 значений) < max_query_size
     logins = ['login=some.long.login.user%d' % i for i in range(2000)]
     many = ['%s=Значение номер %d длинное' % (a, i) for a in ['office_desc', 'city_nm', 'legal_position_nm'] for i in range(200)]
@@ -372,24 +382,23 @@ def behaviour(mode, stream):
     ok('%s: эхо метки запроса' % mode, m['rq'] == 'r-42' and rows and [r for r in rows if r['role'] == 'meta'][0]['v'] == 'r-42', m['rq'])
     emp = len(set(r[0] for r in d['rows']))
     ok('%s: лимит 10 000 сотрудников' % mode, emp == 10000 and m['lim'] == '10000', (emp, m['lim']))
-    ok('%s: по умолчанию — MasterID и дата найма' % mode, d['cols'] == ['master_id', 'hiredate'], d['cols'])
+    ok('%s: в строках — все поля реестра' % mode, d['cols'] == keys_for(mode), d['cols'][:4])
     ok('%s: пачки по 500 сотрудников и порядок' % mode,
        [int(r[0]) for r in d['rows']] == sorted(int(r[0]) for r in d['rows']), 'порядок строк')
     d, rows, _ = run_new({'lim_f': ['777'], 'sort_f': ['drop table:asc'], 'cols_f': ['nope', 'full_nm', 'full_nm']}, 'a.user', mode)
     m = d['meta']['m']
     ok('%s: чужой лимит и сортировка — по умолчанию' % mode, m['lim'] == '5000' and m['sort'] == 'master_id:asc', (m['lim'], m['sort']))
-    ok('%s: неизвестные и повторные колонки отброшены' % mode, d['cols'] == ['master_id', 'hiredate', 'full_nm'] if mode == 'us'
-       else d['cols'] == ['master_id', 'full_nm'], d['cols'])
+    ok('%s: носитель колонок не действует — все поля реестра' % mode, d['cols'] == keys_for(mode), d['cols'][:4])
     # сортировка на сервере по тексту и по маскированному полю
     d, rows, _ = run_new({'sort_f': ['legal_position_nm:desc'], 'cols_f': ['legal_position_nm'], 'lim_f': ['5000']}, 'hr.super', mode)
     i = d['cols'].index('legal_position_nm')
-    vals = [r[i] for r in d['rows']]
+    vals = first_rows(d, i)
     top = q("SELECT max(legal_position_nm) AS v FROM prod_proteus.mdm_employee_d_detail_last_day%s PREWHERE legal_employee_flg = 1"
             % ('_functional' if mode == 'kp' else ''))[0]['v']
     ok('%s: сортировка на сервере по убыванию' % mode, vals and vals[0] == top and vals == sorted(vals, reverse=True), (vals[:2], top))
     d, rows, _ = run_new({'sort_f': ['full_nm:asc'], 'cols_f': ['full_nm'], 'lim_f': ['25000']}, 'a.user', mode)
     i = d['cols'].index('full_nm')
-    vals = [r[i] for r in d['rows']]
+    vals = first_rows(d, i)
     first_mask = vals.index(MASK_NEW) if MASK_NEW in vals else len(vals)
     ok('%s: скрытое warden при сортировке — в конце' % mode, all(v == MASK_NEW for v in vals[first_mask:]) and
        vals[:first_mask] == sorted(vals[:first_mask]), (first_mask, len(vals)))

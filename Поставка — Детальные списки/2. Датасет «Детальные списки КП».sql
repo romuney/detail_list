@@ -3,9 +3,10 @@
     (MODE = 'kp'). Файлы поставки отличаются только строкой MODE ниже.
 
     Ответ собирается из частей — чарт просит только то, что показывает. Открытие — итоги
-    и первые 5 000 сотрудников (часть r); значения фильтров (f) и деревья структур
-    (mu / lu / kp) — когда их открывают; поиск — одними находками. Страницы, сортировка
-    загруженного, поиск по таблице, группировка и «Копировать» — в чарте, без запроса.
+    и первые 5 000 сотрудников со всеми полями (часть r): колонки в чарте переключаются без
+    запроса, как в прежнем чарте; значения фильтров (f) и деревья структур (mu / lu / kp) —
+    когда их открывают; поиск — одними находками. Страницы, сортировка загруженного, поиск
+    по таблице, группировка и «Копировать» — в чарте, без запроса.
 
     Строки различаются колонкой role:
       meta  всегда, 1 строка: k — режим (us | kp), n — сотрудников под фильтрами, j — JSON
@@ -24,24 +25,22 @@
             (у КП — путь узла)
       s     выбранные узлы УС / ЮС (если выбраны): уровень, имя и путь для подписи фильтра
       r     часть r — строки списка пачками по CHUNK: k — номер пачки, j — base64 от UTF-8,
-            поля через табуляцию в порядке эха cols, строки через перевод строки; скрытое
-            warden — '⛔'. У КП — строка на аллокацию, если среди колонок есть аллокация или
-            уровень КП (поля сотрудника, кроме MasterID, — только в первой строке сотрудника),
-            иначе строка на сотрудника
+            все поля реестра через табуляцию в порядке эха cols, строки через перевод строки;
+            скрытое warden — '⛔'. У КП — строка на аллокацию, поля сотрудника (кроме MasterID) —
+            только в первой строке сотрудника
 
     Кросс-фильтры эмитит сам чарт, носители в SELECT не выводятся. Имя носителя — основа
     плюс CF: у «Детальных списков» '_f', у КП '_kf' — фильтр одного чарта не попадает в
     датасет другого, даже если область кросс-фильтра шире нужной. Основы:
       per (last | date), dt (YYYY-MM-DD), emp (Юридическая | Активная), tcr (тип ЮЛ),
       flt ('атрибут=значение'), mu / lu (rk узлов УС / ЮС), kp (путь узла КП именами через \x1F),
-      id ('rk|login|tab|siebel=значение'), q (поиск или дети узла), cols (ключи колонок),
+      id ('rk|login|tab|siebel=значение'), q (поиск или дети узла),
       sort ('ключ:asc|desc'), lim (5000 | 10000 | 25000), pt (части: r f mu lu kp q; без
       носителя — r), rq (метка запроса — вернётся в эхе).
 
-    Сначала отобрать, потом упаковать: id сотрудников страницы — ORDER BY … LIMIT по
-    отфильтрованной таблице, маски warden и упаковка — только для них и только по видимым
-    колонкам. Значения фильтров и деревья — из той же таблицы: справочники структур и
-    датасеты нативных фильтров не нужны.
+    Сначала отобрать, потом упаковать: id сотрудников — ORDER BY … LIMIT по отфильтрованной
+    таблице, маски warden и упаковка — только для них. Значения фильтров и деревья — из той
+    же таблицы: справочники структур и датасеты нативных фильтров не нужны.
 
     Доступ — как в прежнем датасете: warden_access_array_cross по current_username()
     маскирует персональные данные, грейд, сеньорность и оценку; без строки в warden
@@ -105,7 +104,6 @@
                    'hrbp_mdm_employee_rk', 'hrap_login', 'hrap_mdm_employee_rk', 'subordination_lvl'] %}
 {% set ALLOC_KEYS = ['alloc', 'kp1', 'kp2', 'kp3', 'kp4', 'kp5', 'kp6', 'kp7', 'kp8', 'kp9', 'kp10', 'kp11', 'kp12'] if KP else [] %}
 {% set LOCKED = ['master_id', 'hiredate'] if not KP else ['master_id'] %}
-{% set DEFAULT_COLS = ['master_id', 'hiredate'] %}
 {#- Атрибуты фильтров (значения — из самой таблицы). regional_hr_login — по массиву login_reg_hr_list, '-' — пустой. -#}
 {% set FACETS = ['active_type_nm', 'employment_relation_type_desc', 'employee_contract_type_desc', 'employee_main_contract_type_nm',
                  'residential_state_nm', 'office_desc', 'emp_specialization_oper_code', 'emp_specialization_it_code',
@@ -156,11 +154,10 @@
 {#- Части ответа: r — строки, f — значения фильтров, mu / lu / kp — деревья, q — только поиск. -#}
 {% set PT = [] %}{% for v in (filter_values('pt' ~ CF) or []) %}{% set s = v|string %}{% if s in ['r', 'f', 'mu', 'lu', 'kp', 'q'] and s not in PT %}{% set _ = PT.append(s) %}{% endif %}{% endfor %}
 {% if not PT %}{% set _ = PT.append('r') %}{% endif %}
-{% set COLS = [] %}{% for c in LOCKED %}{% set _ = COLS.append(c) %}{% endfor %}
-{% set COLS_REQ = [] %}{% for v in (filter_values('cols' ~ CF) or []) %}{% set _ = COLS_REQ.append(v|string) %}{% endfor %}
-{% for c in (COLS_REQ if COLS_REQ else DEFAULT_COLS) %}{% if (c in EMP_KEYS or c in ALLOC_KEYS) and c not in COLS and COLS|length < 130 %}{% set _ = COLS.append(c) %}{% endif %}{% endfor %}
-{#- У КП строка на аллокацию нужна, только если показана аллокация или уровень КП. -#}
-{% set ALLOC_ON = [] %}{% for c in COLS %}{% if c in ALLOC_KEYS %}{% set _ = ALLOC_ON.append(c) %}{% endif %}{% endfor %}
+{#- Колонки — все поля реестра (закреплённые первыми): в чарте они переключаются без запроса. -#}
+{% set COLS = [] %}{% for c in LOCKED + EMP_KEYS + ALLOC_KEYS %}{% if c not in COLS %}{% set _ = COLS.append(c) %}{% endif %}{% endfor %}
+{#- У КП строка — MasterID, поля сотрудника (EMPC), поля аллокации. -#}
+{% set EMPC = [] %}{% for c in COLS %}{% if c != 'master_id' and c not in ALLOC_KEYS %}{% set _ = EMPC.append(c) %}{% endif %}{% endfor %}
 {% set SORT_L = [] %}{% for v in (filter_values('sort' ~ CF) or []) %}{% if SORT_L|length < 1 %}{% set _ = SORT_L.append(v|string) %}{% endif %}{% endfor %}
 {% set SK = (SORT_L|first).split(':')[0] if SORT_L else 'master_id' %}
 {% set SK = SK if SK in EMP_KEYS else 'master_id' %}
@@ -359,6 +356,24 @@ if (
 {%- set fl = flag_of(key) -%}
 {%- set v = raw(key) if key in NUMERIC or key in DATES else "nullIf(toString(" ~ raw(key) ~ "), '')" -%}
 {%- if fl -%}if(({{ flag_expr(key) if inline else fl }}) = 1, {{ v }}, NULL){%- else -%}{{ v }}{%- endif -%}
+{%- endmacro %}
+{#- id сотрудников ответа — первые LIM по сортировке среди отфильтрованных. -#}
+{% macro sel_ids() -%}
+SELECT mdm_employee_rk
+FROM {{ universe() }}
+WHERE warden_n > 0 AND {{ cond() }}
+ORDER BY {{ sortkey(SK, true) }} {{ SD }} NULLS LAST, mdm_employee_rk
+LIMIT {{ LIM }}
+{%- endmacro %}
+{#- Строки выбранных сотрудников с флагами warden (флаг считается, только если его читают). -#}
+{% macro flagged() -%}
+SELECT *,
+            {{ f_personal() }} AS wpf,
+            {{ f_grade() }} AS wgf,
+            {{ f_seniority() }} AS wsf,
+            {{ f_review() }} AS wrf
+          FROM {{ T_EMP }}
+          PREWHERE {{ glob() }} AND mdm_employee_rk IN ({{ sel_ids() }})
 {%- endmacro %}
 {% macro clean(x) -%}
 replaceRegexpAll(replaceAll(replaceAll(replaceAll(ifNull(toString({{ x }}), ''), unhex('E280A8'), ' '), unhex('E280A9'), ' '), unhex('EFBBBF'), ' '), '[\x00-\x1F]', ' ')
@@ -563,38 +578,43 @@ FROM (
 {%- if 'r' in PT %}
 
   UNION ALL
-  {# строки: id страницы — ORDER BY … LIMIT по отфильтрованной таблице; маски и упаковка — только для них.
-     У КП со строками аллокаций поля сотрудника (кроме MasterID — ключа блока) — только в первой строке
-     сотрудника по тому же порядку rn: остальные строки блока несут одни поля аллокации #}
+  {# строки: id сотрудников — ORDER BY … LIMIT по отфильтрованной таблице; маски и упаковка — только для них.
+     Строка собирается до оконных функций: окна сортируют ключ и готовую строку, а не ~110 колонок #}
   SELECT 'r' AS role, toString(ch) AS k, '' AS v, toInt64(count()) AS n,
     base64Encode(arrayStringConcat(arrayMap(x -> x.2, arraySort(x -> x.1, groupArray((rn, line)))), '\n')) AS j
   FROM (
-    SELECT rn,
-      concat({% for c in COLS %}{% if KP and ALLOC_ON and c not in ALLOC_KEYS and c != 'master_id' %}if(rn = rn0, {{ clean(out(c)) }}, ''){% else %}{{ clean(out(c)) }}{% endif %}{% if not loop.last %}, '\t', {% endif %}{% endfor %}) AS line
+{%- if not KP %}
+    SELECT row_number() OVER (ORDER BY sk {{ SD }} NULLS LAST, mdm_employee_rk) AS rn, line
     FROM (
-      SELECT *{% if KP and ALLOC_ON %}, min(rn) OVER (PARTITION BY mdm_employee_rk) AS rn0{% endif %}
+      SELECT mdm_employee_rk, {{ sortkey(SK, false) }} AS sk,
+        concat({% for c in COLS %}{{ clean(out(c)) }}{% if not loop.last %}, '\t', {% endif %}{% endfor %}) AS line
+      FROM ({{ flagged() }})
+    )
+{%- else %}
+    {#- КП: строка на аллокацию — MasterID, поля сотрудника, поля аллокации. Поля сотрудника считаются один раз
+        на сотрудника и стоят только в первой строке его блока (по порядку rn), в остальных — пустые #}
+    SELECT rn, concat(rks, '\t', if(rn = rn0, ifNull(eline, ''), repeat('\t', {{ EMPC|length - 1 }})), '\t', aline) AS line
+    FROM (
+      SELECT mdm_employee_rk, rks, aline, rn, min(rn) OVER (PARTITION BY mdm_employee_rk) AS rn0
       FROM (
-        SELECT *, row_number() OVER (ORDER BY sk {{ SD }} NULLS LAST, mdm_employee_rk{% if KP and ALLOC_ON %}, ifNull(allocation_prt_norm, 0) DESC, kp_sort{% endif %}) AS rn
+        SELECT mdm_employee_rk, rks, aline,
+          row_number() OVER (ORDER BY sk {{ SD }} NULLS LAST, mdm_employee_rk, alloc DESC, kp_sort) AS rn
         FROM (
-          SELECT *,
-            {{ f_personal() }} AS wpf,
-            {{ f_grade() }} AS wgf,
-            {{ f_seniority() }} AS wsf,
-            {{ f_review() }} AS wrf,
-            {{ sortkey(SK, false) }} AS sk{% if KP and ALLOC_ON %},
-            arrayStringConcat([{% for i in range(1, 13) %}ifNull(lvl{{ i }}_functional_unit_nm, ''){% if not loop.last %}, {% endif %}{% endfor %}], '\x1F') AS kp_sort{% endif %}
-          FROM {{ T_EMP }}
-          PREWHERE {{ glob() }} AND mdm_employee_rk IN (
-            SELECT mdm_employee_rk
-            FROM {{ universe() }}
-            WHERE warden_n > 0 AND {{ cond() }}
-            ORDER BY {{ sortkey(SK, true) }} {{ SD }} NULLS LAST, mdm_employee_rk
-            LIMIT {{ LIM }}
-          ){% if KP and not ALLOC_ON %}
-          LIMIT 1 BY mdm_employee_rk{% endif %}
+          SELECT mdm_employee_rk, {{ clean(out('master_id')) }} AS rks, {{ sortkey(SK, false) }} AS sk,
+            ifNull(allocation_prt_norm, 0) AS alloc,
+            arrayStringConcat([{% for i in range(1, 13) %}ifNull(lvl{{ i }}_functional_unit_nm, ''){% if not loop.last %}, {% endif %}{% endfor %}], '\x1F') AS kp_sort,
+            concat({% for c in ALLOC_KEYS %}{{ clean(out(c)) }}{% if not loop.last %}, '\t', {% endif %}{% endfor %}) AS aline
+          FROM ({{ flagged() }})
         )
       )
-    )
+    ) AS a
+    ANY LEFT JOIN (
+      SELECT mdm_employee_rk,
+        concat({% for c in EMPC %}{{ clean(out(c)) }}{% if not loop.last %}, '\t', {% endif %}{% endfor %}) AS eline
+      FROM ({{ flagged() }}
+      LIMIT 1 BY mdm_employee_rk)
+    ) AS e USING (mdm_employee_rk)
+{%- endif %}
   )
   GROUP BY intDiv(rn - 1, {{ CHUNK }}) AS ch
 {%- endif %}
