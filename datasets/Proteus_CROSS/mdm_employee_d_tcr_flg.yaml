@@ -1,0 +1,88 @@
+table_name: mdm_employee_d_tcr_flg
+main_dttm_col: null
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: null
+schema: prod_proteus
+sql: "select distinct lvl1_legal_unit_nm\n, 1 as order_number\n, '\u0422\u0426\u0420\
+  \ \u0420\u0424' as tcr_type\n, type_create_company\nfrom prod_proteus.mdm_employee_d_filter\n\
+  where rus_tcr_flg=1\n\nunion all\n\nselect distinct lvl1_legal_unit_nm\n, 2 as order_number\n\
+  , '\u0422\u0426\u0420 \u0421\u041D\u0413' as tcr_type\n, type_create_company\nfrom\
+  \ prod_proteus.mdm_employee_d_filter\nwhere foreign_tcr_flg=1\n\nunion all\n\nselect\
+  \ distinct lvl1_legal_unit_nm\n, 3 as order_number\n, '\u0422\u0426\u0420 \u0420\
+  \u0424 + \u0422\u0426\u0420 \u0421\u041D\u0413' as tcr_type\n, type_create_company\n\
+  from prod_proteus.mdm_employee_d_filter\nwhere tcr_flg=1\n\nunion all\n\nselect\
+  \ distinct lvl1_legal_unit_nm\n, 4 as order_number\n, '\u0412\u0441\u0435 \u042E\
+  \u041B' as tcr_type\n, type_create_company\nfrom prod_proteus.mdm_employee_d_filter"
+params: null
+template_params: {}
+filter_select_enabled: false
+fetch_values_predicate: null
+extra: null
+uuid: 13f6beb6-f034-46e1-bf58-c12cfcd72f98
+metrics:
+- metric_name: order
+  verbose_name: ''
+  metric_type: null
+  expression: MAX(order_number)
+  description: null
+  d3format: null
+  extra:
+    warning_markdown: ''
+  warning_text: null
+columns:
+- column_name: lvl1_legal_unit_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: NULLABLE(STRING)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: type_create_company
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: NULLABLE(STRING)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: order_number
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: UINT8
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: tcr_type
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+version: 1.0.0
+database_uuid: f3cf662e-9267-42ad-85d9-a009bacb4736

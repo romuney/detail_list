@@ -1,0 +1,7 @@
+uuid: 2f746870-4139-43d4-82ba-e09bca9703a1
+template_name: "Cross - \u043F\u0440\u043E\u0437\u0440\u0430\u0447\u043D\u0430\u044F\
+  \ \u0448\u0430\u043F\u043A\u0430"
+css: ".dashboard-info-panel {\n  background: transparent !important;\n}"
+is_public: true
+order_num: 1
+dashboard_id: 7241

@@ -1,0 +1,166 @@
+table_name: mdm_employee_d_param
+main_dttm_col: null
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: null
+schema: prod_proteus
+sql: ''
+params: null
+template_params:
+  employee_type: "\u0410\u043A\u0442\u0438\u0432\u043D\u0430\u044F"
+filter_select_enabled: true
+fetch_values_predicate: null
+extra: null
+uuid: 278fc7c9-b1cb-4f04-8e10-23ee9736b179
+metrics:
+- metric_name: order
+  verbose_name: order
+  metric_type: null
+  expression: MAX(order_attr)
+  description: null
+  d3format: null
+  extra:
+    warning_markdown: ''
+  warning_text: null
+- metric_name: sort_transformer
+  verbose_name: ''
+  metric_type: null
+  expression: MIN(sort_attr)
+  description: null
+  d3format: null
+  extra:
+    warning_markdown: ''
+  warning_text: null
+columns:
+- column_name: detalization_lvl
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: NULLABLE(FLOAT64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: order_attr
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: NULLABLE(FLOAT64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: value_attr_report_new
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: NULLABLE(STRING)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: management_structure_attr
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: NULLABLE(STRING)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: specialization_attr
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: NULLABLE(STRING)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: value_attr
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: NULLABLE(STRING)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: type_attr
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: NULLABLE(STRING)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: value_attr2
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: null
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: value_attr
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: value_attr3
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: null
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: value_attr
+  description: null
+  python_date_format: null
+  extra:
+    warning_markdown: null
+- column_name: sort_attr
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: NULLABLE(FLOAT64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+version: 1.0.0
+database_uuid: f3cf662e-9267-42ad-85d9-a009bacb4736

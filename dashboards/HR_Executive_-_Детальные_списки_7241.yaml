@@ -1,0 +1,4260 @@
+dashboard_title: "HR Executive - \u0414\u0435\u0442\u0430\u043B\u044C\u043D\u044B\u0435\
+  \ \u0441\u043F\u0438\u0441\u043A\u0438"
+description: null
+css: ".dashboard-container:has( #TABS-rOxWIyuUsx .ant-tabs-tab-active > #TABS-rOxWIyuUsx-tab-TAB-s-2c_Eb4vk)\
+  \ .filters-overflow-container > div > div:nth-child(2),\n.dashboard-container:has(\
+  \ #TABS-rOxWIyuUsx .ant-tabs-tab-active > #TABS-rOxWIyuUsx-tab-TAB-s-2c_Eb4vk) .filters-overflow-container\
+  \ > div > div:nth-child(3),\n.dashboard-container:has( #TABS-rOxWIyuUsx .ant-tabs-tab-active\
+  \ > #TABS-rOxWIyuUsx-tab-TAB-s-2c_Eb4vk) .filters-overflow-container > div > div:nth-child(4),\n\
+  .dashboard-container:has( #TABS-rOxWIyuUsx .ant-tabs-tab-active > #TABS-rOxWIyuUsx-tab-TAB-s-2c_Eb4vk)\
+  \ .filters-overflow-container > div > div:nth-child(5),\n.dashboard-container:has(\
+  \ #TABS-rOxWIyuUsx .ant-tabs-tab-active > #TABS-rOxWIyuUsx-tab-TAB-s-2c_Eb4vk) .filters-overflow-container\
+  \ > div > div:nth-child(6), \n.dashboard-container:has( #TABS-rOxWIyuUsx .ant-tabs-tab-active\
+  \ > #TABS-rOxWIyuUsx-tab-TAB-s-2c_Eb4vk) .filters-overflow-container > div > div:nth-child(7),\n\
+  \n.dashboard-container:has( #TABS-rOxWIyuUsx .ant-tabs-tab-active > #TABS-rOxWIyuUsx-tab-TAB-fPxOetVWbP)\
+  \ .filters-overflow-container > div > div:nth-child(2),\n.dashboard-container:has(\
+  \ #TABS-rOxWIyuUsx .ant-tabs-tab-active > #TABS-rOxWIyuUsx-tab-TAB-fPxOetVWbP) .filters-overflow-container\
+  \ > div > div:nth-child(3),\n.dashboard-container:has( #TABS-rOxWIyuUsx .ant-tabs-tab-active\
+  \ > #TABS-rOxWIyuUsx-tab-TAB-fPxOetVWbP) .filters-overflow-container > div > div:nth-child(4),\n\
+  .dashboard-container:has( #TABS-rOxWIyuUsx .ant-tabs-tab-active > #TABS-rOxWIyuUsx-tab-TAB-fPxOetVWbP)\
+  \ .filters-overflow-container > div > div:nth-child(5),\n.dashboard-container:has(\
+  \ #TABS-rOxWIyuUsx .ant-tabs-tab-active > #TABS-rOxWIyuUsx-tab-TAB-fPxOetVWbP) .filters-overflow-container\
+  \ > div > div:nth-child(6), \n.dashboard-container:has( #TABS-rOxWIyuUsx .ant-tabs-tab-active\
+  \ > #TABS-rOxWIyuUsx-tab-TAB-fPxOetVWbP) .filters-overflow-container > div > div:nth-child(7)\
+  \ \n\n{\n  display: none;\n}\n/*\u041F\u043B\u0430\u0448\u043A\u0430 NEW*/\n#TABS-rOxWIyuUsx\
+  \ > .ant-tabs-nav .ant-tabs-tab:nth-child(1) span[data-test=\"editable-title-input\"\
+  ]:after {\n  content: 'NEW';\n  font-size: 10px;\n  padding: 5px;\n  background:\
+  \ rgb(210, 255, 114);\n  border-radius: 4px;\n  color: rgb(34, 34, 34);\n  margin-left:\
+  \ 5px;\n}\n@import url('https://fonts.googleapis.com/css2?family=Flow+Circular&display=swap');\
+  \ \n.dashboard-info-panel {\n  background: transparent !important;\n}\n/*\u0423\u0431\
+  \u0438\u0440\u0430\u0435\u043C \u043F\u043E\u0434\u0441\u0432\u0435\u0442\u043A\u0443\
+  \ \u043F\u0440\u0438 \u0432\u044B\u0431\u043E\u0440\u0435 \u0444\u0438\u043B\u044C\
+  \u0442\u0440\u0430*/\n.fade-out {\n  box-shadow: none !important;\n  opacity:1!important;\n\
+  }\n.dragdroppable-tab {\n  box-shadow: none !important;\n}\n\n/* \u0430\u043B\u0435\
+  \u0440\u0442\u044B \u0432 \u0448\u0430\u043F\u043A\u0443 */\n1.dashboard-info-panel::after\
+  \ {\n    content: '\u26A0 \u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430\
+  \ RLS. \u0412\u043E\u0437\u043C\u043E\u0436\u043D\u044B \u0432\u0440\u0435\u043C\
+  \u0435\u043D\u043D\u044B\u0435 \u043D\u0435\u043F\u043E\u043B\u0430\u0434\u043A\u0438\
+  ';\n  display: block;\n  width: fit-content;\n  margin: 16px auto;\n  padding: 12px\
+  \ 18px;\n  \n  background: #ff9800;\n  color: white;\n  font-size: 12px;\n  font-weight:\
+  \ 600;\n  text-align: center;\n  \n  border-radius: 12px;\n  box-shadow: 0 4px 12px\
+  \ rgba(255, 152, 0, 0.3);\n}\n1.centered_message::after {\n  content:'\u041F\u0440\
+  \u043E\u0431\u043B\u0435\u043C\u0430 \u043F\u0440\u0438 \u0432\u044B\u0433\u0440\
+  \u0443\u0437\u043A\u0435 \u0438\u0441\u0442\u043E\u0447\u043D\u0438\u043A\u0430\
+  . \u0418\u0441\u043F\u0440\u0430\u0432\u043B\u044F\u0435\u043C';\n}\n\n#app .filters-overflow-container\
+  \ > div > div:first-child {\n  display: none;\n}\n/*\u0421\u0442\u0438\u043B\u0438\
+  \ CSS*/\n.cr_table{\n  width: 100%; \n  padding: 0px;\n  margin: 0px;\n  font-size:\
+  \ 12px;\n}\n.cr_table td{\n  padding: 0px;\n  border: 0px solid !important;\n  margin:\
+  \ 0px;\n}\n.cr_header {\n   text-align: left;\n   vertical-align: bottom;\n   padding-bottom:\
+  \ 4px!important;\n   font-size: 15px;\n }\n .cr_header_mini {text-align: left;\n\
+  \ }\n .cr_refrefh {text-align: right;\n }\n\n/*\u0428\u0440\u0438\u0444\u0442 \u0444\
+  \u0438\u043B\u044C\u0442\u0440\u043E\u0432*/\nh4[data-test=\"filter-control-name\"\
+  ],\n.ant-select-item, \n.ant-select-item-empty,\n.ant-select {\n  font-size: 12px;\n\
+  }\n.css-1f7esk9 > div > div > div.open.css-22ql99 > div.filters-overflow-container\
+  \ > div > div:nth-child(1) > div > h3{\n  font-size: 12px;\n}\n.css-ksfebx > div\
+  \ {\n  min-width: 550px;\n}\n/*\u0414\u0435\u043B\u0430\u0435\u043C \u043C\u0435\
+  \u043D\u044C\u0448\u0435 \u043E\u0442\u0441\u0443\u043F\u044B \u043C\u0435\u0436\
+  \u0434\u0443 \u0444\u0438\u043B\u044C\u0442\u0440\u0430\u043C\u0438*/\n.css-ant-form.ant-form-vertical\
+  \ .ant-form-item {\n    margin-bottom: 4px;\n}\n\n/*\u0441\u0442\u0438\u043B\u044C\
+  \ \u0434\u043B\u044F \u0441\u0441\u044B\u043B\u043E\u043A \u043D\u0430 \u0434\u0440\
+  \u0443\u0433\u0438\u0435 \u043E\u0442\u0447\u0435\u0442\u044B*/\n#GRID_ID-panel-GRID_ID\
+  \ > div > div > div:nth-child(1)\n{height:35px;\nmargin-bottom:0px;\noverflow:hidden;\n\
+  }\n#chart-id-98067 > div{\n  width:100%;\n  padding:0px;\n}\n.dashboard-chart-id-98067.fade-out.css-0{\n\
+  \  padding:0px;\n  margin-right:2px;\n}\n/*\u0423\u0431\u0438\u0440\u0430\u0435\u043C\
+  \ \u043F\u0435\u0440\u0435\u043D\u043E\u0441 \u0437\u043D\u0430\u0447\u0435\u043D\
+  \u0438\u0439 \u0432 \u0444\u0438\u043B\u044C\u0442\u0440\u0430\u0445*/\n.ant-select-selection-overflow\
+  \ {\n  flex-wrap: nowrap;\n  overflow: hidden;\n}\n/*\u0423\u0431\u0438\u0440\u0430\
+  \u0435\u043C \u043F\u0435\u0440\u0435\u043D\u043E\u0441 \u043D\u0430\u0438\u043C\
+  \u0435\u043D\u043E\u0432\u0430\u043D\u0438\u0439 \u0441\u0430\u043C\u0438\u0445\
+  \ \u0444\u0438\u043B\u044C\u0442\u0440\u043E\u0432*/\ndiv:has(>h4[data-test=\"filter-control-name\"\
+  ]) {\n  overflow: hidden;\n  white-space: nowrap;\n}\n\n/*\u0412\u044B\u0441\u0442\
+  \u0440\u0430\u0438\u0432\u0430\u0435\u043C \u0431\u043B\u043E\u043A\u0438 \u0441\
+  \ \u0432\u044B\u0431\u043E\u0440\u043E\u043C \u043F\u0430\u0440\u0430\u043C\u0435\
+  \u0442\u0440\u043E\u0432*/\n  .filters-overflow-container > div > div:nth-child(3)\n\
+  , .filters-overflow-container > div > div:nth-child(5) {\n  display: inline-block;\n\
+  \  width: 48%;\n  margin-right: 4px;\n  margin-top: 4px;\n  font-size: 15px;\n}\n\
+  \n  .filters-overflow-container > div > div:nth-child(4)\n, .filters-overflow-container\
+  \ > div > div:nth-child(6) {\n  display: inline-block;\n  width: 48%;\n  margin-left:\
+  \ 4px;\n  margin-bottom: 4px;\n}\n\n.filters-overflow-container > div > div:nth-child(2),\
+  \ \n.filters-overflow-container > div > div:nth-child(7),\n.filters-overflow-container\
+  \ > div > div:nth-child(25),\n.filters-overflow-container > div > div:nth-child(40),\n\
+  .filters-overflow-container > div > div:nth-child(52),\n.filters-overflow-container\
+  \ > div > div:nth-child(55),\n.filters-overflow-container > div > div:nth-child(57),\n\
+  .filters-overflow-container > div > div:nth-child(69),\n.filters-overflow-container\
+  \ > div > div:nth-child(74)\n{\n  padding-bottom:10px;\n}\n\n.filters-overflow-container\
+  \ > div > div:nth-child(7),\n.filters-overflow-container > div > div:nth-child(25),\n\
+  .filters-overflow-container > div > div:nth-child(40),\n.filters-overflow-container\
+  \ > div > div:nth-child(52),\n.filters-overflow-container > div > div:nth-child(55),\n\
+  .filters-overflow-container > div > div:nth-child(57),\n.filters-overflow-container\
+  \ > div > div:nth-child(69),\n.filters-overflow-container > div > div:nth-child(74)\n\
+  {\n  padding-top:10px;\n}\n\n/*\u0434\u0435\u043B\u0430\u0435\u043C \u043E\u0431\
+  \u0432\u043E\u0434\u043A\u0443 \u0433\u043E\u043B\u0443\u0431\u044B\u043C*/\n  .filters-overflow-container\
+  \ > div > div:nth-child(3)\n, .filters-overflow-container > div > div:nth-child(4)\n\
+  , .filters-overflow-container > div > div:nth-child(5)\n, .filters-overflow-container\
+  \ > div > div:nth-child(6) {\n  background-color:rgb( 238, 245, 255);\n  border-radius:4px;\n\
+  \  padding:4px;\n  color:blue;\n}\n/*\u0434\u0435\u043B\u0430\u0435\u043C \u043E\
+  \u0431\u0432\u043E\u0434\u043A\u0443 \u0441\u0435\u0440\u044B\u043C \u043A\u0440\
+  \u043E\u0441\u0441-\u0444\u0438\u043B\u044C\u0442\u0440\u043E\u0432*/\n  .filters-overflow-container\
+  \ > div > div:nth-child(26)\n, .filters-overflow-container > div > div:nth-child(41)\n\
+  , .filters-overflow-container > div > div:nth-child(56) { \n  background: linear-gradient(135deg,\n\
+  \    rgba(238, 245, 255, 0.5),\n    rgba(195, 215, 240, 0.7)\n  );\n  border-radius:12px;\n\
+  \  padding:6px;\n  margin-right: 6px;\n}\n \n  .filters-overflow-container > div\
+  \ > div:nth-child(26)\n, .filters-overflow-container > div > div:nth-child(41)\n\
+  , .filters-overflow-container > div > div:nth-child(56) {\n  padding-top:10px;\n\
+  \  padding-bottom:10px;\n}\n\n.filters-overflow-container > div > div:nth-child(10)\
+  \ {\n  display:none;\n}\n\n/*\u0412\u044B\u0441\u0442\u0440\u0430\u0438\u0432\u0430\
+  \u0435\u043C \u0444\u0438\u043B\u044C\u0442\u0440\u044B \u0432 \u0441\u0442\u0440\
+  \u043E\u043A\u0443 \u043F\u043E \u043B\u0435\u0432\u043E\u043C\u0443 \u043A\u0440\
+  \u0430\u044E*/\n  .filters-overflow-container > div > div:nth-child(9)\n, .filters-overflow-container\
+  \ > div > div:nth-child(12)\n, .filters-overflow-container > div > div:nth-child(14)\n\
+  , .filters-overflow-container > div > div:nth-child(16)\n, .filters-overflow-container\
+  \ > div > div:nth-child(18)\n, .filters-overflow-container > div > div:nth-child(20)\n\
+  , .filters-overflow-container > div > div:nth-child(22)\n, .filters-overflow-container\
+  \ > div > div:nth-child(24)\n\n, .filters-overflow-container > div > div:nth-child(28)\n\
+  , .filters-overflow-container > div > div:nth-child(30)\n, .filters-overflow-container\
+  \ > div > div:nth-child(32)\n, .filters-overflow-container > div > div:nth-child(34)\n\
+  , .filters-overflow-container > div > div:nth-child(36)\n, .filters-overflow-container\
+  \ > div > div:nth-child(38)\n\n, .filters-overflow-container > div > div:nth-child(43)\n\
+  , .filters-overflow-container > div > div:nth-child(45)\n, .filters-overflow-container\
+  \ > div > div:nth-child(47)\n, .filters-overflow-container > div > div:nth-child(49)\n\
+  , .filters-overflow-container > div > div:nth-child(51)\n\n, .filters-overflow-container\
+  \ > div > div:nth-child(54)\n\n, .filters-overflow-container > div > div:nth-child(58)\n\
+  , .filters-overflow-container > div > div:nth-child(60)\n, .filters-overflow-container\
+  \ > div > div:nth-child(62)\n, .filters-overflow-container > div > div:nth-child(64)\n\
+  , .filters-overflow-container > div > div:nth-child(66)\n, .filters-overflow-container\
+  \ > div > div:nth-child(68)\n\n, .filters-overflow-container > div > div:nth-child(71)\n\
+  , .filters-overflow-container > div > div:nth-child(73)\n\n, .filters-overflow-container\
+  \ > div > div:nth-child(76)\n, .filters-overflow-container > div > div:nth-child(78)\n\
+  , .filters-overflow-container > div > div:nth-child(80)\n\n{\n  border-radius: 4px;\n\
+  \  display: inline-block;\n  width: 48%;\n  margin-left: 4px;\n}\n\n/*\u0412\u044B\
+  \u0441\u0442\u0440\u0430\u0438\u0432\u0430\u0435\u043C \u0444\u0438\u043B\u044C\u0442\
+  \u0440\u044B \u0432 \u0441\u0442\u0440\u043E\u043A\u0443 \u043F\u043E \u043F\u0440\
+  \u0430\u0432\u043E\u043C\u0443 \u043A\u0440\u0430\u044E*/\n  .filters-overflow-container\
+  \ > div > div:nth-child(8)\n, .filters-overflow-container > div > div:nth-child(11)\n\
+  , .filters-overflow-container > div > div:nth-child(13)\n, .filters-overflow-container\
+  \ > div > div:nth-child(15)\n, .filters-overflow-container > div > div:nth-child(17)\n\
+  , .filters-overflow-container > div > div:nth-child(19)\n, .filters-overflow-container\
+  \ > div > div:nth-child(21)\n, .filters-overflow-container > div > div:nth-child(23)\n\
+  \n, .filters-overflow-container > div > div:nth-child(27)\n, .filters-overflow-container\
+  \ > div > div:nth-child(29)\n, .filters-overflow-container > div > div:nth-child(31)\n\
+  , .filters-overflow-container > div > div:nth-child(33)\n, .filters-overflow-container\
+  \ > div > div:nth-child(35)\n, .filters-overflow-container > div > div:nth-child(37)\n\
+  , .filters-overflow-container > div > div:nth-child(39)\n\n, .filters-overflow-container\
+  \ > div > div:nth-child(42)\n, .filters-overflow-container > div > div:nth-child(44)\n\
+  , .filters-overflow-container > div > div:nth-child(46)\n, .filters-overflow-container\
+  \ > div > div:nth-child(48)\n, .filters-overflow-container > div > div:nth-child(50)\n\
+  \n, .filters-overflow-container > div > div:nth-child(53)\n\n, .filters-overflow-container\
+  \ > div > div:nth-child(57)\n, .filters-overflow-container > div > div:nth-child(59)\n\
+  , .filters-overflow-container > div > div:nth-child(61)\n, .filters-overflow-container\
+  \ > div > div:nth-child(63)\n, .filters-overflow-container > div > div:nth-child(65)\n\
+  , .filters-overflow-container > div > div:nth-child(67)\n\n, .filters-overflow-container\
+  \ > div > div:nth-child(70)\n, .filters-overflow-container > div > div:nth-child(72)\n\
+  \n, .filters-overflow-container > div > div:nth-child(75) \n, .filters-overflow-container\
+  \ > div > div:nth-child(77)\n, .filters-overflow-container > div > div:nth-child(79)\n\
+  , .filters-overflow-container > div > div:nth-child(81)\n\n{\n  border-radius: 4px;\n\
+  \  display: inline-block;\n  width: 48%;\n  margin-right: 4px;\n}\n\n/*\u041C\u0438\
+  \u043D\u0438\u043C\u0430\u043B\u044C\u043D\u0430\u044F \u0448\u0438\u0440\u0438\u043D\
+  \u0430 \u0434\u0430\u0448\u0431\u043E\u0440\u0434\u0430*/\nbody {min-width: 1200px}\n\
+  \n\n/*\u0428\u0438\u0440\u0438\u043D\u0430 \u0432\u0435\u0440\u0445\u043D\u0435\u0433\
+  \u043E \u0431\u043B\u043E\u043A\u0430*/\n.css-o9kagx {max-width:100%}\n\n/*\u0423\
+  \u0431\u0438\u0440\u0430\u0435\u043C \u0438\u043A\u043E\u043D\u043A\u0443 \u0444\
+  \u0438\u043B\u044C\u0442\u0440\u043E\u0432*/\n.filter-counts {\n  visibility: hidden;\n\
+  \  position:absolute;\n  z-index:0;\n}\n\n .dashboard-component-chart-holder.fade-out\n\
+  , .dashboard-chart-id-64114.fade-out.css-0\n, .dashboard-chart-id-88830.fade-out.css-0\n\
+  , .css-1f41l3g.dashboard-markdown\n{\n  border-radius:15px!important\n}\n\n/*Tabs*/\n\
+  .ant-tabs-nav-wrap{\n  background: #f6f6f6;\n  min-height:15px !important;\n  padding-left:10px;\n\
+  }\n\n.ant-tabs-nav-wrap> ant-tabs-nav-list{\n  display: block !important; \n}\n\n\
+  /*\u0423\u0431\u0438\u0440\u0430\u0435\u043C \u043B\u0438\u0448\u043D\u0438\u0435\
+  \ \u043E\u0442\u0441\u0442\u0443\u043F\u044B \u0443 \u0447\u0430\u0440\u0442\u043E\
+  \u0432*/\n#chart-id-82335 > div,\n#chart-id-80829 > div,\n#chart-id-64114 > div,\n\
+  #chart-id-83199 > div,\n#chart-id-88554 > div,\n#chart-id-88830 > div,\n#chart-id-92284\
+  \ > div,\n#TABS-CYUf8HWwAw-panel-TAB-82NpEYk3F_ > div > div > div > div > div >\
+  \ div > div.dashboard-component.dashboard-component-chart-holder.dashboard-chart-id-64114.fade-out.css-0,\n\
+  #MARKDOWN-vM6WXMYOoI > div > div.dashboard-component.dashboard-component-chart-holder\n\
+  { width:100%; \n  padding:8px;\n}\n\n/* \u043E\u043F\u0440\u0435\u0434\u0435\u043B\
+  \u044F\u0435\u043C \u043F\u0435\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0435\
+  \ */\n:root {\n  --dashboard-background: #f6f6f6;\n  --columns-width-bars: 130px;\n\
+  \  --columns-width-values: 60px;\n  }\n/*\u0414\u0435\u043B\u0430\u0435\u043C \u0441\
+  \u0435\u0440\u044B\u0439 \u0444\u043E\u043D \u043D\u0430 \u0432\u043A\u043B\u0430\
+  \u0434\u043A\u0430\u0445*/\n.ant-tabs-nav-wrap,\ndiv[role=\"tabpanel\"]{\n  background:\
+  \ var(--dashboard-background);\n}\n/* \u0438\u0437\u043C\u0435\u043D\u044F\u0435\
+  \u043C \u0444\u043E\u043D \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u044B*/\nhtml\
+  \ {\n  background: var(--dashboard-background);\n}\n\n\n/*\u0412\u0441\u0435 \u0437\
+  \u0430\u0433\u043E\u043B\u043E\u0432\u043A\u0438*/\n:not(.dashboard-chart-id-319901)\
+  \ > div > div.css-1n2xxv,\n:not(.dashboard-chart-id-319891) > div > div.css-1n2xxv,\n\
+  :not(.dashboard-chart-id-319909) > div > div.css-1n2xxv\n{margin: 0px;}\n\n/* \u0441\
+  \u043A\u0440\u044B\u0432\u0430\u0435\u043C \u043D\u0430\u0438\u043C\u0435\u043D\u043E\
+  \u0432\u0430\u043D\u0438\u0435 \u0447\u0430\u0440\u0442\u0430 */\n.css-1n2xxv >\
+  \ div.header-title {\n  visibility: hidden;\n  height:0px;\n}\n\n.dashboard-chart-id-319891.fade-out.css-0\
+  \ > div > div.css-1n2xxv > div.header-title,\n.dashboard-chart-id-319901.fade-out.css-0\
+  \ > div > div.css-1n2xxv > div.header-title,\n.dashboard-chart-id-319909.fade-out.css-0\
+  \ > div > div.css-1n2xxv > div.header-title {\n  visibility: visible;\n  height:30px\
+  \ !important;\n}\n\n.dashboard-chart-id-319901 > div > div.css-1n2xxv > .header-title,\n\
+  .dashboard-chart-id-319891 > div > div.css-1n2xxv > .header-title,\n.dashboard-chart-id-319909\
+  \ > div > div.css-1n2xxv > .header-title {\n  font-size: 12px;\n  margin: 6px 0px\
+  \ 10px 0px;\n}\n\n/*\u0442\u0440\u0438 \u0442\u043E\u0447\u043A\u0438*/\n.css-1n2xxv\
+  \ > .header-controls {\n  position: absolute;\n  right: 15px;\n  z-index:10;\n}\n\
+  \n.css-nxtj6w {\n  visibility: hidden;\n}\n\n#slice_88830-controls .css-nxtj6w,\n\
+  #slice_279005-controls .css-nxtj6w,\n#slice_319891-controls .css-nxtj6w,\n#slice_319901-controls\
+  \ .css-nxtj6w,\n#slice_319909-controls .css-nxtj6w {\n  visibility: visible;\n}\n\
+  \n/* \u0441\u0442\u0438\u043B\u0438\u0437\u0430\u0446\u0438\u044F \u0441\u043A\u0440\
+  \u043E\u043B\u043B\u0430 */\n* {\n  scrollbar-width: thin;\n  scrollbar-color: #aeb5bd\
+  \ transparent;\n}\n*::-webkit-scrollbar {\n  width: 12px;\n  height: 12px;\n}\n\
+  *::-webkit-scrollbar-track {\n  background: #fff;\n}\n*::-webkit-scrollbar-thumb\
+  \ {\n  background-color: #aeb5bd;\n  border: 4px solid #fff;\n  border-radius: 20px;\n\
+  }\n\n/* \u0441\u0442\u0438\u043B\u044C \u0434\u043B\u044F \u0442\u0430\u0431\u043B\
+  \u0438\u0446\u044B \u041A\u041F */\n#chart-id-279005 td {\n  text-align: left;\n\
+  \  border: none;\n  padding: 4px 15px;\n  font-size: 12px;\n  max-width: 200px;\n\
+  \  vertical-align: top;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space:\
+  \ nowrap;\n}\n\n#chart-id-279005 th {\n  font-weight: bold;\n  text-align: left;\n\
+  \  border: none;\n  padding: 5px 10px;\n  background:rgb(238, 245, 255);\n  font-size:\
+  \ 12px;\n  border-top: 1px solid rgb(238, 245, 255);\n  position: sticky;\n  top:\
+  \ 0;\n  z-index: 1;\n}\n#chart-id-279005 tbody tr:nth-child(even) {\n  background-color:\
+  \ rgb(221, 230, 237,0.2);\n}\n#chart-id-279005 tbody tr:last-child td{\n  border-bottom:\
+  \ 1px solid rgb(238, 245, 255);\n}\n#chart-id-279005 > div > div > div > div:nth-child(2)\
+  \ {\n  1overflow-x: hidden;\n  1height:auto;\n}"
+slug: hr-executive-detail-employee
+uuid: 93b5ad34-0b96-47cb-8be4-0c29501e819b
+position:
+  CHART-3Ud41WO-UR:
+    children: []
+    id: CHART-3Ud41WO-UR
+    meta:
+      chartId: 319909
+      height: 69
+      sliceName: "\u0412\u044B\u0433\u0440\u0443\u0437\u043A\u0430 - \u0447\u0430\u0441\
+        \u0442\u044C 3 (100 001 - 150 000 \u0441\u0442\u0440\u043E\u043A)"
+      uuid: e1578077-176e-470a-bb17-a64215e3c338
+      width: 4
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    - TAB-m6Vake1MR
+    - ROW-3hJA9nymyg
+    type: CHART
+  CHART-7CCLyaUDhn:
+    children: []
+    id: CHART-7CCLyaUDhn
+    meta:
+      chartId: 279005
+      height: 93
+      sliceName: "\u0422\u0440\u0430\u043D\u0441\u0444\u043E\u0440\u043C\u0435\u0440\
+        \ - \u041A\u041F"
+      uuid: 67e8ec79-db25-407b-be4c-b2b7f75deaf4
+      width: 12
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    - TAB-xSZ-e58tUo
+    - ROW--zin3cNROh
+    type: CHART
+  CHART-MevSr9SCAp:
+    children: []
+    id: CHART-MevSr9SCAp
+    meta:
+      chartId: 795014
+      height: 130
+      sliceName: "\u0414\u0435\u0442\u0430\u043B\u044C\u043D\u044B\u0435 \u0441\u043F\
+        \u0438\u0441\u043A\u0438 \u041A\u041F Echarts"
+      uuid: ceae7f44-45a9-449f-a793-348500973b83
+      width: 12
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-fPxOetVWbP
+    - ROW-K4iti8Rgxe
+    type: CHART
+  CHART-RogLL36G3f:
+    children: []
+    id: CHART-RogLL36G3f
+    meta:
+      chartId: 319901
+      height: 69
+      sliceName: "\u0412\u044B\u0433\u0440\u0443\u0437\u043A\u0430 - \u0447\u0430\u0441\
+        \u0442\u044C 2 (50 001 - 100 000 \u0441\u0442\u0440\u043E\u043A)"
+      uuid: 62d8b35a-d6b8-4b2d-9f12-283676c69e87
+      width: 4
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    - TAB-m6Vake1MR
+    - ROW-3hJA9nymyg
+    type: CHART
+  CHART-_FwwVUnkth:
+    children: []
+    id: CHART-_FwwVUnkth
+    meta:
+      chartId: 324579
+      height: 38
+      sliceName: "[HR-Exec-\u0414\u0435\u0442\u0430\u043B\u0438]-\u0432\u044B\u0433\
+        \u0440\u0443\u0437\u043A\u0430 \u0432\u0441\u0435\u0445 \u0441\u0442\u0440\
+        \u043E\u043A"
+      uuid: a64ba33b-47e8-4f70-92cb-3c5d5a934701
+      width: 12
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    - TAB-m6Vake1MR
+    - ROW-kaTNQRIGv1
+    type: CHART
+  CHART-_mlsX7bzss:
+    children: []
+    id: CHART-_mlsX7bzss
+    meta:
+      chartId: 64114
+      height: 155
+      sliceName: "[HR-Exec-\u0414\u0435\u0442\u0430\u043B\u0438]-transformer-table-limit"
+      uuid: e1964e3e-9e00-4739-911b-965988010ad5
+      width: 12
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    - TAB-82NpEYk3F_
+    - ROW-rMhZbe6_9
+    type: CHART
+  CHART-explore-92284-1:
+    children: []
+    id: CHART-explore-92284-1
+    meta:
+      chartId: 92284
+      height: 46
+      sliceName: "[HR-Exec-\u0414\u0435\u0442\u0430\u043B\u0438]-header_transformer"
+      uuid: 1750758a-960f-4d82-91d4-e7866365c5bb
+      width: 7
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - ROW-Hvh6dT2UKA
+    type: CHART
+  CHART-explore-98067-1:
+    children: []
+    id: CHART-explore-98067-1
+    meta:
+      chartId: 98067
+      height: 9
+      sliceName: "\u0421\u0441\u044B\u043B\u043A\u0438 \u043D\u0430 \u043E\u0442\u0447\
+        \u0435\u0442\u044B \u0434\u043B\u044F \u0434\u0435\u0442\u0430\u043B\u044C\
+        \u043D\u044B\u0445 \u0441\u043F\u0438\u0441\u043A\u043E\u0432"
+      uuid: ac2246da-6c69-44d2-b0e6-2a7a330c6f51
+      width: 12
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-2GtCjhWzZ
+    type: CHART
+  CHART-qrm_F1t5Jy:
+    children: []
+    id: CHART-qrm_F1t5Jy
+    meta:
+      chartId: 726821
+      height: 146
+      sliceName: "\u0420\u0430\u0431\u043E\u0447\u0430\u044F \u041E\u0425\u0420\u0415\
+        \u041D\u0415\u041D\u041D\u0410\u042F \u0442\u0430\u0431\u043B\u0438\u0446\u0430"
+      uuid: d93c0b97-e685-4b0e-8007-157651b2955f
+      width: 12
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-s-2c_Eb4vk
+    - ROW-JEl3D_llvl
+    type: CHART
+  CHART-u8M8Dq1-iO:
+    children: []
+    id: CHART-u8M8Dq1-iO
+    meta:
+      chartId: 319891
+      height: 69
+      sliceName: "\u0412\u044B\u0433\u0440\u0443\u0437\u043A\u0430 - \u0447\u0430\u0441\
+        \u0442\u044C 1 (1 - 50 000 \u0441\u0442\u0440\u043E\u043A)"
+      uuid: 685be5aa-f6e0-4379-bc2e-7c98e812cb6e
+      width: 4
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    - TAB-m6Vake1MR
+    - ROW-3hJA9nymyg
+    type: CHART
+  DASHBOARD_VERSION_KEY: v2
+  GRID_ID:
+    children:
+    - ROW-2GtCjhWzZ
+    - TABS-rOxWIyuUsx
+    id: GRID_ID
+    parents:
+    - ROOT_ID
+    type: GRID
+  HEADER_ID:
+    id: HEADER_ID
+    meta:
+      text: "HR Executive - \u0414\u0435\u0442\u0430\u043B\u044C\u043D\u044B\u0435\
+        \ \u0441\u043F\u0438\u0441\u043A\u0438"
+    type: HEADER
+  MARKDOWN-stGXZrgeJc:
+    children: []
+    id: MARKDOWN-stGXZrgeJc
+    meta:
+      code: "<body>\n   <div class=\"column-container \">\n    <div class=\"column-container\"\
+        \ style=\"font-size: 12px;margin: 10px;\">\n        <span style=\"padding-bottom:\
+        \ 10px;font-weight: bold; color: red;\">\n            \u0414\u0430\u043D\u043D\
+        \u044B\u0439 \u043B\u0438\u0441\u0442 \u0432\u0441\u0435 \u0435\u0449\u0451\
+        \ \u043D\u0430\u0445\u043E\u0434\u0438\u0442\u0441\u044F \u0432 \u0440\u0430\
+        \u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0435, \u043D\u043E \u0438\u043C\
+        \ \u0443\u0436\u0435 \u043C\u043E\u0436\u043D\u043E \u043F\u043E\u043B\u044C\
+        \u0437\u043E\u0432\u0430\u0442\u044C\u0441\u044F \u0434\u043B\u044F \u0432\
+        \u044B\u0433\u0440\u0443\u0437\u043E\u043A \u0438\u0437 \u043A\u0430\u0442\
+        \u0430\u043B\u043E\u0433\u0430 \u043F\u0440\u043E\u0434\u0443\u043A\u0442\u0430\
+        \n        </span>\n        <span  style=\"padding-bottom: 10px;\">\n     \
+        \       \u041F\u0440\u0438 \u0440\u0430\u0431\u043E\u0442\u0435 \u0443\u0447\
+        \u0442\u0438 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0435\u0435:\n   \
+        \         <ol>\n                <li>\u0412 \u0442\u0435\u043A\u0443\u0449\u0435\
+        \u0439 \u0432\u0435\u0440\u0441\u0438\u0438 \u0432\u044B\u0433\u0440\u0443\
+        \u0437\u043A\u0438 \u043E\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u044E\
+        \u0442 \u043F\u0435\u0440\u0441 \u0434\u0430\u043D\u043D\u044B\u0435 (\u0424\
+        \u0418\u041E, \u0434\u0430\u0442\u0430 \u0440\u043E\u0436\u0434\u0435\u043D\
+        \u0438\u044F, \u0433\u0440\u0435\u0439\u0434\u044B). \u042D\u0442\u0438 \u0430\
+        \u0442\u0440\u0438\u0431\u0443\u0442\u044B \u0431\u0443\u0434\u0443\u0442\
+        \ \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u044B \u0432 \u0434\u0430\
+        \u043B\u044C\u043D\u0435\u0439\u0448\u0435\u043C.</li>\n                <li>\u041F\
+        \u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E \u043E\u0442\
+        \u0447\u0435\u0442 \u0444\u0438\u043B\u044C\u0442\u0440\u0443\u0435\u0442\u0441\
+        \u044F \u043F\u043E \u0442\u0432\u043E\u0435\u0439 \u0443\u043F\u0440\u0430\
+        \u0432\u043B\u0435\u043D\u0447\u0435\u0441\u043A\u043E\u0439 \u043A\u043E\u043C\
+        \u0430\u043D\u0434\u0435. \u042D\u0442\u043E \u0432\u0430\u0436\u043D\u043E\
+        \ \u0434\u043B\u044F \u043E\u043F\u0442\u0438\u043C\u0438\u0437\u0430\u0446\
+        \u0438\u0438 \u043E\u0442\u0447\u0435\u0442\u0430. \u0421\u043F\u0435\u0440\
+        \u0432\u0430 \u043D\u0430\u0441\u0442\u0440\u043E\u0439 \u0432\u0441\u0435\
+        \u0445 \u043D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u044B\u0435\
+        \ \u0444\u0438\u043B\u044C\u0442\u0440\u044B \u043F\u043E \u0430\u0442\u0440\
+        \u0438\u0431\u0443\u0442\u0430\u043C, \u0430 \u0434\u0430\u043B\u0435\u0435\
+        \ \u0432 \u0444\u0438\u043B\u044C\u0442\u0440\u0435 \"\u041C\u043E\u044F \u043A\
+        \u043E\u043C\u0430\u043D\u0434\u0430\" \u0443\u0441\u0442\u0430\u043D\u043E\
+        \u0432\u0438 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435 \u043D\u0435\
+        \u0442. </li>    \n                <li> \u0414\u043B\u044F \u0432\u044B\u0433\
+        \u0440\u0443\u0437\u043A\u0438 \u0432 Excel \u043D\u0430\u0436\u043C\u0438\
+        \ \u043D\u0430 \u0442\u0440\u0438 \u0442\u043E\u0447\u043A\u0438 - \u0441\u043A\
+        \u0430\u0447\u0430\u0442\u044C. </li>\n            </ol>\n        </span>\n\
+        \    </div>\n   </div>\n</body>"
+      height: 24
+      width: 12
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    - TAB-xSZ-e58tUo
+    - ROW-beKG-TU1wu
+    type: MARKDOWN
+  MARKDOWN-vM6WXMYOoI:
+    children: []
+    id: MARKDOWN-vM6WXMYOoI
+    meta:
+      code: "<style>\n    .row-container \n    {\n        display: flex; /* \u0420\
+        \u0430\u0437\u043C\u0435\u0449\u0430\u0435\u043C \u044D\u043B\u0435\u043C\u0435\
+        \u043D\u0442\u044B \u0432 \u0441\u0442\u0440\u043E\u043A\u0443 */\n      \
+        \  height: 500 px;\n        width: 100%;\n        justify-content: space-between;\n\
+        \        font-size:12px;\n    }\n    .big-font {\n        font-size:18px;\n\
+        \    }\n    .header{\n        font-size:14px;\n    }\n\n    .column-container\
+        \ \n    {\n        display: flex; /* \u0420\u0430\u0437\u043C\u0435\u0449\u0430\
+        \u0435\u043C \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u044B \u0432 \u0441\
+        \u0442\u043E\u043B\u0431\u0435\u0446 */\n        flex-direction: column;\n\
+        \        justify-content: space-between;\n        height: auto;\n        font-size:12px;\n\
+        \    }\n    .rounded-block \n    {\n      border-radius: 10px;\n      padding:\
+        \ 10px;\n      margin-top: 10px;\n      flex: 1;\n    }\n\n    .info-block\n\
+        \    {\n      border-radius: 0px 0px 10px 10px;\n      background-color: rgba(165,\
+        \ 161, 161, 0.1);     \n    }\n\n    .vertical-block {\n        width:8px;\n\
+        \        height: 80%;\n        align-self: center;\n        margin-left: 12px;\n\
+        \        margin-right: 2px;\n        border-radius: 12px;\n    }\n\n    .red-background\
+        \ {\n        background-color: rgb(255, 0, 0);\n        margin: 5px;\n   \
+        \ }\n\n    .blue-background {\n        background-color: rgb(26, 186, 239);\n\
+        \        margin: 5px;\n    }\n    \n    .green-background {\n      background-color:\
+        \ rgba(147, 229, 151, 0.3);\n      border-radius: 10px;\n    }\n\n    .red-opacity\
+        \ {\n        background-color: rgba(255, 0, 0, 0.1);\n    }\n\n    .blue-opacity\
+        \ {\n        background-color: rgb(26, 186, 239, 0.1);\n    }\n\n    details\
+        \ > summary {\n      font-size: 10pt;\n      padding: 5px;\n      background-color:\
+        \ RGBA(165, 161, 161, 0.1);\n      color: #333;\n      cursor: pointer;\n\
+        \      border-radius: 10px;\n      display: block;\n    }\n\n    details summary::-webkit-details-marker\
+        \ {\n      display: none;\n    }\n    \n    details[open] > summary {\n  \
+        \    border-radius: 10px 10px 0px 0px;\n    }\n  \n    details summary::before\
+        \ {\n      content: \"\u25B7\";\n    }\n  \n    details[open] summary::before\
+        \ {\n      content: \"\u25BD\";\n    }\n    .span_style\n    {\n        padding-bottom:\
+        \ 10px;\n        font-size: 12px;\n        margin: 10px\n    }\n</style>\n\
+        \n<body>\n   <div class=\"column-container \">\n    <div style=\"text-align:\
+        \ center; color: #6a6a9a\">\n        <i class=\"fa fa-info-circle fa-2x\"\
+        \ aria-hidden=\"true\"></i>\n    </div>\n    <div class=\"column-container\"\
+        \ style=\"font-size: 12px;margin: 10px\">\n        <span style=\"padding-bottom:\
+        \ 10px;\">\n            \u041E\u0442\u0447\u0435\u0442 \u0440\u0430\u0431\u043E\
+        \u0442\u0430\u0435\u0442 \u043F\u043E \u043F\u0440\u0438\u043D\u0446\u0438\
+        \u043F\u0443 \u043A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440\
+        \u0430, \u043A\u043E\u0433\u0434\u0430 \u043F\u043E\u0434 \u043B\u044E\u0431\
+        \u043E\u0439 \u0437\u0430\u043F\u0440\u043E\u0441 \u043C\u043E\u0436\u043D\
+        \u043E \u0441\u043E\u0431\u0440\u0430\u0442\u044C \u0441\u0432\u043E\u0439\
+        \ \u0432\u0430\u0440\u0438\u0430\u043D\u0442 \u0438\u0442\u043E\u0433\u043E\
+        \u0432\u043E\u0439 \u0442\u0430\u0431\u043B\u0438\u0446\u044B. \u0412 \u043B\
+        \u0435\u0432\u043E\u0439 \u0447\u0430\u0441\u0442\u0438 \u0434\u043E\u0441\
+        \u0442\u0443\u043F\u043D\u044B\u0435 4 \u043D\u0430\u0431\u043E\u0440\u0430\
+        \ \u043F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u043E\u0432, \u043A\u0430\
+        \u0436\u0434\u044B\u0439 \u0438\u0437 \u043A\u043E\u0442\u043E\u0440\u044B\
+        \u0445 \u0441\u043E\u0434\u0435\u0440\u0436\u0438\u0442 \u0441\u0432\u043E\
+        \u0439 \u043D\u0430\u0431\u043E\u0440 \u0430\u0442\u0440\u0438\u0431\u0443\
+        \u0442\u043E\u0432.\n        </span>\n        <span  style=\"padding-bottom:\
+        \ 10px;\">\n            \u0414\u0430\u043D\u043D\u044B\u0435 \u0432 \u043E\
+        \u0442\u0447\u0435\u0442\u0435 \u043E\u0442\u043E\u0431\u0440\u0430\u0436\u0435\
+        \u043D\u044B \u0442\u043E\u043B\u044C\u043A\u043E \u043F\u043E \u043E\u0441\
+        \u043D\u043E\u0432\u043D\u043E\u0439 \u044E\u0440\u0438\u0434\u0438\u0447\u0435\
+        \u0441\u043A\u043E\u0439 \u043F\u043E\u0437\u0438\u0446\u0438\u0438 \u0441\
+        \u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0430. \u041F\u043E\u0434\
+        \u0440\u043E\u0431\u043D\u0435\u0435 <a href=\"https://dd.tcsbank.ru/urn%3Ametricbank%3Amgt_metric%3A1102?types=&systems=&scope=DATA&toolPanel=catalog&activeView=card&toolPanel=catalog\"\
+        >\u0437\u0434\u0435\u0441\u044C</a>.\n        </span>\n        <span  style=\"\
+        padding-bottom: 10px;\">\n             \u0412 \u043E\u0442\u0447\u0435\u0442\
+        \u0435 \u043D\u0430\u0441\u0442\u0440\u043E\u0435\u043D\u043E \u0440\u0430\
+        \u0437\u0433\u0440\u0430\u043D\u0438\u0447\u0435\u043D\u0438\u0435 \u043F\u0440\
+        \u0430\u0432 \u0434\u043E\u0441\u0442\u0443\u043F\u0430 \u043D\u0430 \u043F\
+        \u0440\u043E\u0441\u043C\u043E\u0442\u0440 \u043F\u0435\u0440\u0441\u043E\u043D\
+        \u0430\u043B\u044C\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445\
+        \ \u0441\u043E\u0433\u043B\u0430\u0441\u043D\u043E <a href=\"https://wiki.tcsbank.ru/pages/viewpage.action?pageId=1540862317\"\
+        >\u043C\u0430\u0442\u0440\u0438\u0446\u0435 \u043F\u0440\u0430\u0432 \u0434\
+        \u043E\u0441\u0442\u0443\u043F\u0430</a>. \u0422\u0430\u043A\u0436\u0435 \u043E\
+        \u0431\u0440\u0430\u0442\u0438 \u0432\u043D\u0438\u043C\u0430\u043D\u0438\u0435\
+        , \u0447\u0442\u043E \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u044B, \u043A\
+        \u043E\u0442\u043E\u0440\u044B\u0435 \u0435\u0441\u0442\u044C \u0432 \u043E\
+        \u0442\u0447\u0435\u0442\u0435 \u0438 \u043F\u043E\u044F\u0432\u044F\u0442\
+        \u0441\u044F \u0432 \u0431\u0443\u0434\u0443\u0449\u0435\u043C, \u043E\u0442\
+        \u043D\u043E\u0441\u044F\u0442\u0441\u044F \u0438\u043C\u0435\u043D\u043D\u043E\
+        \ \u043A \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0443.   \n\
+        \        </span>\n        <span  style=\"padding-bottom: 10px;\">\n      \
+        \      \u0417\u0430\u0432\u0435\u0441\u0442\u0438 \u0437\u0430\u0434\u0430\
+        \u0447\u0443 \u043D\u0430 \u0434\u043E\u0440\u0430\u0431\u043E\u0442\u043A\
+        \u0443 \u043F\u043E <a href=\"https://jira.tcsbank.ru/secure/CreateIssueDetails!init.jspa?pid=199612&issuetype=128300&priority=6&components=295831\"\
+        >\u0441\u0441\u044B\u043B\u043A\u0435</a>.\n        </span>\n    </div>\n\
+        \   </div>\n</body>"
+      height: 46
+      width: 5
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - ROW-Hvh6dT2UKA
+    type: MARKDOWN
+  ROOT_ID:
+    children:
+    - GRID_ID
+    id: ROOT_ID
+    type: ROOT
+  ROW--zin3cNROh:
+    children:
+    - CHART-7CCLyaUDhn
+    id: ROW--zin3cNROh
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    - TAB-xSZ-e58tUo
+    type: ROW
+  ROW-2GtCjhWzZ:
+    children:
+    - CHART-explore-98067-1
+    id: ROW-2GtCjhWzZ
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    type: ROW
+  ROW-3hJA9nymyg:
+    children:
+    - CHART-u8M8Dq1-iO
+    - CHART-RogLL36G3f
+    - CHART-3Ud41WO-UR
+    id: ROW-3hJA9nymyg
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    - TAB-m6Vake1MR
+    type: ROW
+  ROW-Hvh6dT2UKA:
+    children:
+    - CHART-explore-92284-1
+    - MARKDOWN-vM6WXMYOoI
+    id: ROW-Hvh6dT2UKA
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    type: ROW
+  ROW-JEl3D_llvl:
+    children:
+    - CHART-qrm_F1t5Jy
+    id: ROW-JEl3D_llvl
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-s-2c_Eb4vk
+    type: ROW
+  ROW-K4iti8Rgxe:
+    children:
+    - CHART-MevSr9SCAp
+    id: ROW-K4iti8Rgxe
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-fPxOetVWbP
+    type: ROW
+  ROW-beKG-TU1wu:
+    children:
+    - MARKDOWN-stGXZrgeJc
+    id: ROW-beKG-TU1wu
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    - TAB-xSZ-e58tUo
+    type: ROW
+  ROW-kaTNQRIGv1:
+    children:
+    - CHART-_FwwVUnkth
+    id: ROW-kaTNQRIGv1
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    - TAB-m6Vake1MR
+    type: ROW
+  ROW-rMhZbe6_9:
+    children:
+    - CHART-_mlsX7bzss
+    id: ROW-rMhZbe6_9
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    - TAB-82NpEYk3F_
+    type: ROW
+  TAB-82NpEYk3F_:
+    children:
+    - ROW-rMhZbe6_9
+    id: TAB-82NpEYk3F_
+    meta:
+      defaultText: "\u0418\u043C\u044F \u0432\u043A\u043B\u0430\u0434\u043A\u0438"
+      placeholder: "\u0418\u043C\u044F \u0432\u043A\u043B\u0430\u0434\u043A\u0438"
+      text: "\u0412\u044B\u0433\u0440\u0443\u0437\u043A\u0430 - 1000 \u0441\u0442\u0440\
+        \u043E\u043A"
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    type: TAB
+  TAB-PzsfbCXhBl:
+    children:
+    - ROW-Hvh6dT2UKA
+    - TABS-VbQ1uHAkO9
+    id: TAB-PzsfbCXhBl
+    meta:
+      defaultText: "\u0418\u043C\u044F \u0432\u043A\u043B\u0430\u0434\u043A\u0438"
+      placeholder: "\u0418\u043C\u044F \u0432\u043A\u043B\u0430\u0434\u043A\u0438"
+      text: "\u0414\u0435\u0442\u0430\u043B\u044C\u043D\u044B\u0435 \u0441\u043F\u0438\
+        \u0441\u043A\u0438 old"
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    type: TAB
+  TAB-fPxOetVWbP:
+    children:
+    - ROW-K4iti8Rgxe
+    id: TAB-fPxOetVWbP
+    meta:
+      defaultText: "\u0418\u043C\u044F \u0432\u043A\u043B\u0430\u0434\u043A\u0438"
+      placeholder: "\u0418\u043C\u044F \u0432\u043A\u043B\u0430\u0434\u043A\u0438"
+      text: "\u0414\u0435\u0442\u0430\u043B\u044C\u043D\u044B\u0435 \u0441\u043F\u0438\
+        \u0441\u043A\u0438 \u041A\u041F"
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    type: TAB
+  TAB-m6Vake1MR:
+    children:
+    - ROW-kaTNQRIGv1
+    - ROW-3hJA9nymyg
+    id: TAB-m6Vake1MR
+    meta:
+      defaultText: "\u0418\u043C\u044F \u0432\u043A\u043B\u0430\u0434\u043A\u0438"
+      placeholder: "\u0418\u043C\u044F \u0432\u043A\u043B\u0430\u0434\u043A\u0438"
+      text: "\u0412\u044B\u0433\u0440\u0443\u0437\u043A\u0430 - \u0432\u0441\u0435\
+        \ \u0441\u0442\u0440\u043E\u043A\u0438"
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    type: TAB
+  TAB-s-2c_Eb4vk:
+    children:
+    - ROW-JEl3D_llvl
+    id: TAB-s-2c_Eb4vk
+    meta:
+      defaultText: "\u0418\u043C\u044F \u0432\u043A\u043B\u0430\u0434\u043A\u0438"
+      placeholder: "\u0418\u043C\u044F \u0432\u043A\u043B\u0430\u0434\u043A\u0438"
+      text: "\u0414\u0435\u0442\u0430\u043B\u044C\u043D\u044B\u0435 \u0441\u043F\u0438\
+        \u0441\u043A\u0438"
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    type: TAB
+  TAB-xSZ-e58tUo:
+    children:
+    - ROW-beKG-TU1wu
+    - ROW--zin3cNROh
+    id: TAB-xSZ-e58tUo
+    meta:
+      defaultText: "\u0418\u043C\u044F \u0432\u043A\u043B\u0430\u0434\u043A\u0438"
+      placeholder: "\u0418\u043C\u044F \u0432\u043A\u043B\u0430\u0434\u043A\u0438"
+      text: "\u0412\u044B\u0433\u0440\u0443\u0437\u043A\u0430 \u041A\u041F - 100\u043A\
+        \ \u0441\u0442\u0440\u043E\u043A"
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    - TABS-VbQ1uHAkO9
+    type: TAB
+  TABS-VbQ1uHAkO9:
+    children:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    id: TABS-VbQ1uHAkO9
+    meta: {}
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-rOxWIyuUsx
+    - TAB-PzsfbCXhBl
+    type: TABS
+  TABS-rOxWIyuUsx:
+    children:
+    - TAB-s-2c_Eb4vk
+    - TAB-fPxOetVWbP
+    - TAB-PzsfbCXhBl
+    id: TABS-rOxWIyuUsx
+    meta: {}
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    type: TABS
+metadata:
+  show_native_filters: true
+  chart_configuration:
+    '279005':
+      id: 279005
+      crossFilters:
+        scope:
+          rootPath:
+          - ROOT_ID
+          excluded:
+          - 279005
+        chartsInScope:
+        - 64114
+        - 92284
+        - 98067
+        - 319891
+        - 319901
+        - 319909
+        - 324579
+        - 726821
+        - 795014
+    '319891':
+      id: 319891
+      crossFilters:
+        scope:
+          rootPath:
+          - ROOT_ID
+          excluded:
+          - 319891
+        chartsInScope:
+        - 64114
+        - 92284
+        - 98067
+        - 279005
+        - 319901
+        - 319909
+        - 324579
+        - 726821
+        - 795014
+    '319901':
+      id: 319901
+      crossFilters:
+        scope:
+          rootPath:
+          - ROOT_ID
+          excluded:
+          - 319901
+        chartsInScope:
+        - 64114
+        - 92284
+        - 98067
+        - 279005
+        - 319891
+        - 319909
+        - 324579
+        - 726821
+        - 795014
+    '319909':
+      id: 319909
+      crossFilters:
+        scope:
+          rootPath:
+          - ROOT_ID
+          excluded:
+          - 319909
+        chartsInScope:
+        - 64114
+        - 92284
+        - 98067
+        - 279005
+        - 319891
+        - 319901
+        - 324579
+        - 726821
+        - 795014
+    '726821':
+      id: 726821
+      crossFilters:
+        scope:
+          rootPath:
+          - ROOT_ID
+          excluded:
+          - 726821
+        chartsInScope:
+        - 64114
+        - 92284
+        - 98067
+        - 279005
+        - 319891
+        - 319901
+        - 319909
+        - 324579
+        - 795014
+    '795014':
+      id: 795014
+      crossFilters:
+        scope:
+          rootPath:
+          - ROOT_ID
+          excluded:
+          - 795014
+        chartsInScope:
+        - 64114
+        - 92284
+        - 98067
+        - 279005
+        - 319891
+        - 319901
+        - 319909
+        - 324579
+        - 726821
+  color_scheme: ''
+  refresh_frequency: 3600
+  expanded_slices: {}
+  label_colors: {}
+  timed_refresh_immune_slices: []
+  cross_filters_enabled: true
+  default_filters: '{}'
+  native_filter_configuration:
+  - id: NATIVE_FILTER-1kr_7jx4F
+    controlValues:
+      arbitraryFilterValue: false
+      enableEmptyFilter: true
+      defaultToFirstItem: false
+      multiSelect: false
+      searchAllOptions: true
+      inverseSelection: false
+    name: Hideit
+    filterType: filter_select
+    targets:
+    - column:
+        name: dashboard_id
+      datasetUuid: 8ea3770e-5110-45e6-905b-de9b5748bad6
+    defaultDataMask:
+      extraFormData:
+        filters:
+        - col: dashboard_id
+          op: IN
+          val:
+          - '7241'
+      filterState:
+        validateMessage: false
+        validateStatus: false
+        label: '7241'
+        value:
+        - '7241'
+      __cache:
+        validateMessage: false
+        validateStatus: false
+        label: '7241'
+        value:
+        - '7241'
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 92284
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    - 795014
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-fPxOetVWbP
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER_DIVIDER-f23FP-WgJ
+    type: DIVIDER
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded: []
+    title: "\u0412\u044B\u0431\u043E\u0440 \u0441\u0442\u043E\u043B\u0431\u0446\u043E\
+      \u0432 \u0442\u0430\u0431\u043B\u0438\u0446\u044B"
+    description: ''
+    chartsInScope: []
+    tabsInScope: []
+  - id: NATIVE_FILTER-SNCZipRYT
+    adhoc_filters:
+    - expressionType: SIMPLE
+      subject: type_attr
+      operator: IN
+      operatorId: IN
+      comparator:
+      - "\u041F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0435\
+        \ \u0434\u0430\u043D\u043D\u044B\u0435"
+      clause: WHERE
+      sqlExpression: null
+      isExtra: false
+      isNew: false
+      datasourceWarning: false
+      filterOptionName: filter_sew82sqty5c_v7dote0bp4p
+    controlValues:
+      sortAscending: true
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0410\u0442\u0440\u0438\u0431\u0443\u0442\u044B \u0424\u041B"
+    filterType: filter_select
+    targets:
+    - column:
+        name: value_attr
+      datasetUuid: 278fc7c9-b1cb-4f04-8e10-23ee9736b179
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - TAB-s-2c_Eb4vk
+      - TAB-fPxOetVWbP
+      - TAB-PzsfbCXhBl
+      excluded:
+      - 92284
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-2OZayUOq3
+    controlValues:
+      sortAscending: true
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0421\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A"
+    filterType: filter_select
+    targets:
+    - column:
+        name: value_attr
+      datasetUuid: 278fc7c9-b1cb-4f04-8e10-23ee9736b179
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - TAB-s-2c_Eb4vk
+      - TAB-fPxOetVWbP
+      - TAB-PzsfbCXhBl
+      excluded:
+      - 92284
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+    adhoc_filters:
+    - expressionType: SIMPLE
+      subject: type_attr
+      operator: IN
+      operatorId: IN
+      comparator:
+      - "\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0441\u043E\u0442\u0440\u0443\
+        \u0434\u043D\u0438\u043A\u0430"
+      clause: WHERE
+      sqlExpression: null
+      isExtra: false
+      isNew: false
+      datasourceWarning: false
+      filterOptionName: filter_xc4lgknmorj_inseh7lndte
+  - id: NATIVE_FILTER-PBdtzTMIA
+    controlValues:
+      sortAscending: true
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0410\u0442\u0440\u0438\u0431\u0443\u0442\u044B \u042E\u0421"
+    filterType: filter_select
+    targets:
+    - column:
+        name: value_attr
+      datasetUuid: 278fc7c9-b1cb-4f04-8e10-23ee9736b179
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - TAB-s-2c_Eb4vk
+      - TAB-fPxOetVWbP
+      - TAB-PzsfbCXhBl
+      excluded:
+      - 92284
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+    adhoc_filters:
+    - expressionType: SIMPLE
+      subject: type_attr
+      operator: IN
+      operatorId: IN
+      comparator:
+      - "\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u042E\u0421"
+      clause: WHERE
+      sqlExpression: null
+      isExtra: false
+      isNew: false
+      datasourceWarning: false
+      filterOptionName: filter_k6jvqzwgeed_eai2iact9u
+  - id: NATIVE_FILTER-jFskEQYD0
+    controlValues:
+      sortAscending: true
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0410\u0442\u0440\u0438\u0431\u0443\u0442\u044B \u0423\u0421"
+    filterType: filter_select
+    targets:
+    - column:
+        name: value_attr
+      datasetUuid: 278fc7c9-b1cb-4f04-8e10-23ee9736b179
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - TAB-s-2c_Eb4vk
+      - TAB-fPxOetVWbP
+      - TAB-PzsfbCXhBl
+      excluded:
+      - 92284
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+    adhoc_filters:
+    - expressionType: SIMPLE
+      subject: type_attr
+      operator: IN
+      operatorId: IN
+      comparator:
+      - "\u0410\u0442\u0440\u0438\u0431\u0443\u0442 \u0423\u0421"
+      clause: WHERE
+      sqlExpression: null
+      isExtra: false
+      isNew: false
+      datasourceWarning: false
+      filterOptionName: filter_rrb25hqn5c_p36c496uew
+  - id: NATIVE_FILTER_DIVIDER-pjMXnSoUW
+    type: DIVIDER
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded: []
+    title: "\u0424\u0438\u043B\u044C\u0442\u0440\u044B"
+    description: ''
+    chartsInScope: []
+    tabsInScope: []
+  - id: NATIVE_FILTER-MRJHLHybuJ
+    adhoc_filters:
+    - expressionType: SIMPLE
+      subject: report_nm
+      operator: ==
+      operatorId: EQUALS
+      comparator: "HR Executive Report - \u0414\u0435\u0442\u0430\u043B\u044C\u043D\
+        \u044B\u0435 \u0441\u043F\u0438\u0441\u043A\u0438"
+      clause: WHERE
+      sqlExpression: null
+      isExtra: false
+      isNew: false
+      datasourceWarning: false
+      filterOptionName: filter_1lj0fop6andh_p1xbj1aol88
+    controlValues:
+      enableEmptyFilter: true
+      defaultToFirstItem: false
+      multiSelect: false
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u041F\u0435\u0440\u0438\u043E\u0434"
+    filterType: filter_select
+    targets:
+    - column:
+        name: calendar_date
+      datasetUuid: 92398c8a-2d67-4ac2-a166-4a1869f3ef5a
+    defaultDataMask:
+      extraFormData:
+        filters:
+        - col: calendar_date
+          op: IN
+          val:
+          - "\u041F\u043E\u0441\u043B\u0435\u0434\u043D\u0438\u0439 \u0434\u0435\u043D\
+            \u044C"
+      filterState:
+        validateMessage: false
+        validateStatus: false
+        label: "\u041F\u043E\u0441\u043B\u0435\u0434\u043D\u0438\u0439 \u0434\u0435\
+          \u043D\u044C"
+        value:
+        - "\u041F\u043E\u0441\u043B\u0435\u0434\u043D\u0438\u0439 \u0434\u0435\u043D\
+          \u044C"
+      __cache:
+        validateMessage: false
+        validateStatus: false
+        label: "\u041F\u043E\u0441\u043B\u0435\u0434\u043D\u0438\u0439 \u0434\u0435\
+          \u043D\u044C"
+        value:
+        - "\u041F\u043E\u0441\u043B\u0435\u0434\u043D\u0438\u0439 \u0434\u0435\u043D\
+          \u044C"
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: "\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0439 \u0434\u0430\
+      \u043D\u043D\u044B\u0439 \u0444\u0438\u043B\u044C\u0442\u0440 \u0434\u043B\u044F\
+      \ \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u043F\u0435\u0440\u0438\
+      \u043E\u0434\u0430 \u043E\u0442\u0447\u0435\u0442\u0430. \u041F\u0440\u0438\
+      \ \u0432\u044B\u0431\u0440\u0430\u043D\u043D\u043E\u043C \u0437\u043D\u0430\u0447\
+      \u0435\u043D\u0438\u0438 \"\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\
+      \u0435\u043B\u044C\u0441\u043A\u0430\u044F \u0434\u0430\u0442\u0430\" \u043D\
+      \u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E \u0437\u0430\u043F\u043E\
+      \u043B\u043D\u0438\u0442\u044C \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F\
+      \ \u0432 \u0441\u043E\u0441\u0435\u0434\u043D\u0435\u043C \u0444\u0438\u043B\
+      \u044C\u0442\u0440\u0435, \u0432\u044B\u0431\u0440\u0430\u0432 \u0434\u0430\u0442\
+      \u0443 \u043E\u0442\u0447\u0435\u0442\u0430."
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-J6YSv_htzG
+    controlValues:
+      sortAscending: false
+      enableEmptyFilter: true
+      defaultToFirstItem: true
+      multiSelect: false
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\
+      \u0441\u043A\u0430\u044F \u0434\u0430\u0442\u0430"
+    filterType: filter_select
+    targets:
+    - column:
+        name: business_dt_detail
+      datasetUuid: aa2f3eed-c30e-48cd-b090-8b46036fa07d
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+    requiredFirst: true
+  - id: NATIVE_FILTER_DIVIDER-5lb93WAmEU
+    type: DIVIDER
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded: []
+    title: "\u0417\u0430\u0433\u043B\u0443\u0448\u043A\u0430 \u0434\u0430\u0442"
+    description: ''
+    chartsInScope: []
+    tabsInScope: []
+  - id: NATIVE_FILTER-Iwn7hu0CY
+    controlValues:
+      arbitraryFilterValue: true
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: MasterID
+    filterType: filter_select
+    targets:
+    - column:
+        name: mdm_employee_rk
+      datasetUuid: 33bb4f5b-f9a1-45a5-8bba-43fdae8f831f
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-8eJNJ6_dt
+    controlValues:
+      arbitraryFilterValue: true
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u041B\u043E\u0433\u0438\u043D"
+    filterType: filter_select
+    targets:
+    - column:
+        name: ad_login
+      datasetUuid: 33bb4f5b-f9a1-45a5-8bba-43fdae8f831f
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-DQ8pgC_0N
+    controlValues:
+      arbitraryFilterValue: true
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0422\u0430\u0431\u0435\u043B\u044C\u043D\u044B\u0439"
+    filterType: filter_select
+    targets:
+    - column:
+        name: employee_main_work_no
+      datasetUuid: 33bb4f5b-f9a1-45a5-8bba-43fdae8f831f
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-j2YrBPKYL
+    controlValues:
+      arbitraryFilterValue: true
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: Siebel_ID
+    filterType: filter_select
+    targets:
+    - column:
+        name: party_id
+      datasetUuid: 33bb4f5b-f9a1-45a5-8bba-43fdae8f831f
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-zaUkc5IYVl
+    controlValues:
+      enableEmptyFilter: true
+      defaultToFirstItem: false
+      multiSelect: false
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0427\u0438\u0441\u043B\u0435\u043D\u043D\u043E\u0441\u0442\u044C"
+    filterType: filter_select
+    targets:
+    - column:
+        name: employee_type
+      datasetUuid: 6569a939-941d-484c-98e9-d4598946a893
+    defaultDataMask:
+      extraFormData:
+        filters:
+        - col: employee_type
+          op: IN
+          val:
+          - "\u042E\u0440\u0438\u0434\u0438\u0447\u0435\u0441\u043A\u0430\u044F"
+      filterState:
+        validateMessage: false
+        validateStatus: false
+        label: "\u042E\u0440\u0438\u0434\u0438\u0447\u0435\u0441\u043A\u0430\u044F"
+        value:
+        - "\u042E\u0440\u0438\u0434\u0438\u0447\u0435\u0441\u043A\u0430\u044F"
+      __cache:
+        validateMessage: false
+        validateStatus: false
+        label: "\u042E\u0440\u0438\u0434\u0438\u0447\u0435\u0441\u043A\u0430\u044F"
+        value:
+        - "\u042E\u0440\u0438\u0434\u0438\u0447\u0435\u0441\u043A\u0430\u044F"
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-wZ26XbgVz
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0422\u0438\u043F \u0447\u0438\u0441\u043B\u0435\u043D\u043D\u043E\u0441\
+      \u0442\u0438"
+    filterType: filter_select
+    targets:
+    - column:
+        name: active_type_nm
+      datasetUuid: 6569a939-941d-484c-98e9-d4598946a893
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-zaUkc5IYVl
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    - 98067
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-6gV-pqBU-
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0422\u0438\u043F \u043E\u0444\u043E\u0440\u043C\u043B\u0435\u043D\u0438\
+      \u044F"
+    filterType: filter_select
+    targets:
+    - column:
+        name: employment_relation_type_desc
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-Iwn7hu0CY
+    - NATIVE_FILTER-8eJNJ6_dt
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-eOV16qptS
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0422\u0438\u043F \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0430"
+    filterType: filter_select
+    targets:
+    - column:
+        name: employee_contract_type_desc
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-Iwn7hu0CY
+    - NATIVE_FILTER-8eJNJ6_dt
+    - NATIVE_FILTER-6gV-pqBU-
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-fNLKTJR81
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0420\u0435\u0433\u0438\u043E\u043D"
+    filterType: filter_select
+    targets:
+    - column:
+        name: residential_state_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    - 98067
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-Id9rHEEUa
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u041E\u0444\u0438\u0441"
+    filterType: filter_select
+    targets:
+    - column:
+        name: office_desc
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-fNLKTJR81
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: "\u0424\u0430\u043A\u0442\u0438\u0447\u0435\u0441\u043A\u0438\u0439\
+      \ \u043E\u0444\u0438\u0441 \u0441 \u043C\u0430\u0439\u0442\u0438"
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-9TAMBAMgO
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: HQ|Line|Support
+    filterType: filter_select
+    targets:
+    - column:
+        name: emp_specialization_oper_code
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-6gV-pqBU-
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-yl9-LhKGR
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: IT|non-IT
+    filterType: filter_select
+    targets:
+    - column:
+        name: emp_specialization_it_code
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-9TAMBAMgO
+    - NATIVE_FILTER-6gV-pqBU-
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-tNE1Xn5oM
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0421\u0442\u0440\u0438\u043C"
+    filterType: filter_select
+    targets:
+    - column:
+        name: emp_stream_desc
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-9TAMBAMgO
+    - NATIVE_FILTER-yl9-LhKGR
+    - NATIVE_FILTER-6gV-pqBU-
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-ytTmbIkJ9
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0421\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\
+      \u044F"
+    filterType: filter_select
+    targets:
+    - column:
+        name: emp_specialization_desc
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-9TAMBAMgO
+    - NATIVE_FILTER-yl9-LhKGR
+    - NATIVE_FILTER-tNE1Xn5oM
+    - NATIVE_FILTER-6gV-pqBU-
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER_DIVIDER-jbebWGOSP
+    type: DIVIDER
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded: []
+    title: "\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0447\u0435\u0441\u043A\
+      \u0430\u044F"
+    description: ''
+    chartsInScope: []
+    tabsInScope: []
+  - id: NATIVE_FILTER-QVGjkBRD3c
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u041A\u0440\u043E\u0441\u0441-\u0444\u0438\u043B\u044C\u0442\u0440 \u043F\
+      \u043E \u0423\u0421"
+    filterType: filter_select
+    targets:
+    - column:
+        name: new_management_unit_nm
+      datasetUuid: d10d4afd-b406-4a1f-a8a2-ff498761a5f4
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: "\u0421 \u043F\u043E\u043C\u043E\u0449\u044C\u044E \u043A\u0440\u043E\
+      \u0441\u0441-\u0444\u0438\u043B\u044C\u0442\u0440\u0430 \u043C\u043E\u0436\u043D\
+      \u043E \u043E\u0442\u0444\u0438\u043B\u044C\u0442\u0440\u043E\u0432\u0430\u0442\
+      \u044C \u044E\u043D\u0438\u0442\u044B \u043D\u0430 \u0440\u0430\u0437\u043D\u044B\
+      \u0445 \u0443\u0440\u043E\u0432\u043D\u044F\u0445 \u0423\u0421. \n\n\u041D\u0435\
+      \u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E \u0432 \u0441\u0442\u0440\u043E\
+      \u043A\u0443 \u043F\u043E\u0438\u0441\u043A\u0430 \u0432\u0432\u0435\u0441\u0442\
+      \u0438 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u044E\u043D\u0438\u0442\
+      \u0430. \u0415\u0441\u043B\u0438 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435\
+      \ \u043D\u0435 \u0443\u043D\u0438\u043A\u0430\u043B\u044C\u043D\u043E\u0435\
+      , \u0442\u043E \u043E\u0442\u043E\u0431\u0440\u0430\u0437\u0438\u0442\u0441\u044F\
+      \ \u0442\u0430\u043A\u0436\u0435 \u0438 \u043D\u0430\u0437\u0432\u0430\u043D\
+      \u0438\u0435 \u0440\u043E\u0434\u0438\u0442\u0435\u043B\u044C\u0441\u043A\u043E\
+      \u0433\u043E \u044E\u043D\u0438\u0442\u0430"
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-n-mcrm4VN
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 3"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl3_mapped_management_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-wwbcXn-g9
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 4"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl4_mapped_management_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-n-mcrm4VN
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded: []
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 98067
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-MWqQqd-VI
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 5"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl5_mapped_management_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-n-mcrm4VN
+    - NATIVE_FILTER-wwbcXn-g9
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded: []
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 98067
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-wma9sXDSA
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 6"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl6_mapped_management_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-n-mcrm4VN
+    - NATIVE_FILTER-wwbcXn-g9
+    - NATIVE_FILTER-MWqQqd-VI
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-EfeKazg7r
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 7"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl7_mapped_management_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-n-mcrm4VN
+    - NATIVE_FILTER-wwbcXn-g9
+    - NATIVE_FILTER-MWqQqd-VI
+    - NATIVE_FILTER-wma9sXDSA
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-6EmSvblT4
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 8"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl8_mapped_management_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-n-mcrm4VN
+    - NATIVE_FILTER-wwbcXn-g9
+    - NATIVE_FILTER-MWqQqd-VI
+    - NATIVE_FILTER-wma9sXDSA
+    - NATIVE_FILTER-EfeKazg7r
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER--zCnuLLeC
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 9"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl9_mapped_management_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-n-mcrm4VN
+    - NATIVE_FILTER-wwbcXn-g9
+    - NATIVE_FILTER-MWqQqd-VI
+    - NATIVE_FILTER-wma9sXDSA
+    - NATIVE_FILTER-EfeKazg7r
+    - NATIVE_FILTER-6EmSvblT4
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-3Drsgdpg8
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 10"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl10_mapped_management_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-n-mcrm4VN
+    - NATIVE_FILTER-wwbcXn-g9
+    - NATIVE_FILTER-MWqQqd-VI
+    - NATIVE_FILTER-wma9sXDSA
+    - NATIVE_FILTER-EfeKazg7r
+    - NATIVE_FILTER-6EmSvblT4
+    - NATIVE_FILTER--zCnuLLeC
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-6_LqZ0_q0
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 11"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl11_mapped_management_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-n-mcrm4VN
+    - NATIVE_FILTER-wwbcXn-g9
+    - NATIVE_FILTER-MWqQqd-VI
+    - NATIVE_FILTER-wma9sXDSA
+    - NATIVE_FILTER-EfeKazg7r
+    - NATIVE_FILTER-6EmSvblT4
+    - NATIVE_FILTER--zCnuLLeC
+    - NATIVE_FILTER-3Drsgdpg8
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-8qDgptskDf
+    controlValues:
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 12"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl12_mapped_management_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-1kr_7jx4F
+    - NATIVE_FILTER-SNCZipRYT
+    - NATIVE_FILTER-2OZayUOq3
+    - NATIVE_FILTER-PBdtzTMIA
+    - NATIVE_FILTER-jFskEQYD0
+    - NATIVE_FILTER-MRJHLHybuJ
+    - NATIVE_FILTER-J6YSv_htzG
+    - NATIVE_FILTER-Iwn7hu0CY
+    - NATIVE_FILTER-8eJNJ6_dt
+    - NATIVE_FILTER-DQ8pgC_0N
+    - NATIVE_FILTER-j2YrBPKYL
+    - NATIVE_FILTER-zaUkc5IYVl
+    - NATIVE_FILTER-wZ26XbgVz
+    - NATIVE_FILTER-6gV-pqBU-
+    - NATIVE_FILTER-eOV16qptS
+    - NATIVE_FILTER-fNLKTJR81
+    - NATIVE_FILTER-Id9rHEEUa
+    - NATIVE_FILTER-9TAMBAMgO
+    - NATIVE_FILTER-yl9-LhKGR
+    - NATIVE_FILTER-tNE1Xn5oM
+    - NATIVE_FILTER-ytTmbIkJ9
+    - NATIVE_FILTER-QVGjkBRD3c
+    - NATIVE_FILTER-n-mcrm4VN
+    - NATIVE_FILTER-wwbcXn-g9
+    - NATIVE_FILTER-MWqQqd-VI
+    - NATIVE_FILTER-wma9sXDSA
+    - NATIVE_FILTER-EfeKazg7r
+    - NATIVE_FILTER-6EmSvblT4
+    - NATIVE_FILTER--zCnuLLeC
+    - NATIVE_FILTER-3Drsgdpg8
+    - NATIVE_FILTER-6_LqZ0_q0
+    - NATIVE_FILTER-lj8lGHfJnb
+    - NATIVE_FILTER-EqfzcDepw
+    - NATIVE_FILTER-6AF8ONK2H
+    - NATIVE_FILTER-jRNE6iVPLc
+    - NATIVE_FILTER-cKer5_rCH
+    - NATIVE_FILTER-t64BzJcEC
+    - NATIVE_FILTER-o1GNF6E1P
+    - NATIVE_FILTER-TU7IJzN2e
+    - NATIVE_FILTER-asz3qcr3e
+    - NATIVE_FILTER-F9CtzKJFR
+    - NATIVE_FILTER-e4b82pOwd
+    - NATIVE_FILTER-Jt2rFRekP
+    - NATIVE_FILTER-eH-QAFrgA
+    - NATIVE_FILTER-U2Ntk2Vrr
+    - NATIVE_FILTER-Bj8Gv8kFV
+    - NATIVE_FILTER-TkOdMbx3N
+    - NATIVE_FILTER-8v6fE2TZbb
+    - NATIVE_FILTER-SZf_Weot5-
+    - NATIVE_FILTER-sNYk38bJPb
+    - NATIVE_FILTER-6q_cGNIOJu
+    - NATIVE_FILTER-__tBvIJ2f8
+    - NATIVE_FILTER-uqc97QrDH0
+    - NATIVE_FILTER-sPpJ27zWFL
+    - NATIVE_FILTER-wvuO0QbM4-
+    - NATIVE_FILTER-W6AQlV09_U
+    - NATIVE_FILTER-FaEeJpQrsi
+    - NATIVE_FILTER-Zs2x9hZTX4
+    - NATIVE_FILTER-Gcv3y1RyzD
+    - NATIVE_FILTER-iyzBdHrAxS
+    - NATIVE_FILTER-NHG_senslV
+    - NATIVE_FILTER-805bnyAZMk
+    - NATIVE_FILTER-NTLwmqxqPG
+    - NATIVE_FILTER-X66U0U-Iy2
+    - NATIVE_FILTER-0nZOyChugj
+    - NATIVE_FILTER-9cRbSBwkgf
+    - NATIVE_FILTER-snGPYwIhRE
+    - NATIVE_FILTER-ns36GaNgqR
+    - NATIVE_FILTER-HEnhSBMQFb
+    scope:
+      rootPath:
+      - TAB-s-2c_Eb4vk
+      - TAB-fPxOetVWbP
+      - TAB-PzsfbCXhBl
+      excluded:
+      - 92284
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-lj8lGHfJnb
+    controlValues:
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 13"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl13_mapped_management_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - TAB-s-2c_Eb4vk
+      - TAB-fPxOetVWbP
+      - TAB-PzsfbCXhBl
+      excluded:
+      - 92284
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-EqfzcDepw
+    controlValues:
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0424\u043B\u0430\u0433 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\
+      \u0442\u0435\u043B\u044F \u0423\u0421"
+    filterType: filter_select
+    targets:
+    - column:
+        name: management_head_flg
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    - 795014
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-fPxOetVWbP
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-6AF8ONK2H
+    controlValues:
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u041B\u043E\u0433\u0438\u043D HRBP"
+    filterType: filter_select
+    targets:
+    - column:
+        name: hrbp_login
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-n-mcrm4VN
+    - NATIVE_FILTER-wwbcXn-g9
+    - NATIVE_FILTER-MWqQqd-VI
+    - NATIVE_FILTER-wma9sXDSA
+    - NATIVE_FILTER-EfeKazg7r
+    - NATIVE_FILTER-6EmSvblT4
+    - NATIVE_FILTER--zCnuLLeC
+    - NATIVE_FILTER-3Drsgdpg8
+    - NATIVE_FILTER-6_LqZ0_q0
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    - 795014
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-fPxOetVWbP
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER_DIVIDER-6ZswVE1GJ
+    type: DIVIDER
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded: []
+    title: "\u042E\u0440\u0438\u0434\u0438\u0447\u0435\u0441\u043A\u0430\u044F"
+    description: ''
+    chartsInScope: []
+    tabsInScope: []
+  - id: NATIVE_FILTER-jRNE6iVPLc
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u041A\u0440\u043E\u0441\u0441-\u0444\u0438\u043B\u044C\u0442\u0440 \u043F\
+      \u043E \u042E\u0421"
+    filterType: filter_select
+    targets:
+    - column:
+        name: new_legal_unit_nm
+      datasetUuid: 257e148e-27a1-4f40-8901-2ef8fbb56e00
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: "\u0421 \u043F\u043E\u043C\u043E\u0449\u044C\u044E \u043A\u0440\u043E\
+      \u0441\u0441-\u0444\u0438\u043B\u044C\u0442\u0440\u0430 \u043C\u043E\u0436\u043D\
+      \u043E \u043E\u0442\u0444\u0438\u043B\u044C\u0442\u0440\u043E\u0432\u0430\u0442\
+      \u044C \u044E\u043D\u0438\u0442\u044B \u043D\u0430 \u0440\u0430\u0437\u043D\u044B\
+      \u0445 \u0443\u0440\u043E\u0432\u043D\u044F\u0445 \u042E\u0421. \n\n\u041D\u0435\
+      \u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E \u0432 \u0441\u0442\u0440\u043E\
+      \u043A\u0443 \u043F\u043E\u0438\u0441\u043A\u0430 \u0432\u0432\u0435\u0441\u0442\
+      \u0438 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u044E\u043D\u0438\u0442\
+      \u0430. \u0415\u0441\u043B\u0438 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435\
+      \ \u043D\u0435 \u0443\u043D\u0438\u043A\u0430\u043B\u044C\u043D\u043E\u0435\
+      , \u0442\u043E \u043E\u0442\u043E\u0431\u0440\u0430\u0437\u0438\u0442\u0441\u044F\
+      \ \u0442\u0430\u043A\u0436\u0435 \u0438 \u043D\u0430\u0437\u0432\u0430\u043D\
+      \u0438\u0435 \u0440\u043E\u0434\u0438\u0442\u0435\u043B\u044C\u0441\u043A\u043E\
+      \u0433\u043E \u044E\u043D\u0438\u0442\u0430"
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-cKer5_rCH
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 1"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl1_legal_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-U2Ntk2Vrr
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-t64BzJcEC
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 2"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl2_legal_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-cKer5_rCH
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-o1GNF6E1P
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 3"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl3_legal_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-cKer5_rCH
+    - NATIVE_FILTER-t64BzJcEC
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-TU7IJzN2e
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 4"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl4_legal_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-cKer5_rCH
+    - NATIVE_FILTER-t64BzJcEC
+    - NATIVE_FILTER-o1GNF6E1P
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-asz3qcr3e
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 5"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl5_legal_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-cKer5_rCH
+    - NATIVE_FILTER-t64BzJcEC
+    - NATIVE_FILTER-o1GNF6E1P
+    - NATIVE_FILTER-TU7IJzN2e
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-F9CtzKJFR
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 6"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl6_legal_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-cKer5_rCH
+    - NATIVE_FILTER-t64BzJcEC
+    - NATIVE_FILTER-o1GNF6E1P
+    - NATIVE_FILTER-TU7IJzN2e
+    - NATIVE_FILTER-asz3qcr3e
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-e4b82pOwd
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 7"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl7_management_unit_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-cKer5_rCH
+    - NATIVE_FILTER-t64BzJcEC
+    - NATIVE_FILTER-o1GNF6E1P
+    - NATIVE_FILTER-TU7IJzN2e
+    - NATIVE_FILTER-MWqQqd-VI
+    - NATIVE_FILTER-F9CtzKJFR
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-Jt2rFRekP
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u041B\u043E\u0433\u0438\u043D \u0440\u0435\u0433 HR"
+    filterType: filter_select
+    targets:
+    - column:
+        name: regional_hr_login
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-cKer5_rCH
+    - NATIVE_FILTER-t64BzJcEC
+    - NATIVE_FILTER-o1GNF6E1P
+    - NATIVE_FILTER-TU7IJzN2e
+    - NATIVE_FILTER-asz3qcr3e
+    - NATIVE_FILTER-F9CtzKJFR
+    - NATIVE_FILTER-e4b82pOwd
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-eH-QAFrgA
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0422\u0438\u043F \u0434\u043E\u0433\u043E\u0432\u043E\u0440\u0430 (\u0448\
+      \u0442\u0430\u0442)"
+    filterType: filter_select
+    targets:
+    - column:
+        name: employee_main_contract_type_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-U2Ntk2Vrr
+    controlValues:
+      sortAscending: true
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: false
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0422\u0438\u043F \u042E\u041B"
+    filterType: filter_select
+    targets:
+    - column:
+        name: tcr_type
+      datasetUuid: 13f6beb6-f034-46e1-bf58-c12cfcd72f98
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    sortMetric: order
+  - id: NATIVE_FILTER_DIVIDER-qibN1VGCu
+    type: DIVIDER
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded: []
+    title: "\u0410\u0442\u0440\u0438\u0431\u0443\u0442\u044B \u043D\u0430\u0439\u043C\
+      \u0430"
+    description: ''
+    chartsInScope: []
+    tabsInScope: []
+  - id: NATIVE_FILTER-Bj8Gv8kFV
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0418\u0441\u0442\u043E\u0447\u043D\u0438\u043A \u043F\u0440\u0438\u0432\
+      \u043B\u0435\u0447\u0435\u043D\u0438\u044F"
+    filterType: filter_select
+    targets:
+    - column:
+        name: mapping_channel_name
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-TkOdMbx3N
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0414\u0435\u0442\u0430\u043B\u0438\u0437\u0438\u0440\u043E\u0432\u0430\
+      \u043D\u043D\u044B\u0439 \u0438\u0441\u0442\u043E\u0447\u043D\u0438\u043A"
+    filterType: filter_select
+    targets:
+    - column:
+        name: respond_source_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 16822
+      - 98067
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER_DIVIDER-4lbnLQ0TOE
+    type: DIVIDER
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded: []
+    title: "\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u043F\u0440\u043E\u0434\u0443\
+      \u043A\u0442\u043E\u0432"
+    description: ''
+    chartsInScope: []
+    tabsInScope: []
+  - id: NATIVE_FILTER-8v6fE2TZbb
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u041A\u0440\u043E\u0441\u0441-\u0444\u0438\u043B\u044C\u0442\u0440 \u043F\
+      \u043E \u041A\u041F"
+    filterType: filter_select
+    targets:
+    - column:
+        name: new_functional_unit_nm
+      datasetUuid: 2c5f3606-4d3d-4876-9928-d228996d6762
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-SZf_Weot5-
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+    type: NATIVE_FILTER
+    description: "\u0421 \u043F\u043E\u043C\u043E\u0449\u044C\u044E \u043A\u0440\u043E\
+      \u0441\u0441-\u0444\u0438\u043B\u044C\u0442\u0440\u0430 \u043C\u043E\u0436\u043D\
+      \u043E \u043E\u0442\u0444\u0438\u043B\u044C\u0442\u0440\u043E\u0432\u0430\u0442\
+      \u044C \u044E\u043D\u0438\u0442\u044B \u043D\u0430 \u0440\u0430\u0437\u043D\u044B\
+      \u0445 \u0443\u0440\u043E\u0432\u043D\u044F\u0445 \u041A\u041F. \n\n\u041D\u0435\
+      \u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E \u0432 \u0441\u0442\u0440\u043E\
+      \u043A\u0443 \u043F\u043E\u0438\u0441\u043A\u0430 \u0432\u0432\u0435\u0441\u0442\
+      \u0438 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u044E\u043D\u0438\u0442\
+      \u0430. \u0415\u0441\u043B\u0438 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435\
+      \ \u043D\u0435 \u0443\u043D\u0438\u043A\u0430\u043B\u044C\u043D\u043E\u0435\
+      , \u0442\u043E \u043E\u0442\u043E\u0431\u0440\u0430\u0437\u0438\u0442\u0441\u044F\
+      \ \u0442\u0430\u043A\u0436\u0435 \u0438 \u043D\u0430\u0437\u0432\u0430\u043D\
+      \u0438\u0435 \u0440\u043E\u0434\u0438\u0442\u0435\u043B\u044C\u0441\u043A\u043E\
+      \u0433\u043E \u044E\u043D\u0438\u0442\u0430"
+    chartsInScope:
+    - 16822
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-SZf_Weot5-
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 1"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl1_functional_unit_nm
+      datasetUuid: 9d256137-c0f6-4139-a959-dfa7f19b0071
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-sNYk38bJPb
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 2"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl2_functional_unit_nm
+      datasetUuid: 9d256137-c0f6-4139-a959-dfa7f19b0071
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-SZf_Weot5-
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-6q_cGNIOJu
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 3"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl3_functional_unit_nm
+      datasetUuid: 9d256137-c0f6-4139-a959-dfa7f19b0071
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-SZf_Weot5-
+    - NATIVE_FILTER-sNYk38bJPb
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-__tBvIJ2f8
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 4"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl4_functional_unit_nm
+      datasetUuid: 9d256137-c0f6-4139-a959-dfa7f19b0071
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-SZf_Weot5-
+    - NATIVE_FILTER-sNYk38bJPb
+    - NATIVE_FILTER-6q_cGNIOJu
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-uqc97QrDH0
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 5"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl5_functional_unit_nm
+      datasetUuid: 9d256137-c0f6-4139-a959-dfa7f19b0071
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds:
+    - NATIVE_FILTER-SZf_Weot5-
+    - NATIVE_FILTER-sNYk38bJPb
+    - NATIVE_FILTER-6q_cGNIOJu
+    - NATIVE_FILTER-__tBvIJ2f8
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-sPpJ27zWFL
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 6"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl6_functional_unit_nm
+      datasetUuid: 9d256137-c0f6-4139-a959-dfa7f19b0071
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-wvuO0QbM4-
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 7"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl7_functional_unit_nm
+      datasetUuid: 9d256137-c0f6-4139-a959-dfa7f19b0071
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-W6AQlV09_U
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 8"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl8_functional_unit_nm
+      datasetUuid: 9d256137-c0f6-4139-a959-dfa7f19b0071
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-FaEeJpQrsi
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 9"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl9_functional_unit_nm
+      datasetUuid: 9d256137-c0f6-4139-a959-dfa7f19b0071
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-Zs2x9hZTX4
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 10"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl10_functional_unit_nm
+      datasetUuid: 9d256137-c0f6-4139-a959-dfa7f19b0071
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-Gcv3y1RyzD
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 11"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl11_functional_unit_nm
+      datasetUuid: 9d256137-c0f6-4139-a959-dfa7f19b0071
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-iyzBdHrAxS
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0423\u0440\u043E\u0432\u0435\u043D\u044C 12"
+    filterType: filter_select
+    targets:
+    - column:
+        name: lvl12_functional_unit_nm
+      datasetUuid: 9d256137-c0f6-4139-a959-dfa7f19b0071
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER_DIVIDER-Oxcpyblr4X
+    type: DIVIDER
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded: []
+    title: "\u0420\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0435\
+      \ \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u044B"
+    description: ''
+    chartsInScope: []
+    tabsInScope: []
+  - id: NATIVE_FILTER-JxGLroQrO9
+    controlValues:
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u041B\u043E\u043A\u0430\u0446\u0438\u044F"
+    filterType: filter_select
+    targets:
+    - column:
+        name: location_type
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - TAB-s-2c_Eb4vk
+      - TAB-PzsfbCXhBl
+      - TAB-fPxOetVWbP
+      excluded: []
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-EK0hwWZGqM
+    controlValues:
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u041C\u0430\u043A\u0440\u043E\u0440\u0435\u0433\u0438\u043E\u043D"
+    filterType: filter_select
+    targets:
+    - column:
+        name: macroregion_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - TAB-s-2c_Eb4vk
+      - TAB-PzsfbCXhBl
+      - TAB-fPxOetVWbP
+      excluded: []
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-NHG_senslV
+    controlValues:
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0413\u043E\u0440\u043E\u0434"
+    filterType: filter_select
+    targets:
+    - column:
+        name: city_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    - 795014
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-fPxOetVWbP
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-DFBcaYzOTn
+    controlValues:
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0412 \u043B\u043E\u043A\u0430\u0446\u0438\u0438 \u0445\u0430\u0431\u0430"
+    filterType: filter_select
+    targets:
+    - column:
+        name: tcr_exist_flg
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - TAB-s-2c_Eb4vk
+      - TAB-PzsfbCXhBl
+      - TAB-fPxOetVWbP
+      excluded: []
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER_DIVIDER-aME8EQ0JsT
+    type: DIVIDER
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded: []
+    title: "\u0414\u0440\u0443\u0433\u0438\u0435 \u0430\u0442\u0440\u0438\u0431\u0443\
+      \u0442\u044B"
+    description: ''
+    chartsInScope: []
+    tabsInScope: []
+  - id: NATIVE_FILTER-805bnyAZMk
+    controlValues:
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "T-\u043E\u0431\u0440\u0430\u0437\u043E\u0432\u0430\u043D\u0438\u0435"
+    filterType: filter_select
+    targets:
+    - column:
+        name: t_education_desc
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: "\u0421\u0435\u0433\u043C\u0435\u043D\u0442\u0430\u0446\u0438\u044F\
+      \ \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u043E\u0432 \u043E\u0442\
+      \u043D\u043E\u0441\u0438\u0442\u0435\u043B\u044C\u043D\u043E \u043F\u0440\u043E\
+      \u0445\u043E\u0436\u0434\u0435\u043D\u0438\u044F \u043F\u0440\u043E\u0435\u043A\
+      \u0442\u043E\u0432 T-\u043E\u0431\u0440\u0430\u0437\u043E\u0432\u0430\u043D\u0438\
+      \u044F: \u0441\u0442\u0430\u0436\u0438\u0440\u043E\u0432\u043A\u0430 T-\u0421\
+      \u0442\u0430\u0440\u0442, \u0424\u0438\u043D\u0442\u0435\u0445 \u0438 \u043E\
+      \u0441\u0442\u0430\u043B\u044C\u043D\u044B\u0435 \u0441\u043F\u0435\u0446\u043F\
+      \u0440\u043E\u0435\u043A\u0442\u044B \u0422-\u043E\u0431\u0440\u0430\u0437\u043E\
+      \u0432\u0430\u043D\u0438\u044F.\n\u0415\u0441\u043B\u0438 \u0441\u043E\u0442\
+      \u0440\u0443\u0434\u043D\u0438\u043A \u043F\u0440\u043E\u0445\u043E\u0434\u0438\
+      \u043B \u0438 T-\u0441\u0442\u0430\u0440\u0442, \u0438 \u0441\u043F\u0435\u0446\
+      \u043F\u0440\u043E\u0435\u043A\u0442, \u0442\u043E \u043F\u043E\u043F\u0430\u0434\
+      \u0430\u0435\u0442 \u0432 \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044E\
+      \  \xABT-\u043E\u0431\u0440\u0430\u0437\u043E\u0432\u0430\u043D\u0438\u0435\
+      \ \u0434\u0440\u0443\u0433\u043E\u0435\xBB."
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    - 795014
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-fPxOetVWbP
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-NTLwmqxqPG
+    controlValues:
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0423\u0432\u043E\u043B\u0435\u043D \u043D\u0430 \u043E\u0442\u0447\u0435\
+      \u0442\u043D\u0443\u044E \u0434\u0430\u0442\u0443"
+    filterType: filter_select
+    targets:
+    - column:
+        name: company_fire_flg
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    - 795014
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-fPxOetVWbP
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-X66U0U-Iy2
+    controlValues:
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0420\u043E\u0441\u0431\u0430\u043D\u043A"
+    filterType: filter_select
+    targets:
+    - column:
+        name: rb_flg
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: "\u041F\u0440\u0438\u0437\u043D\u0430\u043A \u0442\u043E\u0433\u043E\
+      , \u0447\u0442\u043E \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\
+      \ \u0440\u0430\u0431\u043E\u0442\u0430\u043B \u0432 \u0420\u043E\u0441\u0431\
+      \u0430\u043D\u043A\u0435 \u0432 2024 \u0433\u043E\u0434\u0443"
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    - 795014
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-fPxOetVWbP
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-0nZOyChugj
+    controlValues:
+      arbitraryFilterValue: false
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0420\u043E\u0441\u0431\u0430\u043D\u043A (MNA)"
+    filterType: filter_select
+    targets:
+    - column:
+        name: rb_migration_flg
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: "\u041F\u0440\u0438\u0437\u043D\u0430\u043A \u0442\u043E\u0433\u043E\
+      , \u0447\u0442\u043E \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\
+      \ \u043F\u0440\u0438\u0448\u0435\u043B \u0438\u0437 \u0420\u043E\u0441\u0431\
+      \u0430\u043D\u043A\u0430 \u0432 \u0422-\u0411\u0430\u043D\u043A \u0447\u0435\
+      \u0440\u0435\u0437 \u043F\u0435\u0440\u0435\u0432\u043E\u0434. \u0423\u0441\u0442\
+      \u0430\u043D\u043E\u0432\u0438 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435\
+      \ 0, \u0447\u0442\u043E\u0431\u044B \u0441\u043B\u0435\u0434\u0438\u0442\u044C\
+      \ \u0437\u0430 \u043E\u0440\u0433\u0430\u043D\u0438\u0447\u0435\u0441\u043A\u0438\
+      \u043C \u0440\u043E\u0441\u0442\u043E\u043C \u0422-\u0411\u0430\u043D\u043A\u0430"
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    - 726821
+    - 795014
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-PzsfbCXhBl
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+    - TAB-fPxOetVWbP
+    - TAB-s-2c_Eb4vk
+  - id: NATIVE_FILTER-9cRbSBwkgf
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: true
+      inverseSelection: false
+    name: "\u0414\u043E\u043B\u0436\u043D\u043E\u0441\u0442\u044C"
+    filterType: filter_select
+    targets:
+    - column:
+        name: legal_position_nm
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 88830
+    - 92284
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+  - id: NATIVE_FILTER-snGPYwIhRE
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u041F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u0441\u043E\u0442\
+      \u0440\u0443\u0434\u043D\u0438\u043A\u0430 \u0432 \u0441\u0442\u0440\u0443\u043A\
+      \u0442\u0443\u0440\u0435"
+    filterType: filter_select
+    targets:
+    - column:
+        name: subordination_lvl
+      datasetUuid: d1e72219-149c-40bd-ac6d-70857b589894
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: ''
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-ns36GaNgqR
+    controlValues:
+      enableEmptyFilter: false
+      defaultToFirstItem: false
+      multiSelect: true
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u0421\u0435\u0433\u043C\u0435\u043D\u0442 \u0440\u0443\u043A\u043E\u0432\
+      \u043E\u0434\u0438\u0442\u0435\u043B\u044F"
+    filterType: filter_select
+    targets:
+    - column:
+        name: head_lvl_segment
+      datasetUuid: 33bb4f5b-f9a1-45a5-8bba-43fdae8f831f
+    defaultDataMask:
+      extraFormData: {}
+      filterState: {}
+      ownState: {}
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded:
+      - 98067
+      - 16822
+    type: NATIVE_FILTER
+    description: "1. \u0421\u0435\u0433\u043C\u0435\u043D\u0442 \"\u041B\u0438\u043D\
+      \u0435\u0439\u043D\u044B\u0439 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\
+      \u0442\u0435\u043B\u044C\" \u043E\u043F\u0440\u0435\u0434\u0435\u043B\u044F\u0435\
+      \u0442\u0441\u044F \u043F\u043E \u043D\u0430\u043B\u0438\u0447\u0438\u044E \u0445\
+      \u043E\u0442\u044F \u0431\u044B \u043E\u0434\u043D\u043E\u0433\u043E \u0447\u0435\
+      \u043B\u043E\u0432\u0435\u043A\u0430 \u0432 \u043F\u043E\u0434\u0447\u0438\u043D\
+      \u0435\u043D\u0438\u0438 \u043F\u043E \u0443\u043F\u0440\u0430\u0432\u043B\u0435\
+      \u043D\u0447\u0435\u0441\u043A\u043E\u0439 \u0441\u0442\u0440\u0443\u043A\u0442\
+      \u0443\u0440\u0435. \u0415\u0441\u043B\u0438 \u0443 \u0441\u043E\u0442\u0440\
+      \u0443\u0434\u043D\u0438\u043A\u0430 \u0438\u043C\u0435\u0435\u0442\u0441\u044F\
+      \ \u0444\u043B\u0430\u0433 \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\
+      \u0435\u043B\u044F, \u043D\u043E \u043D\u0435\u0442 \u043B\u044E\u0434\u0435\
+      \u0439 \u0432 \u043F\u043E\u0434\u0447\u0438\u043D\u0435\u043D\u0438\u0438,\
+      \ \u0442\u043E \u043E\u043D \u0431\u0443\u0434\u0435\u0442 \u0432 \u0441\u0435\
+      \u0433\u043C\u0435\u043D\u0442\u0435 \"\u0420\u0443\u043A\u043E\u0432\u043E\u0434\
+      \u0438\u0442\u0435\u043B\u044C \u0431\u0435\u0437 \u043F\u043E\u0434\u0447\u0438\
+      \u043D\u0435\u043D\u043D\u044B\u0445\"\n2. \u0421\u0435\u0433\u043C\u0435\u043D\
+      \u0442 \"\u041B\u0438\u0434 \u043B\u0438\u0434\u043E\u0432\" \u043E\u043F\u0440\
+      \u0435\u0434\u0435\u043B\u044F\u0435\u0442\u0441\u044F \u043F\u043E \u043D\u0430\
+      \u043B\u0438\u0447\u0438\u044E \u0445\u043E\u0442\u044F \u0431\u044B \u043E\u0434\
+      \u043D\u043E\u0433\u043E \"\u041B\u0438\u043D\u0435\u0439\u043D\u043E\u0433\u043E\
+      \ \u0440\u0443\u043A\u043E\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F \u0432\
+      \ \u043F\u043E\u0434\u0447\u0438\u043D\u0435\u043D\u0438\u0438\"\n3. \u0421\u0435\
+      \u0433\u043C\u0435\u043D\u0442\u044B \"C-level\" \u0438 \"Middle management\"\
+      \ \u0438\u043C\u0435\u044E\u0442 \u0431\u043E\u043B\u0435\u0435 \u0432\u044B\
+      \u0441\u043E\u043A\u0438\u0439 \u043F\u0440\u0438\u043E\u0440\u0438\u0442\u0435\
+      \u0442, \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043D\
+      \u043D\u043E, \u043D\u0430\u043F\u0440\u0438\u043C\u0435\u0440, \u043F\u0440\
+      \u0438 \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0438\
+      \ \u043A\u0440\u0438\u0442\u0435\u0440\u0438\u044F\u043C \u0441\u0435\u0433\u043C\
+      \u0435\u043D\u0442\u043E\u0432 \u0438 \"\u041B\u0438\u0434 \u043B\u0438\u0434\
+      \u043E\u0432\" \u0438 \"Middle management\", \u0431\u0443\u0434\u0435\u0442\
+      \ \u0432\u044B\u0432\u0435\u0434\u0435\u043D  \"Middle management\""
+    chartsInScope:
+    - 64114
+    - 92284
+    - 279005
+    - 319891
+    - 319901
+    - 319909
+    - 324579
+    tabsInScope:
+    - TAB-82NpEYk3F_
+    - TAB-m6Vake1MR
+    - TAB-xSZ-e58tUo
+  - id: NATIVE_FILTER-HEnhSBMQFb
+    controlValues:
+      enableEmptyFilter: true
+      defaultToFirstItem: false
+      multiSelect: false
+      searchAllOptions: false
+      inverseSelection: false
+    name: "\u041C\u043E\u044F \u043A\u043E\u043C\u0430\u043D\u0434\u0430"
+    filterType: filter_select
+    targets:
+    - column:
+        name: selected_option
+      datasetUuid: 56f7a8c9-222d-4ac4-8d37-2b8dbb189f50
+    defaultDataMask:
+      extraFormData:
+        filters:
+        - col: selected_option
+          op: IN
+          val:
+          - "\u0414\u0430"
+      filterState:
+        validateMessage: false
+        validateStatus: false
+        label: "\u0414\u0430"
+        value:
+        - "\u0414\u0430"
+      __cache:
+        validateMessage: false
+        validateStatus: false
+        label: "\u0414\u0430"
+        value:
+        - "\u0414\u0430"
+    cascadeParentIds: []
+    scope:
+      rootPath:
+      - TAB-xSZ-e58tUo
+      excluded: []
+    type: NATIVE_FILTER
+    description: "\u0424\u0438\u043B\u044C\u0442\u0440 \u043F\u0440\u0438\u043C\u0435\
+      \u043D\u044F\u0435\u0442\u0441\u044F \u0442\u043E\u043B\u044C\u043A\u043E \u043D\
+      \u0430 \u043B\u0438\u0441\u0442\u0435 \"\u0412\u044B\u0433\u0440\u0443\u0437\
+      \u043A\u0430 \u041A\u041F - 100\u043A \u0441\u0442\u0440\u043E\u043A\""
+    chartsInScope:
+    - 279005
+    tabsInScope:
+    - TAB-xSZ-e58tUo
+  stagger_refresh: true
+  filter_scopes: {}
+  shared_label_colors: {}
+  color_scheme_domain: []
+info_panel:
+  id: 4278
+  description: <p></p>
+  datasource_rule: latest
+  datasource_id: null
+  label_url: https://share.tinkoff.ru/s/demwaznYTRnWzcE/download/CrossData.png
+  row_level_security: true
+  links:
+  - url: https://dd.t-tech.team/urn%3Add%3Areports%3Areports%3Areport%3A1728?toolPanel=catalog
+    name: data_detective
+    type: data_detective
+    in_group: false
+    icon_name: null
+  - url: https://time.tbank.ru/tinkoff/channels/hr-report-ask
+    name: time
+    type: time
+    in_group: false
+    icon_name: null
+  - url: https://polls.tbank.ru/s/clx2687e9000l0dv8av0g73br
+    name: "\u041E\u0441\u0442\u0430\u0432\u0438\u0442\u044C \u043E\u0442\u0437\u044B\
+      \u0432"
+    type: custom
+    in_group: true
+    icon_name: null
+  - url: https://proteus.tcsbank.ru/superset/dashboard/crossdata-map/
+    name: "\u0412\u0441\u0435 \u043E\u0442\u0447\u0451\u0442\u044B \u043F\u043E \u043A\
+      \u043E\u043C\u0430\u043D\u0434\u0435"
+    type: custom
+    in_group: true
+    icon_name: null
+  contact_users:
+  - 348
+  - 13087
+  - 14
+  - 36
+  - 7798
+  - 1096
+  - 7798
+  - 14
+  - 13087
+  - 1096
+  - 348
+  - 36
+version: 1.0.0

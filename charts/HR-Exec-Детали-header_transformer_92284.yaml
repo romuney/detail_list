@@ -1,0 +1,465 @@
+slice_name: "[HR-Exec-\u0414\u0435\u0442\u0430\u043B\u0438]-header_transformer"
+description: null
+certified_by: null
+certification_details: null
+viz_type: handlebars
+params:
+  datasource: 23044__table
+  viz_type: handlebars
+  slice_id: 92284
+  query_mode: aggregate
+  groupby:
+  - cnt_row
+  - datasourceWarning: false
+    expressionType: SQL
+    label: warden_first_nm
+    sqlExpression: warden_array.3
+  - expressionType: SQL
+    label: unit_nm
+    sqlExpression: warden_array.18
+  - label: level_managament
+    sqlExpression: "case\n  when warden_array.5 = 3 then  'lvl3_mapped_management_unit_nm'\n\
+      \  when warden_array.5 = 4 then  'lvl4_mapped_management_unit_nm'\n  when warden_array.5\
+      \ = 5 then  'lvl5_mapped_management_unit_nm'\n  when warden_array.5 = 6 then\
+      \  'lvl6_mapped_management_unit_nm'\n  when warden_array.5 = 7 then  'lvl7_mapped_management_unit_nm'\n\
+      \  when warden_array.5 = 8 then  'lvl8_mapped_management_unit_nm'\n  when warden_array.5\
+      \ = 9 then  'lvl9_mapped_management_unit_nm'\n  when warden_array.5 = 10 then\
+      \ 'lvl10_mapped_management_unit_nm'\n  when warden_array.5 = 11 then 'lvl11_mapped_management_unit_nm'\n\
+      \  when warden_array.5 = 12 then 'lvl12_mapped_management_unit_nm'\n  when warden_array.5\
+      \ = 13 then 'lvl13_mapped_management_unit_nm'\nend\n"
+    expressionType: SQL
+  - label: level_managament_id
+    sqlExpression: "case\n  when warden_array.5 = 3 then  'NATIVE_FILTER-n-mcrm4VN'\n\
+      \  when warden_array.5 = 4 then  'NATIVE_FILTER-wwbcXn-g9'\n  when warden_array.5\
+      \ = 5 then  'NATIVE_FILTER-MWqQqd-VI'\n  when warden_array.5 = 6 then  'NATIVE_FILTER-wma9sXDSA'\n\
+      \  when warden_array.5 = 7 then  'NATIVE_FILTER-EfeKazg7r'\n  when warden_array.5\
+      \ = 8 then  'NATIVE_FILTER-6EmSvblT4'\n  when warden_array.5 = 9 then  'NATIVE_FILTER--zCnuLLeC'\n\
+      \  when warden_array.5 = 10 then 'NATIVE_FILTER-3Drsgdpg8'\n  when warden_array.5\
+      \ = 11 then 'NATIVE_FILTER-6_LqZ0_q0'\n  when warden_array.5 = 12 then 'NATIVE_FILTER-8qDgptskDf'\n\
+      \  when warden_array.5 = 13 then 'NATIVE_FILTER-lj8lGHfJnb'\nend\n"
+    expressionType: SQL
+  - datasourceWarning: false
+    expressionType: SQL
+    label: special_role_nm
+    sqlExpression: warden_array.7
+  - datasourceWarning: false
+    expressionType: SQL
+    label: warden_login
+    sqlExpression: warden_array.2
+  - datasourceWarning: false
+    expressionType: SQL
+    label: support_gph_flg
+    sqlExpression: warden_array.16
+  - datasourceWarning: false
+    expressionType: SQL
+    label: hr_filter
+    sqlExpression: "case\n  when warden_array.7 = 'HRBP' then 'hrbp_login'\n  when\
+      \ warden_array.7 = '\u0420\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\
+      \u044B\u0439 HR' then 'regional_hr_login'\n  else '\u041D\u0435\u0442 \u0441\
+      \u043F\u0435\u0446 \u0440\u043E\u043B\u0438'\nend"
+  - datasourceWarning: false
+    expressionType: SQL
+    label: hr_filter_id
+    sqlExpression: "case\n  when warden_array.7 = 'HRBP' then 'NATIVE_FILTER-6AF8ONK2H'\n\
+      \  when warden_array.7 = '\u0420\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\
+      \u043D\u044B\u0439 HR' then 'NATIVE_FILTER-Jt2rFRekP'\n  else '\u041D\u0435\u0442\
+      \ \u0441\u043F\u0435\u0446 \u0440\u043E\u043B\u0438'\nend"
+  - datasourceWarning: false
+    expressionType: SQL
+    label: hr_unit_nm
+    sqlExpression: "'\u0422\u0432\u043E\u044F \u043F\u043E\u043F\u0443\u043B\u044F\
+      \u0446\u0438\u044F'"
+  - datasourceWarning: false
+    expressionType: SQL
+    label: personal_management_unit_nm
+    sqlExpression: warden_array.6
+  - datasourceWarning: false
+    expressionType: SQL
+    label: personal_legal_unit_nm
+    sqlExpression: warden_array.15
+  - datasourceWarning: false
+    expressionType: SQL
+    label: has_legal_unit
+    sqlExpression: not(hasAny(warden_array.16, ['']))
+  - datasourceWarning: false
+    expressionType: SQL
+    label: has_management_unit
+    sqlExpression: not(hasAny(warden_array.9, ['']))
+  - datasourceWarning: false
+    expressionType: SQL
+    label: choose_functional
+    sqlExpression: "{% if filter_values('lvl1_functional_unit_nm')|length or filter_values('lvl2_functional_unit_nm')|length\
+      \ or filter_values('lvl3_functional_unit_nm')|length or filter_values('lvl4_functional_unit_nm')|length\
+      \ \n   or filter_values('lvl5_functional_unit_nm')|length or filter_values('lvl6_functional_unit_nm')|length\
+      \ or filter_values('lvl7_functional_unit_nm')|length or filter_values('lvl8_functional_unit_nm')|length\n\
+      \   or filter_values('lvl9_functional_unit_nm')|length or filter_values('lvl10_functional_unit_nm')|length\
+      \ or filter_values('lvl11_functional_unit_nm')|length or filter_values('lvl12_functional_unit_nm')|length\
+      \ or filter_values('new_functional_unit_nm')|length %}\n1\n{% else %}\n2 \n\
+      {%endif%}"
+  - datasourceWarning: false
+    expressionType: SQL
+    label: hide_show_filter
+    sqlExpression: "{% if '\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\
+      \u043B\u044C\u0441\u043A\u0438\u0439 \u043F\u0435\u0440\u0438\u043E\u0434' in\
+      \ filter_values('calendar_date') %} \n'opacity: 1;'\n{% else %} \n'opacity:\
+      \ 0.5;'\n{% endif %}"
+  - expressionType: SQL
+    label: management_unit_nm
+    sqlExpression: warden_array.4
+  all_columns: []
+  percent_metrics: []
+  timeseries_limit_metric: null
+  order_by_cols: []
+  order_desc: true
+  server_pagination: false
+  row_limit: 10000
+  server_page_length: 10
+  show_totals: false
+  adhoc_filters: []
+  handlebarsTemplate: "<style>\n    .header_mdm\n    {\n        padding: 0px;\n  \
+    \      text-align: center;\n        font-size: 20px;\n        font-weight: bold;\n\
+    \    }\n    .header_text\n    {\n        font-size: 12px;\n        text-align:\
+    \ justify;\n        padding-top: 10px;\n    }\n    .filters-overflow-container\
+    \ > div > div:nth-child(9) .ant-form-item-label,\n    .filters-overflow-container\
+    \ > div > div:nth-child(9) .ant-select-selector\n    { {{data.[0].hide_show_filter}}\
+    \ }\n</style>\n<div style=\"padding: 0px;\">\n<div class=\"header_nm\">\n    {{#each\
+    \ data}}\n    <span class=\"header_mdm\">\u041F\u0440\u0438\u0432\u0435\u0442\
+    , {{stringify warden_first_nm}}!</span>\n    <!-- <span class=\"alarm\">\u0418\
+    \u0434\u0443\u0442 \u0434\u043E\u0440\u0430\u0431\u043E\u0442\u043A\u0438 \u0432\
+    \ \u043E\u0442\u0447\u0435\u0442\u0435. \u041C\u043E\u0433\u0443\u0442 \u0432\u043E\
+    \u0437\u043D\u0438\u043A\u0430\u0442\u044C \u043E\u0448\u0438\u0431\u043A\u0438\
+    \ </span><br>-->\n    <div class=\"container_hello\">\n    <div class=\"header_text\"\
+    >\n      {{#if (eq this.support_gph_flg 1)}}\n      \u0442\u0432\u043E\u044F \u0437\
+    \u043E\u043D\u0430 \u0432\u0438\u0434\u0438\u043C\u043E\u0441\u0442\u0438 \u043F\
+    \u043E \u043E\u0441\u043E\u0431\u044B\u043C \u0440\u043E\u043B\u044F\u043C: <span\
+    \ class=\"quick_filter_superuser\"><span class=\"kpi_descr1\">\u0412\u0441\u0435\
+    \ \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\u0438 \u0413\u041F\u0425\
+    </span><br></span><br>\n      {{/if}}\n      {{#if (eq this.has_management_unit\
+    \ 1)}}\n      \u0442\u0432\u043E\u044F \u0437\u043E\u043D\u0430 \u0432\u0438\u0434\
+    \u0438\u043C\u043E\u0441\u0442\u0438 \u043F\u043E \u0443\u043F\u0440\u0430\u0432\
+    \u043B\u0435\u043D\u0447\u0435\u0441\u043A\u043E\u0439: <span class=\"quick_filter_superuser\"\
+    >{{personal_management_unit_nm}}</span><br>\n      {{/if}}\n      {{#if (eq this.has_leagl_unit\
+    \ 1)}}\n      \u0442\u0432\u043E\u044F \u0437\u043E\u043D\u0430 \u0432\u0438\u0434\
+    \u0438\u043C\u043E\u0441\u0442\u0438 \u043F\u043E \u044E\u0440\u0438\u0434\u0438\
+    \u0447\u0435\u0441\u043A\u043E\u0439: <span class=\"quick_filter_superuser\">{{personal_legal_unit_nm}}</span><br>\n\
+    \      {{/if}}\n    </div>\n    <div class=\"header_text\">\n        \u0414\u0430\
+    \u043D\u043D\u044B\u0439 \u043E\u0442\u0447\u0435\u0442 \u043F\u043E\u043C\u043E\
+    \u0436\u0435\u0442 \u0441\u0444\u043E\u0440\u043C\u0438\u0440\u043E\u0432\u0430\
+    \u0442\u044C \u0442\u0430\u0431\u043B\u0438\u0446\u0443 \u0441 \u0430\u0442\u0440\
+    \u0438\u0431\u0443\u0442\u0430\u043C\u0438 \u0441\u043E\u0442\u0440\u0443\u0434\
+    \u043D\u0438\u043A\u0430. \u041E\u0437\u043D\u0430\u043A\u043E\u043C\u044C\u0441\
+    \u044F \u0441 \u0438\u043D\u0441\u0442\u0440\u0443\u043A\u0446\u0438\u0435\u0439\
+    \ \u0438 \u0441\u043F\u0440\u0430\u0432\u043E\u0447\u043D\u043E\u0439 \u0438\u043D\
+    \u0444\u043E\u0440\u043C\u0430\u0446\u0438\u0435\u0439 \u043F\u0435\u0440\u0435\
+    \u0434 \u043D\u0430\u0447\u0430\u043B\u043E\u043C \u0440\u0430\u0431\u043E\u0442\
+    \u044B.   \n    </div>\n    </div>\n    {{/each}}\n</div>\n</div>\n<div class=\"\
+    column-container \">\n  <span class=\"header-text-instruction\">\u0418\u043D\u0441\
+    \u0442\u0440\u0443\u043A\u0446\u0438\u044F \u043F\u043E \u0440\u0430\u0431\u043E\
+    \u0442\u0435 \u0441 \u043E\u0442\u0447\u0435\u0442\u043E\u043C</span>\n  <div\
+    \ class=\"row-container\">\n    <div>\n      <div class=\"header_text\">\n   \
+    \     <ol>\n          <li>\u041F\u0440\u0438\u043C\u0435\u043D\u0438 \u0432\u0441\
+    \u0435 \u043D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u044B\u0435 \u0444\
+    \u0438\u043B\u044C\u0442\u0440\u044B. \u0412\u044B\u0433\u0440\u0443\u0436\u0430\
+    \u0439 \u0442\u043E\u043B\u044C\u043A\u043E \u0442\u043E, \u0447\u0442\u043E \u043F\
+    \u043E\u0442\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044F \u0432 \u0440\u0430\
+    \u0431\u043E\u0442\u0435. \u042D\u0442\u043E \u043F\u043E\u043C\u043E\u0436\u0435\
+    \u0442 \u043E\u0442\u0447\u0435\u0442\u0443 \u0440\u0430\u0431\u043E\u0442\u0430\
+    \u0442\u044C \u0431\u044B\u0441\u0442\u0440\u0435\u0435.</li>\n          <li>\u0412\
+    \ \u043B\u0435\u0432\u043E\u0439 \u043F\u0430\u043D\u0435\u043B\u0438 \u0432\u044B\
+    \u0431\u0435\u0440\u0438 \u0432\u0441\u0435 \u043F\u043E\u043B\u044F \u0434\u043B\
+    \u044F \u0444\u043E\u0440\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F\
+    \ \u0438\u0442\u043E\u0433\u043E\u0432\u043E\u0439 \u0442\u0430\u0431\u043B\u0438\
+    \u0446\u044B.</li>\n          <li> <span>\u0421\u0442\u0440\u043E\u043A \u0432\
+    \ \u0442\u0430\u0431\u043B\u0438\u0446\u0435 {{data.[0].cnt_row}} (\u043B\u0438\
+    \u043C\u0438\u0442 1000 \u0441\u0442\u0440\u043E\u043A). </span>\n          {{#if\
+    \ (eq data.[0].choose_functional 2)}}\n            {{#if (lte data.[0].cnt_row\
+    \ 1000)}}\n        <span>\u041F\u0435\u0440\u0435\u0439\u0434\u0438 \u043D\u0430\
+    \ \u0432\u043A\u043B\u0430\u0434\u043A\u0443 <span style=\"font-weight: bold;\"\
+    >\"\u0412\u044B\u0433\u0440\u0443\u0437\u043A\u0430 - 1000 \u0441\u0442\u0440\u043E\
+    \u043A\"</span>\u0438 \u0441\u043B\u0435\u0434\u0443\u0439 \u043F\u043E \u0438\
+    \u043D\u0441\u0442\u0440\u0443\u043A\u0446\u0438\u0438.</span>\n      {{else}}\n\
+    \         <span>\u041F\u0435\u0440\u0435\u0439\u0434\u0438 \u043D\u0430 \u0432\
+    \u043A\u043B\u0430\u0434\u043A\u0443 <span style=\"font-weight: bold;\">\"\u0412\
+    \u044B\u0433\u0440\u0443\u0437\u043A\u0430 - \u0432\u0441\u0435 \u0441\u0442\u0440\
+    \u043E\u043A\u0438\"</span> \u0438 \u0441\u043B\u0435\u0434\u0443\u0439 \u043F\
+    \u043E \u0438\u043D\u0441\u0442\u0440\u0443\u043A\u0446\u0438\u0438.</span><br>\
+    \ \n      {{/if}}\n      {{else}}\n      <span>\u0414\u043B\u044F \u0432\u044B\
+    \u0433\u0440\u0443\u0437\u043A\u0438 \u0441\u0442\u0440\u0443\u043A\u0442\u0443\
+    \u0440\u044B \u041A\u041F \u043F\u0435\u0440\u0435\u0439\u0434\u0438 \u043D\u0430\
+    \ \u0432\u043A\u043B\u0430\u0434\u043A\u0443 <span style=\"font-weight: bold;\"\
+    >\"\u0412\u044B\u0433\u0440\u0443\u0437\u043A\u0430 \u041A\u041F - 100\u041A \u0441\
+    \u0442\u0440\u043E\u043A\"</span>\u0438 \u0441\u043B\u0435\u0434\u0443\u0439 \u043F\
+    \u043E \u0438\u043D\u0441\u0442\u0440\u0443\u043A\u0446\u0438\u0438.</span><br>\n\
+    \      {{/if}}</li>\n        </ol>\n      </div>\n      {{#if (or (eq data.[0].special_role_nm\
+    \ 'HRBP') (eq data.[0].special_role_nm '\u0420\u0435\u0433\u0438\u043E\u043D\u0430\
+    \u043B\u044C\u043D\u044B\u0439 HR') (eq data.[0].special_role_nm '\u041F\u0430\
+    \u0440\u0442\u043D\u0435\u0440 \u043F\u043E \u0430\u0434\u0430\u043F\u0442\u0430\
+    \u0446\u0438\u0438'))}} \n      <span class=\"header_text\">\u0412\u043E\u0441\
+    \u043F\u043E\u043B\u044C\u0437\u0443\u0439\u0441\u044F \u0431\u044B\u0441\u0442\
+    \u0440\u044B\u043C \u0444\u0438\u043B\u044C\u0442\u0440\u043E\u043C:\n      <span\
+    \ style=\"font-weight:bold\">\n        <a href=\"https://proteus.tcsbank.ru/superset/dashboard/hr-executive-detail-employee/?native_filters=({{data.0.hr_filter_id}}:(__cache:(label:'{{data.0.warden_login}}',validateStatus:!f,value:!('{{data.0.warden_login}}')),extraFormData:(filters:!((col:{{data.0.hr_filter}},op:IN,val:!('{{data.0.warden_login}}')))),filterState:(label:'{{data.0.warden_login}}',validateStatus:!f,value:!('{{data.0.warden_login}}')),id:{{data.0.hr_filter_id}},ownState:()))\"\
+    \ class=\"quick_filter\">\u0422\u0432\u043E\u044F \u043F\u043E\u043F\u0443\u043B\
+    \u044F\u0446\u0438\u044F</a>\n        </span>\n      {{else}}\n        <span class=\"\
+    header_text\">\u0412\u043E\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0439\u0441\
+    \u044F \u0431\u044B\u0441\u0442\u0440\u044B\u043C \u0444\u0438\u043B\u044C\u0442\
+    \u0440\u043E\u043C \u043F\u043E \u043A\u043E\u043C\u0430\u043D\u0434\u0435: <span\
+    \ style=\"font-weight:bold\">\n        <a href=\"https://proteus.tcsbank.ru/superset/dashboard/hr-executive-detail-employee/?native_filters=({{data.0.level_managament_id}}:(__cache:(label:'{{data.0.unit_nm}}',validateStatus:!f,value:!('{{data.0.unit_nm}}')),extraFormData:(filters:!((col:{{data.0.level_managament}},op:IN,val:!('{{data.0.unit_nm}}')))),filterState:(label:'{{data.0.unit_nm}}',validateStatus:!f,value:!('{{data.0.unit_nm}}')),id:{{data.0.level_managament_id}},ownState:()))\"\
+    \ class=\"quick_filter\">{{data.0.management_unit_nm}}</a>\n        </span>\n\
+    \      {{/if}}\n    </div>\n  </div>"
+  styleTemplate: ".container_hello {\n    1height:80px;\n    margin-bottom: 10px;\n\
+    }\n.alarm{\n  text-align:right;\n  padding-left:50px;\n  font-weight:bold;\n \
+    \ font-size:16px;\n  color:red;\n}\n.quick_filter{\n    background-color:rgb(238,\
+    \ 245, 255);\n    padding:4px;\n    border-radius:4px;\n    font-weight:bold;\n\
+    }\n.quick_filter_superuser{\n    background-color:rgb(247, 203, 206, 0.5);\n \
+    \   padding:4px;\n    border-radius:4px;\n    font-weight:bold;\n}\n.row-container\
+    \ {\n  display: flex; /* \u0420\u0430\u0437\u043C\u0435\u0449\u0430\u0435\u043C\
+    \ \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u044B \u0432 \u0441\u0442\u0440\u043E\
+    \u043A\u0443 */\n}\n.width-60 {\n  width: 60%;\n}\n.width-30 {\n  width: 30%;\n\
+    }\n.rounded-block {\n  border-radius: 10px;\n  padding: 10px;\n  margin-left:\
+    \ 5px;\n  margin-right: 5px;\n  flex: 1;\n}\n.grey-background {\n  background-color:\
+    \ rgba(128, 128, 128, 0.1);\n}\n.dot {\n  display: block;\n  height: 4px;\n  width:\
+    \ 4px;\n  border-radius: 50%;\n  margin: 2px 0px;\n  background-color: rgb(135,\
+    \ 147, 153);\n}\n.text-instruction {\n  font-size: 12px;\n}\n.header-text-instruction\
+    \ {\n  font-size: 14px;\n  font-weight: bold;\n}\n.column-container {\n  display:\
+    \ flex; /* \u0420\u0430\u0437\u043C\u0435\u0449\u0430\u0435\u043C \u044D\u043B\
+    \u0435\u043C\u0435\u043D\u0442\u044B \u0432 \u0441\u0442\u043E\u043B\u0431\u0435\
+    \u0446 */\n  flex-direction: column;\n  justify-content: space-between;\n  overflow:\
+    \ visible\n}\n.kpi_descr1 {\n    font-size: 12px;\n    line-height: 15px;\n}"
+  extra_form_data: {}
+query_context: "{\"datasource\":{\"id\":23044,\"type\":\"table\"},\"force\":false,\"\
+  queries\":[{\"filters\":[],\"extras\":{\"having\":\"\",\"where\":\"\"},\"applied_time_extras\"\
+  :{},\"columns\":[\"cnt_row\",{\"datasourceWarning\":false,\"expressionType\":\"\
+  SQL\",\"label\":\"warden_first_nm\",\"sqlExpression\":\"warden_array.3\"},{\"expressionType\"\
+  :\"SQL\",\"label\":\"unit_nm\",\"sqlExpression\":\"warden_array.18\"},{\"label\"\
+  :\"level_managament\",\"sqlExpression\":\"case\\n  when warden_array.5 = 3 then\
+  \  'lvl3_mapped_management_unit_nm'\\n  when warden_array.5 = 4 then  'lvl4_mapped_management_unit_nm'\\\
+  n  when warden_array.5 = 5 then  'lvl5_mapped_management_unit_nm'\\n  when warden_array.5\
+  \ = 6 then  'lvl6_mapped_management_unit_nm'\\n  when warden_array.5 = 7 then  'lvl7_mapped_management_unit_nm'\\\
+  n  when warden_array.5 = 8 then  'lvl8_mapped_management_unit_nm'\\n  when warden_array.5\
+  \ = 9 then  'lvl9_mapped_management_unit_nm'\\n  when warden_array.5 = 10 then 'lvl10_mapped_management_unit_nm'\\\
+  n  when warden_array.5 = 11 then 'lvl11_mapped_management_unit_nm'\\n  when warden_array.5\
+  \ = 12 then 'lvl12_mapped_management_unit_nm'\\n  when warden_array.5 = 13 then\
+  \ 'lvl13_mapped_management_unit_nm'\\nend\\n\",\"expressionType\":\"SQL\"},{\"label\"\
+  :\"level_managament_id\",\"sqlExpression\":\"case\\n  when warden_array.5 = 3 then\
+  \  'NATIVE_FILTER-n-mcrm4VN'\\n  when warden_array.5 = 4 then  'NATIVE_FILTER-wwbcXn-g9'\\\
+  n  when warden_array.5 = 5 then  'NATIVE_FILTER-MWqQqd-VI'\\n  when warden_array.5\
+  \ = 6 then  'NATIVE_FILTER-wma9sXDSA'\\n  when warden_array.5 = 7 then  'NATIVE_FILTER-EfeKazg7r'\\\
+  n  when warden_array.5 = 8 then  'NATIVE_FILTER-6EmSvblT4'\\n  when warden_array.5\
+  \ = 9 then  'NATIVE_FILTER--zCnuLLeC'\\n  when warden_array.5 = 10 then 'NATIVE_FILTER-3Drsgdpg8'\\\
+  n  when warden_array.5 = 11 then 'NATIVE_FILTER-6_LqZ0_q0'\\n  when warden_array.5\
+  \ = 12 then 'NATIVE_FILTER-8qDgptskDf'\\n  when warden_array.5 = 13 then 'NATIVE_FILTER-lj8lGHfJnb'\\\
+  nend\\n\",\"expressionType\":\"SQL\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"special_role_nm\",\"sqlExpression\":\"warden_array.7\"},{\"\
+  datasourceWarning\":false,\"expressionType\":\"SQL\",\"label\":\"warden_login\"\
+  ,\"sqlExpression\":\"warden_array.2\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"support_gph_flg\",\"sqlExpression\":\"warden_array.16\"},{\"\
+  datasourceWarning\":false,\"expressionType\":\"SQL\",\"label\":\"hr_filter\",\"\
+  sqlExpression\":\"case\\n  when warden_array.7 = 'HRBP' then 'hrbp_login'\\n  when\
+  \ warden_array.7 = '\u0420\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\
+  \u044B\u0439 HR' then 'regional_hr_login'\\n  else '\u041D\u0435\u0442 \u0441\u043F\
+  \u0435\u0446 \u0440\u043E\u043B\u0438'\\nend\"},{\"datasourceWarning\":false,\"\
+  expressionType\":\"SQL\",\"label\":\"hr_filter_id\",\"sqlExpression\":\"case\\n\
+  \  when warden_array.7 = 'HRBP' then 'NATIVE_FILTER-6AF8ONK2H'\\n  when warden_array.7\
+  \ = '\u0420\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0439 HR'\
+  \ then 'NATIVE_FILTER-Jt2rFRekP'\\n  else '\u041D\u0435\u0442 \u0441\u043F\u0435\
+  \u0446 \u0440\u043E\u043B\u0438'\\nend\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"hr_unit_nm\",\"sqlExpression\":\"'\u0422\u0432\u043E\u044F\
+  \ \u043F\u043E\u043F\u0443\u043B\u044F\u0446\u0438\u044F'\"},{\"datasourceWarning\"\
+  :false,\"expressionType\":\"SQL\",\"label\":\"personal_management_unit_nm\",\"sqlExpression\"\
+  :\"warden_array.6\"},{\"datasourceWarning\":false,\"expressionType\":\"SQL\",\"\
+  label\":\"personal_legal_unit_nm\",\"sqlExpression\":\"warden_array.15\"},{\"datasourceWarning\"\
+  :false,\"expressionType\":\"SQL\",\"label\":\"has_legal_unit\",\"sqlExpression\"\
+  :\"not(hasAny(warden_array.16, ['']))\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"has_management_unit\",\"sqlExpression\":\"not(hasAny(warden_array.9,\
+  \ ['']))\"},{\"datasourceWarning\":false,\"expressionType\":\"SQL\",\"label\":\"\
+  choose_functional\",\"sqlExpression\":\"{% if filter_values('lvl1_functional_unit_nm')|length\
+  \ or filter_values('lvl2_functional_unit_nm')|length or filter_values('lvl3_functional_unit_nm')|length\
+  \ or filter_values('lvl4_functional_unit_nm')|length \\n   or filter_values('lvl5_functional_unit_nm')|length\
+  \ or filter_values('lvl6_functional_unit_nm')|length or filter_values('lvl7_functional_unit_nm')|length\
+  \ or filter_values('lvl8_functional_unit_nm')|length\\n   or filter_values('lvl9_functional_unit_nm')|length\
+  \ or filter_values('lvl10_functional_unit_nm')|length or filter_values('lvl11_functional_unit_nm')|length\
+  \ or filter_values('lvl12_functional_unit_nm')|length or filter_values('new_functional_unit_nm')|length\
+  \ %}\\n1\\n{% else %}\\n2 \\n{%endif%}\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"hide_show_filter\",\"sqlExpression\":\"{% if '\u041F\u043E\u043B\
+  \u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u0438\u0439 \u043F\
+  \u0435\u0440\u0438\u043E\u0434' in filter_values('calendar_date') %} \\n'opacity:\
+  \ 1;'\\n{% else %} \\n'opacity: 0.5;'\\n{% endif %}\"},{\"expressionType\":\"SQL\"\
+  ,\"label\":\"management_unit_nm\",\"sqlExpression\":\"warden_array.4\"}],\"metrics\"\
+  :[],\"annotation_layers\":[],\"row_limit\":10000,\"series_limit\":0,\"order_desc\"\
+  :true,\"url_params\":{},\"custom_params\":{},\"custom_form_data\":{}}],\"form_data\"\
+  :{\"datasource\":\"23044__table\",\"viz_type\":\"handlebars\",\"slice_id\":92284,\"\
+  query_mode\":\"aggregate\",\"groupby\":[\"cnt_row\",{\"datasourceWarning\":false,\"\
+  expressionType\":\"SQL\",\"label\":\"warden_first_nm\",\"sqlExpression\":\"warden_array.3\"\
+  },{\"expressionType\":\"SQL\",\"label\":\"unit_nm\",\"sqlExpression\":\"warden_array.18\"\
+  },{\"label\":\"level_managament\",\"sqlExpression\":\"case\\n  when warden_array.5\
+  \ = 3 then  'lvl3_mapped_management_unit_nm'\\n  when warden_array.5 = 4 then  'lvl4_mapped_management_unit_nm'\\\
+  n  when warden_array.5 = 5 then  'lvl5_mapped_management_unit_nm'\\n  when warden_array.5\
+  \ = 6 then  'lvl6_mapped_management_unit_nm'\\n  when warden_array.5 = 7 then  'lvl7_mapped_management_unit_nm'\\\
+  n  when warden_array.5 = 8 then  'lvl8_mapped_management_unit_nm'\\n  when warden_array.5\
+  \ = 9 then  'lvl9_mapped_management_unit_nm'\\n  when warden_array.5 = 10 then 'lvl10_mapped_management_unit_nm'\\\
+  n  when warden_array.5 = 11 then 'lvl11_mapped_management_unit_nm'\\n  when warden_array.5\
+  \ = 12 then 'lvl12_mapped_management_unit_nm'\\n  when warden_array.5 = 13 then\
+  \ 'lvl13_mapped_management_unit_nm'\\nend\\n\",\"expressionType\":\"SQL\"},{\"label\"\
+  :\"level_managament_id\",\"sqlExpression\":\"case\\n  when warden_array.5 = 3 then\
+  \  'NATIVE_FILTER-n-mcrm4VN'\\n  when warden_array.5 = 4 then  'NATIVE_FILTER-wwbcXn-g9'\\\
+  n  when warden_array.5 = 5 then  'NATIVE_FILTER-MWqQqd-VI'\\n  when warden_array.5\
+  \ = 6 then  'NATIVE_FILTER-wma9sXDSA'\\n  when warden_array.5 = 7 then  'NATIVE_FILTER-EfeKazg7r'\\\
+  n  when warden_array.5 = 8 then  'NATIVE_FILTER-6EmSvblT4'\\n  when warden_array.5\
+  \ = 9 then  'NATIVE_FILTER--zCnuLLeC'\\n  when warden_array.5 = 10 then 'NATIVE_FILTER-3Drsgdpg8'\\\
+  n  when warden_array.5 = 11 then 'NATIVE_FILTER-6_LqZ0_q0'\\n  when warden_array.5\
+  \ = 12 then 'NATIVE_FILTER-8qDgptskDf'\\n  when warden_array.5 = 13 then 'NATIVE_FILTER-lj8lGHfJnb'\\\
+  nend\\n\",\"expressionType\":\"SQL\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"special_role_nm\",\"sqlExpression\":\"warden_array.7\"},{\"\
+  datasourceWarning\":false,\"expressionType\":\"SQL\",\"label\":\"warden_login\"\
+  ,\"sqlExpression\":\"warden_array.2\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"support_gph_flg\",\"sqlExpression\":\"warden_array.16\"},{\"\
+  datasourceWarning\":false,\"expressionType\":\"SQL\",\"label\":\"hr_filter\",\"\
+  sqlExpression\":\"case\\n  when warden_array.7 = 'HRBP' then 'hrbp_login'\\n  when\
+  \ warden_array.7 = '\u0420\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\
+  \u044B\u0439 HR' then 'regional_hr_login'\\n  else '\u041D\u0435\u0442 \u0441\u043F\
+  \u0435\u0446 \u0440\u043E\u043B\u0438'\\nend\"},{\"datasourceWarning\":false,\"\
+  expressionType\":\"SQL\",\"label\":\"hr_filter_id\",\"sqlExpression\":\"case\\n\
+  \  when warden_array.7 = 'HRBP' then 'NATIVE_FILTER-6AF8ONK2H'\\n  when warden_array.7\
+  \ = '\u0420\u0435\u0433\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0439 HR'\
+  \ then 'NATIVE_FILTER-Jt2rFRekP'\\n  else '\u041D\u0435\u0442 \u0441\u043F\u0435\
+  \u0446 \u0440\u043E\u043B\u0438'\\nend\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"hr_unit_nm\",\"sqlExpression\":\"'\u0422\u0432\u043E\u044F\
+  \ \u043F\u043E\u043F\u0443\u043B\u044F\u0446\u0438\u044F'\"},{\"datasourceWarning\"\
+  :false,\"expressionType\":\"SQL\",\"label\":\"personal_management_unit_nm\",\"sqlExpression\"\
+  :\"warden_array.6\"},{\"datasourceWarning\":false,\"expressionType\":\"SQL\",\"\
+  label\":\"personal_legal_unit_nm\",\"sqlExpression\":\"warden_array.15\"},{\"datasourceWarning\"\
+  :false,\"expressionType\":\"SQL\",\"label\":\"has_legal_unit\",\"sqlExpression\"\
+  :\"not(hasAny(warden_array.16, ['']))\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"has_management_unit\",\"sqlExpression\":\"not(hasAny(warden_array.9,\
+  \ ['']))\"},{\"datasourceWarning\":false,\"expressionType\":\"SQL\",\"label\":\"\
+  choose_functional\",\"sqlExpression\":\"{% if filter_values('lvl1_functional_unit_nm')|length\
+  \ or filter_values('lvl2_functional_unit_nm')|length or filter_values('lvl3_functional_unit_nm')|length\
+  \ or filter_values('lvl4_functional_unit_nm')|length \\n   or filter_values('lvl5_functional_unit_nm')|length\
+  \ or filter_values('lvl6_functional_unit_nm')|length or filter_values('lvl7_functional_unit_nm')|length\
+  \ or filter_values('lvl8_functional_unit_nm')|length\\n   or filter_values('lvl9_functional_unit_nm')|length\
+  \ or filter_values('lvl10_functional_unit_nm')|length or filter_values('lvl11_functional_unit_nm')|length\
+  \ or filter_values('lvl12_functional_unit_nm')|length or filter_values('new_functional_unit_nm')|length\
+  \ %}\\n1\\n{% else %}\\n2 \\n{%endif%}\"},{\"datasourceWarning\":false,\"expressionType\"\
+  :\"SQL\",\"label\":\"hide_show_filter\",\"sqlExpression\":\"{% if '\u041F\u043E\u043B\
+  \u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u0438\u0439 \u043F\
+  \u0435\u0440\u0438\u043E\u0434' in filter_values('calendar_date') %} \\n'opacity:\
+  \ 1;'\\n{% else %} \\n'opacity: 0.5;'\\n{% endif %}\"},{\"expressionType\":\"SQL\"\
+  ,\"label\":\"management_unit_nm\",\"sqlExpression\":\"warden_array.4\"}],\"all_columns\"\
+  :[],\"percent_metrics\":[],\"timeseries_limit_metric\":null,\"order_by_cols\":[],\"\
+  order_desc\":true,\"server_pagination\":false,\"row_limit\":10000,\"server_page_length\"\
+  :10,\"show_totals\":false,\"adhoc_filters\":[],\"handlebarsTemplate\":\"<style>\\\
+  n    .header_mdm\\n    {\\n        padding: 0px;\\n        text-align: center;\\\
+  n        font-size: 20px;\\n        font-weight: bold;\\n    }\\n    .header_text\\\
+  n    {\\n        font-size: 12px;\\n        text-align: justify;\\n        padding-top:\
+  \ 10px;\\n    }\\n    .filters-overflow-container > div > div:nth-child(9) .ant-form-item-label,\\\
+  n    .filters-overflow-container > div > div:nth-child(9) .ant-select-selector\\\
+  n    { {{data.[0].hide_show_filter}} }\\n</style>\\n<div style=\\\"padding: 0px;\\\
+  \">\\n<div class=\\\"header_nm\\\">\\n    {{#each data}}\\n    <span class=\\\"\
+  header_mdm\\\">\u041F\u0440\u0438\u0432\u0435\u0442, {{stringify warden_first_nm}}!</span>\\\
+  n    <!-- <span class=\\\"alarm\\\">\u0418\u0434\u0443\u0442 \u0434\u043E\u0440\u0430\
+  \u0431\u043E\u0442\u043A\u0438 \u0432 \u043E\u0442\u0447\u0435\u0442\u0435. \u041C\
+  \u043E\u0433\u0443\u0442 \u0432\u043E\u0437\u043D\u0438\u043A\u0430\u0442\u044C\
+  \ \u043E\u0448\u0438\u0431\u043A\u0438 </span><br>-->\\n    <div class=\\\"container_hello\\\
+  \">\\n    <div class=\\\"header_text\\\">\\n      {{#if (eq this.support_gph_flg\
+  \ 1)}}\\n      \u0442\u0432\u043E\u044F \u0437\u043E\u043D\u0430 \u0432\u0438\u0434\
+  \u0438\u043C\u043E\u0441\u0442\u0438 \u043F\u043E \u043E\u0441\u043E\u0431\u044B\
+  \u043C \u0440\u043E\u043B\u044F\u043C: <span class=\\\"quick_filter_superuser\\\"\
+  ><span class=\\\"kpi_descr1\\\">\u0412\u0441\u0435 \u0441\u043E\u0442\u0440\u0443\
+  \u0434\u043D\u0438\u043A\u0438 \u0413\u041F\u0425</span><br></span><br>\\n     \
+  \ {{/if}}\\n      {{#if (eq this.has_management_unit 1)}}\\n      \u0442\u0432\u043E\
+  \u044F \u0437\u043E\u043D\u0430 \u0432\u0438\u0434\u0438\u043C\u043E\u0441\u0442\
+  \u0438 \u043F\u043E \u0443\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0447\u0435\
+  \u0441\u043A\u043E\u0439: <span class=\\\"quick_filter_superuser\\\">{{personal_management_unit_nm}}</span><br>\\\
+  n      {{/if}}\\n      {{#if (eq this.has_leagl_unit 1)}}\\n      \u0442\u0432\u043E\
+  \u044F \u0437\u043E\u043D\u0430 \u0432\u0438\u0434\u0438\u043C\u043E\u0441\u0442\
+  \u0438 \u043F\u043E \u044E\u0440\u0438\u0434\u0438\u0447\u0435\u0441\u043A\u043E\
+  \u0439: <span class=\\\"quick_filter_superuser\\\">{{personal_legal_unit_nm}}</span><br>\\\
+  n      {{/if}}\\n    </div>\\n    <div class=\\\"header_text\\\">\\n        \u0414\
+  \u0430\u043D\u043D\u044B\u0439 \u043E\u0442\u0447\u0435\u0442 \u043F\u043E\u043C\
+  \u043E\u0436\u0435\u0442 \u0441\u0444\u043E\u0440\u043C\u0438\u0440\u043E\u0432\u0430\
+  \u0442\u044C \u0442\u0430\u0431\u043B\u0438\u0446\u0443 \u0441 \u0430\u0442\u0440\
+  \u0438\u0431\u0443\u0442\u0430\u043C\u0438 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\
+  \u0438\u043A\u0430. \u041E\u0437\u043D\u0430\u043A\u043E\u043C\u044C\u0441\u044F\
+  \ \u0441 \u0438\u043D\u0441\u0442\u0440\u0443\u043A\u0446\u0438\u0435\u0439 \u0438\
+  \ \u0441\u043F\u0440\u0430\u0432\u043E\u0447\u043D\u043E\u0439 \u0438\u043D\u0444\
+  \u043E\u0440\u043C\u0430\u0446\u0438\u0435\u0439 \u043F\u0435\u0440\u0435\u0434\
+  \ \u043D\u0430\u0447\u0430\u043B\u043E\u043C \u0440\u0430\u0431\u043E\u0442\u044B\
+  .   \\n    </div>\\n    </div>\\n    {{/each}}\\n</div>\\n</div>\\n<div class=\\\
+  \"column-container \\\">\\n  <span class=\\\"header-text-instruction\\\">\u0418\u043D\
+  \u0441\u0442\u0440\u0443\u043A\u0446\u0438\u044F \u043F\u043E \u0440\u0430\u0431\
+  \u043E\u0442\u0435 \u0441 \u043E\u0442\u0447\u0435\u0442\u043E\u043C</span>\\n \
+  \ <div class=\\\"row-container\\\">\\n    <div>\\n      <div class=\\\"header_text\\\
+  \">\\n        <ol>\\n          <li>\u041F\u0440\u0438\u043C\u0435\u043D\u0438 \u0432\
+  \u0441\u0435 \u043D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u044B\u0435\
+  \ \u0444\u0438\u043B\u044C\u0442\u0440\u044B. \u0412\u044B\u0433\u0440\u0443\u0436\
+  \u0430\u0439 \u0442\u043E\u043B\u044C\u043A\u043E \u0442\u043E, \u0447\u0442\u043E\
+  \ \u043F\u043E\u0442\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044F \u0432 \u0440\
+  \u0430\u0431\u043E\u0442\u0435. \u042D\u0442\u043E \u043F\u043E\u043C\u043E\u0436\
+  \u0435\u0442 \u043E\u0442\u0447\u0435\u0442\u0443 \u0440\u0430\u0431\u043E\u0442\
+  \u0430\u0442\u044C \u0431\u044B\u0441\u0442\u0440\u0435\u0435.</li>\\n         \
+  \ <li>\u0412 \u043B\u0435\u0432\u043E\u0439 \u043F\u0430\u043D\u0435\u043B\u0438\
+  \ \u0432\u044B\u0431\u0435\u0440\u0438 \u0432\u0441\u0435 \u043F\u043E\u043B\u044F\
+  \ \u0434\u043B\u044F \u0444\u043E\u0440\u043C\u0438\u0440\u043E\u0432\u0430\u043D\
+  \u0438\u044F \u0438\u0442\u043E\u0433\u043E\u0432\u043E\u0439 \u0442\u0430\u0431\
+  \u043B\u0438\u0446\u044B.</li>\\n          <li> <span>\u0421\u0442\u0440\u043E\u043A\
+  \ \u0432 \u0442\u0430\u0431\u043B\u0438\u0446\u0435 {{data.[0].cnt_row}} (\u043B\
+  \u0438\u043C\u0438\u0442 1000 \u0441\u0442\u0440\u043E\u043A). </span>\\n      \
+  \    {{#if (eq data.[0].choose_functional 2)}}\\n            {{#if (lte data.[0].cnt_row\
+  \ 1000)}}\\n        <span>\u041F\u0435\u0440\u0435\u0439\u0434\u0438 \u043D\u0430\
+  \ \u0432\u043A\u043B\u0430\u0434\u043A\u0443 <span style=\\\"font-weight: bold;\\\
+  \">\\\"\u0412\u044B\u0433\u0440\u0443\u0437\u043A\u0430 - 1000 \u0441\u0442\u0440\
+  \u043E\u043A\\\"</span>\u0438 \u0441\u043B\u0435\u0434\u0443\u0439 \u043F\u043E\
+  \ \u0438\u043D\u0441\u0442\u0440\u0443\u043A\u0446\u0438\u0438.</span>\\n      {{else}}\\\
+  n         <span>\u041F\u0435\u0440\u0435\u0439\u0434\u0438 \u043D\u0430 \u0432\u043A\
+  \u043B\u0430\u0434\u043A\u0443 <span style=\\\"font-weight: bold;\\\">\\\"\u0412\
+  \u044B\u0433\u0440\u0443\u0437\u043A\u0430 - \u0432\u0441\u0435 \u0441\u0442\u0440\
+  \u043E\u043A\u0438\\\"</span> \u0438 \u0441\u043B\u0435\u0434\u0443\u0439 \u043F\
+  \u043E \u0438\u043D\u0441\u0442\u0440\u0443\u043A\u0446\u0438\u0438.</span><br>\
+  \ \\n      {{/if}}\\n      {{else}}\\n      <span>\u0414\u043B\u044F \u0432\u044B\
+  \u0433\u0440\u0443\u0437\u043A\u0438 \u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\
+  \u044B \u041A\u041F \u043F\u0435\u0440\u0435\u0439\u0434\u0438 \u043D\u0430 \u0432\
+  \u043A\u043B\u0430\u0434\u043A\u0443 <span style=\\\"font-weight: bold;\\\">\\\"\
+  \u0412\u044B\u0433\u0440\u0443\u0437\u043A\u0430 \u041A\u041F - 100\u041A \u0441\
+  \u0442\u0440\u043E\u043A\\\"</span>\u0438 \u0441\u043B\u0435\u0434\u0443\u0439 \u043F\
+  \u043E \u0438\u043D\u0441\u0442\u0440\u0443\u043A\u0446\u0438\u0438.</span><br>\\\
+  n      {{/if}}</li>\\n        </ol>\\n      </div>\\n      {{#if (or (eq data.[0].special_role_nm\
+  \ 'HRBP') (eq data.[0].special_role_nm '\u0420\u0435\u0433\u0438\u043E\u043D\u0430\
+  \u043B\u044C\u043D\u044B\u0439 HR') (eq data.[0].special_role_nm '\u041F\u0430\u0440\
+  \u0442\u043D\u0435\u0440 \u043F\u043E \u0430\u0434\u0430\u043F\u0442\u0430\u0446\
+  \u0438\u0438'))}} \\n      <span class=\\\"header_text\\\">\u0412\u043E\u0441\u043F\
+  \u043E\u043B\u044C\u0437\u0443\u0439\u0441\u044F \u0431\u044B\u0441\u0442\u0440\u044B\
+  \u043C \u0444\u0438\u043B\u044C\u0442\u0440\u043E\u043C:\\n      <span style=\\\"\
+  font-weight:bold\\\">\\n        <a href=\\\"https://proteus.tcsbank.ru/superset/dashboard/hr-executive-detail-employee/?native_filters=({{data.0.hr_filter_id}}:(__cache:(label:'{{data.0.warden_login}}',validateStatus:!f,value:!('{{data.0.warden_login}}')),extraFormData:(filters:!((col:{{data.0.hr_filter}},op:IN,val:!('{{data.0.warden_login}}')))),filterState:(label:'{{data.0.warden_login}}',validateStatus:!f,value:!('{{data.0.warden_login}}')),id:{{data.0.hr_filter_id}},ownState:()))\\\
+  \" class=\\\"quick_filter\\\">\u0422\u0432\u043E\u044F \u043F\u043E\u043F\u0443\u043B\
+  \u044F\u0446\u0438\u044F</a>\\n        </span>\\n      {{else}}\\n        <span\
+  \ class=\\\"header_text\\\">\u0412\u043E\u0441\u043F\u043E\u043B\u044C\u0437\u0443\
+  \u0439\u0441\u044F \u0431\u044B\u0441\u0442\u0440\u044B\u043C \u0444\u0438\u043B\
+  \u044C\u0442\u0440\u043E\u043C \u043F\u043E \u043A\u043E\u043C\u0430\u043D\u0434\
+  \u0435: <span style=\\\"font-weight:bold\\\">\\n        <a href=\\\"https://proteus.tcsbank.ru/superset/dashboard/hr-executive-detail-employee/?native_filters=({{data.0.level_managament_id}}:(__cache:(label:'{{data.0.unit_nm}}',validateStatus:!f,value:!('{{data.0.unit_nm}}')),extraFormData:(filters:!((col:{{data.0.level_managament}},op:IN,val:!('{{data.0.unit_nm}}')))),filterState:(label:'{{data.0.unit_nm}}',validateStatus:!f,value:!('{{data.0.unit_nm}}')),id:{{data.0.level_managament_id}},ownState:()))\\\
+  \" class=\\\"quick_filter\\\">{{data.0.management_unit_nm}}</a>\\n        </span>\\\
+  n      {{/if}}\\n    </div>\\n  </div>\",\"styleTemplate\":\".container_hello {\\\
+  n    1height:80px;\\n    margin-bottom: 10px;\\n}\\n.alarm{\\n  text-align:right;\\\
+  n  padding-left:50px;\\n  font-weight:bold;\\n  font-size:16px;\\n  color:red;\\\
+  n}\\n.quick_filter{\\n    background-color:rgb(238, 245, 255);\\n    padding:4px;\\\
+  n    border-radius:4px;\\n    font-weight:bold;\\n}\\n.quick_filter_superuser{\\\
+  n    background-color:rgb(247, 203, 206, 0.5);\\n    padding:4px;\\n    border-radius:4px;\\\
+  n    font-weight:bold;\\n}\\n.row-container {\\n  display: flex; /* \u0420\u0430\
+  \u0437\u043C\u0435\u0449\u0430\u0435\u043C \u044D\u043B\u0435\u043C\u0435\u043D\u0442\
+  \u044B \u0432 \u0441\u0442\u0440\u043E\u043A\u0443 */\\n}\\n.width-60 {\\n  width:\
+  \ 60%;\\n}\\n.width-30 {\\n  width: 30%;\\n}\\n.rounded-block {\\n  border-radius:\
+  \ 10px;\\n  padding: 10px;\\n  margin-left: 5px;\\n  margin-right: 5px;\\n  flex:\
+  \ 1;\\n}\\n.grey-background {\\n  background-color: rgba(128, 128, 128, 0.1);\\\
+  n}\\n.dot {\\n  display: block;\\n  height: 4px;\\n  width: 4px;\\n  border-radius:\
+  \ 50%;\\n  margin: 2px 0px;\\n  background-color: rgb(135, 147, 153);\\n}\\n.text-instruction\
+  \ {\\n  font-size: 12px;\\n}\\n.header-text-instruction {\\n  font-size: 14px;\\\
+  n  font-weight: bold;\\n}\\n.column-container {\\n  display: flex; /* \u0420\u0430\
+  \u0437\u043C\u0435\u0449\u0430\u0435\u043C \u044D\u043B\u0435\u043C\u0435\u043D\u0442\
+  \u044B \u0432 \u0441\u0442\u043E\u043B\u0431\u0435\u0446 */\\n  flex-direction:\
+  \ column;\\n  justify-content: space-between;\\n  overflow: visible\\n}\\n.kpi_descr1\
+  \ {\\n    font-size: 12px;\\n    line-height: 15px;\\n}\",\"extra_form_data\":{},\"\
+  force\":false,\"result_format\":\"json\",\"result_type\":\"full\"},\"result_format\"\
+  :\"json\",\"result_type\":\"full\"}"
+cache_timeout: null
+uuid: 1750758a-960f-4d82-91d4-e7866365c5bb
+version: 1.0.0
+dataset_uuid: b79a6d1d-fb80-4886-a712-0a7d283b06ac

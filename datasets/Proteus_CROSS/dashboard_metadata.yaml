@@ -1,0 +1,194 @@
+table_name: dashboard_metadata
+main_dttm_col: null
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: null
+schema: prod_proteus
+sql: "select \n*\nfrom prod_proteus.v_dashboard_metadata"
+params: null
+template_params: {}
+filter_select_enabled: false
+fetch_values_predicate: null
+extra: null
+uuid: 8ea3770e-5110-45e6-905b-de9b5748bad6
+metrics:
+- metric_name: count
+  verbose_name: COUNT(*)
+  metric_type: null
+  expression: COUNT(*)
+  description: null
+  d3format: null
+  extra: {}
+  warning_text: null
+columns:
+- column_name: v_rls_flg
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(Int64)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: v_updated_at_dttm
+  verbose_name: null
+  is_dttm: true
+  is_active: null
+  type: Nullable(DateTime)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: v_data_source_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: v_paragraph_url
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: v_dashboard_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: v_feedback_url
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: v_email_url
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: v_description_url
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: v_domen_url
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: v_domen_nm
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: v_note_user
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: v_note_url
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: v_support_url
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+- column_name: dashboard_id
+  verbose_name: null
+  is_dttm: false
+  is_active: null
+  type: Nullable(String)
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  extra: {}
+version: 1.0.0
+database_uuid: f3cf662e-9267-42ad-85d9-a009bacb4736
