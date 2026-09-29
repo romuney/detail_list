@@ -16,6 +16,8 @@
    лимит, пачки, эхо, строка на аллокацию у КП, носители другого чарта не действуют, враждебный ввод,
    AlwaysTrue при сохранении датасета, нет строки в warden, режимы ClickHouse 24.8 (старый
    анализатор, prefer_column_name_to_alias, join_use_nulls, group_by_use_nulls).
+4. Круг sqlglot: Proteus (Superset 4.1+) разбирает SQL sqlglot и может перепечатать его им же —
+   перепечатанный запрос отдаёт тот же ответ (разбор при сохранении — stand/parse.py).
 """
 import os
 import re
@@ -78,11 +80,11 @@ def keys_for(mode):
     return EMP_KEYS + (ALLOC_KEYS if mode == 'kp' else [])
 
 
-def run_new(flt, user, mode, cols=None, settings=''):
+def run_new(flt, user, mode, cols=None, settings='', reprinted=False):
     f = dict(flt)
     if cols is not None:
         f['cols_f'] = cols
-    rows, dt = ch.dataset(f, user, mode, settings=settings)
+    rows, dt = ch.dataset(f, user, mode, settings=settings, reprinted=reprinted)
     return ch.decode(rows), rows, dt
 
 
@@ -348,7 +350,7 @@ def first_rows(d, i):
     return out
 
 
-def behaviour(mode, stream):
+def behaviour(mode, stream, kp):
     print('— части ответа, сортировка, лимит, эхо, ввод, доступ, режимы ClickHouse: %s' % mode)
     d, rows, _ = run_new({}, 'a.user', mode)
     ok('%s: по умолчанию — только meta и строки' % mode, d['roles'] == {'meta', 'r'} and len(set(r[0] for r in d['rows'])) == 5000,
@@ -440,6 +442,26 @@ def behaviour(mode, stream):
         {'q_f': ['mu>' + mu4], 'pt_f': ['q']},
         {'q_f': ['f:office_desc=офис'], 'pt_f': ['q', 'f']},
     ]
+    # круг sqlglot: перепечатанный запрос — тот же ответ (разделитель пути КП, сортировки, поиск, ввод)
+    kpath = '\x1f'.join([kp['a'], kp['b']])
+    rt = variants + [
+        {},
+        {'kp_f': [kpath], 'pt_f': ['r', 'f', 'kp'], 'sort_f': ['company_fire_dt:desc']},
+        {'q_f': ['kp>' + kpath], 'pt_f': ['q']},
+        {'q_f': ['lu=инвест'], 'pt_f': ['q'], 'per_f': ['date'], 'dt_f': ['2026-08-31'], 'emp_f': ['Активная'], 'tcr_f': ['ТЦР РФ']},
+        {'id_f': ['login=' + r['l'] for r in q("SELECT ad_login AS l FROM prod_proteus.mdm_employee_d_detail_last_day LIMIT 50")],
+         'sort_f': ['grade:asc'], 'lim_f': ['10000']},
+        evil,
+    ]
+    for vi, flt in enumerate(rt):
+        for user in (['a.user', 'hr.super'] if vi == len(variants) else ['a.user']):
+            try:
+                a, _, _ = run_new(flt, user, mode)
+                b, _, _ = run_new(flt, user, mode, reprinted=True)
+                ok('%s: круг sqlglot, вариант %d, %s — ответ тот же' % (mode, vi + 1, user), sig(a) == sig(b) and a['cols'] == b['cols'],
+                   (a['meta']['m']['total'], b['meta']['m']['total']))
+            except Exception as e:  # noqa: BLE001
+                ok('%s: круг sqlglot, вариант %d, %s' % (mode, vi + 1, user), False, e)
     for vi, flt in enumerate(variants):
         base, _, _ = run_new(flt, 'a.user', mode)
         for st in ['allow_experimental_analyzer = 0', 'prefer_column_name_to_alias = 1', 'join_use_nulls = 1', 'group_by_use_nulls = 1',
@@ -457,7 +479,7 @@ def main():
     for mode in modes:
         stream, mu, lu, kp = oracle(mode)
         independent(mode, stream, mu, lu)
-        behaviour(mode, stream)
+        behaviour(mode, stream, kp)
     print('\n%d проверок, провалов: %d (%.0f с)' % (PASSED[0] + len(FAILS), len(FAILS), time.time() - t0))
     for f in FAILS:
         print('  ✗', f)

@@ -15,7 +15,7 @@ Superset): два быстрых чарта без нативных фильтр
 
 | Задача | Куда |
 |---|---|
-| Поменять датасет | `proteus/detail-list.data.sql` → `stand/check.py` (оба режима, 0 провалов) |
+| Поменять датасет | `proteus/detail-list.data.sql` → `stand/parse.py` (разбор, как Proteus при сохранении) → `stand/check.py` (оба режима, 0 провалов) |
 | Поменять чарт | `proteus/detail-list.chart.js` по скиллу proteus-echarts-builder → `node --check` → ESLint `no-undef` (`stand/eslint.chart.cjs`, 0 ошибок) → `check.py` скилла → `stand/click.cjs` на живом стенде |
 | Отдать владельцу | `python3 stand/pack.py` → папка «Поставка — Детальные списки», правка `0. Инструкция.md` (после первой установки — раздел «Что нового»: какие файлы заменить) |
 | Прежние чарты и фильтры | выгрузка 7241 в корне: `charts/` (ключ `jsx` — код чартов 726821 и 795014), `datasets/Proteus_CROSS/`, `dashboards/`; первая выгрузка по ошибке («Анализ закрытых вакансий», 13198) к задаче не относится |
@@ -25,13 +25,14 @@ Superset): два быстрых чарта без нативных фильтр
 ## Стенд (без доступа к бою)
 
 chdb 2.1.1 (= ClickHouse 24.8, как в бою) — в отдельном venv (`pip install chdb==2.1.1
-jinja2 pyyaml`); Jinja датасета рендерится, как в Proteus (`filter_values`,
-`current_username`, AlwaysTrue при сохранении). В chdb нет `base64Encode` — строки
-кодирует стенд.
+jinja2 pyyaml sqlglot==26.33.0 sqlparse`); Jinja датасета рендерится, как в Proteus
+(`filter_values`, `current_username`, AlwaysTrue при сохранении). В chdb нет `base64Encode` —
+строки кодирует стенд.
 
 ```
 <venv>/bin/python stand/world.py              # синтетический мир → stand/.db: 100 тыс. сотрудников, 200 тыс. аллокаций КП, warden
-<venv>/bin/python stand/check.py [us|kp]      # 291 проверка: сверка с прежним датасетом выгрузки, независимый расчёт, режимы ClickHouse
+python3 stand/parse.py                        # разбор SQL sqlglot, как Proteus при сохранении датасета (без chdb; версии 23–30 — PYTHONPATH)
+<venv>/bin/python stand/check.py [us|kp]      # 313 проверок: сверка с прежним датасетом выгрузки, независимый расчёт, режимы ClickHouse, круг sqlglot
 <venv>/bin/python stand/live.py               # чарт в браузере: ?user=a.user|hr.super|p.lead|nobody, ?mode=us|kp, ?w=, ?selfoff=1
 NODE_PATH=$(npm root -g) node stand/click.cjs # живой прогон: каждый контрол обоих чартов (82 шага, 0 провалов)
 node $(npm root -g)/eslint/bin/eslint.js -c stand/eslint.chart.cjs --no-config-lookup proteus/detail-list.chart.js
@@ -79,6 +80,13 @@ python3 stand/pack.py [--check]               # файлы 1–4 поставк�
   списка; `cross_filter_*_structure` и датасеты нативных фильтров не используются.
 - **ClickHouse 24.8:** без SETTINGS в датасете, `ifNull` на каждом выходе, проверка старым
   и новым анализатором, `prefer_column_name_to_alias`, `join_use_nulls`, `group_by_use_nulls`.
+- **Парсер Proteus (sqlglot) — до ClickHouse:** SQL датасета разбирается при сохранении
+  («Некорректный SQL запрос: →…←» — так упало `GROUP BY intDiv(…) AS ch`, 29.09) и может
+  перепечатываться (Superset 4.1+ форматирует SQL чарта). Поэтому: без алиасов в `GROUP BY`,
+  без `\x`-экранов в строках (`'\x1F'` перепечатается как `'\\x1F'` — разделитель пути КП —
+  `char(31)`, класс управляющих — `'[[:cntrl:]]'`); `\t`, `\n`, `\'`, `\\` переживают печать.
+  Разбор — `stand/parse.py` (sqlglot 23–30 + «только SELECT»), перепечатанный запрос отдаёт
+  тот же ответ — раздел 4 `stand/check.py`. chdb такие ошибки не ловит: он выполняет всё.
 - **Чарт:** ES5, БЛОКИ 1–7 шаблона скилла, состояние в `window.__pvtState[ns]`, классы с
   префиксом ns; base64 — `atob` + `TextDecoder`; поле ввода при поиске не пересоздаётся
   (точечные обновления списка и таблицы); вид — профиль Proteus Adoption, как HRBP HUB

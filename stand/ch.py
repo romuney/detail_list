@@ -8,7 +8,8 @@ render()   — Jinja с filter_values / get_filters / current_username / where_i
 dataset()  — новый датасет proteus/detail-list.data.sql (mode 'us' | 'kp'), обёрнутый так же,
              как Proteus оборачивает чарт: SELECT измерений FROM (датасет) GROUP BY … LIMIT.
              Носители передаются основой с '_f'; у КП они уходят как '_kf' (так их шлёт чарт КП),
-             raw_carriers=True — как есть.
+             raw_carriers=True — как есть; reprinted=True — запрос перепечатан sqlglot, как его
+             может перепечатать Proteus (Superset 4.1+ форматирует SQL чарта sqlglot).
 current()  — прежний датасет из выгрузки (mdm_employee_d_detail_echarts / …functional_echarts) —
              оракул проверок: те же сотрудники и те же значения полей.
 decode()   — разбор ответа нового датасета: meta, фасеты, узлы, найденное, строки.
@@ -114,7 +115,13 @@ def _run(q, settings=''):
 
 def stand_sql(text):
     """chdb без base64Encode: строку отдаёт ClickHouse, base64 — Python (decode/dataset)."""
-    return text.replace('base64Encode(', '(')
+    return re.sub(r'(?i)\bbase64Encode\(', '(', text)
+
+
+def sqlglot_reprint(text):
+    """Как Proteus (Superset 4.1+): разбор sqlglot диалектом clickhouse и печать им же."""
+    import sqlglot
+    return sqlglot.transpile(text, read='clickhouse', write='clickhouse')[0]
 
 
 def carriers(flt, mode):
@@ -124,11 +131,13 @@ def carriers(flt, mode):
     return {(k[:-2] + '_kf' if k.endswith('_f') else k): v for k, v in (flt or {}).items()}
 
 
-def dataset(flt=None, user='a.user', mode='us', settings='', always_true=False, raw=False, raw_carriers=False):
+def dataset(flt=None, user='a.user', mode='us', settings='', always_true=False, raw=False, raw_carriers=False,
+            reprinted=False):
     """Как Proteus: SELECT измерений FROM (датасет) AS virtual_table GROUP BY измерений LIMIT."""
-    inner = stand_sql(sql(flt if raw_carriers else carriers(flt, mode), user, mode, always_true))
+    inner = sql(flt if raw_carriers else carriers(flt, mode), user, mode, always_true)
     q = ('SELECT %s FROM (%s) AS virtual_table GROUP BY %s LIMIT %d'
          % (', '.join(MEASURES), inner, ', '.join(MEASURES), ROW_LIMIT))
+    q = stand_sql(sqlglot_reprint(q) if reprinted else q)
     rows, dt = _run(q, settings)
     if not raw:
         for r in rows:

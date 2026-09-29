@@ -45,6 +45,12 @@
     Доступ — как в прежнем датасете: warden_access_array_cross по current_username()
     маскирует персональные данные, грейд, сеньорность и оценку; без строки в warden
     приходит только meta (ok = 0). ClickHouse 24.8: без SETTINGS, ifNull на каждом выходе.
+
+    Proteus разбирает отрендеренный SQL парсером sqlglot ещё до ClickHouse (сохранение
+    датасета падает «Некорректный SQL запрос») и может перепечатать его им же. Поэтому: без
+    алиасов в GROUP BY (номер пачки — колонкой подзапроса), без \x-экранов в строках — '\x1F'
+    перепечатается как '\\x1F' (четыре знака): разделитель пути КП — char(31). Проверка —
+    stand/parse.py (разбор) и круг sqlglot в stand/check.py (перепечатанный SQL отдаёт то же).
 ============================================================================ -#}
 {% set MODE = 'us' %}
 {% set KP = MODE == 'kp' %}
@@ -191,13 +197,13 @@
 {% macro kp_levels() -%}
 arrayMap(x -> arrayFilter(y -> y != '' AND y != '-', arraySlice(splitByString('<>', x), 1, 12)), splitByString(';', ifNull(functional_lvl_all_array, '')))
 {%- endmacro %}
-{% macro kp_paths() -%}arrayFilter(p -> p != '', arrayMap(a -> arrayStringConcat(a, '\x1F'), {{ kp_levels() }})){%- endmacro %}
+{% macro kp_paths() -%}arrayFilter(p -> p != '', arrayMap(a -> arrayStringConcat(a, char(31)), {{ kp_levels() }})){%- endmacro %}
 {% macro kp_nodes() -%}
-arrayDistinct(arrayFlatten(arrayMap(a -> arrayMap(i -> arrayStringConcat(arraySlice(a, 1, i), '\x1F'), range(1, length(a) + 1)), {{ kp_levels() }})))
+arrayDistinct(arrayFlatten(arrayMap(a -> arrayMap(i -> arrayStringConcat(arraySlice(a, 1, i), char(31)), range(1, length(a) + 1)), {{ kp_levels() }})))
 {%- endmacro %}
 {#- Узлы, у которых есть дети: собственные префиксы путей аллокаций (без полного пути). -#}
 {% macro kp_parents() -%}
-arrayDistinct(arrayFlatten(arrayMap(a -> arrayMap(i -> arrayStringConcat(arraySlice(a, 1, i), '\x1F'), range(1, length(a))), {{ kp_levels() }})))
+arrayDistinct(arrayFlatten(arrayMap(a -> arrayMap(i -> arrayStringConcat(arraySlice(a, 1, i), char(31)), range(1, length(a))), {{ kp_levels() }})))
 {%- endmacro %}
 {% macro kp_id(p) -%}substring(lower(hex(MD5({{ p }}))), 1, 12){%- endmacro %}
 
@@ -214,7 +220,7 @@ ifNull(toString({{ a }}), '') IN dl_f_{{ a }}
 {%- for a in FACETS -%}{%- if a != skip and a in F and F[a] %} AND {{ fcond(a) }}{% endif -%}{%- endfor -%}
 {%- if skip != 'mu' and MU %} AND hasAny(dl_mu, {{ mu_rks() }}){% endif -%}
 {%- if skip != 'lu' and LU %} AND hasAny(dl_lu, {{ lu_rks() }}){% endif -%}
-{%- if skip != 'kp' and KPP %} AND arrayExists(p -> arrayExists(s -> startsWith(concat(p, '\x1F'), concat(s, '\x1F')), dl_kp), {{ kp_paths() }}){% endif -%}
+{%- if skip != 'kp' and KPP %} AND arrayExists(p -> arrayExists(s -> startsWith(concat(p, char(31)), concat(s, char(31))), dl_kp), {{ kp_paths() }}){% endif -%}
 {%- if IDS['rk'] or IDS['login'] or IDS['tab'] or IDS['siebel'] %} AND (0
 {%- if IDS['rk'] %} OR mdm_employee_rk IN dl_rk{% endif -%}
 {%- if IDS['login'] %} OR lower(ifNull(ad_login, '')) IN dl_login{% endif -%}
@@ -376,7 +382,7 @@ SELECT *,
           PREWHERE {{ glob() }} AND mdm_employee_rk IN ({{ sel_ids() }})
 {%- endmacro %}
 {% macro clean(x) -%}
-replaceRegexpAll(replaceAll(replaceAll(replaceAll(ifNull(toString({{ x }}), ''), unhex('E280A8'), ' '), unhex('E280A9'), ' '), unhex('EFBBBF'), ' '), '[\x00-\x1F]', ' ')
+replaceRegexpAll(replaceAll(replaceAll(replaceAll(ifNull(toString({{ x }}), ''), unhex('E280A8'), ' '), unhex('E280A9'), ' '), unhex('EFBBBF'), ' '), '[[:cntrl:]]', ' ')
 {%- endmacro %}
 
 WITH
@@ -470,10 +476,10 @@ FROM (
   {# дерево КП: узел — путь именами, id — 12 знаков md5 пути, сотрудник в узле — один раз. Есть дети — следующий
      путь по возрастанию начинается с «путь\x1F» (\x1F меньше любого знака имени) #}
   SELECT 't' AS role, 'kp' AS k, {{ kp_id('kpath') }} AS v, toInt64(tn) AS n,
-    concat(toString(td), '\t', if(td > 1, substring(lower(hex(MD5(arrayStringConcat(arraySlice(parts, 1, td - 1), '\x1F')))), 1, 12), ''), '\t',
-      parts[td], '\t', toString(ta), '\t', toString(startsWith(nxt, concat(kpath, '\x1F'))), '\t', kpath, '\t', toString(nodes)) AS j
+    concat(toString(td), '\t', if(td > 1, substring(lower(hex(MD5(arrayStringConcat(arraySlice(parts, 1, td - 1), char(31))))), 1, 12), ''), '\t',
+      parts[td], '\t', toString(ta), '\t', toString(startsWith(nxt, concat(kpath, char(31)))), '\t', kpath, '\t', toString(nodes)) AS j
   FROM (
-    SELECT kpath, length(splitByString('\x1F', kpath)) AS td, splitByString('\x1F', kpath) AS parts, sum(ok) AS tn, count() AS ta,
+    SELECT kpath, length(splitByString(char(31), kpath)) AS td, splitByString(char(31), kpath) AS parts, sum(ok) AS tn, count() AS ta,
       count() OVER () AS nodes, leadInFrame(kpath) OVER (ORDER BY kpath ROWS BETWEEN CURRENT ROW AND 1 FOLLOWING) AS nxt
     FROM (
       SELECT {{ kp_nodes() }} AS kn, toUInt8({{ cond('kp') }}) AS ok
@@ -484,8 +490,8 @@ FROM (
     GROUP BY kpath
   )
   WHERE nodes <= {{ TREE_FULL_MAX }} OR td <= {{ TREE_TOP }}
-    OR arrayExists(s -> startsWith(concat(s, '\x1F'), concat(kpath, '\x1F')), dl_kp)
-    OR has(dl_kp, arrayStringConcat(arraySlice(parts, 1, td - 1), '\x1F'))
+    OR arrayExists(s -> startsWith(concat(s, char(31)), concat(kpath, char(31))), dl_kp)
+    OR has(dl_kp, arrayStringConcat(arraySlice(parts, 1, td - 1), char(31)))
 {%- endif %}
 {%- for tk, root, rks, nms, sel in [('mu', MU_ROOT, mu_rks(), mu_nms(), MU), ('lu', 1, lu_rks(), lu_nms(), LU)] if sel %}
 
@@ -533,10 +539,10 @@ FROM (
   {# КП: поиск по имени узла или дети узла; есть дети — узел среди префиксов путей сотрудника (флаг — до ARRAY JOIN:
      массив путей по строкам узлов не размножается) #}
   SELECT 'q' AS role, 'kp' AS k, {{ kp_id('kpath') }} AS v, toInt64(qn) AS n,
-    concat(toString(qd), '\t', if(qd > 1, substring(lower(hex(MD5(arrayStringConcat(arraySlice(parts, 1, qd - 1), '\x1F')))), 1, 12), ''), '\t',
+    concat(toString(qd), '\t', if(qd > 1, substring(lower(hex(MD5(arrayStringConcat(arraySlice(parts, 1, qd - 1), char(31))))), 1, 12), ''), '\t',
       parts[qd], '\t', toString(qa), '\t', toString(qk), '\t', kpath, '\t') AS j
   FROM (
-    SELECT kt.1 AS kpath, length(splitByString('\x1F', kpath)) AS qd, splitByString('\x1F', kpath) AS parts, sum(ok) AS qn, count() AS qa,
+    SELECT kt.1 AS kpath, length(splitByString(char(31), kpath)) AS qd, splitByString(char(31), kpath) AS parts, sum(ok) AS qn, count() AS qa,
       max(kt.2) AS qk
     FROM (
       SELECT arrayMap(p -> (p, has(dp, p)), kn) AS kts, ok
@@ -545,12 +551,12 @@ FROM (
         FROM {{ universe() }}
         {#- без искомого текста (у детей — без имени самого узла) в строке аллокаций находок у сотрудника нет #}
         WHERE warden_n > 0 AND {% if Q['op'] == '=' %}positionCaseInsensitiveUTF8(ifNull(functional_lvl_all_array, ''), {{ qs(Q['x']) }}) > 0
-          {%- else %}position(ifNull(functional_lvl_all_array, ''), arrayElement(splitByString('\x1F', {{ qs(Q['x']) }}), -1)) > 0{% endif %}
+          {%- else %}position(ifNull(functional_lvl_all_array, ''), arrayElement(splitByString(char(31), {{ qs(Q['x']) }}), -1)) > 0{% endif %}
       )
     )
     ARRAY JOIN kts AS kt
-    WHERE {% if Q['op'] == '=' %}positionCaseInsensitiveUTF8(arrayElement(splitByString('\x1F', kt.1), -1), {{ qs(Q['x']) }}) > 0
-      {%- else %}startsWith(kt.1, concat({{ qs(Q['x']) }}, '\x1F')) AND position(substring(kt.1, length({{ qs(Q['x']) }}) + 2), '\x1F') = 0{% endif %}
+    WHERE {% if Q['op'] == '=' %}positionCaseInsensitiveUTF8(arrayElement(splitByString(char(31), kt.1), -1), {{ qs(Q['x']) }}) > 0
+      {%- else %}startsWith(kt.1, concat({{ qs(Q['x']) }}, char(31))) AND position(substring(kt.1, length({{ qs(Q['x']) }}) + 2), char(31)) = 0{% endif %}
     GROUP BY kpath
     ORDER BY {% if Q['op'] == '=' %}qn DESC, qa DESC, kpath{% else %}kpath{% endif %}
     LIMIT {{ SEARCH_TOP if Q['op'] == '=' else CHILD_TOP }}
@@ -579,9 +585,13 @@ FROM (
 
   UNION ALL
   {# строки: id сотрудников — ORDER BY … LIMIT по отфильтрованной таблице; маски и упаковка — только для них.
-     Строка собирается до оконных функций: окна сортируют ключ и готовую строку, а не ~110 колонок #}
+     Строка собирается до оконных функций: окна сортируют ключ и готовую строку, а не ~110 колонок.
+     Номер пачки — колонкой подзапроса: алиас в GROUP BY (GROUP BY выражение AS ch) ClickHouse принимает,
+     а разбор SQL в Proteus (sqlglot) при сохранении датасета — нет #}
   SELECT 'r' AS role, toString(ch) AS k, '' AS v, toInt64(count()) AS n,
     base64Encode(arrayStringConcat(arrayMap(x -> x.2, arraySort(x -> x.1, groupArray((rn, line)))), '\n')) AS j
+  FROM (
+  SELECT intDiv(rn - 1, {{ CHUNK }}) AS ch, rn, line
   FROM (
 {%- if not KP %}
     SELECT row_number() OVER (ORDER BY sk {{ SD }} NULLS LAST, mdm_employee_rk) AS rn, line
@@ -602,7 +612,7 @@ FROM (
         FROM (
           SELECT mdm_employee_rk, {{ clean(out('master_id')) }} AS rks, {{ sortkey(SK, false) }} AS sk,
             ifNull(allocation_prt_norm, 0) AS alloc,
-            arrayStringConcat([{% for i in range(1, 13) %}ifNull(lvl{{ i }}_functional_unit_nm, ''){% if not loop.last %}, {% endif %}{% endfor %}], '\x1F') AS kp_sort,
+            arrayStringConcat([{% for i in range(1, 13) %}ifNull(lvl{{ i }}_functional_unit_nm, ''){% if not loop.last %}, {% endif %}{% endfor %}], char(31)) AS kp_sort,
             concat({% for c in ALLOC_KEYS %}{{ clean(out(c)) }}{% if not loop.last %}, '\t', {% endif %}{% endfor %}) AS aline
           FROM ({{ flagged() }})
         )
@@ -616,6 +626,7 @@ FROM (
     ) AS e USING (mdm_employee_rk)
 {%- endif %}
   )
-  GROUP BY intDiv(rn - 1, {{ CHUNK }}) AS ch
+  )
+  GROUP BY ch
 {%- endif %}
 )
