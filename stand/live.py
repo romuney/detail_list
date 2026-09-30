@@ -1,18 +1,18 @@
-"""Живой стенд вкладки «Детальных списков»: борд из двух чартов поверх датасетов в chdb.
+"""Живой стенд вкладки «Детальных списков»: борд из двух чартов (панель фильтров слева, список справа) поверх chdb.
 
     python3 stand/live.py [порт]        # http://127.0.0.1:8766/?user=a.user&mode=us
 
 Страница повторяет Proteus: каждый чарт — в <iframe sandbox="allow-scripts"> (хост
 [_echarts_instance_], массив data, applyCrossFilter); родитель — борд:
-  • кросс-фильтры по областям, как в JSON-метаданных поставки: строка фильтров → себе и списку,
+  • кросс-фильтры по областям, как в JSON-метаданных поставки: панель фильтров → себе и списку,
     список → только себе; маски эмиттеров, в область которых входит чарт, складываются и уходят в
     его датасет как filter_values (носители с суффиксом вкладки '_f' / '_kf'); чарт перезапускается
     в том же окне iframe (состояние живёт), только если его фильтры изменились;
   • канал скриншотов: ECHARTS_UPDATE_DATA_URL кладёт dataUrl в img.echarts-plugin рядом с iframe,
-    CSS борда — файл 9 поставки (id чартов подставлены): строка фильтров разворачивается поверх списка.
+    CSS борда — файл 9 поставки (id чартов подставлены): панель фильтров разворачивается вправо поверх списка.
 ?user= — логин (current_username): a.user, hr.super, p.lead, nobody; ?mode=us|kp — вкладка (у КП в чартах
-ns 'dlk' / 'dlkf', как в файлах поставки); ?w= — ширина борда, px; ?fh= — высота строки фильтров
-(по умолчанию 96), ?lh= — высота списка; ?selfoff=flt|list — чарт не фильтрует сам себя (проверка
+ns 'dlk' / 'dlkf', как в файлах поставки); ?w= — ширина борда, px; ?pw= — ширина панели фильтров
+(по умолчанию 340), ?h= — высота ряда; ?selfoff=flt|list — чарт не фильтрует сам себя (проверка
 предупреждения); ?delay= — задержка ответа, мс.
 Счётчики для проверок (у родителя): window.__runs = {flt, list}, window.__masks = {flt, list} (эмиты),
 window.__ms / __bytes = {flt: [], list: []} (время и размер ответов), window.__runMs (время скрипта).
@@ -57,8 +57,9 @@ parent.postMessage({ type: 'STAND_READY', chart: NAME }, '*');
 
 PAGE = r'''<!doctype html><html><head><meta charset="utf-8"><title>Детальные списки · стенд борда</title>
 <style>html,body{margin:0;background:#f4f5f7;font:13px Arial}
-.dashboard-grid{padding:16px;display:flex;flex-direction:column;gap:16px}
-.grid-row{display:flex}.dashboard-component-chart-holder{flex:1;position:relative}
+.dashboard-grid{padding:16px}
+.grid-row{display:flex;gap:16px}.grid-column{position:relative;flex:0 0 auto}.grid-column.list{flex:1 1 auto;min-width:0}
+.dashboard-component-chart-holder{position:relative;height:100%}
 .dashboard-chart,.chart-container,.slice_container,.react_sanbbox,[id^="chart-id-"]{width:100%;height:100%}
 .react_sanbbox iframe{border:0;width:100%;height:100%;display:block}
 img.echarts-plugin{display:none}
@@ -70,23 +71,26 @@ var USER = Q.get('user') || 'a.user', MODE = Q.get('mode') === 'kp' ? 'kp' : 'us
 var SELFOFF = Q.get('selfoff') || '', IDS = __IDS__, INNER = __INNER__;
 var grid = document.getElementById('grid');
 if (Q.get('w')) grid.style.width = Q.get('w') + 'px';
-var H = { flt: +(Q.get('fh') || 96), list: +(Q.get('lh') || Math.max(560, innerHeight - (+(Q.get('fh') || 96)) - 48)) };
+var H = +(Q.get('h') || Math.max(640, innerHeight - 32)), PW = +(Q.get('pw') || 340);
 // Области кросс-фильтров — как в JSON-метаданных поставки (п. 4 инструкции).
 var SCOPE = { flt: ['flt', 'list'], list: ['list'] };
 if (SELFOFF) SCOPE[SELFOFF] = SCOPE[SELFOFF].filter(function (c) { return c !== SELFOFF; });
 var MASKS = { flt: [], list: [] }, LAST = { flt: null, list: null }, FR = {}, SRCS = {};
 window.__runs = { flt: 0, list: 0 }; window.__masks = { flt: [], list: [] }; window.__ms = { flt: [], list: [] };
 window.__bytes = { flt: [], list: [] }; window.__runMs = { flt: [], list: [] }; window.__errs = []; window.__req = { flt: 0, list: 0 };
+var row = document.createElement('div');
+row.className = 'grid-row';
+row.style.height = H + 'px';
+grid.appendChild(row);
 ['flt', 'list'].forEach(function (c) {
-  var id = IDS[c];
-  var row = document.createElement('div');
-  row.className = 'grid-row';
-  row.style.height = H[c] + 'px';
-  row.innerHTML = '<div class="dashboard-component-chart-holder"><div class="dashboard-chart dashboard-chart-id-' + id + '">'
+  var id = IDS[c], col = document.createElement('div');
+  col.className = 'grid-column' + (c === 'list' ? ' list' : '');
+  if (c === 'flt') col.style.width = PW + 'px';
+  col.innerHTML = '<div class="dashboard-component-chart-holder"><div class="dashboard-chart dashboard-chart-id-' + id + '">'
     + '<div class="chart-container"><div class="slice_container"><div id="chart-id-' + id + '"><div class="react_sanbbox">'
     + '<iframe sandbox="allow-scripts" name="' + c + '"></iframe></div></div><img class="echarts-plugin"></div></div></div></div>';
-  grid.appendChild(row);
-  FR[c] = row.querySelector('iframe');
+  row.appendChild(col);
+  FR[c] = col.querySelector('iframe');
   FR[c].srcdoc = INNER.replace('__NAME__', c);
 });
 function incoming(c) {

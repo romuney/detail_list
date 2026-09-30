@@ -1,4 +1,4 @@
-// Живой прогон вкладки на стенде борда: строка фильтров и список — каждый контрол кликом, с проверкой.
+// Живой прогон вкладки на стенде борда: панель фильтров и список — каждый контрол кликом, с проверкой.
 // smoke скилла кликает первый поповер и первые подсказки одного чарта; здесь — весь сценарий пользователя
 // на борде из двух iframe (области кросс-фильтров, канал скриншотов, CSS разворота — как в Proteus).
 //
@@ -49,16 +49,13 @@ const listMasks = (p) => p.evaluate(() => window.__masks.list.length);
 const fltIframe = (p) => p.evaluate(() => { const f = document.querySelector('iframe[name="flt"]').getBoundingClientRect(); return { h: Math.round(f.height), w: Math.round(f.width) }; });
 const marker = (p) => p.evaluate(() => /REwtRkxULURELU9O/.test(document.querySelector('.dashboard-chart-id-222222 img.echarts-plugin, .dashboard-chart-id-333333 img.echarts-plugin').src || ''));
 const ddOpen = (p) => p.F.evaluate(() => { const d = document.querySelector('[class$="-dd"]'); if (!d || d.style.display === 'none') return null; const r = d.getBoundingClientRect(); return { w: Math.round(r.width), h: Math.round(r.height), top: Math.round(r.top) }; });
-const applyText = (p) => p.F.evaluate(() => { const b = document.querySelector('[data-acts] [data-action="apply"]'); return b ? b.textContent.trim() : ''; });
-// Открыть фильтр строки: пилюля видна — по ней, спрятана в «Ещё» — через «Ещё».
+const applyText = (p) => p.F.evaluate(() => { const b = document.querySelector('[data-foot] [data-action="apply"]'); return b ? b.textContent.trim() : ''; });
+// Прогноз панели по кубу: «Будет N» / «Под фильтрами N».
+const forecast = (p) => p.F.evaluate(() => { const b = document.querySelector('[data-tot] b'); return b ? +b.textContent.replace(/\D/g, '') : -1; });
+const PW = 340;
+// Открыть фильтр панели: поле всегда на виду (разделы развёрнуты).
 async function openFilter(p, key) {
-  const vis = await p.F.evaluate((k) => { const b = document.querySelector('[data-pills] [data-k="' + k + '"]'); return !!b && b.style.display !== 'none'; }, key);
-  if (vis) await p.F.click('[data-pills] [data-k="' + key + '"]');
-  else {
-    await p.F.click('[data-more]');
-    await p.waitForTimeout(150);
-    await p.F.click('[class$="-dd"] [data-pop="' + key + '"]');
-  }
+  await p.F.click('[data-panel] [data-k="' + key + '"]');
   await p.waitForTimeout(250);
 }
 // Счётчики значений атрибута в открытой выпадашке: значение → число.
@@ -82,53 +79,73 @@ const ddCounts = (p) => p.F.evaluate(() => {
     ok(mode + ': открытие без эмитов', (await p.evaluate(() => window.__masks.flt.length + window.__masks.list.length)) === 0);
     ok(mode + ': больше 25 000 — плашка «сузьте фильтры»', all > 25000 && /Сузьте фильтры/.test(await note(p)), [all, await note(p)]);
 
-    // Строка фильтров: два ряда, всё остальное — в «Ещё»
-    const bar = await p.F.evaluate(() => {
-      const ps = Array.prototype.slice.call(document.querySelectorAll('[data-pills] [data-k]'));
-      const vis = ps.filter((b) => b.style.display !== 'none'), more = document.querySelector('[data-more]');
-      const tops = {};
-      vis.forEach((b) => { tops[b.getBoundingClientRect().top] = 1; });
-      return { all: ps.length, vis: vis.length, rows: Object.keys(tops).length, more: more && more.style.display !== 'none' ? more.textContent : '' };
+    // Панель фильтров: разделы, в разделе — по два в ряд
+    const pan = await p.F.evaluate(() => {
+      const secs = document.querySelectorAll('[data-sec]'), flds = document.querySelectorAll('[data-panel] [data-k]'), out = { secs: secs.length, flds: flds.length, cols: 0 };
+      const g = secs[0].querySelectorAll('[data-k]'), xs = {};
+      g.forEach((b) => { xs[Math.round(b.getBoundingClientRect().left)] = 1; });
+      out.cols = Object.keys(xs).length;
+      return out;
     });
-    ok(mode + ': строка — 33 фильтра, видимые в два ряда, остальные в «Ещё»', bar.all === 33 && bar.rows <= 2 && (bar.vis === 33 || /Ещё \d+/.test(bar.more)), bar);
-    ok(mode + ': строка — iframe в высоту ячейки', (await fltIframe(p)).h === 96, await fltIframe(p));
+    ok(mode + ': панель — 7 разделов, 33 фильтра, по два в ряд', pan.secs === 7 && pan.flds === 33 && pan.cols === 2, pan);
+    ok(mode + ': панель — iframe в ширину колонки', (await fltIframe(p)).w === PW, await fltIframe(p));
 
-    // Структура: значения уже в ответе — открыть без запроса; выпадашка широкая, iframe развернулся
+    // Структура: дерево уже в кубе — открыть без запроса; выпадашка справа от панели, поверх списка
     const tk = mode === 'kp' ? 'kp' : 'mu';
     const r0 = await reqs(p);
     await openFilter(p, tk);
     const dd1 = await ddOpen(p);
+    const ddLeft = await p.F.evaluate(() => Math.round(document.querySelector('[class$="-dd"]').getBoundingClientRect().left));
     ok(mode + ': структура открывается без запроса', JSON.stringify(await reqs(p)) === JSON.stringify(r0) && (await p.F.$$('[data-tsel="' + tk + '"]')).length > 0);
-    ok(mode + ': выпадашка широкая и поверх списка (маркер, iframe развёрнут)', dd1 && dd1.w >= 500 && dd1.h > 150 && (await marker(p)) && (await fltIframe(p)).h > 500,
-      [dd1, await marker(p), await fltIframe(p)]);
+    ok(mode + ': выпадашка широкая, справа от панели, поверх списка (маркер, iframe развёрнут вправо)',
+      dd1 && dd1.w >= 500 && dd1.h > 150 && ddLeft >= PW && (await marker(p)) && (await fltIframe(p)).w > 800,
+      [dd1, ddLeft, await marker(p), await fltIframe(p)]);
     await p.F.click('[class$="-dd"] [data-action="tw"]');
     await p.waitForTimeout(150);
     ok(mode + ': узел раскрывается', (await p.F.$$('[data-action="tw"][aria-expanded="true"]')).length > 0);
     await p.F.fill('[data-psearch]', 'инвест');
     await p.waitForTimeout(300);
     const hits = await p.F.$$('[data-tsel="' + tk + '"]');
-    ok(mode + ': поиск юнита — по пришедшему дереву, без запроса', hits.length > 0 && JSON.stringify(await reqs(p)) === JSON.stringify(r0), hits.length);
+    ok(mode + ': поиск юнита — по кубу, без запроса', hits.length > 0 && JSON.stringify(await reqs(p)) === JSON.stringify(r0), hits.length);
     ok(mode + ': курсор в поле поиска', await p.F.evaluate(() => document.activeElement && document.activeElement.hasAttribute('data-psearch')));
+    const f0 = await forecast(p);
     await hits[0].click();
     await p.waitForTimeout(150);
+    const f1 = await forecast(p);
     ok(mode + ': выбор копится — «Применить · 1»', /Применить · 1/.test(await applyText(p)), await applyText(p));
+    ok(mode + ': прогноз «Будет N» — сразу по выбору, без запроса', f0 === all && f1 > 0 && f1 < f0 && JSON.stringify(await reqs(p)) === JSON.stringify(r0), [f0, f1, all]);
     await p.keyboard.press('Escape');
     await p.waitForTimeout(300);
-    ok(mode + ': Esc закрывает, iframe обратно в строку', !(await ddOpen(p)) && !(await marker(p)) && (await fltIframe(p)).h === 96, await fltIframe(p));
-    ok(mode + ': фильтр на строке показывает выбор', (await p.F.$$('[data-k="' + tk + '"] [data-action="clr"]')).length === 1);
+    ok(mode + ': Esc закрывает, iframe обратно в колонку', !(await ddOpen(p)) && !(await marker(p)) && (await fltIframe(p)).w === PW, await fltIframe(p));
+    ok(mode + ': поле показывает выбор и ×', (await p.F.$$('[data-k="' + tk + '"] [data-action="clr"]')).length === 1);
 
-    // Атрибут: значения со счётчиками, выбор
+    // Каскад до «Применить»: счётчики значений другого фильтра — уже под набранным выбором
     await openFilter(p, 'f:emp_stream_desc');
     const before = await ddCounts(p);
-    ok(mode + ': значения атрибута — сразу, со счётчиками', Object.keys(before).length > 5 && JSON.stringify(await reqs(p)) === JSON.stringify(r0), Object.keys(before).length);
+    const sumB = Object.keys(before).reduce((x, k) => x + before[k], 0);
+    ok(mode + ': значения атрибута — сразу, под набранной структурой (сумма = прогноз)', Object.keys(before).length > 0 && sumB === f1
+      && JSON.stringify(await reqs(p)) === JSON.stringify(r0), [Object.keys(before).length, sumB, f1]);
     await p.keyboard.press('Escape');
     await openFilter(p, 'f:emp_specialization_it_code');
     await p.F.click('[class$="-dd"] [data-fk="emp_specialization_it_code"][data-fv="IT"]');
     await p.waitForTimeout(150);
-    ok(mode + ': второй фильтр — «Применить · 2» в выпадашке и в строке', /Применить · 2/.test(await applyText(p))
-      && /Применить · 2/.test(await p.F.textContent('[class$="-dd"] [data-action="apply"]')));
+    const f2 = await forecast(p);
+    ok(mode + ': второй фильтр — «Применить · 2» в выпадашке и в панели, прогноз сузился', /Применить · 2/.test(await applyText(p))
+      && /Применить · 2/.test(await p.F.textContent('[class$="-dd"] [data-action="apply"]')) && f2 < f1, [f2, f1]);
+    await p.keyboard.press('Escape');
+    await openFilter(p, 'f:emp_stream_desc');
+    const midC = await ddCounts(p);
+    const sumM = Object.keys(midC).reduce((x, k) => x + midC[k], 0);
+    ok(mode + ': каскад — счётчики стрима пересчитались без запроса, пустые спрятаны', sumM === f2 && JSON.stringify(midC) !== JSON.stringify(before)
+      && Object.keys(midC).every((k) => midC[k] > 0) && JSON.stringify(await reqs(p)) === JSON.stringify(r0), [sumM, f2]);
+    const zb = await p.F.$('[class$="-dd"] [data-action="zeros"]');
+    if (zb) {
+      await zb.click();
+      await p.waitForTimeout(150);
+      ok(mode + ': «Показать ещё … без сотрудников» — нули серым', Object.keys(await ddCounts(p)).length > Object.keys(midC).length);
+    }
 
-    // Применить: оба чарта пересчитываются; список сразу показывает «Обновляю…»
+    // Применить: оба чарта пересчитываются; список сразу показывает «Обновляю…»; итог = прогноз
     const lm = await listMasks(p);
     await act(p, ['flt', 'list'], async () => {
       await p.F.click('[class$="-dd"] [data-action="apply"]');
@@ -136,15 +153,21 @@ const ddCounts = (p) => p.F.evaluate(() => {
       ok(mode + ': список сразу ждёт фильтры («Обновляю…»)', !!(await p.L.$('[class$="-load"]')));
     });
     const t1 = await total(p);
-    ok(mode + ': «Применить» — итог списка сузился', t1 > 0 && t1 < all, [t1, all]);
+    ok(mode + ': «Применить» — итог списка = прогноз панели', t1 === f2 && t1 < all, [t1, f2, all]);
     ok(mode + ': список не эмитил сам', (await listMasks(p)) === lm);
     ok(mode + ': ожидание снято, выпадашка закрыта', !(await p.L.$('[class$="-load"]')) && !(await ddOpen(p)) && /^Применить$/.test(await applyText(p)), await applyText(p));
-    ok(mode + ': применённые фильтры — на строке', (await p.F.$$('[data-pills] [data-action="clr"]')).length === 2);
+    ok(mode + ': применённые фильтры — в панели', (await p.F.$$('[data-panel] [data-action="clr"]')).length === 2 && (await forecast(p)) === t1);
     await openFilter(p, 'f:emp_stream_desc');
     const after = await ddCounts(p);
-    const sumAfter = Object.keys(after).reduce((s, k) => s + after[k], 0);
-    ok(mode + ': влияние фильтра на фильтр — счётчики стрима при остальных фильтрах', JSON.stringify(after) !== JSON.stringify(before) && sumAfter === t1, [sumAfter, t1]);
+    const sumAfter = Object.keys(after).reduce((x, k) => x + after[k], 0);
+    ok(mode + ': после «Применить» — те же счётчики при остальных фильтрах', sumAfter === t1, [sumAfter, t1]);
     await p.keyboard.press('Escape');
+    // Подсказка у поля не разворачивает iframe (не дёргается)
+    await p.F.hover('[data-panel] [data-k="f:office_desc"]');
+    await p.waitForTimeout(250);
+    const tp = await p.F.evaluate(() => { const t = document.querySelector('body > [class$="-tip"]'); if (!t || t.style.display === 'none') return null; const r = t.getBoundingClientRect(); return [Math.round(r.left), Math.round(r.right)]; });
+    ok(mode + ': подсказка поля — в панели, iframe не разворачивается', tp && tp[1] <= PW && !(await marker(p)) && (await fltIframe(p)).w === PW, [tp, await fltIframe(p)]);
+    await p.mouse.move(900, 500);
 
     // Колонки: добавить — один запрос списка; убрать — без запроса
     const lr = await reqs(p);
@@ -247,9 +270,9 @@ const ddCounts = (p) => p.F.evaluate(() => {
     await p.L.click('[data-pop="lim"]');
     await act(p, ['list'], () => p.L.click('[data-action="setlim"][data-key="10000"]'));
     ok(mode + ': лимит 10 000', /10 000/.test(await p.L.textContent('[data-pop="lim"]')));
-    await act(p, ['flt', 'list'], () => p.F.click('[data-acts] [data-action="reset"]'));
+    await act(p, ['flt', 'list'], () => p.F.click('[data-foot] [data-action="reset"]'));
     ok(mode + ': «Сбросить» — снова все', (await total(p)) === all, [await total(p), all]);
-    ok(mode + ': «Сбросить» — фильтров на строке нет', (await p.F.$$('[data-pills] [data-action="clr"]')).length === 0);
+    ok(mode + ': «Сбросить» — фильтров в панели нет', (await p.F.$$('[data-panel] [data-action="clr"]')).length === 0);
     const pg0 = await p.L.textContent('[data-pager]');
     await p.L.click('[data-action="pg"][data-key="next"]');
     await p.waitForTimeout(200);
@@ -265,7 +288,7 @@ const ddCounts = (p) => p.F.evaluate(() => {
     ok(mode + ': все загружены — плашки нет', (await note(p)) === '', await note(p));
 
     // Под фильтрами от 5 000 до 25 000 — «Загрузить всех»
-    await act(p, ['flt', 'list'], () => p.F.click('[data-acts] [data-action="reset"]'));
+    await act(p, ['flt', 'list'], () => p.F.click('[data-foot] [data-action="reset"]'));
     await openFilter(p, 'f:active_type_nm');
     const mid = await p.F.evaluate(() => {
       const ls = document.querySelectorAll('[class$="-dd"] label[class$="-opt"]');
@@ -290,7 +313,7 @@ const ddCounts = (p) => p.F.evaluate(() => {
     const pgBefore = await p.L.textContent('[data-pager]');
     await p.mouse.click(700, 600);
     await p.waitForTimeout(300);
-    ok(mode + ': клик мимо закрывает выпадашку, iframe обратно', !(await ddOpen(p)) && (await fltIframe(p)).h === 96 && (await p.L.textContent('[data-pager]')) === pgBefore);
+    ok(mode + ': клик мимо закрывает выпадашку, iframe обратно', !(await ddOpen(p)) && (await fltIframe(p)).w === PW && (await p.L.textContent('[data-pager]')) === pgBefore);
 
     const errs = p.errs.concat(await p.evaluate(() => window.__errs));
     ok(mode + ': ошибок в консоли и в скриптах чартов нет', errs.length === 0, errs.slice(0, 3));

@@ -12,7 +12,8 @@ dataset()  — новый датасет proteus/detail-list.data.sql (mode 'us'
              может перепечатать Proteus (Superset 4.1+ форматирует SQL чарта sqlglot).
 current()  — прежний датасет из выгрузки (mdm_employee_d_detail_echarts / …functional_echarts) —
              оракул проверок: те же сотрудники и те же значения полей.
-decode()   — разбор ответа нового датасета: meta, фасеты, узлы, найденное, строки.
+decode()   — разбор ответа нового датасета: meta, строки (list); словари, деревья и куб (filters).
+cube_count() — счётчики панели по кубу, как их считает чарт (для сверки с независимым расчётом).
 
 В chdb 2.1.1 нет base64Encode: ClickHouse отдаёт строку, base64 делает Python —
 размер ответа тот же, что в бою.
@@ -143,7 +144,7 @@ def dataset(flt=None, user='a.user', mode='us', settings='', always_true=False, 
     rows, dt = _run(q, settings)
     if not raw:
         for r in rows:
-            if r.get('role') in ('r', 'T', 'F'):
+            if r.get('role') in ('r', 'T', 'D'):
                 r['j'] = base64.b64encode(r['j'].encode('utf-8')).decode('ascii')
     return rows, dt
 
@@ -163,68 +164,89 @@ def current(flt=None, user='a.user', mode='us', limit=None, settings=''):
     return out, rows, dt
 
 
+def _unesc(v):
+    return re.sub(r'\\(.)', lambda m: {'n': '\n', 'r': '\r'}.get(m.group(1), m.group(1)), v)
+
+
+def _fixed(txt, w, A):
+    out = []
+    for p in range(0, len(txt) - w + 1, w):
+        v = 0
+        for ch in txt[p:p + w]:
+            v = v * 64 + A[ch]
+        out.append(v)
+    return out
+
+
 def decode(rows):
-    """Ответ нового датасета → {'meta', 'f', 'fq', 't', 'q', 's', 'rows', 'cols', 'roles'}; узлы T — в 't'."""
-    res = {'meta': None, 'f': {}, 'fq': {}, 't': {}, 'q': {}, 's': {}, 'rows': [], 'cols': [], 'roles': set()}
-    chunks, tree_chunks = [], {}
+    """Ответ нового датасета → {'meta', 'rows', 'cols', 'roles', 'dict', 'trees', 'cube', 'N'}.
+
+    trees[tk] — узлы в порядке обхода: {'id', 'lvl', 'own', 'name', 'par', 'end', 'path'}; у КП id = путь через \\x1f.
+    cube[k] — список на сотрудника: код словаря (атрибут), номер узла или -1 (mu / lu), список кодов / узлов
+    (regional_hr_login / kp)."""
+    res = {'meta': None, 'rows': [], 'cols': [], 'roles': set(), 'dict': {}, 'trees': {}, 'cube': {}, 'N': 0}
+    chunks, tree_chunks, cube_chunks = [], {}, {}
     for r in rows:
         role = r['role']
         res['roles'].add(role)
         if role == 'meta':
             res['meta'] = json.loads(r['j'])
             res['meta']['n'] = int(r['n'])
-        elif role == 'f':
-            a, nv = r['j'].split('\t')
-            res['f'].setdefault(r['k'], {})[r['v']] = (int(r['n']), int(a), int(nv))
-        elif role == 'fq':
-            res['fq'].setdefault(r['k'], {})[r['v']] = (int(r['n']), int(r['j']))
-        elif role in ('t', 'q', 's'):
-            # уровень, родитель, имя, всего, есть дети, путь, узлов в дереве (у t)
-            parts = r['j'].split('\t')
-            assert len(parts) == 7, (role, r['j'])
-            node = {'id': r['v'], 'n': int(r['n']), 'lvl': int(parts[0]), 'pid': parts[1], 'name': parts[2], 'all': int(parts[3]),
-                    'hk': int(parts[4]), 'path': parts[5], 'nodes': int(parts[6]) if parts[6] else None}
-            res[role].setdefault(r['k'], []).append(node)
-        elif role == 'F':
-            # атрибут одной строкой: «значение\tсотрудников» по строке, в значении \ \t \n \r экранированы
-            nv = int(r['v'])
+        elif role == 'D':
             text = base64.b64decode(r['j']).decode('utf-8') if r['j'] else ''
-            for line in text.split('\n'):
-                if line == '':
-                    continue
-                v, n = line.rsplit('\t', 1)
-                v = re.sub(r'\\(.)', lambda m: {'t': '\t', 'n': '\n', 'r': '\r'}.get(m.group(1), m.group(1)), v)
-                res['f'].setdefault(r['k'], {})[v] = (int(n), None, nv)
+            res['dict'][r['k']] = [_unesc(v) for v in text.split('\n')] if int(r['v']) else []
         elif role == 'T':
-            # пачки узлов в порядке обхода в глубину: УС / ЮС — «rk, уровень, при остальных, есть дети, имя»,
-            # КП — «уровень, при остальных, есть дети, имя»; родитель — ближайший выше узел меньшего уровня
-            tree_chunks.setdefault(r['k'], []).append((int(r['v'].split(':')[0]), int(r['v'].split(':')[1]), r['j']))
+            c, nodes = r['v'].split(':')
+            tree_chunks.setdefault(r['k'], []).append((int(c), int(nodes), r['j']))
+        elif role == 'C':
+            c, w, m = r['v'].split(':')
+            cube_chunks.setdefault(r['k'], []).append((int(c), int(w), m == '1', int(r['n']), r['j']))
         elif role == 'r':
             chunks.append((int(r['k']), r['j']))
     for tk, parts in tree_chunks.items():
-        stack, out = [], []
+        stack, out, leaf = [], [], [None]
         for _, nodes, j in sorted(parts):
             for line in (base64.b64decode(j).decode('utf-8') if j else '').split('\n'):
                 if line == '':
                     continue
                 p = line.split('\t')
                 if tk == 'kp':
-                    lvl, n, hk, name = int(p[0]), int(p[1]), int(p[2]), p[3]
+                    lvl, own, name, rid = int(p[0]), p[1] == '1', p[2], None
                 else:
-                    rid, lvl, n, hk, name = p[0], int(p[1]), int(p[2]), int(p[3]), p[4]
-                while stack and stack[-1]['lvl'] >= lvl:
-                    stack.pop()
-                par = stack[-1] if stack else None
-                node = {'n': n, 'lvl': lvl, 'name': name, 'all': None, 'hk': hk, 'nodes': nodes}
-                if tk == 'kp':
-                    node['path'] = (par['path'] + '\x1f' if par else '') + name
-                    node['id'] = hashlib.md5(node['path'].encode('utf-8')).hexdigest()[:12]
-                    node['pid'] = par['id'] if par else ''
-                else:
-                    node.update({'id': rid, 'pid': par['id'] if par else '', 'path': ''})
-                stack.append(node)
+                    rid, lvl, own, name = p[0], int(p[1]), p[2] == '1', p[3]
+                while stack and out[stack[-1]]['lvl'] >= lvl:
+                    out[stack.pop()]['end'] = len(out) - 1
+                par = stack[-1] if stack else -1
+                node = {'lvl': lvl, 'own': own, 'name': name, 'par': par, 'nodes': nodes}
+                node['path'] = ((out[par]['path'] + '\x1f') if par >= 0 else '') + name
+                node['id'] = node['path'] if tk == 'kp' else rid
+                stack.append(len(out))
                 out.append(node)
-        res['t'][tk] = out
+                if own:
+                    leaf.append(len(out) - 1)
+        while stack:
+            out[stack.pop()]['end'] = len(out) - 1
+        res['trees'][tk] = out
+        res['trees'][tk + ':leaf'] = leaf
+    if res['meta'] and cube_chunks:
+        A = {c: i for i, c in enumerate(res['meta']['m']['alph'])}
+        res['N'] = sum(x[3] for x in cube_chunks.get('emp', []))
+        for k, parts in cube_chunks.items():
+            leaf = res['trees'].get(k + ':leaf')
+            vals = []
+            for _, w, multi, n, j in sorted(parts):
+                if multi:
+                    emps = j.split('.')
+                    assert len(emps) == n, (k, len(emps), n)
+                    for e in emps:
+                        codes = _fixed(e, w, A)
+                        vals.append([leaf[c] for c in codes] if leaf else codes)
+                else:
+                    codes = _fixed(j, w, A)
+                    assert len(codes) == n, (k, len(codes), n)
+                    vals.extend([(leaf[c] if c else -1) for c in codes] if leaf else codes)
+            assert len(vals) == res['N'], (k, len(vals), res['N'])
+            res['cube'][k] = vals
     res['cols'] = res['meta']['a']['cols'] if res['meta'] else []
     for _, j in sorted(chunks):
         text = base64.b64decode(j).decode('utf-8') if j else ''
@@ -232,6 +254,47 @@ def decode(rows):
             if line != '':
                 res['rows'].append(line.split('\t'))
     return res
+
+
+EMP_BIT = {'Юридическая': 1, 'Активная': 2}
+TCR_BIT = {'ТЦР РФ': 1, 'ТЦР СНГ': 2, 'ТЦР РФ + ТЦР СНГ': 4}
+
+
+def cube_count(d, sel, skip=None):
+    """Как чарт: сотрудники куба под выбором sel = {'flt': {атрибут: [значения]}, 'mu'|'lu'|'kp': [id узлов],
+    'emp': 'Юридическая'|'Активная', 'tcr': ''|…}, кроме фильтра skip. Возвращает список номеров сотрудников."""
+    tests = []
+    emp = sel.get('emp') or 'Юридическая'
+    if skip != 'emp':
+        dv = d['dict']['emp']
+        tests.append(lambda e, b=EMP_BIT[emp]: int(dv[d['cube']['emp'][e]]) & b)
+    if sel.get('tcr') and skip != 'tcr':
+        dt = d['dict']['tcr']
+        tests.append(lambda e, b=TCR_BIT[sel['tcr']]: int(dt[d['cube']['tcr'][e]]) & b)
+    for a, vals in (sel.get('flt') or {}).items():
+        if a == skip or not vals:
+            continue
+        codes = set(i for i, v in enumerate(d['dict'][a]) if v in vals)
+        col = d['cube'][a]
+        if a == 'regional_hr_login':
+            tests.append(lambda e, col=col, codes=codes: any(c in codes for c in col[e]))
+        else:
+            tests.append(lambda e, col=col, codes=codes: col[e] in codes)
+    for tk in ('mu', 'lu', 'kp'):
+        ids = sel.get(tk) or []
+        if not ids or tk == skip:
+            continue
+        T = d['trees'][tk]
+        cov = set()
+        for i, x in enumerate(T):
+            if x['id'] in ids:
+                cov.update(range(i, x['end'] + 1))
+        col = d['cube'][tk]
+        if tk == 'kp':
+            tests.append(lambda e, col=col, cov=cov: any(c in cov for c in col[e]))
+        else:
+            tests.append(lambda e, col=col, cov=cov: col[e] in cov)
+    return [e for e in range(d['N']) if all(t(e) for t in tests)]
 
 
 def size(rows):

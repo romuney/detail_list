@@ -15,7 +15,7 @@ module.exports = [{
       window: 'readonly', document: 'readonly', navigator: 'readonly', console: 'readonly',
       getComputedStyle: 'readonly', setTimeout: 'readonly', clearTimeout: 'readonly', innerWidth: 'readonly',
       ResizeObserver: 'readonly', Element: 'readonly', atob: 'readonly', btoa: 'readonly', TextDecoder: 'readonly',
-      Uint8Array: 'readonly', JSON: 'readonly', escape: 'readonly',
+      Uint8Array: 'readonly', Int16Array: 'readonly', Int32Array: 'readonly', Uint32Array: 'readonly', JSON: 'readonly', escape: 'readonly',
       data: 'readonly', applyCrossFilter: 'readonly', option: 'writable'
     }
   },
