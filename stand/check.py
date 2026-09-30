@@ -381,9 +381,9 @@ def behaviour(mode, stream, kp):
     d3, _, _ = run_new({'id_f': ['rk=' + r['r'] for r in ids]}, 'a.user', mode, view='filters')
     ok('%s: «Сотрудники по списку» сужают куб' % mode, d3['N'] == 7, d3['N'])
     d4, _, _ = run_new({'per_f': ['date'], 'dt_f': ['2026-08-31']}, 'a.user', mode, view='filters')
-    n4 = int(q("SELECT uniqExact(mdm_employee_rk) AS n FROM prod_proteus.mdm_employee_d_detail_period%s WHERE business_dt = toDate('2026-08-31') "
-               "AND (legal_employee_flg = 1 OR active_employee_flg = 1)" % ('_functional' if mode == 'kp' else ''))[0]['n'])
-    ok('%s: «Период» — куб на дату' % mode, d4['N'] == n4 and n4 > 0, (d4['N'], n4))
+    ok('%s: «Период» куб не меняет — действующие на последний день, эхо даты есть' % mode,
+       d4['cube'] == d['cube'] and d4['dict'] == d['dict'] and d4['meta']['m']['per'] == 'date' and d4['meta']['m']['dt'] == '2026-08-31',
+       (d4['N'], d['N']))
     d, rows, _ = run_new({'pt_f': ['f', 'q'], 'q_f': ['mu=инвест'], 'frq_f': ['f-7']}, 'a.user', mode)
     ok('%s: список не читает поиск и части, эхо метки панели фильтров' % mode,
        d['roles'] == {'meta', 'r'} and d['meta']['m']['frq'] == 'f-7' and 'dates' not in d['meta'], (d['roles'], d['meta']['m'].get('frq')))

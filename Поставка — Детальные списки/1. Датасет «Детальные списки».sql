@@ -10,8 +10,8 @@
                загруженного, группировка и «Копировать» — в чарте, без запроса.
       filters  meta и КУБ: словари значений атрибутов, деревья УС / ЮС / КП целиком и коды
                значений каждого сотрудника. Счётчики «при остальных фильтрах» считает чарт — по
-               набранному выбору, ещё до «Применить». Куб не зависит от фильтров атрибутов и
-               структур: его сужают только «Период» и «Сотрудники по списку».
+               набранному выбору, ещё до «Применить». Куб — действующие сотрудники на последний
+               день: «Период» его не меняет; сужают его только «Сотрудники по списку».
 
     Строки различаются колонкой role:
       meta  всегда, 1 строка: k — режим (us | kp), n — сотрудников под фильтрами, j — JSON
@@ -228,13 +228,15 @@ arrayDistinct(arrayFlatten(arrayMap(a -> arrayMap(i -> arrayStringConcat(arraySl
 {%- endmacro %}
 
 {#- ---- куб панели фильтров ----
-    Вселенная куба — все сотрудники периода (юридическая ИЛИ активная численность: «Численность»
-    и «Тип ЮЛ» — коды куба) под «Сотрудниками по списку»; фильтры атрибутов и структур её не сужают —
-    их применяет чарт. Сотрудник — одной строкой, номер eo — по mdm_employee_rk. -#}
+    Вселенная куба — действующие сотрудники на последний день (юридическая ИЛИ активная численность:
+    «Численность» и «Тип ЮЛ» — коды куба) под «Сотрудниками по списку». «Период» куб не меняет:
+    значения фильтров от даты не зависят (решение владельца, 30.09); фильтры атрибутов и структур
+    куб не сужают — их применяет чарт. Сотрудник — одной строкой, номер eo — по mdm_employee_rk. -#}
+{% set T_CUR = 'prod_proteus.mdm_employee_d_detail_last_day' ~ ('_functional' if KP else '') %}
 {% macro cube_emp(cols) -%}
 SELECT {{ cols }}, row_number() OVER (ORDER BY mdm_employee_rk) AS eo
-      FROM {% if KP %}(SELECT * FROM {{ T_EMP }} PREWHERE (legal_employee_flg = 1 OR active_employee_flg = 1){% if PER == 'date' %} AND business_dt = toDateOrNull({{ qs(DT) }}){% endif %} LIMIT 1 BY mdm_employee_rk)
-      {%- else %}{{ T_EMP }} PREWHERE (legal_employee_flg = 1 OR active_employee_flg = 1){% if PER == 'date' %} AND business_dt = toDateOrNull({{ qs(DT) }}){% endif %}{% endif %}
+      FROM {% if KP %}(SELECT * FROM {{ T_CUR }} PREWHERE (legal_employee_flg = 1 OR active_employee_flg = 1) LIMIT 1 BY mdm_employee_rk)
+      {%- else %}{{ T_CUR }} PREWHERE (legal_employee_flg = 1 OR active_employee_flg = 1){% endif %}
       WHERE warden_n > 0 AND {{ idcond() }}
 {%- endmacro %}
 {#- Код → w знаков алфавита ALPH, старший разряд первым. -#}

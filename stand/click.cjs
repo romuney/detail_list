@@ -308,6 +308,23 @@ const ddCounts = (p) => p.F.evaluate(() => {
       ok(mode + ': «Загрузить всех» — загружены все', (await note(p)) === '' && new RegExp('из ' + t2.toLocaleString('ru-RU').replace(/\s/g, '.') + '$').test(got), [t2, got]);
     } else ok(mode + ': значение от 5 000 до 25 000 в мире', false, 'нет значения');
 
+    // «Период»: значения фильтров — по действующим, от даты не зависят
+    const fp0 = await forecast(p);
+    await openFilter(p, 'f:emp_stream_desc');
+    const cs0 = await ddCounts(p);
+    await p.keyboard.press('Escape');
+    await openFilter(p, 'per');
+    await p.F.click('[class$="-dd"] [data-action="setper"][data-key="date"]');
+    await p.waitForTimeout(150);
+    await p.keyboard.press('Escape');
+    await openFilter(p, 'f:emp_stream_desc');
+    const cs1 = await ddCounts(p);
+    await p.keyboard.press('Escape');
+    ok(mode + ': дата не меняет числа фильтров, подвал — «Действующих N»', (await forecast(p)) === fp0 && JSON.stringify(cs0) === JSON.stringify(cs1)
+      && /Действующих/.test(await p.F.textContent('[data-tot]')), [fp0, await forecast(p)]);
+    await p.F.click('[data-foot] [data-action="unstage"]');
+    await p.waitForTimeout(150);
+
     // Клик мимо выпадашки (по списку под развёрнутым слоем) — закрывает её, список не кликается
     await openFilter(p, 'emp');
     const pgBefore = await p.L.textContent('[data-pager]');
