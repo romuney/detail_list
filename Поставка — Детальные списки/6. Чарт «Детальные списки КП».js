@@ -1275,6 +1275,26 @@ function buildHTML() {
 }
 
 // ---------- БЛОК 6: МОНТАЖ + ИНТЕРАКТИВ ----------
+// Рассылка всем iframe борда (обход от window.top; свой пропускаем): панель фильтров той же вкладки
+// узнаёт применённые фильтры (эхо этого ответа) — сама она себя не фильтрует.
+function bcast(msg) {
+  try {
+    (function walk(w, d) {
+      if (d > 5) return;
+      for (var i = 0; i < w.frames.length; i++) {
+        var f = w.frames[i];
+        if (f !== window) { try { f.postMessage(msg, '*'); } catch (e) { /* чужой фрейм */ } }
+        try { walk(f, d + 1); } catch (e2) { /* нет доступа к вложенным */ }
+      }
+    })(window.top, 0);
+  } catch (e) { /* нет window.top — стенд без родителя */ }
+}
+function echoMsg() {
+  var ap = applied();
+  return { type: 'DL_ECHO', cf: MODEL.cf, frq: (MODEL.m && MODEL.m.frq) || '',
+    f: { per: ap.per, dt: ap.dt, emp: ap.emp, tcr: ap.tcr, flt: ap.flt, mu: ap.mu, lu: ap.lu, kp: ap.kp, id: ap.id } };
+}
+
 (function mount() {
   try {
     var hosts = document.querySelectorAll('[_echarts_instance_]');
@@ -2187,6 +2207,7 @@ function buildHTML() {
     if (state.onFlt) window.removeEventListener('message', state.onFlt);
     state.onFlt = function (ev) {
       var d = ev.data || {};
+      if (d.type === 'DL_ASK' && d.cf === MODEL.cf && MODEL.m && MODEL.ok && overlay.parentNode) { bcast(echoMsg()); return; }
       if (d.type !== 'DL_FLT' || d.cf !== MODEL.cf || !d.frq || !overlay.parentNode) return;
       if (MODEL.m && MODEL.m.frq === d.frq) return;
       state.pend = { frq: String(d.frq), at: Date.now(), kind: 'filters' };
@@ -2210,6 +2231,8 @@ function buildHTML() {
     armPend();
 
     render();
+    // Панели фильтров — что применено (она сама себя не фильтрует).
+    if (MODEL.m && MODEL.ok) bcast(echoMsg());
     // Новые строки — сверху; прокрутка страницы — как была.
     if (kept && !state.pend) scrollTo(kept, false);
     if (state.open) focusPop();

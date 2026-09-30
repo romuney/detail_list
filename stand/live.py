@@ -4,7 +4,7 @@
 
 Страница повторяет Proteus: каждый чарт — в <iframe sandbox="allow-scripts"> (хост
 [_echarts_instance_], массив data, applyCrossFilter); родитель — борд:
-  • кросс-фильтры по областям, как в JSON-метаданных поставки: панель фильтров → себе и списку,
+  • кросс-фильтры по областям, как в JSON-метаданных поставки: панель фильтров → только списку,
     список → только себе; маски эмиттеров, в область которых входит чарт, складываются и уходят в
     его датасет как filter_values (носители с суффиксом вкладки '_f' / '_kf'); чарт перезапускается
     в том же окне iframe (состояние живёт), только если его фильтры изменились;
@@ -73,7 +73,7 @@ var grid = document.getElementById('grid');
 if (Q.get('w')) grid.style.width = Q.get('w') + 'px';
 var H = +(Q.get('h') || Math.max(640, innerHeight - 32)), PW = +(Q.get('pw') || 340);
 // Области кросс-фильтров — как в JSON-метаданных поставки (п. 4 инструкции).
-var SCOPE = { flt: ['flt', 'list'], list: ['list'] };
+var SCOPE = { flt: ['list'], list: ['list'] };
 if (SELFOFF) SCOPE[SELFOFF] = SCOPE[SELFOFF].filter(function (c) { return c !== SELFOFF; });
 var MASKS = { flt: [], list: [] }, LAST = { flt: null, list: null }, FR = {}, SRCS = {};
 window.__runs = { flt: 0, list: 0 }; window.__masks = { flt: [], list: [] }; window.__ms = { flt: [], list: [] };

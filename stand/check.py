@@ -379,7 +379,7 @@ def behaviour(mode, stream, kp):
     ok('%s: куб не зависит от фильтров атрибутов, численности и ТЦР' % mode, d2['cube'] == d['cube'] and d2['dict'] == d['dict'] and d2['N'] == d['N'])
     ids = q("SELECT toString(mdm_employee_rk) AS r FROM prod_proteus.mdm_employee_d_detail_last_day WHERE legal_employee_flg = 1 LIMIT 7")
     d3, _, _ = run_new({'id_f': ['rk=' + r['r'] for r in ids]}, 'a.user', mode, view='filters')
-    ok('%s: «Сотрудники по списку» сужают куб' % mode, d3['N'] == 7, d3['N'])
+    ok('%s: «Сотрудники по списку» куб не меняют (действуют только на список)' % mode, d3['cube'] == d['cube'] and d3['N'] == d['N'], d3['N'])
     d4, _, _ = run_new({'per_f': ['date'], 'dt_f': ['2026-08-31']}, 'a.user', mode, view='filters')
     ok('%s: «Период» куб не меняет — действующие на последний день, эхо даты есть' % mode,
        d4['cube'] == d['cube'] and d4['dict'] == d['dict'] and d4['meta']['m']['per'] == 'date' and d4['meta']['m']['dt'] == '2026-08-31',

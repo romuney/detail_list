@@ -79,15 +79,26 @@ const ddCounts = (p) => p.F.evaluate(() => {
     ok(mode + ': открытие без эмитов', (await p.evaluate(() => window.__masks.flt.length + window.__masks.list.length)) === 0);
     ok(mode + ': больше 25 000 — плашка «сузьте фильтры»', all > 25000 && /Сузьте фильтры/.test(await note(p)), [all, await note(p)]);
 
-    // Панель фильтров: разделы, в разделе — по два в ряд
+    // Панель фильтров: разделы, в разделе — по два в ряд; «Другие атрибуты» свёрнуты; структуры — на всю строку
     const pan = await p.F.evaluate(() => {
       const secs = document.querySelectorAll('[data-sec]'), flds = document.querySelectorAll('[data-panel] [data-k]'), out = { secs: secs.length, flds: flds.length, cols: 0 };
       const g = secs[0].querySelectorAll('[data-k]'), xs = {};
       g.forEach((b) => { xs[Math.round(b.getBoundingClientRect().left)] = 1; });
       out.cols = Object.keys(xs).length;
+      out.folded = Array.prototype.map.call(document.querySelectorAll('[data-action="sec"][aria-expanded="false"]'), (b) => b.textContent.trim());
+      const mu = document.querySelector('[data-k="mu"]'), panel = document.querySelector('[data-panel]');
+      out.treeFull = mu && mu.getBoundingClientRect().width > panel.getBoundingClientRect().width * 0.8 && /всё дерево/.test(mu.textContent) && /-tree/.test(mu.className);
+      const per = document.querySelector('[data-k="per"]');
+      out.per = per ? per.textContent : '';
+      out.perBlue = per && /-set/.test(per.className);
       return out;
     });
-    ok(mode + ': панель — 7 разделов, 33 фильтра, по два в ряд', pan.secs === 7 && pan.flds === 33 && pan.cols === 2, pan);
+    ok(mode + ': панель — 7 разделов, по два в ряд, «Другие атрибуты» свёрнуты', pan.secs === 7 && pan.flds === 26 && pan.cols === 2 && pan.folded.length === 1 && /Другие/.test(pan.folded[0]), pan);
+    ok(mode + ': структуры — на всю строку, «всё дерево», фиолетовые', pan.treeFull, pan);
+    ok(mode + ': период — дата синим (применён по умолчанию)', pan.perBlue && /\d\d\.\d\d\.\d{4}/.test(pan.per), pan.per);
+    await p.F.click('[data-action="sec"][aria-expanded="false"]');
+    await p.waitForTimeout(150);
+    ok(mode + ': свёрнутый раздел раскрывается', (await p.F.$$('[data-panel] [data-k]')).length === 33);
     ok(mode + ': панель — iframe в ширину колонки', (await fltIframe(p)).w === PW, await fltIframe(p));
 
     // Структура: дерево уже в кубе — открыть без запроса; выпадашка справа от панели, поверх списка
@@ -97,9 +108,12 @@ const ddCounts = (p) => p.F.evaluate(() => {
     const dd1 = await ddOpen(p);
     const ddLeft = await p.F.evaluate(() => Math.round(document.querySelector('[class$="-dd"]').getBoundingClientRect().left));
     ok(mode + ': структура открывается без запроса', JSON.stringify(await reqs(p)) === JSON.stringify(r0) && (await p.F.$$('[data-tsel="' + tk + '"]')).length > 0);
-    ok(mode + ': выпадашка широкая, справа от панели, поверх списка (маркер, iframe развёрнут вправо)',
-      dd1 && dd1.w >= 500 && dd1.h > 150 && ddLeft >= PW && (await marker(p)) && (await fltIframe(p)).w > 800,
-      [dd1, ddLeft, await marker(p), await fltIframe(p)]);
+    const vw = await p.evaluate(() => innerWidth);
+    ok(mode + ': структура — на всё место справа от панели и всю высоту, поверх списка (маркер, iframe развёрнут)',
+      dd1 && dd1.w >= vw - PW - 120 && dd1.h > 600 && ddLeft >= PW && (await marker(p)) && (await fltIframe(p)).w > 800,
+      [dd1, ddLeft, vw, await marker(p), await fltIframe(p)]);
+    ok(mode + ': в выпадашке — «Закрыть», «Применить» только в панели', (await p.F.$$('[class$="-dd"] [data-action="close"]')).length === 1
+      && (await p.F.$$('[class$="-dd"] [data-action="apply"]')).length === 0);
     await p.F.click('[class$="-dd"] [data-action="tw"]');
     await p.waitForTimeout(150);
     ok(mode + ': узел раскрывается', (await p.F.$$('[data-action="tw"][aria-expanded="true"]')).length > 0);
@@ -130,9 +144,10 @@ const ddCounts = (p) => p.F.evaluate(() => {
     await p.F.click('[class$="-dd"] [data-fk="emp_specialization_it_code"][data-fv="IT"]');
     await p.waitForTimeout(150);
     const f2 = await forecast(p);
-    ok(mode + ': второй фильтр — «Применить · 2» в выпадашке и в панели, прогноз сузился', /Применить · 2/.test(await applyText(p))
-      && /Применить · 2/.test(await p.F.textContent('[class$="-dd"] [data-action="apply"]')) && f2 < f1, [f2, f1]);
-    await p.keyboard.press('Escape');
+    ok(mode + ': второй фильтр — «Применить · 2» в панели, прогноз сузился', /Применить · 2/.test(await applyText(p)) && f2 < f1, [f2, f1]);
+    await p.F.click('[class$="-dd"] [data-action="close"]');
+    await p.waitForTimeout(200);
+    ok(mode + ': «Закрыть» закрывает выпадашку', !(await ddOpen(p)) && (await fltIframe(p)).w === PW);
     await openFilter(p, 'f:emp_stream_desc');
     const midC = await ddCounts(p);
     const sumM = Object.keys(midC).reduce((x, k) => x + midC[k], 0);
@@ -145,15 +160,18 @@ const ddCounts = (p) => p.F.evaluate(() => {
       ok(mode + ': «Показать ещё … без сотрудников» — нули серым', Object.keys(await ddCounts(p)).length > Object.keys(midC).length);
     }
 
-    // Применить: оба чарта пересчитываются; список сразу показывает «Обновляю…»; итог = прогноз
+    // Применить: только список (панель себя не фильтрует); список сразу показывает «Обновляю…»; итог = прогноз
     const lm = await listMasks(p);
-    await act(p, ['flt', 'list'], async () => {
-      await p.F.click('[class$="-dd"] [data-action="apply"]');
+    const rq0 = await reqs(p);
+    await p.keyboard.press('Escape');
+    await act(p, ['list'], async () => {
+      await p.F.click('[data-foot] [data-action="apply"]');
       await p.waitForTimeout(60);
       ok(mode + ': список сразу ждёт фильтры («Обновляю…»)', !!(await p.L.$('[class$="-load"]')));
     });
     const t1 = await total(p);
     ok(mode + ': «Применить» — итог списка = прогноз панели', t1 === f2 && t1 < all, [t1, f2, all]);
+    ok(mode + ': «Применить» — запрос только списка, панель себя не перезапрашивает', (await reqs(p)).flt === rq0.flt, [await reqs(p), rq0]);
     ok(mode + ': список не эмитил сам', (await listMasks(p)) === lm);
     ok(mode + ': ожидание снято, выпадашка закрыта', !(await p.L.$('[class$="-load"]')) && !(await ddOpen(p)) && /^Применить$/.test(await applyText(p)), await applyText(p));
     ok(mode + ': применённые фильтры — в панели', (await p.F.$$('[data-panel] [data-action="clr"]')).length === 2 && (await forecast(p)) === t1);
@@ -270,7 +288,7 @@ const ddCounts = (p) => p.F.evaluate(() => {
     await p.L.click('[data-pop="lim"]');
     await act(p, ['list'], () => p.L.click('[data-action="setlim"][data-key="10000"]'));
     ok(mode + ': лимит 10 000', /10 000/.test(await p.L.textContent('[data-pop="lim"]')));
-    await act(p, ['flt', 'list'], () => p.F.click('[data-foot] [data-action="reset"]'));
+    await act(p, ['list'], () => p.F.click('[data-foot] [data-action="reset"]'));
     ok(mode + ': «Сбросить» — снова все', (await total(p)) === all, [await total(p), all]);
     ok(mode + ': «Сбросить» — фильтров в панели нет', (await p.F.$$('[data-panel] [data-action="clr"]')).length === 0);
     const pg0 = await p.L.textContent('[data-pager]');
@@ -283,12 +301,12 @@ const ddCounts = (p) => p.F.evaluate(() => {
     await p.F.fill('[data-ids="rk"]', '100001, 100002\n100003 abc');
     await p.waitForTimeout(150);
     ok(mode + ': список MasterID распознан', /В списке: 3/.test(await p.F.textContent('[data-idinfo]')), await p.F.textContent('[data-idinfo]'));
-    await act(p, ['flt', 'list'], () => p.F.click('[class$="-dd"] [data-action="apply"]'));
+    await act(p, ['list'], () => p.F.click('[data-foot] [data-action="apply"]'));
     ok(mode + ': список сотрудников применён', (await total(p)) === 3, await total(p));
     ok(mode + ': все загружены — плашки нет', (await note(p)) === '', await note(p));
 
     // Под фильтрами от 5 000 до 25 000 — «Загрузить всех»
-    await act(p, ['flt', 'list'], () => p.F.click('[data-foot] [data-action="reset"]'));
+    await act(p, ['list'], () => p.F.click('[data-foot] [data-action="reset"]'));
     await openFilter(p, 'f:active_type_nm');
     const mid = await p.F.evaluate(() => {
       const ls = document.querySelectorAll('[class$="-dd"] label[class$="-opt"]');
@@ -300,7 +318,7 @@ const ddCounts = (p) => p.F.evaluate(() => {
     });
     if (mid !== null) {
       await p.F.click('[class$="-dd"] [data-fk="active_type_nm"][data-fv="' + mid + '"]');
-      await act(p, ['flt', 'list'], () => p.F.click('[class$="-dd"] [data-action="apply"]'));
+      await act(p, ['list'], () => p.F.click('[data-foot] [data-action="apply"]'));
       const t2 = await total(p);
       ok(mode + ': до 25 000 — «Загрузить всех»', /Загрузить всех/.test(await note(p)), [t2, await note(p)]);
       await act(p, ['list'], () => p.L.click('[data-tnote] [data-action="setlim"]'));

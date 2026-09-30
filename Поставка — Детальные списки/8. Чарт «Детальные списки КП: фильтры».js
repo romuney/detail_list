@@ -20,8 +20,10 @@
 //   кодами значений всех фильтров (роль C), словари значений (D) и деревья УС / ЮС / КП целиком (T).
 //   Счётчики «при остальных фильтрах» чарт считает сам по НАБРАННОМУ выбору — ещё до «Применить»:
 //   выбрали значение — остальные фильтры сразу показывают, что под ним осталось, пустое прячется.
-//   Куб — действующие сотрудники на последний день: «Период» значения фильтров не меняет (решение владельца);
-//   запрос нужен только «Применить» (список и эхо), «Сотрудники по списку» сужают куб.
+//   Куб не зависит ни от одного фильтра, поэтому панель НЕ фильтрует сама себя: «Применить» уходит только
+//   в список, применённое панель держит у себя (state.applied) и сверяет с эхом списка (DL_ECHO).
+//   Куб — действующие сотрудники на последний день: ни «Период», ни «Сотрудники по списку» его не меняют
+//   (решение владельца) — они действуют только на список.
 // ВЫПАДАШКА ПОВЕРХ СПИСКА — костыль борда Proteus Adoption (строка ЦА, pa-ca-bar): чарт живёт в
 //   <iframe sandbox> размером с ячейку, единственный канал к родителю — postMessage
 //   ECHARTS_UPDATE_DATA_URL (канал скриншотов). Открыли выпадашку → PNG 1×1 с маркером CFG.overlay.mark;
@@ -45,13 +47,14 @@ var CFG = {
   listMax: 400,                // значений в списке выпадашки за раз
   treeRowsMax: 900,            // строк дерева за раз
   searchMin: 2,
-  pendingWarnMs: 30000,
+  // Структуры — поле на всю строку, фиолетовый акцент: фильтр действует на всё дерево (узел и всё ниже).
   trees: [
-    { key: 'mu', label: 'Юнит УС', name: 'Управленческая структура', max: 50 },
-    { key: 'lu', label: 'Юнит ЮС', name: 'Юридическая структура', max: 50 },
-    { key: 'kp', label: 'Продукт КП', name: 'Каталог продуктов', max: 20 }
+    { key: 'mu', label: 'Управленческая структура', name: 'Управленческая структура', max: 50 },
+    { key: 'lu', label: 'Юридическая структура', name: 'Юридическая структура', max: 50 },
+    { key: 'kp', label: 'Каталог продуктов', name: 'Каталог продуктов', max: 20 }
   ],
   // Разделы и порядок — нативных фильтров борда 7241 (к ним привыкли пользователи); в разделе — по два в ряд.
+  // fold — раздел свёрнут по умолчанию (видно, какие ещё есть фильтры).
   shelf: [
     { name: 'Основные', keys: ['per', 'ids', 'emp', 'active_type_nm', 'employment_relation_type_desc', 'employee_contract_type_desc',
       'residential_state_nm', 'office_desc', 'emp_specialization_oper_code', 'emp_specialization_it_code', 'emp_stream_desc',
@@ -61,7 +64,7 @@ var CFG = {
     { name: 'Атрибуты найма', keys: ['mapping_channel_name', 'respond_source_nm'] },
     { name: 'Каталог продуктов', keys: ['kp'] },
     { name: 'Региональные атрибуты', keys: ['location_type', 'macroregion_nm', 'city_nm', 'tcr_exist_flg'] },
-    { name: 'Другие атрибуты', keys: ['t_education_desc', 'company_fire_flg', 'rb_flg', 'rb_migration_flg', 'legal_position_nm',
+    { name: 'Другие атрибуты', fold: true, keys: ['t_education_desc', 'company_fire_flg', 'rb_flg', 'rb_migration_flg', 'legal_position_nm',
       'subordination_lvl', 'head_lvl_segment'] }
   ],
   facetLabels: {
@@ -83,7 +86,7 @@ var CFG = {
     { key: 'siebel', label: 'Siebel ID', hint: 'основной' }
   ],
   // Ширина выпадашки по виду фильтра, px (не шире места справа от панели).
-  widths: { tree: 560, facet: 420, one: 320, ids: 540 },
+  widths: { tree: 2000, facet: 420, one: 320, ids: 540 },
   overlay: {
     // «DL-FLT-DD-ON» в base64: 12 байт = ровно 16 знаков, стоит в строке PNG как есть.
     mark: 'REwtRkxULURELU9O',
@@ -91,17 +94,18 @@ var CFG = {
   },
   text: {
     noData: 'Нет данных',
-    notApplied: 'Ответа нет 30 секунд. Если так на каждом «Применить» — панель не фильтрует сама себя: в JSON-метаданных дашборда у неё crossFilters.scope.excluded не должен содержать сам чарт (инструкция поставки, п. 4).',
     noAccess: 'Для вашего логина нет строки в таблице доступа warden — фильтры недоступны.',
     noCf: 'Фильтры не применились: нет applyCrossFilter (откройте чарт на дашборде).',
-    server: '«Сотрудники по списку» меняют сам набор сотрудников — счётчики пересчитаются после «Применить».',
+    idsNote: 'Числа — без «Сотрудников по списку»: список сотрудников применится в самом списке.',
     perNote: 'Числа фильтров — по действующим сотрудникам, от «Периода» не зависят; итог на дату — в списке.'
   },
   // Токены — профиль Proteus Adoption, как у чарта списка.
   colors: {
     bg: '#f4f5f7', card: '#ffffff', line: '#e7e9ee', line2: '#eef0f3',
     ink: '#23272e', ink2: '#454b55', muted: '#8a909c', muted2: '#aab0bb',
-    warnTx: '#9a6500', blue: '#3b6fe0', blueBg: '#eef3fe', blueTx: '#2b5fd0', act: '#2b6cff', actInk: '#1f55d6', hl: '#dfe8ff'
+    warnTx: '#9a6500', blue: '#3b6fe0', blueBg: '#eef3fe', blueTx: '#2b5fd0', act: '#2b6cff', actInk: '#1f55d6', hl: '#dfe8ff',
+    // структуры (всё дерево) — фиолетовый акцент с лёгким градиентом
+    vio: '#6d4ae0', vioTx: '#5a3bc4', vioBg1: '#f4f0ff', vioBg2: '#ebe4ff', vioLine: '#d9cffb'
   },
   // Кегли — роли профиля Adoption, веса 400 / 500 / 600. Поле фильтра — две строки (подпись + выбор), 40 px.
   fonts: { family: 'Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif', micro: 9.5, cap: 10.5, note: 11.5, control: 12, body: 12.5, title: 14.5 },
@@ -119,9 +123,11 @@ var STATE0 = {
   q: '',             // поиск в выпадашке
   stage: null,       // набранное, но не применённое — копия applied() с правками
   treeOpen: {}, idKind: 'rk', idBad: 0,
-  fold: {},          // свёрнутые разделы панели
+  fold: {},          // свёрнутые / развёрнутые разделы панели (нет ключа — как в CFG.shelf)
   zeros: {},         // показать значения без сотрудников (по ключу фильтра)
-  pend: null, pendT: null, rqN: 0, warn: '',
+  applied: null,     // применённое (панель себя не фильтрует — держит сама, сверяет с эхом списка)
+  lastFrq: '',       // метка последнего «Применить» — эхо списка с другой меткой устарело
+  rqN: 0, warn: '',
   baseW: 0, sig: false, pin: false
 };
 if (!__S[CFG.ns]) __S[CFG.ns] = {};
@@ -343,7 +349,7 @@ function copyF(o) {
   return c;
 }
 var DEFAULT_F = { per: 'last', dt: '', emp: CFG.emp[0].v, tcr: '', flt: {}, mu: [], lu: [], kp: [], id: {} };
-function applied() { return MODEL.applied || DEFAULT_F; }
+function applied() { return state.applied || MODEL.applied || DEFAULT_F; }
 function staged() { return state.stage || applied(); }
 function idChanged(a, b) {
   for (var i = 0; i < ID_KEYS.length; i++) if (!sameSet((a.id || {})[ID_KEYS[i]], (b.id || {})[ID_KEYS[i]])) return true;
@@ -645,6 +651,14 @@ function buildCSS() {
     P + '-fl{font-size:' + F.cap + 'px;color:' + C.muted + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:13px;}',
     P + '-fv{font-size:' + F.control + 'px;font-weight:500;color:' + C.ink2 + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:16px;}',
     P + '-fld' + P + '-set ' + P + '-fl{color:#5b83dc;}',
+    // структура — на всю строку, фиолетовый акцент с лёгким градиентом
+    P + '-fld' + P + '-tree{grid-column:1 / -1;height:46px;background:linear-gradient(135deg,' + C.vioBg1 + ',' + C.vioBg2 + ');border-color:' + C.vioLine + ';}',
+    P + '-fld' + P + '-tree:hover{border-color:' + C.vio + ';}',
+    P + '-fld' + P + '-tree ' + P + '-fl{color:' + C.vio + ';font-weight:500;}',
+    P + '-fld' + P + '-tree ' + P + '-fv{color:' + C.vioTx + ';font-size:' + F.body + 'px;}',
+    P + '-fld' + P + '-tree' + P + '-on{border-color:' + C.vio + ';box-shadow:0 0 0 2px rgba(109,74,224,.16);}',
+    P + '-fld' + P + '-tree' + P + '-chg{border-color:' + C.vio + ';}',
+    P + '-fld' + P + '-tree ' + P + '-x{background:rgba(109,74,224,.16);color:' + C.vioTx + ';}',
     P + '-fld' + P + '-set ' + P + '-fv{color:' + C.blueTx + ';}',
     P + '-fv' + P + '-all{color:' + C.muted2 + ';font-weight:400;}',
     P + '-fc{position:absolute;right:7px;top:50%;transform:translateY(-50%);color:' + C.muted2 + ';font-size:9px;}',
@@ -667,7 +681,6 @@ function buildCSS() {
     P + '-lnk:hover{text-decoration:underline;}',
     P + '-lnk[disabled]{color:' + C.muted2 + ';cursor:default;text-decoration:none;}',
     P + '-warn{font-size:' + F.note + 'px;color:' + C.warnTx + ';line-height:1.35;}',
-    P + '-busy ' + P + '-body{opacity:.6;transition:opacity .2s;}',
     // тултип и выпадашка — вне корня панели: шрифт повторяем явно
     P + '-tip{position:fixed;z-index:99999;pointer-events:none;opacity:0;display:none;font-family:' + F.family + ';box-sizing:border-box;'
       + 'background:' + C.card + ';border:1px solid ' + C.line + ';border-radius:9px;box-shadow:' + SHL + ';padding:7px 10px;font-size:' + F.note + 'px;'
@@ -678,6 +691,8 @@ function buildCSS() {
     P + '-dd{position:fixed;z-index:9000;display:none;box-sizing:border-box;flex-direction:column;background:' + C.card + ';border:1px solid ' + C.line + ';border-radius:10px;box-shadow:' + SHL + ';padding:10px;font-family:' + F.family + ';font-size:' + F.body + 'px;color:' + C.ink + ';outline:none;}',
     P + '-ddh{display:flex;align-items:center;gap:8px;min-height:22px;margin:2px 4px 8px;font-size:' + F.cap + 'px;text-transform:uppercase;letter-spacing:.4px;color:' + C.muted + ';font-weight:500;}',
     P + '-ddh>span:first-child{flex:1;}',
+    P + '-ddx{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 8px;border:1px solid ' + C.line + ';border-radius:7px;background:' + C.card + ';color:' + C.ink2 + ';font-size:' + F.note + 'px;font-weight:500;text-transform:none;letter-spacing:0;cursor:pointer;}',
+    P + '-ddx:hover{border-color:' + C.act + ';color:' + C.act + ';}',
     P + '-muted{color:' + C.muted + ';font-weight:400;text-transform:none;letter-spacing:0;}',
     P + '-psearch{position:relative;display:block;margin:0 0 8px;color:' + C.muted + ';flex:0 0 auto;}',
     P + '-psearch svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);pointer-events:none;}',
@@ -735,7 +750,7 @@ function hSearch(placeholder) {
   return '<label class="' + P + '-psearch">' + SEARCH_SVG + '<input class="' + P + '-srch" type="text" autocomplete="off" data-psearch="1"'
     + ' placeholder="' + esc(placeholder) + '" value="' + esc(state.q) + '"></label>';
 }
-function perText(o) { return o.per === 'date' && o.dt ? 'на ' + fmtDate(o.dt) : 'последний день'; }
+function perText(o, full) { return o.per === 'date' && o.dt ? 'на ' + fmtDate(o.dt) : 'на ' + fmtDate(MODEL.m.data_dt) + (full ? ' · последний день' : ''); }
 function labelOf(key) {
   if (key === 'per') return 'Период';
   if (key === 'ids') return 'Сотрудники по списку';
@@ -747,7 +762,7 @@ function labelOf(key) {
 function shortList(list) { return list.length ? list[0] + (list.length > 1 ? ' +' + (list.length - 1) : '') : ''; }
 // Что показать в поле и подсказке: {value (текст выбора или ''), all (весь выбор)}.
 function fieldInfo(key, st) {
-  if (key === 'per') return { value: st.per === 'date' ? perText(st) : '', all: perText(st), def: 'последний день' };
+  if (key === 'per') return { value: perText(st), all: perText(st, true), shown: true };
   if (key === 'emp') return { value: isSet(st, 'emp') ? String(st.emp).toLowerCase() : '', all: String(st.emp || CFG.emp[0].v).toLowerCase(), def: 'юридическая' };
   if (key === 'tcr') return { value: st.tcr || '', all: st.tcr || 'все' };
   if (key === 'ids') {
@@ -765,20 +780,23 @@ function fieldInfo(key, st) {
   return { value: shortList(lb), all: lb.slice(0, 30).join(', ') + (lb.length > 30 ? '…' : '') };
 }
 function fieldHTML(key, st, dk) {
-  var P = CFG.ns, info = fieldInfo(key, st), set = isSet(st, key), chg = inArr(dk, key), on = state.open === key;
-  var tp = tip({ title: labelOf(key), text: set ? info.all : (info.def ? info.def : 'Все значения'),
-    note: chg ? NOTE_STAGE : (isTreeKey(key) ? 'Дерево всех уровней и поиск по названию' : key === 'ids' ? 'Вставка списка MasterID, логинов, табельных'
-      : key === 'per' ? 'Состав сотрудников на выбранную дату' : 'Число у значения — сотрудники при остальных фильтрах, сразу по выбору') });
-  return '<button type="button" class="' + P + '-fld' + (set ? ' ' + P + '-set' : '') + (chg ? ' ' + P + '-chg' : '') + (on ? ' ' + P + '-on' : '') + '"'
+  var P = CFG.ns, info = fieldInfo(key, st), set = isSet(st, key), chg = inArr(dk, key), on = state.open === key, tree = isTreeKey(key);
+  var blue = set || info.shown;
+  var tp = tip({ title: labelOf(key), text: set ? info.all : (info.shown ? info.all : tree ? 'Всё дерево: узел и всё, что ниже' : info.def ? info.def : 'Все значения'),
+    note: chg ? NOTE_STAGE : (tree ? 'Дерево всех уровней и поиск по названию; выбранный юнит — вместе со всем, что ниже' : key === 'ids' ? 'Вставка списка MasterID, логинов, табельных'
+      : key === 'per' ? 'Список сотрудников на дату; числа фильтров — по действующим' : 'Число у значения — сотрудники при остальных фильтрах, сразу по выбору') });
+  var val = set || info.shown ? info.value : (tree ? 'Всё дерево' : info.def || 'Все');
+  return '<button type="button" class="' + P + '-fld' + (tree ? ' ' + P + '-tree' : '') + (blue ? ' ' + P + '-set' : '') + (chg ? ' ' + P + '-chg' : '') + (on ? ' ' + P + '-on' : '') + '"'
     + ' data-action="open" data-pop="' + esc(key) + '" data-k="' + esc(key) + '" aria-haspopup="true" aria-expanded="' + (on ? 'true' : 'false') + '"' + tp + '>'
-    + '<span class="' + P + '-fl">' + esc(labelOf(key)) + '</span>'
-    + '<span class="' + P + '-fv' + (set ? '' : ' ' + P + '-all') + '">' + esc(set ? info.value : (info.def || 'Все')) + '</span>'
+    + '<span class="' + P + '-fl">' + esc(labelOf(key)) + (tree ? ' · всё дерево' : '') + '</span>'
+    + '<span class="' + P + '-fv' + (blue ? '' : ' ' + P + '-all') + '">' + esc(val) + '</span>'
     + (set ? '<span class="' + P + '-x" role="button" tabindex="0" aria-label="Снять фильтр" data-action="clr" data-key="' + esc(key) + '">×</span>'
       : '<span class="' + P + '-fc">▾</span>')
     + '</button>';
 }
+function secFolded(g) { return state.fold.hasOwnProperty(g) ? !!state.fold[g] : !!CFG.shelf[g].fold; }
 function sectionHTML(g, st, dk) {
-  var P = CFG.ns, sec = CFG.shelf[g], fold = !!state.fold[g], n = setCount(st, sec.keys), s = '';
+  var P = CFG.ns, sec = CFG.shelf[g], fold = secFolded(g), n = setCount(st, sec.keys), s = '';
   s += '<div class="' + P + '-sec" data-sec="' + g + '"><button type="button" class="' + P + '-sh" data-action="sec" data-key="' + g + '" aria-expanded="' + (fold ? 'false' : 'true') + '">'
     + '<span class="' + P + '-shc">' + (fold ? '▸' : '▾') + '</span><span class="' + P + '-shn">' + esc(sec.name) + '</span>'
     + (n ? '<span class="' + P + '-cnt">' + n + '</span>' : '') + '</button>';
@@ -791,14 +809,14 @@ function sectionHTML(g, st, dk) {
 }
 // Подвал: сколько сотрудников под набранным выбором (из куба, сразу), «Применить», «Отменить», «Сбросить».
 function footHTML() {
-  var P = CFG.ns, n = stageDiff(), busy = !!state.pend, st = staged(), srv = state.stage && idChanged(applied(), st), onDate = st.per === 'date';
+  var P = CFG.ns, n = stageDiff(), st = staged(), onIds = idCount(st) > 0, onDate = st.per === 'date';
   var tot = cubeTotal();
   var s = '<div class="' + P + '-tot" data-tot="1"' + tip({ title: 'Под фильтрами', text: n ? 'Сотрудников под набранным выбором — посчитано сразу, до «Применить».' : 'Сотрудников под применёнными фильтрами.' }) + '>'
-    + (onDate ? 'Действующих ' : n ? 'Будет ' : 'Под фильтрами ') + '<b>' + fmtInt(tot) + '</b> ' + plural(tot, 'сотрудник', 'сотрудника', 'сотрудников')
-    + (srv ? '<i>' + esc(CFG.text.server) + '</i>' : '') + (onDate ? '<i>' + esc(CFG.text.perNote) + '</i>' : '') + '</div>';
-  s += '<button type="button" class="' + P + '-btn ' + P + '-pri" data-action="apply"' + (n && !busy ? '' : ' disabled')
+    + (onDate || onIds ? 'Действующих ' : n ? 'Будет ' : 'Под фильтрами ') + '<b>' + fmtInt(tot) + '</b> ' + plural(tot, 'сотрудник', 'сотрудника', 'сотрудников')
+    + (onIds ? '<i>' + esc(CFG.text.idsNote) + '</i>' : '') + (onDate ? '<i>' + esc(CFG.text.perNote) + '</i>' : '') + '</div>';
+  s += '<button type="button" class="' + P + '-btn ' + P + '-pri" data-action="apply"' + (n ? '' : ' disabled')
     + tip({ title: 'Применить', text: n ? 'Изменено фильтров: ' + n + '. Список обновится одним запросом.' : 'Выберите значения — применятся все сразу.' })
-    + '>' + (busy && state.pend.kind === 'apply' ? 'Применяю…' : 'Применить' + (n ? ' · ' + n : '')) + '</button>';
+    + '>Применить' + (n ? ' · ' + n : '') + '</button>';
   s += '<div class="' + P + '-arow">'
     + '<button type="button" class="' + P + '-lnk" data-action="unstage"' + (n ? '' : ' disabled') + '>Отменить</button>'
     + '<button type="button" class="' + P + '-lnk" data-action="reset"' + (anyFilter(applied()) || n ? '' : ' disabled')
@@ -817,7 +835,7 @@ function buildHTML() {
   if (!MODEL.ok) return buildCSS() + '<div class="' + P + '-root"><div class="' + P + '-panel"><div class="' + P + '-note">' + esc(CFG.text.noAccess) + '</div></div></div>';
   var st = staged(), dk = diffKeys(applied(), st), s = '', all = 0;
   for (var g = 0; g < CFG.shelf.length; g++) { s += sectionHTML(g, st, dk); all += setCount(st, CFG.shelf[g].keys); }
-  return buildCSS() + '<div class="' + P + '-root' + (state.pend && state.pend.kind === 'apply' ? ' ' + P + '-busy' : '') + '">'
+  return buildCSS() + '<div class="' + P + '-root">'
     + '<div class="' + P + '-panel" data-panel="1"><div class="' + P + '-ph"><span class="' + P + '-pt">Фильтры</span>'
     + (all ? '<span class="' + P + '-cnt"' + tip({ title: 'Заданы', text: 'Фильтров задано: ' + all + (dk.length ? ', из них не применено: ' + dk.length : '') + '.' }) + '>' + all + '</span>' : '') + '</div>'
     + '<div class="' + P + '-body" data-body="1">' + s + '</div>'
@@ -831,17 +849,24 @@ function ddWidth(key) {
   if (key === 'per' || key === 'emp' || key === 'tcr') return CFG.widths.one;
   return CFG.widths.facet;
 }
+// Подвал выпадашки: что выбрано и прогноз, «Очистить». «Применить» — одна, внизу панели.
 function ddFoot(text, clearAct, clearKey2) {
-  var P = CFG.ns, n = stageDiff(), tot = cubeTotal();
+  var P = CFG.ns, tot = cubeTotal();
   return '<div class="' + P + '-ddf"><span data-pcount="1">' + esc(text) + ' · будет ' + fmtInt(tot) + '</span>'
     + (clearAct ? '<button type="button" class="' + P + '-btn" data-action="' + clearAct + '" data-key="' + esc(clearKey2 || '') + '">Очистить</button>' : '')
-    + '<button type="button" class="' + P + '-btn ' + P + '-pri" data-action="apply"' + (n && !state.pend ? '' : ' disabled') + '>Применить' + (n ? ' · ' + n : '') + '</button></div>';
+    + '</div>';
+}
+// Шапка выпадашки: название, пояснение и «Закрыть» — видно всегда, даже у большой выпадашки структуры.
+function ddHead(title, muted) {
+  var P = CFG.ns;
+  return '<div class="' + P + '-ddh"><span>' + esc(title) + '</span>' + (muted ? '<span class="' + P + '-muted">' + muted + '</span>' : '')
+    + '<button type="button" class="' + P + '-ddx" data-action="close" aria-label="Закрыть">Закрыть ✕</button></div>';
 }
 function perDD() {
   var P = CFG.ns, st = staged();
-  return '<div class="' + P + '-ddh"><span>Период</span></div>'
+  return ddHead('Период', '')
     + '<div class="' + P + '-opt' + (st.per !== 'date' ? ' ' + P + '-cur' : '') + '" data-action="setper" data-key="last"><span class="' + P + '-rd"></span>'
-    + '<span class="' + P + '-optt">Последний день</span><span class="' + P + '-optn">' + esc(fmtDate(MODEL.m.data_dt)) + '</span></div>'
+    + '<span class="' + P + '-optt">' + esc(fmtDate(MODEL.m.data_dt)) + '</span><span class="' + P + '-optn">последний день</span></div>'
     + '<div class="' + P + '-blk">На дату</div>'
     + (MODEL.dates.length > 8 ? hSearch('Дата, например 31.08') : '')
     + '<div class="' + P + '-list" data-plist="1">' + perListHTML() + '</div>'
@@ -871,7 +896,7 @@ function choiceListHTML(key) {
 }
 function choiceDD(key) {
   var P = CFG.ns;
-  return '<div class="' + P + '-ddh"><span>' + esc(labelOf(key)) + '</span></div><div class="' + P + '-list" data-plist="1">' + choiceListHTML(key) + '</div>'
+  return ddHead(labelOf(key), '') + '<div class="' + P + '-list" data-plist="1">' + choiceListHTML(key) + '</div>'
     + ddFoot(key === 'emp' ? 'Юридическая — по юрлицу, активная — по активной численности' : 'Только сотрудники ТЦР выбранного типа', '', '');
 }
 // Атрибут: значения со счётчиками при остальных фильтрах (из куба, по набранному выбору); пустые под
@@ -898,7 +923,7 @@ function fltValsHTML(attr) {
 }
 function fltDD(attr) {
   var P = CFG.ns, nv = (MODEL.dict[attr] || []).length, sel = staged().flt[attr] || [];
-  return '<div class="' + P + '-ddh"><span>' + esc(CFG.facetLabels[attr] || attr) + '</span><span class="' + P + '-muted">' + fmtInt(nv) + ' ' + plural(nv, 'значение', 'значения', 'значений') + '</span></div>'
+  return ddHead(CFG.facetLabels[attr] || attr, fmtInt(nv) + ' ' + plural(nv, 'значение', 'значения', 'значений'))
     + hSearch('Поиск значения')
     + '<div class="' + P + '-list" data-plist="1">' + fltValsHTML(attr) + '</div>'
     + ddFoot(sel.length ? 'Выбрано: ' + sel.length : 'Все значения', sel.length ? 'fclear' : '', attr);
@@ -983,8 +1008,7 @@ function treeListHTML(tk) {
 }
 function treeDD(tk) {
   var P = CFG.ns, T = MODEL.trees[tk], n = (staged()[tk] || []).length, d = treeDef(tk), nn = T ? T.nodes.length : 0;
-  return '<div class="' + P + '-ddh"><span>' + esc(d.name) + '</span>'
-    + (T ? '<span class="' + P + '-muted">' + fmtInt(nn) + ' ' + plural(nn, 'юнит', 'юнита', 'юнитов') + '</span>' : '') + '</div>'
+  return ddHead(d.name + ' · всё дерево', T ? fmtInt(nn) + ' ' + plural(nn, 'юнит', 'юнита', 'юнитов') : '')
     + hSearch('Поиск юнита по названию на любом уровне')
     + '<div class="' + P + '-list" data-plist="1">' + treeListHTML(tk) + '</div>'
     + ddFoot(n ? 'Выбрано: ' + n + ' из ' + d.max : 'Вся структура', n ? 'tclear' : '', tk);
@@ -1009,15 +1033,16 @@ function idInfoHTML() {
 }
 function idsDD() {
   var P = CFG.ns, st = staged(), kind = idKind(), s = '<div class="' + P + '-ddh"><span>Сотрудники по списку</span><span class="' + P + '-seg">';
+  var close = '<button type="button" class="' + P + '-ddx" data-action="close" aria-label="Закрыть">Закрыть ✕</button>';
   for (var i = 0; i < CFG.idKinds.length; i++) {
     var d = CFG.idKinds[i], n = (st.id[d.key] || []).length;
     s += '<button type="button" class="' + P + '-segb' + (d.key === kind ? ' ' + P + '-on' : '') + '" data-action="idk" data-key="' + d.key + '" role="tab" aria-selected="' + (d.key === kind ? 'true' : 'false') + '">'
       + esc(d.label) + (n ? '<i>' + n + '</i>' : '') + '</button>';
   }
-  s += '</span></div><textarea class="' + P + '-ta" data-ids="' + kind + '" spellcheck="false" placeholder="Вставьте ' + esc(CFG.idKinds[ID_KEYS.indexOf(kind)].label)
+  s += '</span>' + close + '</div><textarea class="' + P + '-ta" data-ids="' + kind + '" spellcheck="false" placeholder="Вставьте ' + esc(CFG.idKinds[ID_KEYS.indexOf(kind)].label)
     + ' — по одному в строке, через запятую или пробел">' + esc((st.id[kind] || []).join('\n')) + '</textarea>'
     + '<div class="' + P + '-idinfo" data-idinfo="1">' + idInfoHTML() + '</div>';
-  return s + ddFoot('Список меняет состав — счётчики после «Применить»', 'idclear', kind);
+  return s + ddFoot('Список применится в самом списке, числа панели — без него', 'idclear', kind);
 }
 function ddHTML() {
   var o = state.open;
@@ -1084,18 +1109,17 @@ function bcast(msg) {
     }
     getTip();
     // showTip/hideTip — служебные: тултип спрятан ДВУМЯ свойствами (display + opacity), координаты —
-    // getBoundingClientRect() как есть, клампинг по окну. Подсказка — у цели (не за курсором): не дёргается.
+    // getBoundingClientRect() как есть, клампинг по окну. Подсказка едет за курсором (rect — точка
+    // курсора), в пределах панели: iframe не разворачивается.
     function showTip(html, rect) {
       var tip = getTip();
       if (tip.__h !== html) { tip.innerHTML = html; tip.__h = html; }
       tip.style.display = 'block';
       tip.style.maxWidth = Math.max(180, Math.min(300, panelW() - 12)) + 'px';
-      tip.style.left = '0px';
-      tip.style.top = '0px';
       var t = tip.getBoundingClientRect();
-      var pad = 6, gap = 6, W = Math.min(window.innerWidth, panelW());
-      var left = rect.left + rect.width / 2 - t.width / 2;
-      var top = rect.top + rect.height + gap;
+      var pad = 6, gap = 14, W = Math.min(window.innerWidth, panelW());
+      var left = rect.left + gap, top = rect.top + gap;
+      if (left + t.width > W - pad) left = rect.left - t.width - gap;
       if (top + t.height > window.innerHeight - pad) top = rect.top - t.height - gap;
       left = Math.max(pad, Math.min(left, W - t.width - pad));
       top = Math.max(pad, Math.min(top, window.innerHeight - t.height - pad));
@@ -1111,8 +1135,7 @@ function bcast(msg) {
     }
     function renderTip() {
       if (!state.tip) { hideTip(); return; }
-      var el = state.tip.el && state.tip.el.parentNode ? state.tip.el : null;
-      showTip(state.tip.html, el ? el.getBoundingClientRect() : state.tip.rect);
+      showTip(state.tip.html, state.tip.rect);
     }
 
     // ── ВЫПАДАШКА ── один узел в overlay рядом с панелью, position:fixed: справа от панели, поверх
@@ -1178,10 +1201,13 @@ function bcast(msg) {
       dd.style.display = 'flex';
       if (room >= S.ddMin) { w = Math.min(ddWidth(state.open), room); left = pr + S.ddGap; }
       else { w = Math.min(ddWidth(state.open), window.innerWidth - 16); left = Math.max(8, Math.min(r.left, window.innerWidth - w - 8)); }
+      // Структура (всё дерево) — большая: вся ширина справа от панели и вся высота чарта.
+      var big = isTreeKey(state.open) && room >= S.ddMin;
       dd.style.width = w + 'px';
       dd.style.left = Math.round(left) + 'px';
-      dd.style.maxHeight = Math.max(200, Math.min(600, window.innerHeight - 16)) + 'px';
-      var h = dd.offsetHeight, top = room >= S.ddMin ? r.top - 8 : r.bottom + 6;
+      dd.style.height = big ? (window.innerHeight - 16) + 'px' : '';
+      dd.style.maxHeight = big ? '' : Math.max(200, Math.min(600, window.innerHeight - 16)) + 'px';
+      var h = dd.offsetHeight, top = big ? 8 : room >= S.ddMin ? r.top - 8 : r.bottom + 6;
       top = Math.max(8, Math.min(top, window.innerHeight - h - 8));
       dd.style.top = Math.round(top) + 'px';
     }
@@ -1251,49 +1277,37 @@ function bcast(msg) {
       return null;
     }
 
-    // ── НАВЕДЕНИЕ: подсказка у поля и кнопок, привязана к цели; iframe не разворачивает.
-    // Между соседними целями не гаснет; ушёл курсор — через 120 мс.
+    // ── НАВЕДЕНИЕ: подсказка едет за курсором (как в HRBP HUB и Adoption); между соседними целями не
+    // гаснет, ушёл курсор в пустоту — через 110 мс. iframe не разворачивает.
     var tipHideT = null;
     function onMove(e) {
       var el = trigger(e.target, 'data-tip');
       if (el && el.getAttribute('aria-expanded') === 'true') el = null;
       if (el && ddEl && ddEl.contains(el)) el = null;
       if (!el || state.open) {
-        if (state.tip && !tipHideT) tipHideT = setTimeout(function () { tipHideT = null; state.tip = null; hideTip(); }, 120);
+        if (state.tip && !tipHideT) tipHideT = setTimeout(function () { tipHideT = null; state.tip = null; hideTip(); }, 110);
         return;
       }
       if (tipHideT) { clearTimeout(tipHideT); tipHideT = null; }
-      if (state.tip && state.tip.el === el) return;
-      state.tip = { html: el.getAttribute('data-tip') || '', el: el, rect: el.getBoundingClientRect() };
-      renderTip();
+      state.tip = { html: el.getAttribute('data-tip') || '', el: el, rect: { left: e.clientX, top: e.clientY, width: 0, height: 0 } };
+      showTip(state.tip.html, state.tip.rect);
     }
     function onLeave() {
       if (tipHideT) { clearTimeout(tipHideT); tipHideT = null; }
       if (state.tip) { state.tip = null; hideTip(); }
     }
 
-    // ── ЭМИССИЯ ── кросс-фильтр на себя (эхо) и на список вкладки (строки); метка frq снимает ожидание.
-    function armPend() {
-      if (state.pendT) clearTimeout(state.pendT);
-      state.pendT = null;
-      if (!state.pend) return;
-      var left = Math.max(200, CFG.pendingWarnMs - (Date.now() - state.pend.at));
-      state.pendT = setTimeout(function () {
-        state.pendT = null;
-        if (!state.pend) return;
-        state.pend = null;
-        state.warn = CFG.text.notApplied;
-        if (state.rerender) state.rerender();
-      }, left);
-    }
+    // ── ЭМИССИЯ ── кросс-фильтр только на список вкладки: панель себя не фильтрует (куб от фильтров не
+    // зависит) — применённое она держит сама. Метка frq: список показывает «Обновляю…» до ответа с ней.
     function emit(f) {
       if (typeof applyCrossFilter !== 'function') { state.warn = CFG.text.noCf; render(); return; }
       state.warn = '';
       state.rqN = (state.rqN || 0) + 1;
       var m = copyF(f);
       m.frq = 'f' + state.rqN + '.' + (Date.now() % 1000000);
-      state.pend = { frq: m.frq, at: Date.now(), kind: 'apply' };
-      armPend();
+      state.applied = copyF(f);
+      state.lastFrq = m.frq;
+      state.stage = null;
       state.open = ''; state.q = ''; state.tip = null; hideTip(); signal();
       bcast({ type: 'DL_FLT', cf: MODEL.cf, frq: m.frq });
       render();
@@ -1314,7 +1328,8 @@ function bcast(msg) {
         openDd(pop);
         return;
       }
-      if (act === 'sec') { state.fold[key] = !state.fold[key]; state.tip = null; hideTip(); render(); return; }
+      if (act === 'sec') { state.fold[key] = !secFolded(+key); state.tip = null; hideTip(); render(); return; }
+      if (act === 'close') { openDd(''); return; }
       if (act === 'clr') {
         stageEdit(function (st) {
           if (key === 'per') { st.per = 'last'; st.dt = ''; }
@@ -1341,7 +1356,7 @@ function bcast(msg) {
         return;
       }
       if (act === 'apply') {
-        if (!stageDiff() || state.pend) return;
+        if (!stageDiff()) return;
         emit(staged());
         return;
       }
@@ -1465,18 +1480,23 @@ function bcast(msg) {
     document.addEventListener('keydown', state.onDocKey, true);
     state.rerender = render;
 
-    // Ответ пришёл: метка совпала с ожиданием — снимаем его; набранное применилось.
-    var frq = MODEL.m ? MODEL.m.frq || '' : '';
-    if (state.pend && frq && frq === state.pend.frq) {
-      state.stage = null;
-      state.pend = null;
-      if (state.warn === CFG.text.notApplied) state.warn = '';
-    } else if (state.pend && Date.now() - state.pend.at > CFG.pendingWarnMs) {
-      state.pend = null;
-      state.warn = CFG.text.notApplied;
-    }
+    // Применённое — эхо списка той же вкладки (после перезагрузки борда кросс-фильтры могут вернуться):
+    // список рассылает DL_ECHO на каждом ответе и отвечает на DL_ASK. Эхо с чужой меткой frq (старый ответ,
+    // пока «Применить» ещё в пути) не берём.
+    if (state.onEcho) window.removeEventListener('message', state.onEcho);
+    state.onEcho = function (ev) {
+      var d = ev.data || {};
+      if (d.type !== 'DL_ECHO' || d.cf !== MODEL.cf || !d.f || !overlay.parentNode) return;
+      if (state.lastFrq && d.frq !== state.lastFrq) return;
+      var f = copyF(d.f);
+      if (state.applied && !diffKeys(state.applied, f).length) return;
+      state.applied = f;
+      if (state.stage && !stageDiff()) state.stage = null;
+      render();
+    };
+    window.addEventListener('message', state.onEcho);
+    bcast({ type: 'DL_ASK', cf: MODEL.cf });
     if (state.stage && !stageDiff()) state.stage = null;
-    armPend();
     state.tip = null;
 
     render();
