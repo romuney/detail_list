@@ -161,8 +161,25 @@
 {% for v in (filter_values('id' ~ CF) or []) %}{% set s = v|string %}{% if '=' in s and ID_ECHO|length < 2000 %}{% set kd = s.split('=', 1)[0] %}{% set x = (s.split('=', 1)[1]|trim|lower) if s.split('=', 1)[0] == 'login' else s.split('=', 1)[1]|trim %}{% if kd in IDS and x and (kd != 'rk' or x.isdigit()) and x not in IDS[kd] %}{% set _ = IDS[kd].append(x) %}{% set _ = ID_ECHO.append(kd ~ '=' ~ x) %}{% endif %}{% endif %}{% endfor %}
 {#- Части ответа по виду: list — строки (r); filters — куб (словари, деревья, коды сотрудников). -#}
 {% set PT = ['cube'] if FLTV else ['r'] %}
-{#- Колонки списка — закреплённые и запрошенные (носитель cols), по умолчанию DEFAULT_COLS: открытие — лёгкое. -#}
-{% set DEFAULT_COLS = ['master_id', 'hiredate'] %}
+{#- Колонки списка — закреплённые и запрошенные (носитель cols). По умолчанию DEFAULT_COLS — пресет «Персоналка»
+    чарта (MasterID, дата найма, ссылка на MyT и колонки пресета; владелец, 30.09): список сверяет его с CFG. -#}
+{% set DEFAULT_COLS = ['master_id', 'hiredate', 'my_link', 'full_nm', 'birth_dt', 'mdm_employee_age',
+                     'age_generation_nm', 'company_fire_dt', 'work_experience_year', 'contact_main_phone_no',
+                     'prs_email_address_txt', 'registration_state_nm', 'registration_city_nm',
+                     'registration_full_address_txt', 'residential_state_nm', 'city_nm',
+                     'residential_full_address_txt', 'doc_city_nm', 'education_degree_unique_max',
+                     'education_spec_nm', 'office_desc', 'ad_login', 'wrk_email_address_txt', 'active_type_nm',
+                     'employment_relation_type_desc', 'employee_status_desc', 'employee_contract_type_desc',
+                     'regional_hr_login', 'employee_main_contract_type_nm', 'employee_main_contract_end_dt',
+                     'legal_position_nm', 'lvl3_mapped_management_unit_nm', 'lvl4_mapped_management_unit_nm',
+                     'lvl5_mapped_management_unit_nm', 'lvl6_mapped_management_unit_nm',
+                     'lvl7_mapped_management_unit_nm', 'lvl8_mapped_management_unit_nm',
+                     'lvl9_mapped_management_unit_nm', 'lvl10_mapped_management_unit_nm',
+                     'lvl11_mapped_management_unit_nm', 'mapped_management_unit_nm', 'subordination_lvl',
+                     'emp_specialization_oper_code', 'emp_specialization_it_code', 'emp_stream_desc',
+                     'emp_specialization_desc', 'management_head_flg', 'head_lvl_segment', 'management_head_nm',
+                     'head_login', 'hrbp_nm', 'hrbp_login', 'hrap_login', 'change_management_unit_dt_text',
+                     'change_management_head_dt', 'change_specialization_dt_text', 'has_children_flg'] %}
 {% set COLS = [] %}{% for c in LOCKED %}{% set _ = COLS.append(c) %}{% endfor %}
 {% set COLS_REQ = [] %}{% for v in (filter_values('cols' ~ CF) or []) %}{% set _ = COLS_REQ.append(v|string) %}{% endfor %}
 {% for c in (COLS_REQ if COLS_REQ else DEFAULT_COLS) %}{% if (c in EMP_KEYS or c in ALLOC_KEYS) and c not in COLS and COLS|length < 130 %}{% set _ = COLS.append(c) %}{% endif %}{% endfor %}

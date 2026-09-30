@@ -1,6 +1,6 @@
 /* ==========================================================================
-   Детальные списки — CSS борда (дописать в конец CSS дашборда).
-   На каждой вкладке два чарта: панель фильтров слева и список справа, в одном ряду.
+   Детальные списки — CSS борда (дописать в конец CSS дашборда, прежний блок «Детальных списков» — убрать).
+   На каждой вкладке два чарта в одном ряду: панель фильтров слева и список справа.
 
    ЗАМЕНИТЕ во ВСЕХ местах (Ctrl+H):
      000000 — id чарта «Детальные списки» (список),
@@ -10,54 +10,68 @@
    Красные «!» редактора у строк с :has(...) — линтер не знает :has, на работу не влияет.
    ========================================================================== */
 
-/* 1. заголовки чартов не нужны: у виджетов своя шапка */
-.dashboard-chart-id-000000 .header-title,
-.dashboard-chart-id-111111 .header-title,
-.dashboard-chart-id-222222 .header-title,
-.dashboard-chart-id-333333 .header-title {
+/* ==========================================================================
+   1. Ячейки без белых рамок, чарт — на всю ячейку. Те же правила, что на борде Proteus Adoption
+   (последняя итерация, проверены в бою), но только для наших четырёх чартов: без них Proteus рисует
+   вокруг чарта белую карточку с отступом 16 px, а высоту iframe пишет атрибутом один раз — внизу
+   остаётся полоса. Цепочка холдер → chart-slice → dashboard-chart → chart-container → slice_container →
+   div → react_sanbbox → iframe — вся во флекс / 100 %.
+   ========================================================================== */
+.dashboard-component-chart-holder:has(#chart-id-000000, #chart-id-111111, #chart-id-222222, #chart-id-333333) {
+  background-color: transparent !important;   /* белая карточка ячейки */
+  padding: 0 !important;                       /* отступ 16 px форка — он и даёт «рамку» */
+  box-shadow: none !important;
+  border: 0 !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.dashboard-component-chart-holder:has(#chart-id-000000, #chart-id-111111, #chart-id-222222, #chart-id-333333) .chart-slice,
+.dashboard-component-chart-holder:has(#chart-id-000000, #chart-id-111111, #chart-id-222222, #chart-id-333333) .dashboard-chart,
+.dashboard-component-chart-holder:has(#chart-id-000000, #chart-id-111111, #chart-id-222222, #chart-id-333333) .chart-container,
+.dashboard-component-chart-holder:has(#chart-id-000000, #chart-id-111111, #chart-id-222222, #chart-id-333333) .slice_container,
+.dashboard-component-chart-holder:has(#chart-id-000000, #chart-id-111111, #chart-id-222222, #chart-id-333333) .slice_container > div,
+.dashboard-component-chart-holder:has(#chart-id-000000, #chart-id-111111, #chart-id-222222, #chart-id-333333) .react_sanbbox {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+/* Шапка чарта (пустой заголовок + меню «…» в режиме правки) места не занимает: меню остаётся поверх. */
+.dashboard-component-chart-holder:has(#chart-id-000000, #chart-id-111111, #chart-id-222222, #chart-id-333333) .header-title {
   display: none !important;
 }
-
-/* 2. без поля 16 px вокруг чартов (emotion-паддинг холдера в форке) */
-.dashboard-grid .dashboard-chart-id-000000 .dashboard-component-chart-holder,
-.dashboard-grid .dashboard-component-chart-holder.dashboard-chart-id-000000,
-.dashboard-grid .dashboard-chart-id-111111 .dashboard-component-chart-holder,
-.dashboard-grid .dashboard-component-chart-holder.dashboard-chart-id-111111,
-.dashboard-grid .dashboard-chart-id-222222 .dashboard-component-chart-holder,
-.dashboard-grid .dashboard-component-chart-holder.dashboard-chart-id-222222,
-.dashboard-grid .dashboard-chart-id-333333 .dashboard-component-chart-holder,
-.dashboard-grid .dashboard-component-chart-holder.dashboard-chart-id-333333 {
-  padding: 0 !important;
+.dashboard-component-chart-holder:has(#chart-id-000000, #chart-id-111111, #chart-id-222222, #chart-id-333333) .chart-slice {
+  position: relative !important;
 }
-
-/* 3. область чарта — колонка на всю высоту ячейки, без паддинга вокруг iframe */
-.dashboard-chart-id-000000 .chart-slice,
-.dashboard-chart-id-111111 .chart-slice,
-.dashboard-chart-id-222222 .chart-slice,
-.dashboard-chart-id-333333 .chart-slice {
-  display: flex;
-  flex-direction: column;
+.dashboard-component-chart-holder:has(#chart-id-000000, #chart-id-111111, #chart-id-222222, #chart-id-333333) .chart-header {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  z-index: 11 !important;
+  margin: 0 !important;
 }
-.dashboard-chart-id-000000 .chart-container,
-.dashboard-chart-id-111111 .chart-container,
-.dashboard-chart-id-222222 .chart-container,
-.dashboard-chart-id-333333 .chart-container {
-  padding: 0 !important;
-}
-.dashboard-chart-id-000000 iframe,
-.dashboard-chart-id-111111 iframe,
-.dashboard-chart-id-222222 iframe,
-.dashboard-chart-id-333333 iframe {
-  display: block;
+#chart-id-000000 iframe,
+#chart-id-111111 iframe,
+#chart-id-222222 iframe,
+#chart-id-333333 iframe {
+  display: block !important;                   /* строчная щель под iframe */
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  height: 100% !important;                     /* перекрывает атрибут height платформы */
+  min-height: 0 !important;
+  border: 0 !important;
 }
 
 /* ==========================================================================
-   4. Панель фильтров — выпадашка вправо поверх списка (ОБЯЗАТЕЛЬНО, без этого блока выпадашки
-   помещаются только внутри узкой панели). Костыль борда Proteus Adoption (фильтр борда 59922, строка ЦА):
+   2. Панель фильтров — выпадашка вправо поверх списка (ОБЯЗАТЕЛЬНО, без этого блока выпадашки
+   помещаются только внутри узкой панели). Костыль борда Proteus Adoption (строка ЦА, шапка 803089):
    панель при открытой выпадашке шлёт в канал скриншотов PNG, в base64 которого стоит маркер
    REwtRkxULURELU9O; родитель кладёт dataUrl в img.echarts-plugin РЯДОМ с iframe, и эти правила
-   разворачивают iframe панели ВПРАВО прозрачным слоем поверх списка. Закрыли — чистый PNG, iframe обратно.
-   Подсказки панели iframe не разворачивают.
+   разворачивают iframe панели ВПРАВО прозрачным слоем поверх списка — на всю ширину борда (выпадашка
+   структуры занимает всё место справа). Закрыли — чистый PNG, iframe обратно.
    ========================================================================== */
 
 /* ячейки не должны резать развёрнутый iframe */
@@ -77,9 +91,9 @@
   position: relative !important;
 }
 
-/* сам слой: высота панели, вправо на всю ширину борда (структура открывается на всё место справа), выше сетки */
-.dashboard-chart-id-222222:has(img.echarts-plugin[src*="REwtRkxULURELU9O"]) iframe,
-.dashboard-chart-id-333333:has(img.echarts-plugin[src*="REwtRkxULURELU9O"]) iframe {
+/* сам слой: высота панели, вправо на всю ширину борда, выше сетки (#chart-id в селекторе — сильнее блока 1) */
+.dashboard-chart-id-222222:has(img.echarts-plugin[src*="REwtRkxULURELU9O"]) #chart-id-222222 iframe,
+.dashboard-chart-id-333333:has(img.echarts-plugin[src*="REwtRkxULURELU9O"]) #chart-id-333333 iframe {
   position: absolute !important;
   top: 0 !important;
   left: 0 !important;
@@ -90,3 +104,30 @@
 }
 /* Пока выпадашка открыта, список под ней закрыт прозрачным слоем: клик туда закрывает выпадашку,
    Esc — тоже. */
+
+/* ==========================================================================
+   3. Та же панель — подсказки: другой маркер (REwtRkxULVRJUC0x), разворот вправо ненамного — на
+   360 px, чтобы подсказка выходила за панель. Курсор ушёл с панели — iframe сразу обратно.
+   ========================================================================== */
+.dashboard-chart-id-222222:has(img.echarts-plugin[src*="REwtRkxULVRJUC0x"]) .slice_container,
+.dashboard-chart-id-222222:has(img.echarts-plugin[src*="REwtRkxULVRJUC0x"]) .chart-container,
+.dashboard-chart-id-222222:has(img.echarts-plugin[src*="REwtRkxULVRJUC0x"]) .dashboard-chart,
+.dashboard-chart-id-333333:has(img.echarts-plugin[src*="REwtRkxULVRJUC0x"]) .slice_container,
+.dashboard-chart-id-333333:has(img.echarts-plugin[src*="REwtRkxULVRJUC0x"]) .chart-container,
+.dashboard-chart-id-333333:has(img.echarts-plugin[src*="REwtRkxULVRJUC0x"]) .dashboard-chart {
+  overflow: visible !important;
+}
+.dashboard-chart-id-222222:has(img.echarts-plugin[src*="REwtRkxULVRJUC0x"]) #chart-id-222222,
+.dashboard-chart-id-333333:has(img.echarts-plugin[src*="REwtRkxULVRJUC0x"]) #chart-id-333333 {
+  position: relative !important;
+}
+.dashboard-chart-id-222222:has(img.echarts-plugin[src*="REwtRkxULVRJUC0x"]) #chart-id-222222 iframe,
+.dashboard-chart-id-333333:has(img.echarts-plugin[src*="REwtRkxULVRJUC0x"]) #chart-id-333333 iframe {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: calc(100% + 360px) !important;
+  height: 100% !important;
+  z-index: 998 !important;
+  background: transparent !important;
+}

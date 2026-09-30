@@ -37,7 +37,11 @@ var CFG = {
   sub: { us: 'Параллельная структура', kp: 'Каталог продуктов' },
   limits: [5000, 10000, 25000],
   pageSizes: [50, 100, 200, 500],
-  defaultCols: ['master_id', 'hiredate'],
+  // По умолчанию — пресет «Персоналка» (владелец, 30.09): CFG.defaultCols собирается ниже, после presets;
+  // датасет отдаёт тот же набор без носителя cols (DEFAULT_COLS в SQL). «Сбросить» — только baseCols.
+  baseCols: ['master_id', 'hiredate'],
+  // Ссылка на MyT — не колонка, а скрепка у MasterID (открыть) и кнопка «скопировать ссылку»; грузится всегда.
+  linkKey: 'my_link',
   locked: { us: ['master_id', 'hiredate'], kp: ['master_id'] },
   emp: ['Юридическая', 'Активная'],
   tcr: ['ТЦР РФ', 'ТЦР СНГ', 'ТЦР РФ + ТЦР СНГ'],
@@ -182,6 +186,13 @@ var CFG = {
   // Отступы — шкала 2…16 профиля; строка таблицы списка — плотная (данных много).
   spacing: { gutter: 16, gap: 12, rowH: 32, colMin: 70, colMax: 640 }
 };
+
+// Колонки по умолчанию: MasterID, дата найма, ссылка на MyT и пресет «Персоналка» (как DEFAULT_COLS датасета).
+CFG.defaultCols = (function () {
+  var out = ['master_id', 'hiredate', 'my_link'], p = CFG.presets[0].cols;
+  for (var i = 0; i < p.length; i++) if (out.indexOf(p[i]) < 0) out.push(p[i]);
+  return out;
+})();
 
 // ---------- БЛОК 2: ВХОД + СОСТОЯНИЕ + ХЕЛПЕРЫ ----------
 // ВСЕ строки data, не data[0].
@@ -405,7 +416,7 @@ function filterCount(o) {
 // Колонки показа: выбор пользователя (порядок) или эхо; группировка — отдельно, над строками.
 function colOrder() {
   var base = state.columnOrder || applied().cols || CFG.defaultCols, out = [];
-  for (var i = 0; i < base.length; i++) if (FIELD_BY[base[i]] && !inArr(state.groupBy, base[i])) out.push(base[i]);
+  for (var i = 0; i < base.length; i++) if (FIELD_BY[base[i]] && base[i] !== CFG.linkKey && !inArr(state.groupBy, base[i])) out.push(base[i]);
   for (var l = LOCKED.length - 1; l >= 0; l--) if (!inArr(out, LOCKED[l]) && !inArr(state.groupBy, LOCKED[l])) out.unshift(LOCKED[l]);
   return uniq(out);
 }
@@ -423,7 +434,7 @@ function perRowCols(cols) {
 // Колонки запроса: закреплённые, группировка, показ. Расчётным полям КП нужна аллокация:
 // сумме — сама доля (alloc), числу аллокаций — строка на аллокацию (любое поле аллокации).
 function reqCols(order) {
-  var o = LOCKED.concat(state.groupBy, order || colOrder()), out = [], perRow = false;
+  var o = LOCKED.concat([CFG.linkKey], state.groupBy, order || colOrder()), out = [], perRow = false;
   for (var i = 0; i < o.length; i++) {
     if (isVirtual(o[i])) continue;
     if (FIELD_BY[o[i]]) out.push(o[i]);
@@ -442,7 +453,7 @@ function maskOf(o) {
     for (var i = 0; i < (vals || []).length; i++) if (vals[i] !== null && vals[i] !== undefined && String(vals[i]) !== '') v.push(String(vals[i]));
     if (v.length) out.push({ column: base + cf, operator: 'IN', value: v });
   }
-  if (o.cols && o.cols.join(',') !== CFG.defaultCols.join(',')) add('cols', o.cols);
+  if (o.cols && !sameSet(o.cols, CFG.defaultCols)) add('cols', o.cols);
   if (o.sort && o.sort !== 'master_id:asc') add('sort', [o.sort]);
   if (o.lim && +o.lim !== CFG.limits[0]) add('lim', [String(o.lim)]);
   add('rq', [o.rq]);
@@ -720,14 +731,16 @@ function buildCSS() {
     P + '-segb' + P + '-on{background:' + C.card + ';color:' + C.ink + ';}',
     P + '-segb i{font-style:normal;color:' + C.act + ';}',
     // «Колонки»: группы сеткой, пресеты
-    P + '-pop' + P + '-cpop{width:760px;}',
+    // настройка колонок — на всю ширину чарта (placePop сужает до ячейки), группы — в один ряд
+    P + '-pop' + P + '-cpop{width:4000px;}',
     P + '-cpt{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;}',
     P + '-cpt ' + P + '-psearch{flex:1 1 220px;margin:0;}',
     P + '-pre{display:inline-flex;align-items:center;height:26px;padding:0 10px;border:1px solid ' + C.line + ';border-radius:999px;background:' + C.card + ';font-size:' + F.note + 'px;font-weight:500;color:' + C.ink2 + ';cursor:pointer;white-space:nowrap;}',
     P + '-pre:hover{border-color:#cfdcfb;color:' + C.act + ';}',
     P + '-pre' + P + '-on{background:' + C.blueBg + ';border-color:#dbe6fd;color:' + C.blueTx + ';}',
-    P + '-cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;max-height:430px;overflow:auto;}',
-    P + '-cg{border:1px solid ' + C.line2 + ';border-radius:9px;padding:4px;min-width:0;}',
+    P + '-cgrid{display:grid;gap:8px;overflow-x:auto;align-items:start;}',
+    P + '-cg{border:1px solid ' + C.line2 + ';border-radius:9px;padding:4px;min-width:0;max-height:440px;overflow:auto;}',
+    P + '-cgh{position:sticky;top:0;background:' + C.card + ';z-index:1;}',
     P + '-cgh{display:flex;align-items:center;gap:8px;padding:6px 8px;font-size:' + F.cap + 'px;text-transform:uppercase;letter-spacing:.3px;color:' + C.muted + ';font-weight:500;}',
     P + '-cgh label{display:flex;align-items:center;gap:8px;flex:1;cursor:pointer;}',
     P + '-cgh input{accent-color:' + C.blue + ';margin:0;}',
@@ -802,6 +815,12 @@ function buildCSS() {
     P + '-mask{color:' + C.muted2 + ';font-weight:400;}',
     P + '-hl{background:' + C.hl + ';color:' + C.actInk + ';border-radius:3px;padding:0 1px;}',
     P + '-a{color:' + C.act + ';text-decoration:none;font-weight:500;}',
+    // ссылка на MyT у MasterID: скрепка — открыть, рядом «скопировать ссылку» (видна при наведении на строку)
+    P + '-clip,' + P + '-clipc{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-left:4px;border:0;border-radius:5px;background:transparent;color:' + C.muted2 + ';cursor:pointer;vertical-align:-4px;padding:0;}',
+    P + '-clip:hover,' + P + '-clipc:hover{background:' + C.blueBg + ';color:' + C.act + ';}',
+    P + '-clipc{visibility:hidden;}',
+    P + '-t tbody:hover ' + P + '-clipc{visibility:visible;}',
+    P + '-clipc' + P + '-ok{visibility:visible;color:#11804a;}',
     P + '-a:hover{text-decoration:underline;}',
     P + '-empty{padding:40px 24px;text-align:center;color:' + C.muted + ';font-size:' + F.body + 'px;line-height:1.5;}',
     P + '-empty b{display:block;color:' + C.ink + ';font-size:15px;font-weight:600;margin-bottom:8px;}',
@@ -936,6 +955,8 @@ function colGroups(q) {
   var groups = [], by = {};
   for (var i = 0; i < FIELDS.length; i++) {
     var f = FIELDS[i];
+    // «Базовое» (MasterID, дата найма, ссылка на MyT) — есть всегда, в настройке не показываем.
+    if (f.group === 'Базовое') continue;
     if (q && lower(f.label).indexOf(q) < 0 && lower(f.key).indexOf(q) < 0) continue;
     if (!by[f.group]) { by[f.group] = { name: f.group, items: [] }; groups.push(by[f.group]); }
     by[f.group].items.push(f);
@@ -944,11 +965,12 @@ function colGroups(q) {
 }
 function presetCols(p) {
   var out = LOCKED.slice();
-  for (var i = 0; i < p.cols.length; i++) if (FIELD_BY[p.cols[i]] && !inArr(out, p.cols[i])) out.push(p.cols[i]);
+  for (var i = 0; i < p.cols.length; i++) if (FIELD_BY[p.cols[i]] && p.cols[i] !== CFG.linkKey && !inArr(out, p.cols[i])) out.push(p.cols[i]);
   return out;
 }
 function colGridHTML() {
   var P = CFG.ns, draft = state.colDraft || colOrder(), q = lower(trim(state.colQ)), gs = colGroups(q), s = '';
+  // Группы — в один ряд (колонкой каждая, своя прокрутка): видно все сразу, без второго уровня.
   for (var g = 0; g < gs.length; g++) {
     var on = 0;
     for (var c = 0; c < gs[g].items.length; c++) if (inArr(draft, gs[g].items[c].key)) on++;
@@ -963,26 +985,39 @@ function colGridHTML() {
   }
   return s || '<div class="' + P + '-nores">Таких колонок нет</div>';
 }
+function colGridStyle() {
+  var n = colGroups(lower(trim(state.colQ))).length;
+  return 'grid-template-columns:repeat(' + Math.max(1, n) + ',minmax(170px,1fr))';
+}
+// Пресет, которому равен набор колонок (или null) — его имя на кнопке «Колонки».
+function presetNow(cols) {
+  for (var i = 0; i < CFG.presets.length; i++) {
+    var p = CFG.presets[i];
+    if (p.only && p.only !== MODE) continue;
+    if (sameSet(presetCols(p), cols)) return p;
+  }
+  return null;
+}
 function colCountText() {
   var draft = state.colDraft || colOrder(), miss = 0;
   for (var i = 0; i < draft.length; i++) if (!loaded(draft[i])) miss++;
   return 'Выбрано: ' + draft.length + (miss ? ' · ' + miss + ' ' + plural(miss, 'новая загрузится', 'новые загрузятся', 'новых загрузятся') + ' одним запросом' : ' · без запроса');
 }
 function colsDDHTML() {
-  var P = CFG.ns, n = colOrder().length, s = '<div class="' + P + '-dd" data-scope="cols">'
-    + ddButton({ key: 'cols', label: '', html: 'Колонки <span class="' + P + '-cnt">' + n + '</span>',
-      tip: { title: 'Колонки таблицы', text: 'Открытие — только MasterID и дата найма. Добавить колонки — один короткий запрос; убрать и переставить — сразу, без запроса.' } });
+  var P = CFG.ns, n = colOrder().length, pn = presetNow(colOrder()), s = '<div class="' + P + '-dd" data-scope="cols">'
+    + ddButton({ key: 'cols', label: '', set: !!pn, html: 'Колонки' + (pn ? ': ' + esc(pn.name) : '') + ' <span class="' + P + '-cnt">' + n + '</span>',
+      tip: { title: 'Колонки таблицы', text: (pn ? 'Сейчас — пресет «' + pn.name + '». ' : '') + 'По умолчанию — «Персоналка». Добавить колонки — один запрос; убрать и переставить — сразу, без запроса.' } });
   if (state.open === 'cols') {
     var draft = state.colDraft || colOrder();
     s += '<div class="' + P + '-pop ' + P + '-cpop ' + P + '-rt" tabindex="-1"><div class="' + P + '-poph"><span>Колонки таблицы</span>'
-      + '<button class="' + P + '-lnk" data-action="colreset">По умолчанию — ' + CFG.defaultCols.length + '</button></div><div class="' + P + '-cpt">'
+      + '<button class="' + P + '-btn" data-action="colreset"' + tip({ title: 'Сбросить', text: 'Оставить только MasterID и дату найма в компанию.' }) + '>Сбросить</button></div><div class="' + P + '-cpt">'
       + hSearch('cols', 'Поиск колонки', state.colQ);
     for (var i = 0; i < CFG.presets.length; i++) {
       var p = CFG.presets[i];
       if (p.only && p.only !== MODE) continue;
       s += '<button class="' + P + '-pre' + (sameSet(presetCols(p), draft) ? ' ' + P + '-on' : '') + '" data-action="preset" data-key="' + i + '">' + esc(p.name) + '</button>';
     }
-    s += '</div><div class="' + P + '-cgrid" data-plist="cols">' + colGridHTML() + '</div>'
+    s += '</div><div class="' + P + '-cgrid" data-plist="cols" style="' + colGridStyle() + '">' + colGridHTML() + '</div>'
       + '<div class="' + P + '-popf"><span data-pcount="1">' + colCountText() + '</span>'
       + '<button class="' + P + '-btn ' + P + '-pri" data-action="colapply">Показать</button></div></div>';
   }
@@ -1064,8 +1099,18 @@ function colW(k) {
 function cellHTML(key, v, q) {
   var P = CFG.ns;
   if (isMasked(v)) return '<span class="' + P + '-mask">⛔ нет доступа</span>';
-  if (key === 'my_link' && /^https?:\/\//i.test(v)) return '<a class="' + P + '-a" href="' + esc(v) + '" target="_blank" rel="noopener noreferrer">майти ↗</a>';
   return hl(cellText(key, v), q);
+}
+var CLIP_SVG = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+  + '<path d="M21 11.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/></svg>';
+var LCOPY_SVG = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">'
+  + '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>';
+// Ссылка на MyT у MasterID: скрепка открывает, кнопка рядом копирует.
+function linkHTML(v) {
+  var P = CFG.ns;
+  if (!/^https?:\/\//i.test(String(v || ''))) return '';
+  return '<a class="' + P + '-clip" href="' + esc(v) + '" target="_blank" rel="noopener noreferrer" aria-label="Открыть в MyT"' + tip({ title: 'MyT', text: 'Открыть карточку сотрудника в MyT.' }) + '>' + CLIP_SVG + '</a>'
+    + '<button type="button" class="' + P + '-clipc" data-action="copylink" data-key="' + esc(v) + '" aria-label="Скопировать ссылку на MyT"' + tip({ title: 'Скопировать ссылку', text: 'Ссылка на карточку в MyT — в буфер обмена.' }) + '>' + LCOPY_SVG + '</button>';
 }
 // Блок сотрудника: у КП со показанными колонками аллокации — строка на аллокацию, иначе одна.
 function blockHTML(b, cols, q, perRow) {
@@ -1078,7 +1123,8 @@ function blockHTML(b, cols, q, perRow) {
       var v = isVirtual(key) ? blockVal(b, key) : cellRaw(ROWS.rows[r], key), cls = [];
       if (c === 0) cls.push(P + '-c0');
       if (keyType(key) === 'num') cls.push(P + '-num');
-      s += '<td' + (cls.length ? ' class="' + cls.join(' ') + '"' : '') + (bn > 1 && !per ? ' rowspan="' + bn + '"' : '') + '>' + cellHTML(key, v, q) + '</td>';
+      s += '<td' + (cls.length ? ' class="' + cls.join(' ') + '"' : '') + (bn > 1 && !per ? ' rowspan="' + bn + '"' : '') + '>' + cellHTML(key, v, q)
+        + (key === 'master_id' ? linkHTML(cellRaw(ROWS.rows[b.i], CFG.linkKey)) : '') + '</td>';
     }
     s += '</tr>';
   }
@@ -1126,7 +1172,8 @@ function tableInnerHTML(V) {
   } else {
     for (var j = pgs.from; j < pgs.to; j++) s += blockHTML(bl[V.idx[j]], cols, q, per);
   }
-  return '<table class="' + P + '-t" style="width:' + W + 'px">' + s + '</table>';
+  // Колонок мало — таблица тянется на всю ширину (доли — по заданным ширинам).
+  return '<table class="' + P + '-t" style="width:' + W + 'px;min-width:100%">' + s + '</table>';
 }
 // Страницы — над таблицей, справа во второй строке панели: размер страницы, диапазон, стрелки.
 function pagerHTML(V) {
@@ -1214,7 +1261,7 @@ function tourSteps() {
   add({ sel: P + '-tsw', title: 'Поиск по таблице',
     html: 'Ищет по всем показанным колонкам загруженных строк и подсвечивает совпадения — сразу, без запроса.' });
   add({ sel: '[data-scope="cols"]', lock: true, title: 'Колонки',
-    html: 'Группы колонок с поиском и готовые наборы. Добавить колонки — один короткий запрос, убрать — сразу.' });
+    html: 'По умолчанию — пресет «Персоналка» (его имя на кнопке). Группы колонок в один ряд, поиск и другие пресеты; «Сбросить» — только MasterID и дата найма. Добавить колонки — один запрос, убрать — сразу.' });
   add({ sel: '[data-action="copy"]', pad: 4, lock: true, title: 'Копировать',
     html: 'Все загруженные строки (с учётом поиска) в текущем порядке строк и колонок — для вставки в Excel. Скопировалось — иконка станет галочкой.' });
   add({ sel: '[data-gzone]', title: 'Группировка',
@@ -1804,6 +1851,10 @@ function echoMsg() {
         if (state.copyT) clearTimeout(state.copyT);
         state.copyT = setTimeout(function () { state.copyT = null; state.copied = ''; swap(); }, 2200);
       };
+      clip(text, done);
+    }
+    // В буфер обмена: Clipboard API, в песочнице без него — запасным путём (execCommand).
+    function clip(text, done) {
       var fallback = function () {
         var ta = document.createElement('textarea'), ok = false;
         ta.value = text;
@@ -1894,7 +1945,7 @@ function echoMsg() {
         render();
         return;
       }
-      if (act === 'colreset') { state.colDraft = LOCKED.concat(CFG.defaultCols); state.colDraft = uniq(state.colDraft); render(); return; }
+      if (act === 'colreset') { state.colDraft = uniq(LOCKED.concat(CFG.baseCols)); render(); return; }
       if (act === 'colapply') {
         var draft = uniq(state.colDraft || colOrder()), miss = false;
         for (var d = 0; d < draft.length; d++) if (!loaded(draft[d])) miss = true;
@@ -1956,6 +2007,15 @@ function echoMsg() {
         return;
       }
       if (act === 'copy') { copyRows(); return; }
+      if (act === 'copylink') {
+        clip(key, function (ok) {
+          a.classList.add(CFG.ns + '-ok');
+          a.setAttribute('data-tip', tipHtml({ title: ok ? 'Ссылка скопирована' : 'Не скопировалось', text: key }));
+          if (state.tip) { state.tip.key = a.getAttribute('data-tip'); renderTip(); }
+          setTimeout(function () { a.classList.remove(CFG.ns + '-ok'); }, 1500);
+        });
+        return;
+      }
     }
 
     // Чекбоксы: change, не click (label/input дают оба события).

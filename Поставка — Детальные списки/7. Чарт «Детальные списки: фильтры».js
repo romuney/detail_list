@@ -47,23 +47,24 @@ var CFG = {
   listMax: 400,                // значений в списке выпадашки за раз
   treeRowsMax: 900,            // строк дерева за раз
   searchMin: 2,
-  // Структуры — поле на всю строку, фиолетовый акцент: фильтр действует на всё дерево (узел и всё ниже).
+  // Структуры — поле на всю строку, лёгкий жёлтый градиент: фильтр действует на всё дерево (узел и всё ниже);
+  // выбрано — синим, как любой заданный фильтр.
   trees: [
     { key: 'mu', label: 'Управленческая структура', name: 'Управленческая структура', max: 50 },
     { key: 'lu', label: 'Юридическая структура', name: 'Юридическая структура', max: 50 },
     { key: 'kp', label: 'Каталог продуктов', name: 'Каталог продуктов', max: 20 }
   ],
   // Разделы и порядок — нативных фильтров борда 7241 (к ним привыкли пользователи); в разделе — по два в ряд.
-  // fold — раздел свёрнут по умолчанию (видно, какие ещё есть фильтры).
+  // fold — раздел свёрнут по умолчанию: открыт только «Основные», остальные — заголовками (видно, что ещё есть).
   shelf: [
     { name: 'Основные', keys: ['per', 'ids', 'emp', 'active_type_nm', 'employment_relation_type_desc', 'employee_contract_type_desc',
       'residential_state_nm', 'office_desc', 'emp_specialization_oper_code', 'emp_specialization_it_code', 'emp_stream_desc',
       'emp_specialization_desc'] },
-    { name: 'Управленческая структура', keys: ['mu', 'management_head_flg', 'hrbp_login'] },
-    { name: 'Юридическая структура', keys: ['lu', 'regional_hr_login', 'employee_main_contract_type_nm', 'tcr'] },
-    { name: 'Атрибуты найма', keys: ['mapping_channel_name', 'respond_source_nm'] },
-    { name: 'Каталог продуктов', keys: ['kp'] },
-    { name: 'Региональные атрибуты', keys: ['location_type', 'macroregion_nm', 'city_nm', 'tcr_exist_flg'] },
+    { name: 'Управленческая структура', fold: true, keys: ['mu', 'management_head_flg', 'hrbp_login'] },
+    { name: 'Юридическая структура', fold: true, keys: ['lu', 'regional_hr_login', 'employee_main_contract_type_nm', 'tcr'] },
+    { name: 'Атрибуты найма', fold: true, keys: ['mapping_channel_name', 'respond_source_nm'] },
+    { name: 'Каталог продуктов', fold: true, keys: ['kp'] },
+    { name: 'Региональные атрибуты', fold: true, keys: ['location_type', 'macroregion_nm', 'city_nm', 'tcr_exist_flg'] },
     { name: 'Другие атрибуты', fold: true, keys: ['t_education_desc', 'company_fire_flg', 'rb_flg', 'rb_migration_flg', 'legal_position_nm',
       'subordination_lvl', 'head_lvl_segment'] }
   ],
@@ -90,6 +91,8 @@ var CFG = {
   overlay: {
     // «DL-FLT-DD-ON» в base64: 12 байт = ровно 16 знаков, стоит в строке PNG как есть.
     mark: 'REwtRkxULURELU9O',
+    // «DL-FLT-TIP-1»: подсказка — iframe разворачивается вправо ненамного (CSS файла 9), чтобы она выходила за панель.
+    tipMark: 'REwtRkxULVRJUC0x',
     png: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
   },
   text: {
@@ -104,8 +107,8 @@ var CFG = {
     bg: '#f4f5f7', card: '#ffffff', line: '#e7e9ee', line2: '#eef0f3',
     ink: '#23272e', ink2: '#454b55', muted: '#8a909c', muted2: '#aab0bb',
     warnTx: '#9a6500', blue: '#3b6fe0', blueBg: '#eef3fe', blueTx: '#2b5fd0', act: '#2b6cff', actInk: '#1f55d6', hl: '#dfe8ff',
-    // структуры (всё дерево) — фиолетовый акцент с лёгким градиентом
-    vio: '#6d4ae0', vioTx: '#5a3bc4', vioBg1: '#f4f0ff', vioBg2: '#ebe4ff', vioLine: '#d9cffb'
+    // структуры (всё дерево) — лёгкий жёлтый градиент; выбранная — синим, как любой заданный фильтр
+    yel1: '#fffcf0', yel2: '#fff5d6', yelLine: '#f0e2b0', yelTx: '#8a6a00'
   },
   // Кегли — роли профиля Adoption, веса 400 / 500 / 600. Поле фильтра — две строки (подпись + выбор), 40 px.
   fonts: { family: 'Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif', micro: 9.5, cap: 10.5, note: 11.5, control: 12, body: 12.5, title: 14.5 },
@@ -128,7 +131,7 @@ var STATE0 = {
   applied: null,     // применённое (панель себя не фильтрует — держит сама, сверяет с эхом списка)
   lastFrq: '',       // метка последнего «Применить» — эхо списка с другой меткой устарело
   rqN: 0, warn: '',
-  baseW: 0, sig: false, pin: false
+  baseW: 0, sig: '', pin: false, tipBig: false
 };
 if (!__S[CFG.ns]) __S[CFG.ns] = {};
 for (var k0 in STATE0) if (STATE0.hasOwnProperty(k0) && !__S[CFG.ns].hasOwnProperty(k0)) __S[CFG.ns][k0] = STATE0[k0];
@@ -651,15 +654,14 @@ function buildCSS() {
     P + '-fl{font-size:' + F.cap + 'px;color:' + C.muted + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:13px;}',
     P + '-fv{font-size:' + F.control + 'px;font-weight:500;color:' + C.ink2 + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:16px;}',
     P + '-fld' + P + '-set ' + P + '-fl{color:#5b83dc;}',
-    // структура — на всю строку, фиолетовый акцент с лёгким градиентом
-    P + '-fld' + P + '-tree{grid-column:1 / -1;height:46px;background:linear-gradient(135deg,' + C.vioBg1 + ',' + C.vioBg2 + ');border-color:' + C.vioLine + ';}',
-    P + '-fld' + P + '-tree:hover{border-color:' + C.vio + ';}',
-    P + '-fld' + P + '-tree ' + P + '-fl{color:' + C.vio + ';font-weight:500;}',
-    P + '-fld' + P + '-tree ' + P + '-fv{color:' + C.vioTx + ';font-size:' + F.body + 'px;}',
-    P + '-fld' + P + '-tree' + P + '-on{border-color:' + C.vio + ';box-shadow:0 0 0 2px rgba(109,74,224,.16);}',
-    P + '-fld' + P + '-tree' + P + '-chg{border-color:' + C.vio + ';}',
-    P + '-fld' + P + '-tree ' + P + '-x{background:rgba(109,74,224,.16);color:' + C.vioTx + ';}',
-    P + '-fld' + P + '-set ' + P + '-fv{color:' + C.blueTx + ';}',
+    // структура — на всю строку, лёгкий жёлтый градиент; выбрано — синим (как любой заданный фильтр)
+    P + '-fld' + P + '-tree{grid-column:1 / -1;height:46px;background:linear-gradient(135deg,' + C.yel1 + ',' + C.yel2 + ');border-color:' + C.yelLine + ';}',
+    P + '-fld' + P + '-tree:hover{border-color:#e2cd84;}',
+    P + '-fld' + P + '-tree ' + P + '-fl{color:' + C.yelTx + ';}',
+    P + '-fld' + P + '-tree ' + P + '-fv{font-size:' + F.body + 'px;}',
+    P + '-fld' + P + '-tree' + P + '-set{background:' + C.blueBg + ';border-color:#dbe6fd;}',
+    P + '-fld' + P + '-tree' + P + '-set ' + P + '-fl{color:#5b83dc;}',
+    P + '-fld' + P + '-tree' + P + '-on{border-color:' + C.act + ';}',
     P + '-fv' + P + '-all{color:' + C.muted2 + ';font-weight:400;}',
     P + '-fc{position:absolute;right:7px;top:50%;transform:translateY(-50%);color:' + C.muted2 + ';font-size:9px;}',
     P + '-x{position:absolute;right:5px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:rgba(43,95,208,.14);color:' + C.blueTx + ';font-size:11px;line-height:1;cursor:pointer;}',
@@ -1109,15 +1111,15 @@ function bcast(msg) {
     }
     getTip();
     // showTip/hideTip — служебные: тултип спрятан ДВУМЯ свойствами (display + opacity), координаты —
-    // getBoundingClientRect() как есть, клампинг по окну. Подсказка едет за курсором (rect — точка
-    // курсора), в пределах панели: iframe не разворачивается.
+    // getBoundingClientRect() как есть. Подсказка едет за курсором (rect — точка курсора) и может выйти за
+    // панель: на время подсказки iframe чуть разворачивается вправо (tipMark), место справа уже есть.
     function showTip(html, rect) {
       var tip = getTip();
       if (tip.__h !== html) { tip.innerHTML = html; tip.__h = html; }
       tip.style.display = 'block';
-      tip.style.maxWidth = Math.max(180, Math.min(300, panelW() - 12)) + 'px';
+      tip.style.maxWidth = '300px';
       var t = tip.getBoundingClientRect();
-      var pad = 6, gap = 14, W = Math.min(window.innerWidth, panelW());
+      var pad = 6, gap = 14, W = Math.max(window.innerWidth, panelW() + 340);
       var left = rect.left + gap, top = rect.top + gap;
       if (left + t.width > W - pad) left = rect.left - t.width - gap;
       if (top + t.height > window.innerHeight - pad) top = rect.top - t.height - gap;
@@ -1158,21 +1160,22 @@ function bcast(msg) {
 
     // Сигнал родителю через канал скриншотов: PNG 1×1, после IEND — маркер, выровненный по 3-байтовой
     // группе base64 (URL валиден, маркер виден в строке как есть).
-    function pngUrl(big) {
+    function pngUrl(mark) {
       var b = CFG.overlay.png;
-      if (big) {
+      if (mark) {
         var raw = atob(b);
         while (raw.length % 3) raw += '\0';
-        b = btoa(raw + atob(CFG.overlay.mark));
+        b = btoa(raw + atob(mark));
       }
       return 'data:image/png;base64,' + b;
     }
+    // Разворот: выпадашка — на всю ширину борда (маркер mark), подсказка — ненамного (tipMark), иначе — ячейка.
     function signal() {
-      var big = !!state.open;
-      if (big === state.sig) return;
+      var mk = state.open ? CFG.overlay.mark : (state.tipBig ? CFG.overlay.tipMark : ''), big = !!mk;
+      if (mk === state.sig) return;
       if (big && !state.pin) state.baseW = overlay.clientWidth || state.baseW;
-      state.sig = big;
-      var url = pngUrl(big);
+      state.sig = mk;
+      var url = pngUrl(mk);
       try {
         if (window.parent && window.parent !== window) {
           window.parent.postMessage({ type: 'ECHARTS_UPDATE_DATA_URL', dataUrl: url, payload: { dataUrl: url } }, '*');
@@ -1190,7 +1193,7 @@ function bcast(msg) {
       } else { overlay.style.width = '100%'; state.pin = false; }
     }
     function unpinIfShrunk() {
-      if (state.pin && !state.open && window.innerWidth <= state.baseW + 4) { overlay.style.width = '100%'; state.pin = false; }
+      if (state.pin && !state.open && !state.tipBig && window.innerWidth <= state.baseW + 4) { overlay.style.width = '100%'; state.pin = false; }
     }
 
     function placeDd() {
@@ -1262,6 +1265,7 @@ function bcast(msg) {
       state.open = key || '';
       state.q = '';
       state.tip = null;
+      state.tipBig = false;   // выпадашка открыта или закрыта — разворот под подсказку больше не нужен
       hideTip();
       signal();
       render();
@@ -1278,23 +1282,34 @@ function bcast(msg) {
     }
 
     // ── НАВЕДЕНИЕ: подсказка едет за курсором (как в HRBP HUB и Adoption); между соседними целями не
-    // гаснет, ушёл курсор в пустоту — через 110 мс. iframe не разворачивает.
-    var tipHideT = null;
+    // гаснет, ушёл курсор в пустоту — через 110 мс. На время подсказок iframe чуть развёрнут вправо (tipMark):
+    // ширина панели закреплена, борд не прыгает; сворачиваем через 400 мс после последней подсказки, а ушёл
+    // курсор с панели — сразу.
+    var tipHideT = null, tipRelT = null;
+    function tipRelease() {
+      if (tipRelT) clearTimeout(tipRelT);
+      tipRelT = setTimeout(function () { tipRelT = null; if (!state.tip && state.tipBig) { state.tipBig = false; signal(); unpinIfShrunk(); } }, 400);
+    }
     function onMove(e) {
       var el = trigger(e.target, 'data-tip');
       if (el && el.getAttribute('aria-expanded') === 'true') el = null;
       if (el && ddEl && ddEl.contains(el)) el = null;
       if (!el || state.open) {
-        if (state.tip && !tipHideT) tipHideT = setTimeout(function () { tipHideT = null; state.tip = null; hideTip(); }, 110);
+        if (state.tip && !tipHideT) tipHideT = setTimeout(function () { tipHideT = null; state.tip = null; hideTip(); tipRelease(); }, 110);
         return;
       }
       if (tipHideT) { clearTimeout(tipHideT); tipHideT = null; }
+      if (tipRelT) { clearTimeout(tipRelT); tipRelT = null; }
+      if (!state.tipBig) { state.tipBig = true; signal(); }
       state.tip = { html: el.getAttribute('data-tip') || '', el: el, rect: { left: e.clientX, top: e.clientY, width: 0, height: 0 } };
       showTip(state.tip.html, state.tip.rect);
     }
+    // Курсор ушёл с панели (на список под развёрнутым слоем) — сворачиваем сразу: список снова кликается.
     function onLeave() {
       if (tipHideT) { clearTimeout(tipHideT); tipHideT = null; }
+      if (tipRelT) { clearTimeout(tipRelT); tipRelT = null; }
       if (state.tip) { state.tip = null; hideTip(); }
+      if (state.tipBig) { state.tipBig = false; signal(); unpinIfShrunk(); }
     }
 
     // ── ЭМИССИЯ ── кросс-фильтр только на список вкладки: панель себя не фильтрует (куб от фильтров не
@@ -1467,10 +1482,23 @@ function bcast(msg) {
       openDd('');
     };
     document.addEventListener('click', state.onDocClick);
+    // Курсор над развёрнутой прозрачной частью (не над панелью) — разворот под подсказку снимаем сразу.
+    if (state.onDocMove) document.removeEventListener('mousemove', state.onDocMove);
+    state.onDocMove = function (ev) {
+      if (!state.tipBig || state.open || !overlay.parentNode) return;
+      var n = ev.target;
+      while (n && n !== document.body) { if (n === overlay) return; n = n.parentNode; }
+      if (state.tip) { state.tip = null; hideTip(); }
+      state.tipBig = false;
+      signal();
+      unpinIfShrunk();
+    };
+    document.addEventListener('mousemove', state.onDocMove);
     if (state.onBlur) window.removeEventListener('blur', state.onBlur);
     state.onBlur = function () {
       setTimeout(function () { if (state.open && !document.hasFocus()) openDd(''); }, 150);
       if (state.tip) { state.tip = null; hideTip(); }
+      if (state.tipBig) { state.tipBig = false; signal(); }
     };
     window.addEventListener('blur', state.onBlur);
     if (state.onDocKey) document.removeEventListener('keydown', state.onDocKey, true);
@@ -1502,12 +1530,13 @@ function bcast(msg) {
     render();
     // Перезапуск скрипта (новый ответ) при открытой выпадашке: скриншот платформы мог затереть маркер —
     // повторяем сигнал; курсор — снова в поле поиска.
+    state.tipBig = false;
     if (state.open) {
-      state.sig = false;
+      state.sig = '';
       signal();
-      setTimeout(function () { if (state.open) { state.sig = false; signal(); placeDd(); } }, 400);
+      setTimeout(function () { if (state.open) { state.sig = ''; signal(); placeDd(); } }, 400);
       focusDd();
-    } else if (state.sig) { state.sig = true; signal(); }
+    } else if (state.sig) { state.sig = 'x'; signal(); }
 
     // ResizeObserver только правит габариты (место выпадашки). render() не вызывать.
     if (typeof ResizeObserver !== 'undefined') {

@@ -76,6 +76,20 @@ def old_order(mode):
     return [m.group(1) or m.group(2) for m in re.finditer(r"ifNull\(toString\((?:`(\w+)`|(toYear\(toDate\(now\(\)\)\)))\),''\)", arr)]
 
 
+def default_js():
+    """Колонки по умолчанию чарта списка: MasterID, дата найма, ссылка на MyT и пресет «Персоналка» (CFG.defaultCols)."""
+    js = open(os.path.join(os.path.dirname(ch.DATASET), 'detail-list.chart.js'), encoding='utf-8').read()
+    m = re.search(r"\{ name: 'Персоналка', cols: \[(.*?)\] \}", js, re.S)
+    out = ['master_id', 'hiredate', 'my_link']
+    for c in re.findall(r"'([a-z0-9_]+)'", m.group(1)):
+        if c not in out:
+            out.append(c)
+    return out
+
+
+DEFAULT_JS = default_js()
+
+
 def keys_for(mode):
     return EMP_KEYS + (ALLOC_KEYS if mode == 'kp' else [])
 
@@ -368,8 +382,8 @@ def first_rows(d, i):
 def behaviour(mode, stream, kp):
     print('— части ответа, сортировка, лимит, эхо, ввод, доступ, режимы ClickHouse: %s' % mode)
     d, rows, _ = run_new({}, 'a.user', mode)
-    ok('%s: список по умолчанию — meta и строки, MasterID и дата найма' % mode,
-       d['roles'] == {'meta', 'r'} and len(set(r[0] for r in d['rows'])) == 5000 and d['cols'] == ['master_id', 'hiredate'], (d['roles'], d['cols']))
+    ok('%s: список по умолчанию — meta и строки, пресет «Персоналка» чарта (+ ссылка на MyT)' % mode,
+       d['roles'] == {'meta', 'r'} and len(set(r[0] for r in d['rows'])) == 5000 and set(d['cols']) == set(DEFAULT_JS), (d['roles'], sorted(set(d['cols']) ^ set(DEFAULT_JS))))
     d, rows, _ = run_new({}, 'a.user', mode, view='filters')
     ok('%s: панель фильтров по умолчанию — meta и куб (словари, коды, три дерева), без строк' % mode,
        d['roles'] == {'meta', 'D', 'C', 'T'} and set(k for k in d['trees'] if ':' not in k) == {'mu', 'lu', 'kp'} and not d['rows']
@@ -456,7 +470,7 @@ def behaviour(mode, stream, kp):
             rows, _ = ch.dataset({}, 'a.user', mode, always_true=True, view=view)
             d = ch.decode(rows)
             ok('%s %s: AlwaysTrue — датасет сохраняется, ответ по умолчанию' % (mode, view), d['meta']['m']['total'] != '0'
-               and (d['cols'] == ['master_id', 'hiredate'] and len(d['rows']) == 5000 if view == 'list' else d['N'] > 0 and len(d['dict']) > 20))
+               and (set(d['cols']) == set(DEFAULT_JS) and len(d['rows']) == 5000 if view == 'list' else d['N'] > 0 and len(d['dict']) > 20))
         except Exception as e:  # noqa: BLE001
             ok('%s %s: AlwaysTrue' % (mode, view), False, e)
         # нет строки в warden — только meta

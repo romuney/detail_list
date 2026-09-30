@@ -48,6 +48,7 @@ const note = (p) => p.L.evaluate(() => { const n = document.querySelector('[data
 const listMasks = (p) => p.evaluate(() => window.__masks.list.length);
 const fltIframe = (p) => p.evaluate(() => { const f = document.querySelector('iframe[name="flt"]').getBoundingClientRect(); return { h: Math.round(f.height), w: Math.round(f.width) }; });
 const marker = (p) => p.evaluate(() => /REwtRkxULURELU9O/.test(document.querySelector('.dashboard-chart-id-222222 img.echarts-plugin, .dashboard-chart-id-333333 img.echarts-plugin').src || ''));
+const tipMarker = (p) => p.evaluate(() => /REwtRkxULVRJUC0x/.test(document.querySelector('.dashboard-chart-id-222222 img.echarts-plugin, .dashboard-chart-id-333333 img.echarts-plugin').src || ''));
 const ddOpen = (p) => p.F.evaluate(() => { const d = document.querySelector('[class$="-dd"]'); if (!d || d.style.display === 'none') return null; const r = d.getBoundingClientRect(); return { w: Math.round(r.width), h: Math.round(r.height), top: Math.round(r.top) }; });
 const applyText = (p) => p.F.evaluate(() => { const b = document.querySelector('[data-foot] [data-action="apply"]'); return b ? b.textContent.trim() : ''; });
 // Прогноз панели по кубу: «Будет N» / «Под фильтрами N».
@@ -74,7 +75,9 @@ const ddCounts = (p) => p.F.evaluate(() => {
     console.log('— вкладка ' + (mode === 'kp' ? '«Детальные списки КП»' : '«Детальные списки»'));
     const p = await open(browser, mode, 'hr.super');
     const all = await total(p);
-    ok(mode + ': открытие — итог и две колонки', all > 0 && (await heads(p)).join(',') === 'master_id,hiredate', [all, await heads(p)]);
+    const h0 = await heads(p);
+    ok(mode + ': открытие — пресет «Персоналка», его имя на кнопке «Колонки», ссылки на MyT — скрепкой', all > 0 && h0.length > 40 && h0[0] === 'master_id'
+      && !h0.includes('my_link') && /Персоналка/.test(await p.L.textContent('[data-pop="cols"]')) && (await p.L.$$('[data-tbox] [class$="-clip"]')).length > 0, [all, h0.length]);
     ok(mode + ': на странице 100 сотрудников', (await rowsShown(p)) === 100, await rowsShown(p));
     ok(mode + ': открытие без эмитов', (await p.evaluate(() => window.__masks.flt.length + window.__masks.list.length)) === 0);
     ok(mode + ': больше 25 000 — плашка «сузьте фильтры»', all > 25000 && /Сузьте фильтры/.test(await note(p)), [all, await note(p)]);
@@ -93,12 +96,14 @@ const ddCounts = (p) => p.F.evaluate(() => {
       out.perBlue = per && /-set/.test(per.className);
       return out;
     });
-    ok(mode + ': панель — 7 разделов, по два в ряд, «Другие атрибуты» свёрнуты', pan.secs === 7 && pan.flds === 26 && pan.cols === 2 && pan.folded.length === 1 && /Другие/.test(pan.folded[0]), pan);
-    ok(mode + ': структуры — на всю строку, «всё дерево», фиолетовые', pan.treeFull, pan);
+    ok(mode + ': панель — 7 разделов, по два в ряд, открыт только «Основные»', pan.secs === 7 && pan.flds === 12 && pan.cols === 2 && pan.folded.length === 6, pan);
     ok(mode + ': период — дата синим (применён по умолчанию)', pan.perBlue && /\d\d\.\d\d\.\d{4}/.test(pan.per), pan.per);
-    await p.F.click('[data-action="sec"][aria-expanded="false"]');
-    await p.waitForTimeout(150);
-    ok(mode + ': свёрнутый раздел раскрывается', (await p.F.$$('[data-panel] [data-k]')).length === 33);
+    for (let i = 0; i < 6; i++) { await p.F.click('[data-action="sec"][aria-expanded="false"]'); await p.waitForTimeout(80); }
+    ok(mode + ': свёрнутые разделы раскрываются', (await p.F.$$('[data-panel] [data-k]')).length === 33);
+    const trees = await p.F.evaluate(() => { const mu = document.querySelector('[data-k="mu"]'), panel = document.querySelector('[data-panel]');
+      return mu && mu.getBoundingClientRect().width > panel.getBoundingClientRect().width * 0.8 && /всё дерево/.test(mu.textContent) && /-tree/.test(mu.className)
+        && /255, 2[45]/.test(getComputedStyle(mu).backgroundImage); });
+    ok(mode + ': структуры — на всю строку, «всё дерево», лёгкий жёлтый градиент', trees);
     ok(mode + ': панель — iframe в ширину колонки', (await fltIframe(p)).w === PW, await fltIframe(p));
 
     // Структура: дерево уже в кубе — открыть без запроса; выпадашка справа от панели, поверх списка
@@ -129,6 +134,7 @@ const ddCounts = (p) => p.F.evaluate(() => {
     ok(mode + ': выбор копится — «Применить · 1»', /Применить · 1/.test(await applyText(p)), await applyText(p));
     ok(mode + ': прогноз «Будет N» — сразу по выбору, без запроса', f0 === all && f1 > 0 && f1 < f0 && JSON.stringify(await reqs(p)) === JSON.stringify(r0), [f0, f1, all]);
     await p.keyboard.press('Escape');
+    await p.mouse.move(900, 500);   // курсор над панелью показал бы подсказку (iframe чуть развёрнут)
     await p.waitForTimeout(300);
     ok(mode + ': Esc закрывает, iframe обратно в колонку', !(await ddOpen(p)) && !(await marker(p)) && (await fltIframe(p)).w === PW, await fltIframe(p));
     ok(mode + ': поле показывает выбор и ×', (await p.F.$$('[data-k="' + tk + '"] [data-action="clr"]')).length === 1);
@@ -146,7 +152,8 @@ const ddCounts = (p) => p.F.evaluate(() => {
     const f2 = await forecast(p);
     ok(mode + ': второй фильтр — «Применить · 2» в панели, прогноз сузился', /Применить · 2/.test(await applyText(p)) && f2 < f1, [f2, f1]);
     await p.F.click('[class$="-dd"] [data-action="close"]');
-    await p.waitForTimeout(200);
+    await p.mouse.move(900, 500);
+    await p.waitForTimeout(250);
     ok(mode + ': «Закрыть» закрывает выпадашку', !(await ddOpen(p)) && (await fltIframe(p)).w === PW);
     await openFilter(p, 'f:emp_stream_desc');
     const midC = await ddCounts(p);
@@ -184,14 +191,18 @@ const ddCounts = (p) => p.F.evaluate(() => {
     await p.F.hover('[data-panel] [data-k="f:office_desc"]');
     await p.waitForTimeout(250);
     const tp = await p.F.evaluate(() => { const t = document.querySelector('body > [class$="-tip"]'); if (!t || t.style.display === 'none') return null; const r = t.getBoundingClientRect(); return [Math.round(r.left), Math.round(r.right)]; });
-    ok(mode + ': подсказка поля — в панели, iframe не разворачивается', tp && tp[1] <= PW && !(await marker(p)) && (await fltIframe(p)).w === PW, [tp, await fltIframe(p)]);
+    ok(mode + ': подсказка поля — за курсором, может выйти за панель (iframe чуть развёрнут, ширина панели прежняя)',
+      tp && (await tipMarker(p)) && (await fltIframe(p)).w === PW + 360 && (await p.F.evaluate(() => Math.round(document.querySelector('[data-panel]').getBoundingClientRect().width))) <= PW,
+      [tp, await fltIframe(p)]);
     await p.mouse.move(900, 500);
+    await p.waitForTimeout(200);
+    ok(mode + ': курсор ушёл с панели — iframe сразу обратно', !(await tipMarker(p)) && (await fltIframe(p)).w === PW, await fltIframe(p));
 
     // Колонки: добавить — один запрос списка; убрать — без запроса
     const lr = await reqs(p);
     await act(p, ['list'], async () => {
       await p.L.click('[data-pop="cols"]');
-      await p.L.click('[data-action="preset"][data-key="' + (mode === 'kp' ? 2 : 0) + '"]');
+      await p.L.click('[data-action="preset"][data-key="' + (mode === 'kp' ? 2 : 1) + '"]');
       await p.L.click('[data-action="colapply"]');
     });
     const h1 = await heads(p);
@@ -203,6 +214,33 @@ const ddCounts = (p) => p.F.evaluate(() => {
     await p.waitForTimeout(300);
     const h2 = await heads(p);
     ok(mode + ': убрать колонку — без запроса', h2.length === h1.length - 1 && !h2.includes('full_nm') && (await listMasks(p)) === m0, [h2.length, h1.length]);
+    // Настройка колонок: на всю ширину, группы в один ряд, без «Базовое»; «Сбросить» — MasterID и дата найма на всю ширину
+    await p.L.click('[data-pop="cols"]');
+    await p.waitForTimeout(150);
+    const cpp = await p.L.evaluate(() => {
+      const pop = document.querySelector('[class*="-cpop"]'), g = document.querySelectorAll('[class$="-cgrid"] > [class$="-cg"]'), tops = {};
+      g.forEach((x) => { tops[Math.round(x.getBoundingClientRect().top)] = 1; });
+      return { w: Math.round(pop.getBoundingClientRect().width), vw: innerWidth, rows: Object.keys(tops).length, n: g.length,
+        base: /Базовое/.test(document.querySelector('[class$="-cgrid"]').textContent) };
+    });
+    ok(mode + ': настройка колонок — на всю ширину, группы в один ряд, без «Базовое»', cpp.w >= cpp.vw - 60 && cpp.rows === 1 && cpp.n >= 4 && !cpp.base, cpp);
+    const mR = await listMasks(p);
+    await p.L.click('[data-action="colreset"]');
+    await p.L.click('[data-action="colapply"]');
+    await p.waitForTimeout(300);
+    const fill = await p.L.evaluate(() => { const t = document.querySelector('[data-tbox] table'), b = document.querySelector('[data-tbox]'); return [Math.round(t.getBoundingClientRect().width), b.clientWidth]; });
+    ok(mode + ': «Сбросить» — MasterID и дата найма, на всю ширину таблицы, без запроса', (await heads(p)).join(',') === 'master_id,hiredate'
+      && fill[0] >= fill[1] - 2 && (await listMasks(p)) === mR, [await heads(p), fill]);
+    await p.L.hover('[data-tbox] tbody td');   // «скопировать ссылку» видна при наведении на строку
+    await p.L.click('[data-tbox] [data-action="copylink"]');
+    await p.waitForTimeout(250);
+    ok(mode + ': «Скопировать ссылку на MyT»', (await p.L.$$('[data-action="copylink"][class$="-ok"], [data-action="copylink"][class*="-ok"]')).length === 1);
+    // обратно к пресету — колонки уже загружены, без запроса
+    await p.L.click('[data-pop="cols"]');
+    await p.L.click('[data-action="preset"][data-key="' + (mode === 'kp' ? 2 : 1) + '"]');
+    await p.L.click('[data-action="colapply"]');
+    await p.waitForTimeout(300);
+    ok(mode + ': обратно к пресету — без запроса', (await heads(p)).length > 10 && (await listMasks(p)) === mR);
 
     // Сортировка, группировка, поиск по таблице, «Копировать»
     const loadedAll = await p.L.evaluate(() => /первые/.test(document.querySelector('[data-tcount]').textContent) === false);
