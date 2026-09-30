@@ -14,7 +14,7 @@ module.exports = [{
     globals: {
       window: 'readonly', document: 'readonly', navigator: 'readonly', console: 'readonly',
       getComputedStyle: 'readonly', setTimeout: 'readonly', clearTimeout: 'readonly', innerWidth: 'readonly',
-      ResizeObserver: 'readonly', Element: 'readonly', atob: 'readonly', TextDecoder: 'readonly',
+      ResizeObserver: 'readonly', Element: 'readonly', atob: 'readonly', btoa: 'readonly', TextDecoder: 'readonly',
       Uint8Array: 'readonly', JSON: 'readonly', escape: 'readonly',
       data: 'readonly', applyCrossFilter: 'readonly', option: 'writable'
     }

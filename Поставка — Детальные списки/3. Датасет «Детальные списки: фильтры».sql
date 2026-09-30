@@ -58,7 +58,7 @@
     stand/parse.py (разбор) и круг sqlglot в stand/check.py (перепечатанный SQL отдаёт то же).
 ============================================================================ -#}
 {% set MODE = 'us' %}
-{% set VIEW = 'list' %}
+{% set VIEW = 'filters' %}
 {% set KP = MODE == 'kp' %}
 {#- Вид: list — чарт списка (meta + строки); filters — чарт фильтров (meta + все значения и деревья). -#}
 {% set FLTV = VIEW == 'filters' %}

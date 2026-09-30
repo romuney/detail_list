@@ -10,7 +10,7 @@ SELECT» (sqlparse у 4.0, sqlglot у 4.1+). Чего парсер не знае
 «Некорректный SQL запрос: →…←», хотя ClickHouse и стенд chdb такой запрос выполняют. Так 29.09
 упало сохранение датасета на `GROUP BY intDiv(rn - 1, 500) AS ch` — алиас в GROUP BY.
 
-Варианты: оба режима × сохранение (AlwaysTrue), открытие под всеми логинами мира, все части
+Варианты: оба режима × оба вида (список и строка фильтров) × сохранение (AlwaysTrue), открытие под всеми логинами мира, все части
 ответа, все фильтры, серверная сортировка по скрытому полю, поиск и дети узла по каждому
 дереву, значения атрибута, враждебный ввод — как есть и в обёртке Proteus
 (SELECT измерений FROM (датасет) AS virtual_table GROUP BY … LIMIT).
@@ -28,7 +28,8 @@ from sqlglot import exp  # noqa: E402
 VARIANTS = {
     'сохранение': ({}, 'a.user', True),
     'открытие': ({}, 'a.user', False),
-    'все части': ({'pt_f': ['r', 'f', 'mu', 'lu', 'kp']}, 'a.user', False),
+    'колонки': ({'cols_f': ['full_nm', 'grade', 'kp1', 'alloc'], 'sort_f': ['legal_position_nm:desc'], 'lim_f': ['10000'],
+                 'rq_f': ['r-1'], 'frq_f': ['f-1']}, 'a.user', False),
     'все фильтры': ({'flt_f': ['office_desc=Офис 1', 'hrbp_login=hrbp.user1', 'regional_hr_login=hr.user2'],
                      'mu_f': ['1001', '1002'], 'lu_f': ['2001'], 'kp_f': ['A\x1fB'], 'id_f': ['rk=100001', 'login=a.b',
                      'tab=77', 'siebel=1-ABC'], 'per_f': ['date'], 'dt_f': ['2026-08-31'], 'emp_f': ['Активная'],
@@ -54,10 +55,11 @@ WRAP = 'SELECT %s FROM (%%s) AS virtual_table GROUP BY %s LIMIT %d' % (
 
 def variants():
     for mode in ['us', 'kp']:
-        for name, (flt, user, at) in VARIANTS.items():
-            yield '%s: %s' % (mode, name), ch.sql(ch.carriers(flt, mode), user, mode, at)
-        for user in USERS:
-            yield '%s: открытие, %s' % (mode, user), ch.sql({}, user, mode, False)
+        for view in ['list', 'filters']:
+            for name, (flt, user, at) in VARIANTS.items():
+                yield '%s %s: %s' % (mode, view, name), ch.sql(ch.carriers(flt, mode), user, mode, at, view)
+            for user in USERS:
+                yield '%s %s: открытие, %s' % (mode, view, user), ch.sql({}, user, mode, False, view)
 
 
 def sqlglot_problem(text):

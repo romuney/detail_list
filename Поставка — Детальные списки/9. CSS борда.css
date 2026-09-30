@@ -1,0 +1,91 @@
+/* ==========================================================================
+   Детальные списки — CSS борда (дописать в конец CSS дашборда).
+   На каждой вкладке два чарта: строка фильтров сверху и список под ней.
+
+   ЗАМЕНИТЕ во ВСЕХ местах (Ctrl+H):
+     000000 — id чарта «Детальные списки» (список),
+     111111 — id чарта «Детальные списки КП» (список),
+     222222 — id чарта «Детальные списки: фильтры» (строка фильтров),
+     333333 — id чарта «Детальные списки КП: фильтры» (строка фильтров).
+   Красные «!» редактора у строк с :has(...) — линтер не знает :has, на работу не влияет.
+   ========================================================================== */
+
+/* 1. заголовки чартов не нужны: у виджетов своя шапка */
+.dashboard-chart-id-000000 .header-title,
+.dashboard-chart-id-111111 .header-title,
+.dashboard-chart-id-222222 .header-title,
+.dashboard-chart-id-333333 .header-title {
+  display: none !important;
+}
+
+/* 2. без поля 16 px вокруг чартов (emotion-паддинг холдера в форке) */
+.dashboard-grid .dashboard-chart-id-000000 .dashboard-component-chart-holder,
+.dashboard-grid .dashboard-component-chart-holder.dashboard-chart-id-000000,
+.dashboard-grid .dashboard-chart-id-111111 .dashboard-component-chart-holder,
+.dashboard-grid .dashboard-component-chart-holder.dashboard-chart-id-111111,
+.dashboard-grid .dashboard-chart-id-222222 .dashboard-component-chart-holder,
+.dashboard-grid .dashboard-component-chart-holder.dashboard-chart-id-222222,
+.dashboard-grid .dashboard-chart-id-333333 .dashboard-component-chart-holder,
+.dashboard-grid .dashboard-component-chart-holder.dashboard-chart-id-333333 {
+  padding: 0 !important;
+}
+
+/* 3. область чарта — колонка на всю высоту ячейки, без паддинга вокруг iframe */
+.dashboard-chart-id-000000 .chart-slice,
+.dashboard-chart-id-111111 .chart-slice,
+.dashboard-chart-id-222222 .chart-slice,
+.dashboard-chart-id-333333 .chart-slice {
+  display: flex;
+  flex-direction: column;
+}
+.dashboard-chart-id-000000 .chart-container,
+.dashboard-chart-id-111111 .chart-container,
+.dashboard-chart-id-222222 .chart-container,
+.dashboard-chart-id-333333 .chart-container {
+  padding: 0 !important;
+}
+.dashboard-chart-id-000000 iframe,
+.dashboard-chart-id-111111 iframe,
+.dashboard-chart-id-222222 iframe,
+.dashboard-chart-id-333333 iframe {
+  display: block;
+}
+
+/* ==========================================================================
+   4. Строка фильтров — выпадашка поверх списка (ОБЯЗАТЕЛЬНО, без этого блока выпадашки
+   обрезаны тонкой ячейкой строки). Костыль борда Proteus Adoption (фильтр борда 59922, строка ЦА):
+   строка при открытой выпадашке (и на время подсказки) шлёт в канал скриншотов PNG, в base64 которого
+   стоит маркер REwtRkxULURELU9O; родитель кладёт dataUrl в img.echarts-plugin РЯДОМ с iframe, и эти
+   правила разворачивают iframe прозрачным слоем поверх списка. Закрыли — чистый PNG, iframe обратно.
+   ========================================================================== */
+
+/* ячейки не должны резать развёрнутый iframe */
+.dashboard-chart-id-222222:has(img.echarts-plugin[src*="REwtRkxULURELU9O"]) .slice_container,
+.dashboard-chart-id-222222:has(img.echarts-plugin[src*="REwtRkxULURELU9O"]) .chart-container,
+.dashboard-chart-id-222222:has(img.echarts-plugin[src*="REwtRkxULURELU9O"]) .dashboard-chart,
+.dashboard-chart-id-333333:has(img.echarts-plugin[src*="REwtRkxULURELU9O"]) .slice_container,
+.dashboard-chart-id-333333:has(img.echarts-plugin[src*="REwtRkxULURELU9O"]) .chart-container,
+.dashboard-chart-id-333333:has(img.echarts-plugin[src*="REwtRkxULURELU9O"]) .dashboard-chart {
+  overflow: visible !important;
+}
+
+/* якорь — #chart-id-… (обёртка iframe внутри области чарта), а не ячейка с заголовком:
+   строка при открытии не прыгает (урок борда 59922) */
+.dashboard-chart-id-222222:has(img.echarts-plugin[src*="REwtRkxULURELU9O"]) #chart-id-222222,
+.dashboard-chart-id-333333:has(img.echarts-plugin[src*="REwtRkxULURELU9O"]) #chart-id-333333 {
+  position: relative !important;
+}
+
+/* сам слой: во всю ширину строки, вниз до 680 px (не больше 88 % экрана), выше сетки */
+.dashboard-chart-id-222222:has(img.echarts-plugin[src*="REwtRkxULURELU9O"]) iframe,
+.dashboard-chart-id-333333:has(img.echarts-plugin[src*="REwtRkxULURELU9O"]) iframe {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: min(680px, 88vh) !important;
+  z-index: 998 !important;           /* выше сетки, ниже системных модалок */
+  background: transparent !important;
+}
+/* Пока выпадашка открыта, список под ней закрыт прозрачным слоем: клик туда закрывает выпадашку,
+   Esc — тоже. */

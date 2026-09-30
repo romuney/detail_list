@@ -1,42 +1,47 @@
 {#- ============================================================================
-    detail_list — датасет чартов «Детальные списки» (MODE = 'us') и «Детальные списки КП»
-    (MODE = 'kp'). Файлы поставки отличаются только строкой MODE ниже.
+    detail_list — датасеты «Детальных списков»: MODE — вкладка (us — «Детальные списки»,
+    kp — «Детальные списки КП»), VIEW — чарт (list — список, filters — строка фильтров над ним).
+    Четыре датасета поставки отличаются только строками MODE и VIEW ниже.
 
-    Ответ собирается из частей — чарт просит только то, что показывает. Открытие — итоги
-    и первые 5 000 сотрудников со всеми полями (часть r): колонки в чарте переключаются без
-    запроса, как в прежнем чарте; значения фильтров (f) и деревья структур (mu / lu / kp) —
-    когда их открывают; поиск — одними находками. Страницы, сортировка загруженного, поиск
-    по таблице, группировка и «Копировать» — в чарте, без запроса.
+    Вкладка — два чарта: строка фильтров и список. Фильтры эмитит строка фильтров (себе и
+    списку), список — только себе сортировку, лимит и колонки. Оба запроса идут параллельно.
+      list     meta и строки: первые 5 000 сотрудников, колонки — закреплённые и запрошенные
+               (по умолчанию MasterID и дата найма). Страницы, поиск по таблице, сортировка
+               загруженного, группировка и «Копировать» — в чарте, без запроса.
+      filters  meta, все значения фильтров и деревья УС / ЮС / КП целиком, счётчики — при
+               ОСТАЛЬНЫХ фильтрах (влияние фильтра на фильтр); открыть фильтр — без запроса.
+               Поиск (q) — только если значений или узлов больше, чем приходит сразу.
 
     Строки различаются колонкой role:
       meta  всегда, 1 строка: k — режим (us | kp), n — сотрудников под фильтрами, j — JSON
-            {"m": итоги и эхо одиночных параметров, "a": эхо списков, "dates": даты «Периода»}
-      f     часть f — значения фильтров: k — атрибут, v — значение, n — сотрудников при
+            {"m": итоги и эхо одиночных параметров, "a": эхо списков, "dates": даты «Периода»
+            (только filters)}
+      f     filters — значения фильтров: k — атрибут, v — значение, n — сотрудников при
             ОСТАЛЬНЫХ фильтрах, j — «всего без фильтров\tзначений у атрибута». У атрибута —
             до FACET_TOP значений по численности и все выбранные, остальные — поиском (fq)
       fq    значения атрибута по q = 'f:атрибут=текст': j — всего без фильтров
-      t     части mu / lu / kp — узлы деревьев УС / ЮС / КП: v — id узла (rk; у КП — 12 знаков
-            md5 пути), n — сотрудников при остальных фильтрах,
-            j — «уровень\tродитель\tимя\tвсего\tесть дети\tпуть КП\tузлов в дереве».
-            Дерево до TREE_FULL_MAX узлов — целиком, больше — верхние TREE_TOP уровня, путь до
-            выбранного и дети выбранного; глубже — детьми узла по запросу (q '>')
+      T     filters — узлы деревьев УС / ЮС / КП пачками по TREE_CHUNK: k — дерево, v — номер
+            пачки, j — base64 от UTF-8, узел в строке: «id\tсотрудников при остальных
+            фильтрах\tуровень\tродитель\tимя\tвсего\tесть дети\tпуть КП\tузлов в дереве»
+            (id — rk; у КП — 12 знаков md5 пути). Дерево до TREE_FULL_MAX узлов — целиком,
+            больше — верхние TREE_TOP уровня, путь до выбранного и дети выбранного
       q     узлы по q = 'mu|lu|kp=текст' (имя на любом уровне, до SEARCH_TOP) или 'mu|lu>rk',
-            'kp>путь' (дети узла, до CHILD_TOP): j — как у t, путь — имена предков через ' › '
-            (у КП — путь узла)
-      s     выбранные узлы УС / ЮС (если выбраны): уровень, имя и путь для подписи фильтра
-      r     часть r — строки списка пачками по CHUNK: k — номер пачки, j — base64 от UTF-8,
-            все поля реестра через табуляцию в порядке эха cols, строки через перевод строки;
-            скрытое warden — '⛔'. У КП — строка на аллокацию, поля сотрудника (кроме MasterID) —
-            только в первой строке сотрудника
+            'kp>путь' (дети узла, до CHILD_TOP): v — id, j — «уровень\tродитель\tимя\tвсего\t
+            есть дети\tпуть\t», путь — имена предков через ' › ' (у КП — путь узла)
+      s     filters — выбранные узлы УС / ЮС (если выбраны): уровень, имя и путь для подписи
+      r     list — строки списка пачками по CHUNK: k — номер пачки, j — base64 от UTF-8, поля
+            через табуляцию в порядке эха cols, строки через перевод строки; скрытое warden —
+            '⛔'. У КП — строка на аллокацию, если среди колонок есть аллокация или уровень КП
+            (поля сотрудника, кроме MasterID, — только в первой строке сотрудника), иначе
+            строка на сотрудника
 
-    Кросс-фильтры эмитит сам чарт, носители в SELECT не выводятся. Имя носителя — основа
-    плюс CF: у «Детальных списков» '_f', у КП '_kf' — фильтр одного чарта не попадает в
-    датасет другого, даже если область кросс-фильтра шире нужной. Основы:
-      per (last | date), dt (YYYY-MM-DD), emp (Юридическая | Активная), tcr (тип ЮЛ),
-      flt ('атрибут=значение'), mu / lu (rk узлов УС / ЮС), kp (путь узла КП именами через \x1F),
-      id ('rk|login|tab|siebel=значение'), q (поиск или дети узла),
-      sort ('ключ:asc|desc'), lim (5000 | 10000 | 25000), pt (части: r f mu lu kp q; без
-      носителя — r), rq (метка запроса — вернётся в эхе).
+    Носители в SELECT не выводятся. Имя носителя — основа плюс CF: у вкладки «Детальные
+    списки» '_f', у КП '_kf' — фильтр одной вкладки не попадает в датасеты другой. Основы:
+      строка фильтров: per (last | date), dt (YYYY-MM-DD), emp (Юридическая | Активная),
+        tcr (тип ЮЛ), flt ('атрибут=значение'), mu / lu (rk узлов УС / ЮС), kp (путь узла КП
+        именами через \x1F), id ('rk|login|tab|siebel=значение'), q (поиск), frq (метка);
+      список: sort ('ключ:asc|desc'), lim (5000 | 10000 | 25000), cols (ключи колонок),
+        rq (метка). Метки возвращаются в эхе meta.
 
     Сначала отобрать, потом упаковать: id сотрудников — ORDER BY … LIMIT по отфильтрованной
     таблице, маски warden и упаковка — только для них. Значения фильтров и деревья — из той
@@ -53,16 +58,21 @@
     stand/parse.py (разбор) и круг sqlglot в stand/check.py (перепечатанный SQL отдаёт то же).
 ============================================================================ -#}
 {% set MODE = 'us' %}
+{% set VIEW = 'list' %}
 {% set KP = MODE == 'kp' %}
+{#- Вид: list — чарт списка (meta + строки); filters — чарт фильтров (meta + все значения и деревья). -#}
+{% set FLTV = VIEW == 'filters' %}
 {#- Носители кросс-фильтра: основа + CF. -#}
 {% set CF = '_kf' if KP else '_f' %}
 {% set LIM_DEFAULT = 5000 %}
 {% set LIM_ALLOWED = [5000, 10000, 25000] %}
 {% set CHUNK = 500 %}
-{#- У атрибута фильтра — не больше FACET_TOP значений (по численности + выбранные), остальное — поиском. -#}
-{% set FACET_TOP = 300 %}
-{#- Дерево до TREE_FULL_MAX узлов — целиком (поиск в чарте без запроса), больше — окрестностью. -#}
-{% set TREE_FULL_MAX = 1500 %}
+{#- Чарт фильтров получает всё сразу: у атрибута — до FACET_TOP значений (по численности + выбранные),
+    дерево до TREE_FULL_MAX узлов — целиком; больше — верх и окрестность выбранного, остальное — поиском. -#}
+{% set FACET_TOP = 5000 %}
+{% set TREE_FULL_MAX = 40000 %}
+{#- Узлы дерева — пачками по TREE_CHUNK строк (иначе десятки тысяч строк ответа против лимита строк чарта). -#}
+{% set TREE_CHUNK = 2000 %}
 {% set TREE_TOP = 3 %}
 {% set SEARCH_TOP = 60 %}
 {% set CHILD_TOP = 1000 %}
@@ -131,7 +141,10 @@
 {#- ---- носители кросс-фильтра. Списки собираются циклом: при сохранении датасета Proteus отдаёт
     вместо списка AlwaysTrueObject — у него нет длины, итерация пустая, остаются значения по умолчанию. ---- -#}
 {% set me = (current_username() or '')|string|trim|lower %}
+{#- Метки запроса: rq — чарта списка (сортировка, лимит, колонки), frq — чарта фильтров (фильтры, поиск);
+    обе возвращаются в эхе — по ним чарты снимают «Загружаю…». -#}
 {% set RQ = [] %}{% for v in (filter_values('rq' ~ CF) or []) %}{% if RQ|length < 1 %}{% set _ = RQ.append((v|string)[:40]) %}{% endif %}{% endfor %}
+{% set FRQ = [] %}{% for v in (filter_values('frq' ~ CF) or []) %}{% if FRQ|length < 1 %}{% set _ = FRQ.append((v|string)[:40]) %}{% endif %}{% endfor %}
 {% set PER_L = [] %}{% for v in (filter_values('per' ~ CF) or []) %}{% set _ = PER_L.append(v|string) %}{% endfor %}
 {% set PER = 'date' if 'date' in PER_L else 'last' %}
 {% set DT_L = [] %}{% for v in (filter_values('dt' ~ CF) or []) %}{% if DT_L|length < 1 %}{% set _ = DT_L.append((v|string|trim)[:10]) %}{% endif %}{% endfor %}
@@ -157,13 +170,20 @@
 {%- elif s[:2] in ['mu', 'lu'] and s[2:3] == '>' %}{% set x = s[3:]|trim %}{% if x and x|length <= 64 and x.isalnum() %}{% set _ = Q.update({'t': s[:2], 'op': '>', 'x': x}) %}{% endif %}
 {%- elif s[:3] == 'kp>' %}{% set x = s[3:] %}{% if x and x|length <= 3000 %}{% set _ = Q.update({'t': 'kp', 'op': '>', 'x': x}) %}{% endif %}
 {%- endif %}{% if Q['t'] %}{% set _ = Q_ECHO.append(Q['t'] ~ Q['op'] ~ Q['x']) %}{% endif %}{% endif %}{% endfor %}
-{#- Части ответа: r — строки, f — значения фильтров, mu / lu / kp — деревья, q — только поиск. -#}
-{% set PT = [] %}{% for v in (filter_values('pt' ~ CF) or []) %}{% set s = v|string %}{% if s in ['r', 'f', 'mu', 'lu', 'kp', 'q'] and s not in PT %}{% set _ = PT.append(s) %}{% endif %}{% endfor %}
-{% if not PT %}{% set _ = PT.append('r') %}{% endif %}
-{#- Колонки — все поля реестра (закреплённые первыми): в чарте они переключаются без запроса. -#}
-{% set COLS = [] %}{% for c in LOCKED + EMP_KEYS + ALLOC_KEYS %}{% if c not in COLS %}{% set _ = COLS.append(c) %}{% endif %}{% endfor %}
-{#- У КП строка — MasterID, поля сотрудника (EMPC), поля аллокации. -#}
-{% set EMPC = [] %}{% for c in COLS %}{% if c != 'master_id' and c not in ALLOC_KEYS %}{% set _ = EMPC.append(c) %}{% endif %}{% endfor %}
+{#- Части ответа по виду: list — строки (r); filters — значения (f) и деревья (mu / lu / kp) всегда, поиск (q) — если
+    значений или узлов больше, чем приходит сразу. Носитель pt больше не нужен. -#}
+{% set PT = ['f', 'mu', 'lu', 'kp'] + (['q'] if Q['t'] else []) if FLTV else ['r'] %}
+{#- Колонки списка — закреплённые и запрошенные (носитель cols), по умолчанию DEFAULT_COLS: открытие — лёгкое. -#}
+{% set DEFAULT_COLS = ['master_id', 'hiredate'] %}
+{% set COLS = [] %}{% for c in LOCKED %}{% set _ = COLS.append(c) %}{% endfor %}
+{% set COLS_REQ = [] %}{% for v in (filter_values('cols' ~ CF) or []) %}{% set _ = COLS_REQ.append(v|string) %}{% endfor %}
+{% for c in (COLS_REQ if COLS_REQ else DEFAULT_COLS) %}{% if (c in EMP_KEYS or c in ALLOC_KEYS) and c not in COLS and COLS|length < 130 %}{% set _ = COLS.append(c) %}{% endif %}{% endfor %}
+{#- У КП строка на аллокацию — только если запрошена колонка аллокации или уровня КП; тогда порядок —
+    MasterID, поля сотрудника (EMPC), поля аллокации (ACOLS): поля сотрудника — только в первой строке. -#}
+{% set EMPC = [] %}{% set ACOLS = [] %}
+{% for c in COLS %}{% if c in ALLOC_KEYS %}{% set _ = ACOLS.append(c) %}{% elif c != 'master_id' %}{% set _ = EMPC.append(c) %}{% endif %}{% endfor %}
+{% set ALLOC_ON = KP and ACOLS|length > 0 %}
+{% if ALLOC_ON %}{% set COLS = ['master_id'] + EMPC + ACOLS %}{% endif %}
 {% set SORT_L = [] %}{% for v in (filter_values('sort' ~ CF) or []) %}{% if SORT_L|length < 1 %}{% set _ = SORT_L.append(v|string) %}{% endif %}{% endfor %}
 {% set SK = (SORT_L|first).split(':')[0] if SORT_L else 'master_id' %}
 {% set SK = SK if SK in EMP_KEYS else 'master_id' %}
@@ -416,23 +436,30 @@ FROM (
   {# meta: итоги, эхо применённого, даты — всегда #}
   SELECT 'meta' AS role, '{{ MODE }}' AS k, {{ qs(RQ|first if RQ else '') }} AS v, toInt64(if(warden_n > 0, countIf({{ cond() }}), 0)) AS n,
     concat('{"m":', toJSONString(map(
-        'ver', '2', 'mode', '{{ MODE }}', 'cf', '{{ CF }}', 'ok', toString(warden_n > 0), 'first_nm', ifNull(toString(warden_array.3), ''),
+        'ver', '3', 'mode', '{{ MODE }}', 'view', '{{ VIEW }}', 'cf', '{{ CF }}', 'ok', toString(warden_n > 0), 'first_nm', ifNull(toString(warden_array.3), ''),
         'total', toString(if(warden_n > 0, countIf({{ cond() }}), 0)), 'all', toString(if(warden_n > 0, count(), 0)),
         'data_dt', ifNull(toString(max(business_dt)), ''), 'per', '{{ PER }}', 'dt', {{ qs(DT) }}, 'emp', {{ qs(EMP) }},
         'tcr', {{ qs(TCR) }}, 'sort', {{ qs(SK ~ ':' ~ SD|lower) }}, 'lim', '{{ LIM }}', 'chunk', '{{ CHUNK }}',
         'facet_top', '{{ FACET_TOP }}', 'tree_full_max', '{{ TREE_FULL_MAX }}', 'search_top', '{{ SEARCH_TOP }}',
-        'child_top', '{{ CHILD_TOP }}', 'rq', {{ qs(RQ|first if RQ else '') }})),
+        'child_top', '{{ CHILD_TOP }}', 'rq', {{ qs(RQ|first if RQ else '') }}, 'frq', {{ qs(FRQ|first if FRQ else '') }})),
       ',"a":', toJSONString(map('flt', {{ qa(FLT_ECHO) }}, 'mu', {{ qa(MU) }}, 'lu', {{ qa(LU) }}, 'kp', {{ qa(KPP) }},
         'id', {{ qa(ID_ECHO) }}, 'cols', {{ qa(COLS) }}, 'q', {{ qa(Q_ECHO) }}, 'pt', {{ qa(PT) }})),
+      {%- if FLTV %}
       ',"dates":', toJSONString((SELECT groupArray(d) FROM (SELECT DISTINCT toString(toDate(business_dt_detail)) AS d
         FROM prod_proteus.mdm_employee_d_business_dt_detail WHERE business_dt_detail IS NOT NULL ORDER BY d DESC LIMIT 400))),
+      {%- endif %}
       '}') AS j
   FROM {{ universe() }}
 {%- if 'f' in PT %}
 
   UNION ALL
-  {# значения фильтров: счётчик — при остальных фильтрах; первые FACET_TOP по численности и выбранные #}
-  SELECT 'f' AS role, fk AS k, fv AS v, toInt64(fn) AS n, concat(toString(fa), '\t', toString(nv)) AS j
+  {# значения фильтров: счётчик — при остальных фильтрах; первые FACET_TOP по численности и выбранные.
+     Атрибут — одной строкой (роль F): v — значений у атрибута всего, j — base64 строк «значение\tсотрудников»
+     по убыванию численности; в значении \ \t \n \r экранированы обратным слэшем #}
+  SELECT 'F' AS role, fk AS k, toString(any(nv)) AS v, toInt64(count()) AS n,
+    base64Encode(arrayStringConcat(arrayMap(x -> x.2, arraySort(x -> x.1, groupArray((rn, concat(
+      replaceAll(replaceAll(replaceAll(replaceAll(fv, '\\', '\\\\'), '\t', '\\t'), '\n', '\\n'), char(13), '\\r'),
+      '\t', toString(fn)))))), '\n')) AS j
   FROM (
     SELECT kv.1 AS fk, kv.2 AS fv, sum(kv.3) AS fn, count() AS fa,
       row_number() OVER (PARTITION BY fk ORDER BY fn DESC, fv) AS rn, count() OVER (PARTITION BY fk) AS nv
@@ -449,16 +476,24 @@ FROM (
     GROUP BY fk, fv
   )
   WHERE rn <= {{ FACET_TOP }}{% for a in F %}{% if F[a] %} OR (fk = '{{ a }}' AND fv IN dl_f_{{ a }}){% endif %}{% endfor %}
+  GROUP BY fk
 {%- endif %}
 {%- for tk, root, nlev, rks, nms, sel in [('mu', MU_ROOT, 12, mu_rks(), mu_nms(), MU), ('lu', 1, 7, lu_rks(), lu_nms(), LU)] if tk in PT %}
 
   UNION ALL
   {# дерево УС / ЮС: узел — rk уровня; целиком до TREE_FULL_MAX узлов, иначе верх, путь до выбранного и его дети;
-     есть дети — у кого-то из людей узла заполнен следующий уровень #}
-  SELECT 't' AS role, '{{ tk }}' AS k, tv AS v, toInt64(tn) AS n,
-    concat(toString(td), '\t', tp, '\t', tnm, '\t', toString(ta), '\t', toString(hk), '\t\t', toString(nodes)) AS j
+     есть дети — у кого-то из людей узла заполнен следующий уровень. Узлы — в порядке обхода в глубину (путь rk от
+     корня), пачками по TREE_CHUNK (роль T, v — «пачка:узлов в дереве»); строка — «rk\tуровень\tсотрудников при
+     остальных фильтрах\tесть дети\tимя»: родитель — ближайший выше узел уровнем меньше (чарт восстанавливает сам) #}
+  SELECT 'T' AS role, '{{ tk }}' AS k, concat(toString(tc), ':', toString(any(nodes))) AS v, toInt64(count()) AS n,
+    base64Encode(arrayStringConcat(arrayMap(x -> x.2, arraySort(x -> x.1, groupArray((ix, line)))), '\n')) AS j
   FROM (
-    SELECT rks[d] AS tv, d AS td, any(if(d > {{ root }}, rks[d - 1], '')) AS tp, any(nms[d]) AS tnm, sum(ok) AS tn, count() AS ta,
+  SELECT intDiv(ix - 1, {{ TREE_CHUNK }}) AS tc, ix, nodes, line
+  FROM (
+  SELECT row_number() OVER (ORDER BY tpath) AS ix, nodes,
+    concat(tv, '\t', toString(td), '\t', toString(tn), '\t', toString(hk), '\t', replaceRegexpAll(tnm, '[[:cntrl:]]', ' ')) AS line
+  FROM (
+    SELECT rks[d] AS tv, d AS td, any(arraySlice(rks, {{ root }}, d - {{ root }} + 1)) AS tpath, any(nms[d]) AS tnm, sum(ok) AS tn,
       max(d < {{ nlev }} AND rks[d + 1] != '') AS hk, max(si > 0 AND d <= si + 1) AS near, count() OVER () AS nodes
     FROM (
       SELECT {{ rks }} AS rks, {{ nms }} AS nms, toUInt8({{ cond(tk) }}) AS ok, arrayFirstIndex(x -> has(dl_{{ tk }}, x), rks) AS si
@@ -469,17 +504,27 @@ FROM (
     GROUP BY tv, td
   )
   WHERE nodes <= {{ TREE_FULL_MAX }} OR td < {{ root + TREE_TOP }} OR near
+  )
+  )
+  GROUP BY tc
 {%- endfor %}
 {%- if 'kp' in PT %}
 
   UNION ALL
-  {# дерево КП: узел — путь именами, id — 12 знаков md5 пути, сотрудник в узле — один раз. Есть дети — следующий
-     путь по возрастанию начинается с «путь\x1F» (\x1F меньше любого знака имени) #}
-  SELECT 't' AS role, 'kp' AS k, {{ kp_id('kpath') }} AS v, toInt64(tn) AS n,
-    concat(toString(td), '\t', if(td > 1, substring(lower(hex(MD5(arrayStringConcat(arraySlice(parts, 1, td - 1), char(31))))), 1, 12), ''), '\t',
-      parts[td], '\t', toString(ta), '\t', toString(startsWith(nxt, concat(kpath, char(31)))), '\t', kpath, '\t', toString(nodes)) AS j
+  {# дерево КП: узел — путь именами, сотрудник в узле — один раз. Есть дети — следующий путь по возрастанию
+     начинается с «путь\x1F» (\x1F меньше любого знака имени). Порядок путей по возрастанию — обход в глубину:
+     строка — «уровень\tсотрудников при остальных фильтрах\tесть дети\tимя», путь (он же значение фильтра)
+     чарт собирает из имён предков #}
+  SELECT 'T' AS role, 'kp' AS k, concat(toString(tc), ':', toString(any(nodes))) AS v, toInt64(count()) AS n,
+    base64Encode(arrayStringConcat(arrayMap(x -> x.2, arraySort(x -> x.1, groupArray((ix, line)))), '\n')) AS j
   FROM (
-    SELECT kpath, length(splitByString(char(31), kpath)) AS td, splitByString(char(31), kpath) AS parts, sum(ok) AS tn, count() AS ta,
+  SELECT intDiv(ix - 1, {{ TREE_CHUNK }}) AS tc, ix, nodes, line
+  FROM (
+  SELECT row_number() OVER (ORDER BY kpath) AS ix, nodes,
+    concat(toString(td), '\t', toString(tn), '\t', toString(startsWith(nxt, concat(kpath, char(31)))), '\t',
+      replaceAll(replaceAll(parts[td], '\t', ' '), '\n', ' ')) AS line
+  FROM (
+    SELECT kpath, length(splitByString(char(31), kpath)) AS td, splitByString(char(31), kpath) AS parts, sum(ok) AS tn,
       count() OVER () AS nodes, leadInFrame(kpath) OVER (ORDER BY kpath ROWS BETWEEN CURRENT ROW AND 1 FOLLOWING) AS nxt
     FROM (
       SELECT {{ kp_nodes() }} AS kn, toUInt8({{ cond('kp') }}) AS ok
@@ -492,8 +537,11 @@ FROM (
   WHERE nodes <= {{ TREE_FULL_MAX }} OR td <= {{ TREE_TOP }}
     OR arrayExists(s -> startsWith(concat(s, char(31)), concat(kpath, char(31))), dl_kp)
     OR has(dl_kp, arrayStringConcat(arraySlice(parts, 1, td - 1), char(31)))
+  )
+  )
+  GROUP BY tc
 {%- endif %}
-{%- for tk, root, rks, nms, sel in [('mu', MU_ROOT, mu_rks(), mu_nms(), MU), ('lu', 1, lu_rks(), lu_nms(), LU)] if sel %}
+{%- for tk, root, rks, nms, sel in [('mu', MU_ROOT, mu_rks(), mu_nms(), MU), ('lu', 1, lu_rks(), lu_nms(), LU)] if sel and FLTV %}
 
   UNION ALL
   {# выбранные узлы УС / ЮС: имя и путь — подпись фильтра без дерева #}
@@ -512,7 +560,8 @@ FROM (
     GROUP BY sid
   )
 {%- endfor %}
-{%- if Q['t'] in ['mu', 'lu'] %}
+{%- if 'q' not in PT %}
+{%- elif Q['t'] in ['mu', 'lu'] %}
 {%- set root = MU_ROOT if Q['t'] == 'mu' else 1 %}{%- set nlev = 12 if Q['t'] == 'mu' else 7 %}
 
   UNION ALL
@@ -593,17 +642,19 @@ FROM (
   FROM (
   SELECT intDiv(rn - 1, {{ CHUNK }}) AS ch, rn, line
   FROM (
-{%- if not KP %}
+{%- if not ALLOC_ON %}
+    {#- строка на сотрудника (у КП без колонок аллокации — одна строка из его аллокаций) #}
     SELECT row_number() OVER (ORDER BY sk {{ SD }} NULLS LAST, mdm_employee_rk) AS rn, line
     FROM (
       SELECT mdm_employee_rk, {{ sortkey(SK, false) }} AS sk,
         concat({% for c in COLS %}{{ clean(out(c)) }}{% if not loop.last %}, '\t', {% endif %}{% endfor %}) AS line
-      FROM ({{ flagged() }})
+      FROM ({{ flagged() }}{% if KP %}
+      LIMIT 1 BY mdm_employee_rk{% endif %})
     )
 {%- else %}
     {#- КП: строка на аллокацию — MasterID, поля сотрудника, поля аллокации. Поля сотрудника считаются один раз
         на сотрудника и стоят только в первой строке его блока (по порядку rn), в остальных — пустые #}
-    SELECT rn, concat(rks, '\t', if(rn = rn0, ifNull(eline, ''), repeat('\t', {{ EMPC|length - 1 }})), '\t', aline) AS line
+    SELECT rn, concat(rks{% if EMPC %}, '\t', if(rn = rn0, ifNull(eline, ''), repeat('\t', {{ EMPC|length - 1 }})){% endif %}, '\t', aline) AS line
     FROM (
       SELECT mdm_employee_rk, rks, aline, rn, min(rn) OVER (PARTITION BY mdm_employee_rk) AS rn0
       FROM (
@@ -613,17 +664,19 @@ FROM (
           SELECT mdm_employee_rk, {{ clean(out('master_id')) }} AS rks, {{ sortkey(SK, false) }} AS sk,
             ifNull(allocation_prt_norm, 0) AS alloc,
             arrayStringConcat([{% for i in range(1, 13) %}ifNull(lvl{{ i }}_functional_unit_nm, ''){% if not loop.last %}, {% endif %}{% endfor %}], char(31)) AS kp_sort,
-            concat({% for c in ALLOC_KEYS %}{{ clean(out(c)) }}{% if not loop.last %}, '\t', {% endif %}{% endfor %}) AS aline
+            concat({% for c in ACOLS %}{{ clean(out(c)) }}{% if not loop.last %}, '\t', {% endif %}{% endfor %}) AS aline
           FROM ({{ flagged() }})
         )
       )
     ) AS a
+    {%- if EMPC %}
     ANY LEFT JOIN (
       SELECT mdm_employee_rk,
         concat({% for c in EMPC %}{{ clean(out(c)) }}{% if not loop.last %}, '\t', {% endif %}{% endfor %}) AS eline
       FROM ({{ flagged() }}
       LIMIT 1 BY mdm_employee_rk)
     ) AS e USING (mdm_employee_rk)
+    {%- endif %}
 {%- endif %}
   )
   )

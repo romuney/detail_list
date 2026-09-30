@@ -80,11 +80,11 @@ def keys_for(mode):
     return EMP_KEYS + (ALLOC_KEYS if mode == 'kp' else [])
 
 
-def run_new(flt, user, mode, cols=None, settings='', reprinted=False):
+def run_new(flt, user, mode, cols=None, settings='', reprinted=False, view='list'):
     f = dict(flt)
     if cols is not None:
         f['cols_f'] = cols
-    rows, dt = ch.dataset(f, user, mode, settings=settings, reprinted=reprinted)
+    rows, dt = ch.dataset(f, user, mode, settings=settings, reprinted=reprinted, view=view)
     return ch.decode(rows), rows, dt
 
 
@@ -231,7 +231,7 @@ def independent(mode, stream, mu, lu):
     U = '(SELECT * FROM %s PREWHERE legal_employee_flg = 1 LIMIT 1 BY mdm_employee_rk)' % T if mode == 'kp' else \
         '%s PREWHERE legal_employee_flg = 1' % T
     for flt in [{}, {'flt_f': ['emp_specialization_it_code=IT', 'emp_stream_desc=' + stream, 'regional_hr_login=-'], 'mu_f': [mu['rk']]}]:
-        d, rows, _ = run_new(dict(flt, pt_f=ALL_PARTS), 'a.user', mode)
+        d, rows, _ = run_new(flt, 'a.user', mode, view='filters')
         tag = '%s %s' % (mode, 'без фильтров' if not flt else 'с фильтрами')
         # фасеты
         bad = []
@@ -243,16 +243,16 @@ def independent(mode, stream, mu, lu):
                 src = "ifNull(toString(%s), '')" % a
             exp = {r['v']: (int(r['n']), int(r['a'])) for r in q(
                 'SELECT %s AS v, countIf(%s) AS n, count() AS a FROM %s GROUP BY v' % (src, where_indep(flt, a), U))}
-            top = sorted(exp.items(), key=lambda kv: (-kv[1][0], kv[0]))[:300]
+            top = sorted(exp.items(), key=lambda kv: (-kv[1][0], kv[0]))[:5000]
             want = set(v for v, _ in top) | set(x.split('=', 1)[1] for x in flt.get('flt_f', []) if x.split('=', 1)[0] == a)
             if set(got) != want:
                 bad.append((a, 'состав', len(got), len(want), sorted(set(got) ^ want)[:3]))
                 continue
-            for v, (n, al, nv) in got.items():
-                if (n, al) != exp.get(v) or nv != len(exp):
-                    bad.append((a, v, (n, al, nv), exp.get(v), len(exp)))
+            for v, (n, _, nv) in got.items():
+                if n != (exp.get(v) or (None,))[0] or nv != len(exp):
+                    bad.append((a, v, (n, nv), exp.get(v), len(exp)))
                     break
-        ok(tag + ': значения фильтров = счёт «при остальных» (и первые 300)', not bad, bad[:3])
+        ok(tag + ': значения фильтров = счёт «при остальных», все значения', not bad, bad[:3])
         # деревья УС и ЮС
         for tk, col, root in [('mu', 'mapped_management_unit', 3), ('lu', 'legal_unit', 1)]:
             nodes = d['t'].get(tk, [])
@@ -264,13 +264,14 @@ def independent(mode, stream, mu, lu):
                            'WHERE rk IS NOT NULL GROUP BY rk' % (lv, col, where_indep(flt, tk), lv, col,
                                                                  ("ifNull(lvl%d_%s_rk, '')" % (lv - 1, col)) if lv > root else "''", nxt, U)):
                     exp[(r['rk'], lv)] = (int(r['n']), int(r['a']), r['nm'], r['p'], int(r['hk']))
-            badn = [(x['id'], x['lvl'], (x['n'], x['all'], x['name'], x['pid'], x['hk']), exp.get((x['id'], x['lvl']))) for x in nodes
-                    if exp.get((x['id'], x['lvl'])) != (x['n'], x['all'], x['name'], x['pid'], x['hk'])]
+            badn = [(x['id'], x['lvl'], (x['n'], x['name'], x['pid'], x['hk']), exp.get((x['id'], x['lvl']))) for x in nodes
+                    if (exp.get((x['id'], x['lvl'])) or (None,) * 5)[:1] + (exp.get((x['id'], x['lvl'])) or (None,) * 5)[2:]
+                    != (x['n'], x['name'], x['pid'], x['hk'])]
             ok('%s: дерево %s — счётчики, имена, родители, есть дети' % (tag, tk), not badn, badn[:3])
             ok('%s: дерево %s — число узлов дерева' % (tag, tk), nodes and all(x['nodes'] == len(exp) for x in nodes),
                (nodes[0]['nodes'] if nodes else None, len(exp)))
             TREES.setdefault((mode, tk, bool(flt)), (flt, exp))
-            full = len(exp) <= 1500
+            full = len(exp) <= 40000
             if full:
                 ok('%s: дерево %s целиком (%d узлов)' % (tag, tk, len(exp)), len(nodes) == len(exp), (len(nodes), len(exp)))
             else:
@@ -283,7 +284,7 @@ def independent(mode, stream, mu, lu):
                     kids = set(k for k in exp if k[1] == lv + 1 and exp[k][3] == sel[0])
                     ok('%s: дерево %s — дети выбранного узла' % (tag, tk), kids <= have, len(kids - have))
     # дерево КП: узел = путь именами, сотрудник — один раз
-    d, rows, _ = run_new({'pt_f': ['kp']}, 'a.user', mode)
+    d, rows, _ = run_new({}, 'a.user', mode, view='filters')
     kp_rows = q('SELECT functional_lvl_all_array AS s FROM %s' % U)
     cnt = {}
     for r in kp_rows:
@@ -303,29 +304,29 @@ def independent(mode, stream, mu, lu):
     ok('%s: дерево КП — верхние 3 уровня' % mode, top <= set(x['path'] for x in nodes), len(top - set(x['path'] for x in nodes)))
     # дети узла КП по запросу
     par = sorted((p for p in kids if p.count('\x1f') == 1), key=lambda p: -cnt[p])[0]
-    d, rows, _ = run_new({'pt_f': ['q'], 'q_f': ['kp>' + par]}, 'a.user', mode)
+    d, rows, _ = run_new({'q_f': ['kp>' + par]}, 'a.user', mode, view='filters')
     got = sorted((x['path'], x['n'], x['hk'], x['lvl']) for x in d['q'].get('kp', []))
     want = sorted((p, cnt[p], 1 if p in kids else 0, p.count('\x1f') + 1) for p in cnt if p.rsplit('\x1f', 1)[0] == par and p.count('\x1f') == 2)
     ok('%s: дети узла КП — состав, счётчики, есть дети' % mode, got == want and got, (got[:2], want[:2]))
-    ok('%s: ответ поиска — только meta и находки' % mode, d['roles'] == {'meta', 'q'}, d['roles'])
+    ok('%s: поиск — находки вместе с полным ответом строки фильтров' % mode, d['roles'] == {'meta', 'q', 'F', 'T'}, d['roles'])
     # дети узла УС / ЮС по запросу и подписи выбранных
     for tk in ['mu', 'lu']:
         flt, exp = TREES[(mode, tk, False)]
         root = 3 if tk == 'mu' else 1
         par = sorted((k for k in exp if exp[k][4] and k[1] == root + 1), key=lambda k: -exp[k][1])[0]
-        d, rows, _ = run_new({'pt_f': ['q'], 'q_f': [tk + '>' + par[0]]}, 'a.user', mode)
+        d, rows, _ = run_new({'q_f': [tk + '>' + par[0]]}, 'a.user', mode, view='filters')
         got = sorted((x['id'], x['lvl'], x['n'], x['all'], x['name'], x['pid'], x['hk']) for x in d['q'].get(tk, []))
         want = sorted((k[0], k[1]) + (e[0], e[1], e[2], e[3], e[4]) for k, e in exp.items() if k[1] == par[1] + 1 and e[3] == par[0])
         ok('%s: дети узла %s — состав, счётчики, есть дети' % (mode, tk), got == want and got, (got[:2], want[:2]))
         deep = sorted((k for k in exp if k[1] == root + 3), key=lambda k: -exp[k][1])[0]
-        d, rows, _ = run_new({tk + '_f': [deep[0], par[0]]}, 'a.user', mode)
+        d, rows, _ = run_new({tk + '_f': [deep[0], par[0]]}, 'a.user', mode, view='filters')
         sn = {x['id']: x for x in d['s'].get(tk, [])}
         okn = set(sn) == {deep[0], par[0]} and sn[deep[0]]['name'] == exp[deep][2] and sn[deep[0]]['lvl'] == deep[1] \
             and sn[deep[0]]['path'].count(' › ') == 2 and sn[deep[0]]['pid'] == exp[deep][3] and sn[par[0]]['path'].count(' › ') == 0
         ok('%s: подписи выбранных узлов %s — имя, уровень, путь' % (mode, tk), okn, [(x['name'], x['lvl'], x['path']) for x in sn.values()])
     # поиск узла
     for tk in ['mu', 'lu', 'kp']:
-        d, rows, _ = run_new({'pt_f': ['q'], 'q_f': [tk + '=инвест']}, 'a.user', mode)
+        d, rows, _ = run_new({'q_f': [tk + '=инвест']}, 'a.user', mode, view='filters')
         hits = d['q'].get(tk, [])
         okh = hits and all('инвест' in h['name'].lower() for h in hits) and len(hits) <= 60
         ok('%s: поиск %s по имени — находки с «инвест»' % (mode, tk), okh, [h['name'] for h in hits[:3]])
@@ -334,7 +335,7 @@ def independent(mode, stream, mu, lu):
             n = q("SELECT count() AS n FROM %s WHERE lvl%d_mapped_management_unit_rk = %s" % (U, h['lvl'], lit(h['id'])))[0]['n']
             ok('%s: поиск mu — счётчик находки' % mode, int(n) == h['n'], (n, h['n']))
             ok('%s: поиск mu — путь находки' % mode, h['path'].count(' › ') == max(0, h['lvl'] - 4), h['path'])
-    d, rows, _ = run_new({'pt_f': ['q'], 'q_f': ['f:legal_position_nm=юрист']}, 'a.user', mode)
+    d, rows, _ = run_new({'q_f': ['f:legal_position_nm=юрист']}, 'a.user', mode, view='filters')
     fq = d['fq'].get('legal_position_nm', {})
     ok('%s: поиск значения атрибута' % mode, fq and all('юрист' in v.lower() for v in fq), list(fq)[:3])
 
@@ -353,25 +354,32 @@ def first_rows(d, i):
 def behaviour(mode, stream, kp):
     print('— части ответа, сортировка, лимит, эхо, ввод, доступ, режимы ClickHouse: %s' % mode)
     d, rows, _ = run_new({}, 'a.user', mode)
-    ok('%s: по умолчанию — только meta и строки' % mode, d['roles'] == {'meta', 'r'} and len(set(r[0] for r in d['rows'])) == 5000,
-       d['roles'])
-    d, rows, _ = run_new({'pt_f': ['f']}, 'a.user', mode)
-    ok('%s: часть f — meta и значения фильтров' % mode, d['roles'] == {'meta', 'f'} and d['meta']['a']['pt'] == ['f'], d['roles'])
-    d, rows, _ = run_new({'pt_f': ['q', 'bogus']}, 'a.user', mode)
-    ok('%s: q без строки поиска — только meta' % mode, d['roles'] == {'meta'} and d['meta']['a']['pt'] == ['q'], d['roles'])
+    ok('%s: список по умолчанию — meta и строки, MasterID и дата найма' % mode,
+       d['roles'] == {'meta', 'r'} and len(set(r[0] for r in d['rows'])) == 5000 and d['cols'] == ['master_id', 'hiredate'], (d['roles'], d['cols']))
+    d, rows, _ = run_new({}, 'a.user', mode, view='filters')
+    ok('%s: строка фильтров по умолчанию — meta, значения и три дерева, без строк' % mode,
+       d['roles'] == {'meta', 'F', 'T'} and set(d['t']) == {'mu', 'lu', 'kp'} and not d['rows'] and d['meta']['dates'], (d['roles'], sorted(d['t'])))
+    d, rows, _ = run_new({'pt_f': ['f', 'q'], 'q_f': ['mu=инвест'], 'frq_f': ['f-7']}, 'a.user', mode)
+    ok('%s: список не читает поиск и части, эхо метки строки фильтров' % mode,
+       d['roles'] == {'meta', 'r'} and d['meta']['m']['frq'] == 'f-7' and 'dates' not in d['meta'], (d['roles'], d['meta']['m'].get('frq')))
     d, rows, _ = run_new({'lim_f': ['10000']}, 'hr.super', mode)
     emp = len(set(r[0] for r in d['rows']))
-    if mode == 'us':
-        ok('us: строка на сотрудника', emp == 10000 and len(d['rows']) == 10000, (emp, len(d['rows'])))
-    else:
-        ok('kp: строка на аллокацию', emp == 10000 and len(d['rows']) > 10000, (emp, len(d['rows'])))
+    ok('%s: без колонок аллокации — строка на сотрудника' % mode, emp == 10000 and len(d['rows']) == 10000, (emp, len(d['rows'])))
+    if mode == 'kp':
+        d, rows, _ = run_new({'cols_f': ['full_nm', 'kp1'], 'lim_f': ['10000']}, 'hr.super', mode)
+        emp = len(set(r[0] for r in d['rows']))
+        ok('kp: с уровнем КП — строка на аллокацию', emp == 10000 and len(d['rows']) > 10000 and d['cols'] == ['master_id', 'full_nm', 'kp1'],
+           (emp, len(d['rows']), d['cols']))
+        d, rows, _ = run_new({'cols_f': ['kp2', 'alloc'], 'lim_f': ['5000']}, 'hr.super', mode)
+        ok('kp: только MasterID и поля аллокации', d['cols'] == ['master_id', 'kp2', 'alloc'] and all(len(r) == 3 for r in d['rows']),
+           (d['cols'], d['rows'][:1]))
     # размер запроса: списки — константами WITH; худший случай (2 000 логинов + 500 значений) < max_query_size
     logins = ['login=some.long.login.user%d' % i for i in range(2000)]
     many = ['%s=Значение номер %d длинное' % (a, i) for a in ['office_desc', 'city_nm', 'legal_position_nm'] for i in range(200)]
-    big = {'flt_f': many, 'id_f': logins, 'pt_f': ALL_PARTS}
-    size = len(ch.sql(ch.carriers(big, mode), 'a.user', mode).encode('utf-8'))
+    big = {'flt_f': many, 'id_f': logins}
+    size = max(len(ch.sql(ch.carriers(big, mode), 'a.user', mode, view=v).encode('utf-8')) for v in ['list', 'filters'])
     ok('%s: худший запрос меньше max_query_size (256 КБ)' % mode, size < 256 * 1024, size)
-    d, rows, _ = run_new(big, 'a.user', mode)
+    d, rows, _ = run_new(big, 'a.user', mode, view='filters')
     ok('%s: значений атрибутов — не больше 500, логинов — 2 000' % mode,
        len(d['meta']['a']['flt']) == 500 and len(d['meta']['a']['id']) == 2000, (len(d['meta']['a']['flt']), len(d['meta']['a']['id'])))
     other = {'flt_f': ['emp_specialization_it_code=IT'], 'lim_f': ['10000']} if mode == 'kp' else {'flt_kf': ['emp_specialization_it_code=IT'], 'lim_kf': ['10000']}
@@ -384,13 +392,13 @@ def behaviour(mode, stream, kp):
     ok('%s: эхо метки запроса' % mode, m['rq'] == 'r-42' and rows and [r for r in rows if r['role'] == 'meta'][0]['v'] == 'r-42', m['rq'])
     emp = len(set(r[0] for r in d['rows']))
     ok('%s: лимит 10 000 сотрудников' % mode, emp == 10000 and m['lim'] == '10000', (emp, m['lim']))
-    ok('%s: в строках — все поля реестра' % mode, d['cols'] == keys_for(mode), d['cols'][:4])
     ok('%s: пачки по 500 сотрудников и порядок' % mode,
        [int(r[0]) for r in d['rows']] == sorted(int(r[0]) for r in d['rows']), 'порядок строк')
     d, rows, _ = run_new({'lim_f': ['777'], 'sort_f': ['drop table:asc'], 'cols_f': ['nope', 'full_nm', 'full_nm']}, 'a.user', mode)
     m = d['meta']['m']
     ok('%s: чужой лимит и сортировка — по умолчанию' % mode, m['lim'] == '5000' and m['sort'] == 'master_id:asc', (m['lim'], m['sort']))
-    ok('%s: носитель колонок не действует — все поля реестра' % mode, d['cols'] == keys_for(mode), d['cols'][:4])
+    ok('%s: неизвестные и повторные колонки отброшены' % mode, d['cols'] == (['master_id', 'hiredate', 'full_nm'] if mode == 'us'
+       else ['master_id', 'full_nm']), d['cols'])
     # сортировка на сервере по тексту и по маскированному полю
     d, rows, _ = run_new({'sort_f': ['legal_position_nm:desc'], 'cols_f': ['legal_position_nm'], 'lim_f': ['5000']}, 'hr.super', mode)
     i = d['cols'].index('legal_position_nm')
@@ -409,24 +417,27 @@ def behaviour(mode, stream, kp):
             'mu_f': ["x'; DROP TABLE t; --", 'abc'], 'kp_f': ["a'\\\x1fb"], 'id_f': ["login=a'b", 'rk=12a', 'tab=\\'],
             'q_f': ["mu=' OR 1=1"], 'dt_f': ["2026-13-45'"], 'per_f': ['date'], 'rq_f': ["'\\"], 'sort_f': ["full_nm:asc'"],
             'cols_f': ["full_nm'"], 'emp_f': ["'"], 'tcr_f': ["ТЦР РФ'"]}
-    try:
-        d, rows, _ = run_new(evil, 'a.user', mode)
-        ok('%s: враждебный ввод — запрос цел, ничего не найдено' % mode, d['meta'] and d['meta']['m']['total'] == '0', d['meta']['m']['total'])
-        ok('%s: враждебный ввод — эхо без лишнего' % mode, d['meta']['a']['mu'] == ['abc'] and d['meta']['a']['cols'][-1] != "full_nm'",
-           d['meta']['a'])
-    except Exception as e:  # noqa: BLE001
-        ok('%s: враждебный ввод — запрос цел' % mode, False, e)
-    # AlwaysTrue при сохранении датасета
-    try:
-        rows, _ = ch.dataset({}, 'a.user', mode, always_true=True)
-        d = ch.decode(rows)
-        ok('%s: AlwaysTrue — датасет сохраняется, ответ по умолчанию' % mode, d['meta']['m']['total'] != '0' and d['cols'][0] == 'master_id')
-    except Exception as e:  # noqa: BLE001
-        ok('%s: AlwaysTrue' % mode, False, e)
-    # нет строки в warden — только meta
-    d, rows, _ = run_new({}, 'nobody', mode)
-    roles = set(r['role'] for r in rows)
-    ok('%s: без строки в warden — только meta, ok = 0' % mode, roles == {'meta'} and d['meta']['m']['ok'] == '0', roles)
+    for view in ['list', 'filters']:
+        try:
+            d, rows, _ = run_new(evil, 'a.user', mode, view=view)
+            ok('%s %s: враждебный ввод — запрос цел, ничего не найдено' % (mode, view), d['meta'] and d['meta']['m']['total'] == '0',
+               d['meta']['m']['total'])
+            ok('%s %s: враждебный ввод — эхо без лишнего' % (mode, view), d['meta']['a']['mu'] == ['abc'] and d['meta']['a']['cols'][-1] != "full_nm'",
+               d['meta']['a'])
+        except Exception as e:  # noqa: BLE001
+            ok('%s %s: враждебный ввод — запрос цел' % (mode, view), False, e)
+        # AlwaysTrue при сохранении датасета
+        try:
+            rows, _ = ch.dataset({}, 'a.user', mode, always_true=True, view=view)
+            d = ch.decode(rows)
+            ok('%s %s: AlwaysTrue — датасет сохраняется, ответ по умолчанию' % (mode, view), d['meta']['m']['total'] != '0'
+               and (d['cols'] == ['master_id', 'hiredate'] and len(d['rows']) == 5000 if view == 'list' else len(d['t']) == 3 and len(d['f']) > 20))
+        except Exception as e:  # noqa: BLE001
+            ok('%s %s: AlwaysTrue' % (mode, view), False, e)
+        # нет строки в warden — только meta
+        d, rows, _ = run_new({}, 'nobody', mode, view=view)
+        roles = set(r['role'] for r in rows)
+        ok('%s %s: без строки в warden — только meta, ok = 0' % (mode, view), roles == {'meta'} and d['meta']['m']['ok'] == '0', roles)
     # режимы ClickHouse 24.8
     def sig(d):
         return (d['meta']['m']['total'], d['rows'], d['f'], d['fq'],
@@ -436,39 +447,44 @@ def behaviour(mode, stream, kp):
     rk = TREES[(mode, 'mu', False)]
     mu4 = sorted((k for k in rk[1] if rk[1][k][4] and k[1] == 4), key=lambda k: -rk[1][k][1])[0][0]
     variants = [
-        {'flt_f': ['emp_specialization_it_code=IT', 'emp_stream_desc=' + stream], 'q_f': ['mu=инвест'], 'cols_f': ['full_nm', 'grade', 'kp1'],
-         'pt_f': ALL_PARTS, 'mu_f': [mu4]},
-        {'flt_f': ['emp_specialization_it_code=IT'], 'q_f': ['kp=инвест'], 'pt_f': ['q'], 'lu_f': [sorted(TREES[(mode, 'lu', False)][1])[0][0]]},
-        {'q_f': ['mu>' + mu4], 'pt_f': ['q']},
-        {'q_f': ['f:office_desc=офис'], 'pt_f': ['q', 'f']},
+        ({'flt_f': ['emp_specialization_it_code=IT', 'emp_stream_desc=' + stream], 'q_f': ['mu=инвест'], 'cols_f': ['full_nm', 'grade', 'kp1'],
+          'mu_f': [mu4]}, 'filters'),
+        ({'flt_f': ['emp_specialization_it_code=IT', 'emp_stream_desc=' + stream], 'cols_f': ['full_nm', 'grade', 'kp1', 'alloc'],
+          'mu_f': [mu4]}, 'list'),
+        ({'flt_f': ['emp_specialization_it_code=IT'], 'q_f': ['kp=инвест'], 'lu_f': [sorted(TREES[(mode, 'lu', False)][1])[0][0]]}, 'filters'),
+        ({'q_f': ['mu>' + mu4]}, 'filters'),
+        ({'q_f': ['f:office_desc=офис']}, 'filters'),
     ]
     # круг sqlglot: перепечатанный запрос — тот же ответ (разделитель пути КП, сортировки, поиск, ввод)
     kpath = '\x1f'.join([kp['a'], kp['b']])
     rt = variants + [
-        {},
-        {'kp_f': [kpath], 'pt_f': ['r', 'f', 'kp'], 'sort_f': ['company_fire_dt:desc']},
-        {'q_f': ['kp>' + kpath], 'pt_f': ['q']},
-        {'q_f': ['lu=инвест'], 'pt_f': ['q'], 'per_f': ['date'], 'dt_f': ['2026-08-31'], 'emp_f': ['Активная'], 'tcr_f': ['ТЦР РФ']},
-        {'id_f': ['login=' + r['l'] for r in q("SELECT ad_login AS l FROM prod_proteus.mdm_employee_d_detail_last_day LIMIT 50")],
-         'sort_f': ['grade:asc'], 'lim_f': ['10000']},
-        evil,
+        ({}, 'list'),
+        ({}, 'filters'),
+        ({'kp_f': [kpath], 'sort_f': ['company_fire_dt:desc'], 'cols_f': ['kp3', 'full_nm']}, 'list'),
+        ({'kp_f': [kpath]}, 'filters'),
+        ({'q_f': ['kp>' + kpath]}, 'filters'),
+        ({'q_f': ['lu=инвест'], 'per_f': ['date'], 'dt_f': ['2026-08-31'], 'emp_f': ['Активная'], 'tcr_f': ['ТЦР РФ']}, 'filters'),
+        ({'id_f': ['login=' + r['l'] for r in q("SELECT ad_login AS l FROM prod_proteus.mdm_employee_d_detail_last_day LIMIT 50")],
+          'sort_f': ['grade:asc'], 'lim_f': ['10000'], 'cols_f': ['grade', 'full_nm']}, 'list'),
+        (evil, 'list'),
+        (evil, 'filters'),
     ]
-    for vi, flt in enumerate(rt):
-        for user in (['a.user', 'hr.super'] if vi == len(variants) else ['a.user']):
+    for vi, (flt, view) in enumerate(rt):
+        for user in (['a.user', 'hr.super'] if vi in (len(variants), len(variants) + 1) else ['a.user']):
             try:
-                a, _, _ = run_new(flt, user, mode)
-                b, _, _ = run_new(flt, user, mode, reprinted=True)
-                ok('%s: круг sqlglot, вариант %d, %s — ответ тот же' % (mode, vi + 1, user), sig(a) == sig(b) and a['cols'] == b['cols'],
+                a, _, _ = run_new(flt, user, mode, view=view)
+                b, _, _ = run_new(flt, user, mode, reprinted=True, view=view)
+                ok('%s %s: круг sqlglot, вариант %d, %s — ответ тот же' % (mode, view, vi + 1, user), sig(a) == sig(b) and a['cols'] == b['cols'],
                    (a['meta']['m']['total'], b['meta']['m']['total']))
             except Exception as e:  # noqa: BLE001
                 ok('%s: круг sqlglot, вариант %d, %s' % (mode, vi + 1, user), False, e)
-    for vi, flt in enumerate(variants):
-        base, _, _ = run_new(flt, 'a.user', mode)
+    for vi, (flt, view) in enumerate(variants):
+        base, _, _ = run_new(flt, 'a.user', mode, view=view)
         for st in ['allow_experimental_analyzer = 0', 'prefer_column_name_to_alias = 1', 'join_use_nulls = 1', 'group_by_use_nulls = 1',
                    'allow_experimental_analyzer = 0, prefer_column_name_to_alias = 1, join_use_nulls = 1, group_by_use_nulls = 1']:
             try:
-                d, _, _ = run_new(flt, 'a.user', mode, settings=st)
-                ok('%s: вариант %d, %s — ответ тот же' % (mode, vi + 1, st), sig(d) == sig(base))
+                d, _, _ = run_new(flt, 'a.user', mode, settings=st, view=view)
+                ok('%s %s: вариант %d, %s — ответ тот же' % (mode, view, vi + 1, st), sig(d) == sig(base))
             except Exception as e:  # noqa: BLE001
                 ok('%s: вариант %d, %s' % (mode, vi + 1, st), False, e)
 

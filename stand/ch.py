@@ -18,6 +18,7 @@ decode()   — разбор ответа нового датасета: meta, ф
 размер ответа тот же, что в бою.
 """
 import base64
+import hashlib
 import json
 import os
 import re
@@ -97,12 +98,13 @@ def render(text, flt=None, user='a.user', always_true=False):
 
 def source(mode='us'):
     text = open(DATASET, encoding='utf-8').read()
-    assert "{% set MODE = 'us' %}" in text
+    assert "{% set MODE = 'us' %}" in text and "{% set VIEW = 'list' %}" in text
     return text.replace("{% set MODE = 'us' %}", "{% set MODE = '" + mode + "' %}")
 
 
-def sql(flt=None, user='a.user', mode='us', always_true=False):
-    return render(source(mode), flt, user, always_true)
+def sql(flt=None, user='a.user', mode='us', always_true=False, view='list'):
+    """view: list — датасет чарта списка, filters — датасет строки фильтров."""
+    return render(source(mode).replace("{% set VIEW = 'list' %}", "{% set VIEW = '" + view + "' %}"), flt, user, always_true)
 
 
 def _run(q, settings=''):
@@ -132,16 +134,16 @@ def carriers(flt, mode):
 
 
 def dataset(flt=None, user='a.user', mode='us', settings='', always_true=False, raw=False, raw_carriers=False,
-            reprinted=False):
+            reprinted=False, view='list'):
     """Как Proteus: SELECT измерений FROM (датасет) AS virtual_table GROUP BY измерений LIMIT."""
-    inner = sql(flt if raw_carriers else carriers(flt, mode), user, mode, always_true)
+    inner = sql(flt if raw_carriers else carriers(flt, mode), user, mode, always_true, view)
     q = ('SELECT %s FROM (%s) AS virtual_table GROUP BY %s LIMIT %d'
          % (', '.join(MEASURES), inner, ', '.join(MEASURES), ROW_LIMIT))
     q = stand_sql(sqlglot_reprint(q) if reprinted else q)
     rows, dt = _run(q, settings)
     if not raw:
         for r in rows:
-            if r.get('role') == 'r':
+            if r.get('role') in ('r', 'T', 'F'):
                 r['j'] = base64.b64encode(r['j'].encode('utf-8')).decode('ascii')
     return rows, dt
 
@@ -162,9 +164,9 @@ def current(flt=None, user='a.user', mode='us', limit=None, settings=''):
 
 
 def decode(rows):
-    """Ответ нового датасета → {'meta', 'f', 'fq', 't', 'q', 's', 'rows', 'cols', 'roles'}."""
+    """Ответ нового датасета → {'meta', 'f', 'fq', 't', 'q', 's', 'rows', 'cols', 'roles'}; узлы T — в 't'."""
     res = {'meta': None, 'f': {}, 'fq': {}, 't': {}, 'q': {}, 's': {}, 'rows': [], 'cols': [], 'roles': set()}
-    chunks = []
+    chunks, tree_chunks = [], {}
     for r in rows:
         role = r['role']
         res['roles'].add(role)
@@ -183,8 +185,46 @@ def decode(rows):
             node = {'id': r['v'], 'n': int(r['n']), 'lvl': int(parts[0]), 'pid': parts[1], 'name': parts[2], 'all': int(parts[3]),
                     'hk': int(parts[4]), 'path': parts[5], 'nodes': int(parts[6]) if parts[6] else None}
             res[role].setdefault(r['k'], []).append(node)
+        elif role == 'F':
+            # атрибут одной строкой: «значение\tсотрудников» по строке, в значении \ \t \n \r экранированы
+            nv = int(r['v'])
+            text = base64.b64decode(r['j']).decode('utf-8') if r['j'] else ''
+            for line in text.split('\n'):
+                if line == '':
+                    continue
+                v, n = line.rsplit('\t', 1)
+                v = re.sub(r'\\(.)', lambda m: {'t': '\t', 'n': '\n', 'r': '\r'}.get(m.group(1), m.group(1)), v)
+                res['f'].setdefault(r['k'], {})[v] = (int(n), None, nv)
+        elif role == 'T':
+            # пачки узлов в порядке обхода в глубину: УС / ЮС — «rk, уровень, при остальных, есть дети, имя»,
+            # КП — «уровень, при остальных, есть дети, имя»; родитель — ближайший выше узел меньшего уровня
+            tree_chunks.setdefault(r['k'], []).append((int(r['v'].split(':')[0]), int(r['v'].split(':')[1]), r['j']))
         elif role == 'r':
             chunks.append((int(r['k']), r['j']))
+    for tk, parts in tree_chunks.items():
+        stack, out = [], []
+        for _, nodes, j in sorted(parts):
+            for line in (base64.b64decode(j).decode('utf-8') if j else '').split('\n'):
+                if line == '':
+                    continue
+                p = line.split('\t')
+                if tk == 'kp':
+                    lvl, n, hk, name = int(p[0]), int(p[1]), int(p[2]), p[3]
+                else:
+                    rid, lvl, n, hk, name = p[0], int(p[1]), int(p[2]), int(p[3]), p[4]
+                while stack and stack[-1]['lvl'] >= lvl:
+                    stack.pop()
+                par = stack[-1] if stack else None
+                node = {'n': n, 'lvl': lvl, 'name': name, 'all': None, 'hk': hk, 'nodes': nodes}
+                if tk == 'kp':
+                    node['path'] = (par['path'] + '\x1f' if par else '') + name
+                    node['id'] = hashlib.md5(node['path'].encode('utf-8')).hexdigest()[:12]
+                    node['pid'] = par['id'] if par else ''
+                else:
+                    node.update({'id': rid, 'pid': par['id'] if par else '', 'path': ''})
+                stack.append(node)
+                out.append(node)
+        res['t'][tk] = out
     res['cols'] = res['meta']['a']['cols'] if res['meta'] else []
     for _, j in sorted(chunks):
         text = base64.b64decode(j).decode('utf-8') if j else ''
