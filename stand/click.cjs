@@ -170,14 +170,36 @@ const ddCounts = (p) => p.F.evaluate(() => {
     else await act(p, ['list'], () => p.L.click('th[data-col="' + sortCol + '"]'));
     ok(mode + ': сортировка по колонке', (await p.L.$$('th[data-col="' + sortCol + '"] [class$="-sa"]')).length === 1);
     const gcol = mode === 'kp' ? 'active_type_nm' : 'emp_stream_desc';
+    const copyAt = () => p.L.evaluate(() => { const r = document.querySelector('[data-action="copy"]').getBoundingClientRect(); return [Math.round(r.right), Math.round(r.top), Math.round(r.width)]; });
+    const c0 = await copyAt();
     await p.L.click('[data-pop="group"]');
     await p.L.click('[data-grp="' + gcol + '"]');
     await p.waitForTimeout(250);
-    ok(mode + ': группировка — строки групп', (await p.L.$$('tr[data-action="grp"]')).length > 0);
+    ok(mode + ': группировка списком «+ колонка» — строки групп', (await p.L.$$('tr[data-action="grp"]')).length > 0);
     await p.keyboard.press('Escape');
-    await p.L.click('[data-pop="group"]');
-    await p.L.click('[data-grp="' + gcol + '"]');
-    await p.keyboard.press('Escape');
+    const gRows = () => p.L.evaluate(() => [document.querySelectorAll('[data-tbox] tr[data-action="grp"]').length, document.querySelectorAll('[data-tbox] tbody tr').length]);
+    await p.L.click('[data-action="gall"]');
+    await p.waitForTimeout(200);
+    const gf = await gRows();
+    ok(mode + ': общая каретка — все группы свёрнуты', gf[0] > 0 && gf[0] === gf[1] && /▸/.test(await p.L.textContent('[data-action="gall"]')), gf);
+    await p.L.click('[data-action="gall"]');
+    await p.waitForTimeout(200);
+    const ge = await gRows();
+    ok(mode + ': общая каретка — развёрнуты', ge[1] > ge[0] && /▾/.test(await p.L.textContent('[data-action="gall"]')), ge);
+    await p.L.click('[data-gcol="' + gcol + '"] [data-action="gdel"]');
+    await p.waitForTimeout(200);
+    ok(mode + ': × на плашке — группировка снята', (await p.L.$$('tr[data-action="grp"]')).length === 0 && (await heads(p)).includes(gcol));
+    // Перетащить заголовок в зону — группировка; плашку обратно на заголовки — снята, колонка на месте броска
+    const m1 = await listMasks(p);
+    await p.L.dragAndDrop('th[data-col="' + gcol + '"]', '[data-gzone]');
+    await p.waitForTimeout(250);
+    ok(mode + ': заголовок в зону группировки — группы, колонка ушла в плашку',
+      (await p.L.$$('tr[data-action="grp"]')).length > 0 && !(await heads(p)).includes(gcol) && (await p.L.$$('[data-gcol="' + gcol + '"]')).length === 1 && (await listMasks(p)) === m1);
+    const hs = await heads(p);
+    await p.L.dragAndDrop('[data-gcol="' + gcol + '"]', 'th[data-col="' + hs[2] + '"]');
+    await p.waitForTimeout(250);
+    const hs2 = await heads(p);
+    ok(mode + ': плашку на заголовок — группировка снята, колонка перед целью', (await p.L.$$('tr[data-action="grp"]')).length === 0 && hs2.indexOf(gcol) === hs2.indexOf(hs[2]) - 1, hs2.slice(0, 5));
     await p.L.fill('[data-tsearch]', 'а');
     await p.waitForTimeout(400);
     ok(mode + ': поиск по таблице', /найдено/.test(await p.L.textContent('[data-tcount]')));
@@ -185,7 +207,41 @@ const ddCounts = (p) => p.F.evaluate(() => {
     await p.waitForTimeout(300);
     await p.L.click('[data-action="copy"]');
     await p.waitForTimeout(300);
-    ok(mode + ': «Копировать»', /Скопировано/.test(await p.L.textContent('[data-copytx]')), await p.L.textContent('[data-copytx]'));
+    const cp = await p.L.evaluate(() => { const b = document.querySelector('[data-action="copy"]'); return [b.className, b.getAttribute('data-tip') || '', b.textContent]; });
+    ok(mode + ': «Копировать» — иконкой, галочка и «Скопировано» в подсказке', /-ok/.test(cp[0]) && /Скопировано/.test(cp[1]) && cp[2].trim() === '', cp);
+    ok(mode + ': «Копировать» — всегда справа, не сдвигается', JSON.stringify(await copyAt()) === JSON.stringify(c0), [c0, await copyAt()]);
+
+    // Тур «Как работать»: все шаги до «Готово», стрелки, Esc
+    await p.L.click('[data-tact="tour"]');
+    await p.waitForTimeout(400);
+    const tourSt = () => p.L.evaluate(() => {
+      const c = document.querySelector('[class$="-tcard"]'), T = document.querySelector('body > [class$="-tour"]');
+      if (!T || T.style.display !== 'block' || !c) return null;
+      const r = c.getBoundingClientRect();
+      return { h: c.querySelector('[class$="-tcs"]').textContent, btns: Array.prototype.map.call(c.querySelectorAll('[data-tact]'), (b) => b.getAttribute('data-tact')),
+        inView: r.top >= 0 && r.left >= 0 && r.bottom <= innerHeight && r.right <= innerWidth };
+    });
+    let steps = 0, allIn = true, n0 = '';
+    for (let i = 0; i < 30; i++) {
+      const st = await tourSt();
+      if (!st) break;
+      steps++;
+      if (!n0) n0 = st.h;
+      allIn = allIn && st.inView;
+      if (st.btns.includes('demo')) { await p.L.click('[class$="-tcard"] [data-tact="demo"]'); await p.waitForTimeout(1800); }
+      else if (st.btns.includes('next')) { await p.L.click('[class$="-tcard"] [data-tact="next"]'); await p.waitForTimeout(300); }
+      else { await p.L.click('[class$="-tcard"] [class$="-pri"][data-tact="close"]'); await p.waitForTimeout(300); }
+    }
+    ok(mode + ': тур — все шаги до «Готово», карточка в окне', steps >= 8 && allIn && (await tourSt()) === null, [steps, n0, allIn]);
+    await p.L.click('[data-tact="tour"]');
+    await p.waitForTimeout(300);
+    await p.keyboard.press('ArrowRight');
+    await p.waitForTimeout(300);
+    const ar = await tourSt();
+    await p.keyboard.press('Escape');
+    await p.waitForTimeout(200);
+    ok(mode + ': тур — стрелка листает, Esc закрывает', !!ar && /· 2 из/.test(ar.h) && (await tourSt()) === null, ar);
+    await p.L.click('[data-action="pg"][data-key="first"]').catch(() => {});
 
     // Лимит; «Сбросить» в строке фильтров — оба чарта снова на всех
     await p.L.click('[data-pop="lim"]');

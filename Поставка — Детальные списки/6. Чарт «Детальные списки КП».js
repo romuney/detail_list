@@ -210,7 +210,8 @@ var STATE0 = {
   warn: '',
   cache: null,           // части ответов по подписи фильтров: rows / f / t / s
   keep: null,            // прокрутка до запроса — вернуть после ответа
-  copied: ''
+  copied: '',
+  tour: null             // тур «Как работать»: {i, dir, shown, key, was, busy}
 };
 if (!__S[CFG.ns]) __S[CFG.ns] = {};
 // Ключи, которых нет в состоянии прошлой версии скрипта (страницу не перезагружали), — по умолчанию.
@@ -528,7 +529,7 @@ function viewCompute(cols) {
       return dir * cmpKey(a, b) || x - y;
     });
   }
-  var V = { cols: cols, idx: idx, items: null, groups: 0 };
+  var V = { cols: cols, idx: idx, items: null, groups: 0, gkeys: [] };
   if (state.groupBy.length) {
     var items = [], tree = {}, order = [];
     for (var j = 0; j < idx.length; j++) {
@@ -537,7 +538,7 @@ function viewCompute(cols) {
         var gv = blockVal(b, state.groupBy[g]);
         path.push(gv);
         var gk = path.join('\u0001');
-        if (!node.kids[gk]) { node.kids[gk] = { key: gk, v: gv, lvl: g, n: 0, kids: {}, order: [], rows: [] }; node.order.push(gk); }
+        if (!node.kids[gk]) { node.kids[gk] = { key: gk, v: gv, lvl: g, n: 0, kids: {}, order: [], rows: [] }; node.order.push(gk); V.gkeys.push(gk); }
         node = node.kids[gk];
         node.n++;
       }
@@ -749,9 +750,6 @@ function buildCSS() {
     P + '-ib{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;border:1px solid ' + C.line + ';background:' + C.card + ';border-radius:7px;color:' + C.ink2 + ';cursor:pointer;padding:0 6px;font-size:13px;line-height:1;}',
     P + '-ib:hover{border-color:#cfdcfb;color:' + C.act + ';}',
     P + '-ib[disabled]{opacity:.4;cursor:default;}',
-    P + '-info{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;border:1px solid ' + C.muted2 + ';color:' + C.muted + ';font-size:9px;font-weight:600;font-style:normal;line-height:1;cursor:help;flex:0 0 auto;user-select:none;}',
-    P + '-info:hover{border-color:' + C.act + ';color:' + C.act + ';}',
-
     // ---- уведомления и загрузка ----
     P + '-notes{flex:0 0 auto;}',
     P + '-note{font-size:' + F.note + 'px;color:' + C.ink2 + ';background:' + C.card + ';border:1px dashed ' + C.line + ';border-radius:9px;padding:10px 14px;margin-top:12px;line-height:1.5;}',
@@ -766,7 +764,7 @@ function buildCSS() {
     // ---- таблица: панель во всю оставшуюся высоту, прокрутка внутри ----
     P + '-main{flex:1 1 auto;min-width:0;min-height:0;display:flex;flex-direction:column;padding:0 16px 16px;}',
     P + '-tpan{flex:1 1 auto;min-height:380px;display:flex;flex-direction:column;background:' + C.card + ';border-radius:12px;box-shadow:' + SH + ';min-width:0;margin-top:12px;}',
-    P + '-ttools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 12px 10px 16px;border-bottom:1px solid ' + C.line + ';}',
+    P + '-ttools{display:flex;align-items:flex-start;gap:8px;padding:12px 12px 10px 16px;border-bottom:1px solid ' + C.line + ';}',
     P + '-tcount{font-size:' + F.body + 'px;color:' + C.ink2 + ';white-space:nowrap;}',
     P + '-tcount b{font-size:' + F.title + 'px;font-weight:600;color:' + C.ink + ';font-variant-numeric:tabular-nums;}',
     P + '-tsub{color:' + C.muted + ';font-size:' + F.note + 'px;white-space:normal;}',
@@ -789,6 +787,8 @@ function buildCSS() {
     P + '-t tbody' + P + '-bk td{border-top:0;}',
     P + '-t tr' + P + '-sub td{border-top:1px dashed ' + C.line2 + ';}',
     P + '-t tr' + P + '-g td{background:' + C.grp + ';color:' + C.ink + ';font-weight:500;cursor:pointer;height:30px;}',
+    // строка группы не обрезается узкой таблицей (одна колонка): подпись идёт дальше вправо
+    P + '-t tr' + P + '-g td{overflow:visible;text-overflow:clip;}',
     P + '-t tbody:hover tr' + P + '-g td{background:#eef1f8;}',
     P + '-gc{display:inline-block;width:14px;color:' + C.muted + ';font-size:10px;}',
     P + '-gl{color:' + C.muted + ';font-weight:400;margin-right:4px;}',
@@ -798,7 +798,7 @@ function buildCSS() {
     P + '-rsz{position:absolute;top:0;right:0;width:8px;height:100%;cursor:col-resize;z-index:5;}',
     P + '-rsz:hover{background:rgba(43,108,255,.25);}',
     P + '-t th' + P + '-dragover{box-shadow:inset 3px 0 0 ' + C.act + ';}',
-    P + '-t th' + P + '-dragsrc{opacity:.45;}',
+    P + '-t th' + P + '-dragsrc,' + P + '-gchip' + P + '-dragsrc{opacity:.45;}',
     P + '-mask{color:' + C.muted2 + ';font-weight:400;}',
     P + '-hl{background:' + C.hl + ';color:' + C.actInk + ';border-radius:3px;padding:0 1px;}',
     P + '-a{color:' + C.act + ';text-decoration:none;font-weight:500;}',
@@ -806,8 +806,59 @@ function buildCSS() {
     P + '-empty{padding:40px 24px;text-align:center;color:' + C.muted + ';font-size:' + F.body + 'px;line-height:1.5;}',
     P + '-empty b{display:block;color:' + C.ink + ';font-size:15px;font-weight:600;margin-bottom:8px;}',
     // ---- страницы ----
-    P + '-pager{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px 8px 16px;border-top:1px solid ' + C.line + ';font-size:' + F.note + 'px;color:' + C.muted + ';}',
+    // ---- вторая строка панели: зона группировки слева, страницы справа ----
+    P + '-tbar{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;padding:8px 12px 8px 16px;border-bottom:1px solid ' + C.line + ';}',
+    P + '-gz{flex:1 1 340px;min-width:0;display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-height:34px;padding:3px 8px;border:1px dashed ' + C.line + ';border-radius:9px;color:' + C.muted + ';font-size:' + F.note + 'px;transition:background .12s,border-color .12s;}',
+    P + '-gz' + P + '-gset{border-style:solid;border-color:' + C.line2 + ';background:' + C.hover + ';}',
+    P + '-gz' + P + '-gzon{border-style:dashed;border-color:' + C.act + ';background:' + C.blueBg + ';}',
+    P + '-gzh{white-space:nowrap;}',
+    P + '-gze{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;}',
+    P + '-gchip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 5px 0 10px;border-radius:999px;background:' + C.blueBg + ';color:' + C.blueTx + ';font-weight:500;cursor:grab;white-space:nowrap;border:1px solid #dbe6fd;}',
+    P + '-gchip' + P + '-dragover{box-shadow:inset 3px 0 0 ' + C.act + ';}',
+    P + '-gsep{color:' + C.muted2 + ';}',
+    P + '-gz ' + P + '-dd{margin-left:auto;}',
+    P + '-gadd{display:inline-flex;align-items:center;height:26px;padding:0 8px;border:0;border-radius:7px;background:transparent;color:' + C.act + ';font-size:' + F.note + 'px;font-weight:500;cursor:pointer;white-space:nowrap;}',
+    P + '-gadd:hover,' + P + '-gadd' + P + '-on{background:' + C.blueBg + ';}',
+    P + '-gall{width:28px;padding:0;color:' + C.muted + ';font-size:11px;}',
+    P + '-pager{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-left:auto;font-size:' + F.note + 'px;color:' + C.muted + ';}',
     P + '-pgi{color:' + C.ink2 + ';font-weight:500;font-variant-numeric:tabular-nums;margin:0 4px;white-space:nowrap;}',
+    // первая строка панели: слева итог и контролы (переносятся), справа — «Копировать» иконкой, всегда на месте
+    P + '-tl{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}',
+    P + '-ib' + P + '-copy{flex:0 0 auto;width:34px;min-width:34px;height:34px;padding:0;border-radius:9px;}',
+    P + '-ib' + P + '-copy' + P + '-ok{color:#11804a;border-color:#bfe6cf;}',
+    P + '-ib' + P + '-copy' + P + '-bad{color:' + C.warnTx + ';border-color:#f3d58f;}',
+
+    // ---- тур «Как работать» (как в HRBP HUB): кнопка в шапке, слой тура ----
+    P + '-help{color:' + C.act + ';}',
+    P + '-help:hover{background:' + C.blueBg + ';border-color:#cfdcfb;}',
+    // Слой тура живёт В BODY, как тултип: шрифт и position:fixed — явно. Затемнение — четыре
+    // шторки вокруг цели (клик мимо цели не проходит), пятая — поверх цели, если она «только смотреть».
+    P + '-tour{font-family:' + CFG.fonts.family + ';display:none;}',
+    P + '-tour *{box-sizing:border-box;font-family:inherit;}',
+    P + '-tb{position:fixed;left:0;top:0;width:0;height:0;z-index:99990;background:rgba(17,24,39,.55);transition:left .2s,top .2s,width .2s,height .2s;}',
+    P + '-tb[data-tb="h"]{background:transparent;cursor:default;}',
+    P + '-tring{position:fixed;z-index:99991;border-radius:10px;box-shadow:0 0 0 2px ' + C.act + ',0 0 0 6px rgba(43,108,255,.22);pointer-events:none;transition:left .2s,top .2s,width .2s,height .2s;}',
+    P + '-tcard{position:fixed;z-index:99992;width:340px;max-width:calc(100vw - 24px);background:' + C.card + ';border-radius:12px;'
+      + 'box-shadow:0 18px 50px rgba(15,23,42,.28),0 2px 8px rgba(15,23,42,.12);padding:12px 16px 14px;color:' + C.ink2 + ';font-size:' + F.body + 'px;line-height:1.5;font-weight:400;}',
+    P + '-tarr{position:absolute;display:none;width:10px;height:10px;background:' + C.card + ';transform:rotate(45deg);}',
+    P + '-tarr' + P + '-ta-bottom{display:block;top:-5px;}',
+    P + '-tarr' + P + '-ta-top{display:block;bottom:-5px;}',
+    P + '-tarr' + P + '-ta-right{display:block;left:-5px;}',
+    P + '-tarr' + P + '-ta-left{display:block;right:-5px;}',
+    P + '-tch{display:flex;align-items:center;gap:8px;margin:0 -6px 4px 0;}',
+    P + '-tcs{font-size:' + F.cap + 'px;text-transform:uppercase;letter-spacing:.4px;color:' + C.muted + ';font-weight:500;}',
+    P + '-tx{margin-left:auto;font-size:12px;}',
+    P + '-tct{font-size:' + F.title + 'px;font-weight:600;color:' + C.ink + ';margin:0 0 4px;}',
+    P + '-tcx b{font-weight:500;color:' + C.ink + ';}',
+    P + '-tul{margin:6px 0 0;padding-left:18px;}',
+    P + '-tul li{margin:0 0 6px;}',
+    P + '-tchint{margin-top:8px;font-size:' + F.note + 'px;color:' + C.act + ';font-weight:500;}',
+    P + '-tcf{display:flex;justify-content:flex-end;gap:8px;margin-top:12px;}',
+    P + '-tcf ' + P + '-btn{height:30px;padding:0 12px;}',
+    P + '-tcf ' + P + '-btn:first-child{margin-right:auto;}',
+    // Показ «нажми — будет»: курсор едет к цели и «нажимает» (кольцо), затем клик по-настоящему.
+    P + '-tcur{position:fixed;z-index:99993;display:none;left:0;top:0;pointer-events:none;transition:left .65s cubic-bezier(.3,.7,.2,1),top .65s cubic-bezier(.3,.7,.2,1);filter:drop-shadow(0 2px 3px rgba(0,0,0,.3));}',
+    P + '-tclk{position:fixed;z-index:99993;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:2px solid ' + C.act + ';pointer-events:none;opacity:0;}',
     '</style>'
   ].join('');
 }
@@ -833,18 +884,26 @@ function ddButton(o) {
       : '<span class="' + P + '-ddc">▾</span>')
     + '</button>';
 }
-// Шапка: имя вкладки, дата данных, приветствие, сколько фильтров применено (фильтры — в строке над списком).
+var CHECK_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+  + '<path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+var HELP_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+  + '<circle cx="12" cy="12" r="9.5"/><path d="M9.3 9.2a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.6-2.7 2.6"/><path d="M12 16.6h.01"/></svg>';
+// Шапка — как в HRBP HUB и Proteus Adoption: имя вкладки слева; справа «Как работать» (тур) и плашки
+// данных: дата данных, период (если на дату), сколько фильтров применено, приветствие.
 function headHTML() {
   var P = CFG.ns, m = MODEL.m, n = filterCount(applied()), s = '<div class="' + P + '-head">';
   s += '<div class="' + P + '-htop"><span class="' + P + '-logo">' + esc(CFG.title[MODE]) + '<small>' + esc(CFG.sub[MODE]) + '</small></span>';
+  s += '<span class="' + P + '-sp"></span>';
+  if (MODEL.ok) {
+    s += '<button type="button" class="' + P + '-btn ' + P + '-help" data-tact="tour" data-tour="help"'
+      + tip({ title: 'Как работать со списком', text: 'Тур по списку: по очереди подсветим элементы и расскажем, что будет по клику.' })
+      + '>' + HELP_SVG + 'Как работать</button>';
+  }
   if (m.data_dt) s += '<span class="' + P + '-badge"' + tip({ title: 'Данные', text: 'Последний день в таблице списка: ' + fmtDay(m.data_dt) + '.' }) + '>Данные на <b>' + esc(fmtDay(m.data_dt)) + '</b></span>';
-  if (m.per === 'date' && m.dt) s += '<span class="' + P + '-badge">Период: <b>на ' + esc(fmtDate(m.dt)) + '</b></span>';
+  if (m.per === 'date' && m.dt) s += '<span class="' + P + '-badge"' + tip({ title: 'Период', text: 'Сотрудники на дату ' + fmtDate(m.dt) + ' — фильтр «Период» в строке фильтров.' }) + '>Период: <b>на ' + esc(fmtDate(m.dt)) + '</b></span>';
   s += '<span class="' + P + '-badge"' + tip({ title: 'Фильтры', text: n ? 'Применено фильтров: ' + n + ' — в строке фильтров над списком.' : 'Фильтров нет — все сотрудники.' }) + '>Фильтров: <b>' + n + '</b></span>';
   if (m.first_nm) s += '<span class="' + P + '-badge">Привет, <b>' + esc(m.first_nm) + '</b></span>';
-  s += '<span class="' + P + '-sp"></span><span class="' + P + '-info"' + tip({ title: 'Как работать',
-    text: 'Фильтры — в строке над списком: выбор копится и уходит одной кнопкой «Применить», список обновится сам. В таблицу приходят первые сотрудники под фильтрами (5 000, можно до 25 000) — страницы, поиск по таблице, сортировка загруженного, группировка и «Копировать» работают без запроса.',
-    note: 'Колонки загружаются по запросу: открытие — только MasterID и дата найма, добавить колонки — один короткий запрос, убрать — сразу.' }) + '>i</span></div>';
-  return s + '</div>';
+  return s + '</div></div>';
 }
 function noticesHTML() {
   var P = CFG.ns, s = '';
@@ -938,11 +997,16 @@ function groupable() {
   }
   return out;
 }
+// Колонку можно сгруппировать: не MasterID, не поле аллокации, ещё не в группировке, уровней меньше предела.
+function canGroup(k) {
+  return !!FIELD_BY[k] && k !== 'master_id' && !isAllocKey(k) && !inArr(state.groupBy, k) && state.groupBy.length < CFG.maxGroup;
+}
+// «+ колонка» в зоне группировки: то же без перетаскивания (список показанных колонок).
 function groupDDHTML() {
-  var P = CFG.ns, n = state.groupBy.length, s = '<div class="' + P + '-dd" data-scope="group">'
-    + ddButton({ key: 'group', label: '', html: 'Группировка' + (n ? ' <span class="' + P + '-cnt">' + n + '</span>' : ''), set: n > 0,
-      tip: { title: 'Группировка', text: n ? 'По: ' + (function () { var l = []; for (var i = 0; i < n; i++) l.push(labelOf(state.groupBy[i])); return l.join(' › '); })() : 'Сгруппировать загруженные строки по колонкам — до ' + CFG.maxGroup + ' уровней, без запроса.' } });
-  if (state.open === 'group') {
+  var P = CFG.ns, n = state.groupBy.length, open = state.open === 'group', s = '<div class="' + P + '-dd" data-scope="group">'
+    + '<button type="button" class="' + P + '-gadd' + (open ? ' ' + P + '-on' : '') + '" data-action="open" data-pop="group" aria-haspopup="true" aria-expanded="' + (open ? 'true' : 'false') + '"'
+    + (open ? '' : tip({ title: 'Группировка', text: 'Выбрать колонки списком — до ' + CFG.maxGroup + ' уровней, без запроса.' })) + '>+ колонка</button>';
+  if (open) {
     var list = groupable();
     s += '<div class="' + P + '-pop ' + P + '-rt" tabindex="-1"><div class="' + P + '-poph"><span>Группировать по</span></div><div class="' + P + '-list">';
     for (var i = 0; i < list.length; i++) {
@@ -952,11 +1016,40 @@ function groupDDHTML() {
         + (at > -1 ? '<span class="' + P + '-optn">' + (at + 1) + '</span>' : '') + '</label>';
     }
     if (!list.length) s += '<div class="' + P + '-nores">Добавьте колонки — по ним можно группировать</div>';
-    s += '</div><div class="' + P + '-popf"><span>Только вид, без запроса</span>'
-      + (n ? '<button class="' + P + '-btn ' + P + '-ghost" data-action="gfold" data-key="1">Свернуть</button><button class="' + P + '-btn ' + P + '-ghost" data-action="gfold" data-key="0">Развернуть</button>' : '')
-      + '</div></div>';
+    s += '</div><div class="' + P + '-popf"><span>Только вид, без запроса. Или перетащите заголовок колонки в зону группировки.</span></div></div>';
   }
   return s + '</div>';
+}
+// Все группы свёрнуты (для общей каретки).
+function allFolded(V) {
+  if (!V || !V.gkeys || !V.gkeys.length) return false;
+  for (var i = 0; i < V.gkeys.length; i++) if (!state.collapsedGroups[V.gkeys[i]]) return false;
+  return true;
+}
+// Зона группировки над таблицей (как в прежнем чарте): перетащите сюда заголовок — строки сгруппируются;
+// плашки — уровни по порядку (тянуть — переставить, обратно на заголовки — снять, × — снять);
+// общая каретка слева сворачивает и разворачивает все группы.
+function gzoneInner(V) {
+  var P = CFG.ns, n = state.groupBy.length, s = '';
+  if (n) {
+    var fold = allFolded(V);
+    s += '<button type="button" class="' + P + '-ib ' + P + '-gall" data-action="gall" aria-label="' + (fold ? 'Развернуть все группы' : 'Свернуть все группы') + '"'
+      + tip({ title: fold ? 'Развернуть все' : 'Свернуть все', text: fold ? 'Раскрыть все группы и строки в них.' : 'Свернуть все группы до заголовков — видно, сколько сотрудников в каждой.' })
+      + '>' + (fold ? '▸' : '▾') + '</button><span class="' + P + '-gzh">Группировка:</span>';
+    for (var i = 0; i < n; i++) {
+      var k = state.groupBy[i];
+      if (i) s += '<span class="' + P + '-gsep">›</span>';
+      s += '<span class="' + P + '-gchip" draggable="true" data-gcol="' + k + '"'
+        + tip({ title: labelOf(k), text: 'Уровень ' + (i + 1) + '. Перетащите — поменять порядок; на заголовки таблицы — снять группировку.' })
+        + '>' + esc(labelOf(k)) + '<span class="' + P + '-x" role="button" tabindex="0" aria-label="Снять группировку" data-action="gdel" data-key="' + k + '">×</span></span>';
+    }
+  } else s += '<span class="' + P + '-gzh ' + P + '-gze"' + tip({ title: 'Группировка', text: 'Перетащите сюда заголовок колонки — строки сгруппируются по её значениям, до ' + CFG.maxGroup + ' уровней. Без запроса.' })
+    + '>Перетащите сюда заголовок колонки, чтобы сгруппировать</span>';
+  return s + (n < CFG.maxGroup ? groupDDHTML() : '');
+}
+function gzoneHTML(V) {
+  var P = CFG.ns;
+  return '<div class="' + P + '-gz' + (state.groupBy.length ? ' ' + P + '-gset' : '') + '" data-gzone="1">' + gzoneInner(V) + '</div>';
 }
 // Ширина колонки: заданная мышью или по типу, но не уже подписи шапки (капитель ~7 px на знак).
 function colW(k) {
@@ -1035,13 +1128,14 @@ function tableInnerHTML(V) {
   }
   return '<table class="' + P + '-t" style="width:' + W + 'px">' + s + '</table>';
 }
+// Страницы — над таблицей, справа во второй строке панели: размер страницы, диапазон, стрелки.
 function pagerHTML(V) {
-  var P = CFG.ns, s = '<span>Строк на странице</span><span class="' + P + '-seg">';
+  var P = CFG.ns, s = '<span class="' + P + '-seg"' + tip({ title: 'Строк на странице', text: 'Только вид: все загруженные строки уже в чарте.' }) + '>';
   for (var i = 0; i < CFG.pageSizes.length; i++) {
     var ps = CFG.pageSizes[i];
     s += '<button class="' + P + '-segb' + (ps === state.pageSize ? ' ' + P + '-on' : '') + '" data-action="ps" data-key="' + ps + '" role="tab" aria-selected="' + (ps === state.pageSize ? 'true' : 'false') + '">' + ps + '</button>';
   }
-  s += '</span><span class="' + P + '-sp"></span>';
+  s += '</span>';
   if (V && ROWS && V.idx.length) {
     var p = pageSlice(V);
     s += '<span class="' + P + '-pgi">' + fmtInt(p.from + 1) + '–' + fmtInt(p.to) + ' из ' + fmtInt(p.total) + '</span>'
@@ -1073,19 +1167,92 @@ function limNoteHTML() {
   return '<div class="' + P + '-tnote" data-tnote="1"><span>' + esc(CFG.text.part.replace('{got}', fmtInt(got)).replace('{total}', fmtInt(t))) + '</span>'
     + '<button class="' + P + '-lnk" data-action="setlim" data-key="' + lim + '">Загрузить всех — ' + fmtInt(t) + '</button></div>';
 }
+// «Копировать» — иконкой, всегда справа в первой строке панели; итог копирования — в подсказке и цветом.
+function copyBtnHTML(V) {
+  var P = CFG.ns, ok = /^Скопировано/.test(state.copied || ''), on = !!(ROWS && V && V.idx.length);
+  return '<button type="button" class="' + P + '-ib ' + P + '-copy' + (state.copied ? ' ' + P + (ok ? '-ok' : '-bad') : '') + '" data-action="copy" aria-label="Копировать"'
+    + (on ? '' : ' disabled') + tip({ title: state.copied || 'Копировать',
+      text: 'Все загруженные строки (с учётом поиска по таблице), в текущем порядке строк и колонок — для вставки в Excel.' })
+    + '>' + (ok ? CHECK_SVG : COPY_SVG) + '</button>';
+}
 function tableHTML() {
   var P = CFG.ns, V = viewRows(), s = '<div class="' + P + '-tpan">';
-  s += '<div class="' + P + '-ttools"><span class="' + P + '-tcount" data-tcount="1">' + countHTML(V) + '</span>' + limDDHTML()
+  s += '<div class="' + P + '-ttools"><div class="' + P + '-tl"><span class="' + P + '-tcount" data-tcount="1">' + countHTML(V) + '</span>' + limDDHTML()
     + '<span class="' + P + '-sp"></span>'
     + '<label class="' + P + '-tsw">' + SEARCH_SVG + '<input class="' + P + '-srch" type="text" autocomplete="off" data-tsearch="1" placeholder="Поиск по таблице" value="' + esc(state.search) + '"></label>'
-    + colsDDHTML() + groupDDHTML()
-    + '<button class="' + P + '-btn' + (state.copied ? ' ' + P + '-ok' : '') + '" data-action="copy"' + (ROWS && V && V.idx.length ? '' : ' disabled')
-    + tip({ title: 'Копировать', text: 'Все загруженные строки (с учётом поиска по таблице), в текущем порядке строк и колонок — для вставки в Excel.' })
-    + '>' + COPY_SVG + '<span data-copytx="1">' + esc(state.copied || 'Копировать') + '</span></button></div>';
+    + colsDDHTML() + '</div>' + copyBtnHTML(V) + '</div>';
+  s += '<div class="' + P + '-tbar">' + gzoneHTML(V) + '<div class="' + P + '-pager" data-pager="1">' + pagerHTML(V) + '</div></div>';
   s += limNoteHTML();
-  s += '<div class="' + P + '-tbox" data-tbox="1">' + tableInnerHTML(V) + '</div>';
-  s += '<div class="' + P + '-pager" data-pager="1">' + pagerHTML(V) + '</div></div>';
+  s += '<div class="' + P + '-tbox" data-tbox="1">' + tableInnerHTML(V) + '</div></div>';
   return s;
+}
+
+// ---- тур «Как работать» (движок — как в HRBP HUB, БЛОК 6) ----
+// Шаг: sel — селектор внутри overlay (или функция), all — подсветить все совпадения, pad — поле рамки,
+// lock — подсвеченное не кликается (там запрос), demo — «нажми — будет»: «Показать» кликает цель сам,
+// done(key) — что считается сделанным, hint — «попробуйте сами»; need — показывать ли шаг (только то, что сам тур не меняет, иначе список шагов съедет).
+// Цель не нашлась (нет строк) — шаг пропускается. Строка фильтров — соседний чарт (свой iframe):
+// подсветить её отсюда нельзя, о ней — первый шаг.
+function tourIntroHTML() {
+  var ap = applied();
+  return '<ul class="' + CFG.ns + '-tul">'
+    + '<li><b>Фильтры</b> — в строке над списком: выбор копится и уходит одной кнопкой «Применить», список обновится сам.</li>'
+    + '<li>В таблицу приходят первые <b>' + esc(fmtInt(ap.lim)) + '</b> сотрудников под фильтрами (можно до ' + esc(fmtInt(CFG.limits[CFG.limits.length - 1])) + ').</li>'
+    + '<li>Страницы, поиск, сортировка загруженного, группировка и «Копировать» — без запроса. Новые колонки — один короткий запрос.</li>'
+    + '<li>Наведите на кнопку или обрезанную ячейку — подсказка покажет, что это, или полный текст.</li></ul>';
+}
+function tourSteps() {
+  var P = '.' + CFG.ns, out = [], V = viewRows(), pgs = V && V.idx.length ? pageSlice(V) : null;
+  function add(o) { if (o.need === undefined || o.need) out.push(o); }
+  add({ intro: true, title: CFG.title[MODE] + ' за минуту', html: tourIntroHTML() });
+  add({ sel: '[data-tcount]', title: 'Сколько сотрудников',
+    html: 'Всего под фильтрами строки фильтров. Если загружены не все — рядом сказано, сколько в таблице и в каком порядке они отобраны.' });
+  add({ sel: '[data-tnote]', title: 'Загружены не все',
+    html: 'До ' + fmtInt(CFG.limits[CFG.limits.length - 1]) + ' под фильтрами — «Загрузить всех» догрузит одним запросом. Больше — сузьте фильтры.' });
+  add({ sel: '[data-scope="lim"]', lock: true, title: 'Загружать',
+    html: 'Сколько первых сотрудников под фильтрами везти в таблицу: 5 000, 10 000 или 25 000. Больше строк — дольше загрузка.' });
+  add({ sel: P + '-tsw', title: 'Поиск по таблице',
+    html: 'Ищет по всем показанным колонкам загруженных строк и подсвечивает совпадения — сразу, без запроса.' });
+  add({ sel: '[data-scope="cols"]', lock: true, title: 'Колонки',
+    html: 'Группы колонок с поиском и готовые наборы. Добавить колонки — один короткий запрос, убрать — сразу.' });
+  add({ sel: '[data-action="copy"]', pad: 4, lock: true, title: 'Копировать',
+    html: 'Все загруженные строки (с учётом поиска) в текущем порядке строк и колонок — для вставки в Excel. Скопировалось — иконка станет галочкой.' });
+  add({ sel: '[data-gzone]', title: 'Группировка',
+    html: 'Перетащите сюда заголовок колонки — строки сгруппируются по её значениям, до ' + CFG.maxGroup + ' уровней. Плашки уровней можно переставлять, × или перенос обратно на заголовки снимает группировку. «+ колонка» — то же списком.' });
+  add({ sel: '[data-action="gall"]', need: state.groupBy.length > 0, pad: 3, demo: true,
+    done: function () { return !!state.tour && state.tour.fold0 !== allFolded(viewRows()); }, title: 'Свернуть и развернуть все',
+    html: 'Общая каретка сворачивает все группы до заголовков с числом сотрудников — и разворачивает обратно. У каждой группы — своя каретка.',
+    hint: 'Нажмите на каретку или «Показать».' });
+  add({ sel: '[data-pager]', title: 'Страницы',
+    html: 'Сколько строк на странице и листание. Все загруженные строки уже в чарте — листание мгновенное.' });
+  add({ sel: '[data-action="pg"][data-key="next"]:not([disabled])', need: !!pgs && pgs.pages > 1, pad: 3, demo: true,
+    done: function () { return !!state.tour && (state.page || 0) !== state.tour.page0; }, title: 'Следующая страница',
+    html: 'Нажмите › — таблица покажет следующие строки.', hint: 'Нажмите на подсвеченную стрелку или «Показать».' });
+  add({ sel: P + '-t thead th', all: true, pad: 2, lock: true, title: 'Заголовки колонок',
+    html: '<b>Клик</b> — сортировка (все сотрудники загружены — в памяти, иначе первые под фильтрами в новом порядке). <b>Перетащить</b> — переставить колонку или сгруппировать по ней. <b>Край</b> — ширина, двойной клик — как было.' });
+  add({ sel: '[data-tour="help"]', pad: 4, last: true, title: 'Тур всегда под рукой',
+    html: 'Кнопка «Как работать» покажет этот тур ещё раз.' });
+  return out;
+}
+// Карточка шага: чарт и номер, заголовок, текст, подсказка «попробуйте сами», кнопки.
+function tourCardHTML(list, i, step, done) {
+  var P = CFG.ns;
+  var b = i > 0 ? '<button type="button" class="' + P + '-btn ' + P + '-ghost" data-tact="back">Назад</button>'
+    : '<button type="button" class="' + P + '-btn ' + P + '-ghost" data-tact="close">Закрыть</button>';
+  if (step.demo && !done) b += '<button type="button" class="' + P + '-btn ' + P + '-ghost" data-tact="next">Далее</button>'
+    + '<button type="button" class="' + P + '-btn ' + P + '-pri" data-tact="demo">Показать</button>';
+  else if (step.last) b += '<button type="button" class="' + P + '-btn ' + P + '-pri" data-tact="close">Готово</button>';
+  else b += '<button type="button" class="' + P + '-btn ' + P + '-pri" data-tact="next">' + (step.intro ? 'Начать' : 'Далее') + '</button>';
+  return '<span class="' + P + '-tarr"></span>'
+    + '<div class="' + P + '-tch"><span class="' + P + '-tcs">' + esc(CFG.title[MODE]) + ' · ' + (i + 1) + ' из ' + list.length + '</span>'
+    + '<button type="button" class="' + P + '-ib ' + P + '-tx" data-tact="close" aria-label="Закрыть тур">✕</button></div>'
+    + '<div class="' + P + '-tct">' + esc(step.title) + '</div><div class="' + P + '-tcx">' + step.html + '</div>'
+    + (step.demo && !done && step.hint ? '<div class="' + P + '-tchint">' + esc(step.hint) + '</div>' : '')
+    + '<div class="' + P + '-tcf">' + b + '</div>';
+}
+function canAnim() {
+  if (typeof Element === 'undefined' || !Element.prototype.animate) return false;
+  return !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 }
 
 // Только конкатенация строк. Все данные через esc().
@@ -1194,6 +1361,232 @@ function buildHTML() {
       showTip(state.tip.key || '', state.tip.rect);
     }
 
+    // ── ТУР «КАК РАБОТАТЬ» (как в HRBP HUB) ──
+    // Слой тура — в body, как тултип (render() его не стирает): четыре шторки вокруг цели
+    // затемняют всё, кроме неё, и не пропускают клики мимо; пятая ложится на цель, если та
+    // «только смотреть» (lock); рамка вокруг цели; карточка со стрелкой; курсор для показа.
+    // Шаги — tourSteps() в БЛОКЕ 5; состояние — state.tour, переживает перезапуск скрипта.
+    var tourNode = null;
+    var CURSOR_SVG = '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 2.5v16.2l4.3-4.1 2.9 6.6 2.6-1.1-2.9-6.5h6z" fill="#1f2530" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>';
+    function tourLayer() {
+      if (tourNode && tourNode.parentNode) return tourNode;
+      var old = document.querySelector('body > .' + CFG.ns + '-tour');
+      if (old) old.parentNode.removeChild(old);
+      var P = CFG.ns, sides = ['t', 'b', 'l', 'r', 'h'], h = '';
+      for (var i = 0; i < sides.length; i++) h += '<div class="' + P + '-tb" data-tb="' + sides[i] + '"></div>';
+      h += '<div class="' + P + '-trings"></div><div class="' + P + '-tcard" role="dialog" aria-modal="true" aria-label="Как работать со списком"></div>'
+        + '<span class="' + P + '-tclk"></span><span class="' + P + '-tcur">' + CURSOR_SVG + '</span>';
+      tourNode = document.createElement('div');
+      tourNode.className = P + '-tour';
+      tourNode.innerHTML = h;
+      document.body.appendChild(tourNode);
+      // Слушатели — на новый узел, один раз: узел пересоздаётся только вместе с запуском скрипта.
+      tourNode.addEventListener('click', function (e) {
+        var n = e.target;
+        while (n && n !== tourNode && !(n.getAttribute && n.getAttribute('data-tact'))) n = n.parentNode;
+        if (n && n !== tourNode) tourAct(n.getAttribute('data-tact'));
+      });
+      // Колесо над затемнением листает таблицу (или сам чарт): подсветка едет вместе с целью.
+      tourNode.addEventListener('wheel', function (e) {
+        var tb = overlay.querySelector('[data-tbox]');
+        if (tb && tb.scrollHeight > tb.clientHeight) tb.scrollTop += e.deltaY; else overlay.scrollTop += e.deltaY;
+        tourPos();
+      });
+      return tourNode;
+    }
+    function tourQ(cls) { return tourNode ? tourNode.querySelector('.' + CFG.ns + '-' + cls) : null; }
+    function tourEls(step) {
+      if (!step || !step.sel) return [];
+      var raw = typeof step.sel === 'function' ? step.sel(overlay) : overlay.querySelectorAll(step.sel), out = [];
+      if (!raw) return out;
+      if (raw.nodeType === 1) raw = [raw];
+      for (var i = 0; i < raw.length; i++) {
+        var el = raw[i], r = el && el.getBoundingClientRect ? el.getBoundingClientRect() : null;
+        if (r && r.width > 0 && r.height > 0) { out.push(el); if (!step.all) break; }
+      }
+      return out;
+    }
+    function tourRect(els) {
+      var l = Infinity, t = Infinity, r = -Infinity, b = -Infinity;
+      for (var i = 0; i < els.length; i++) {
+        var q = els[i].getBoundingClientRect();
+        l = Math.min(l, q.left); t = Math.min(t, q.top); r = Math.max(r, q.right); b = Math.max(b, q.bottom);
+      }
+      return { left: l, top: t, right: r, bottom: b, width: r - l, height: b - t };
+    }
+    // Цель вне видимой части — прокручиваем overlay: цель — по центру, высокая — верхом под край.
+    function tourScroll(els) {
+      if (!els.length) return;
+      var u = tourRect(els), o = overlay.getBoundingClientRect(), top = Math.max(o.top, 0);
+      var vh = Math.min(o.bottom, window.innerHeight) - top;
+      if (u.top >= top + 8 && u.bottom <= top + vh - 8) return;
+      overlay.scrollTop += (u.top - top) - (u.height > vh - 160 ? 72 : (vh - u.height) / 2);
+    }
+    function tourBox(el, l, t, w, h) {
+      el.style.left = Math.round(l) + 'px'; el.style.top = Math.round(t) + 'px';
+      el.style.width = Math.max(0, Math.round(w)) + 'px'; el.style.height = Math.max(0, Math.round(h)) + 'px';
+    }
+    // Карточка — со стороны, где помещается (снизу, сверху, справа, слева); цель во весь экран —
+    // карточка в нижнем углу поверх неё. Стрелка смотрит в центр цели.
+    function tourPlace(r) {
+      var card = tourQ('tcard'), arr = card ? card.querySelector('.' + CFG.ns + '-tarr') : null;
+      if (!card || !arr) return;
+      var W = window.innerWidth, H = window.innerHeight, m = 12, g = 14, side = '', left, top;
+      var cw = card.offsetWidth, ch = card.offsetHeight;
+      if (!r) { left = (W - cw) / 2; top = Math.max(m, Math.min(96, (H - ch) / 2)); }
+      else {
+        var cx = (r.l + r.r) / 2, cy = (r.t + r.b) / 2;
+        var fits = { bottom: r.b + g + ch <= H - m, top: r.t - g - ch >= m, right: r.r + g + cw <= W - m, left: r.l - g - cw >= m };
+        var order = ['bottom', 'top', 'right', 'left'];
+        for (var i = 0; i < order.length && !side; i++) if (fits[order[i]]) side = order[i];
+        if (side === 'bottom') { top = r.b + g; left = cx - cw / 2; }
+        else if (side === 'top') { top = r.t - g - ch; left = cx - cw / 2; }
+        else if (side === 'right') { left = r.r + g; top = cy - ch / 2; }
+        else if (side === 'left') { left = r.l - g - cw; top = cy - ch / 2; }
+        else { left = W - cw - m; top = H - ch - m; }
+      }
+      left = Math.max(m, Math.min(left, W - cw - m));
+      top = Math.max(m, Math.min(top, H - ch - m));
+      card.style.left = Math.round(left) + 'px';
+      card.style.top = Math.round(top) + 'px';
+      arr.className = CFG.ns + '-tarr' + (side ? ' ' + CFG.ns + '-ta-' + side : '');
+      if (side === 'bottom' || side === 'top') { arr.style.left = Math.round(Math.max(14, Math.min(cw - 24, (r.l + r.r) / 2 - left - 5))) + 'px'; arr.style.top = ''; }
+      else if (side) { arr.style.top = Math.round(Math.max(14, Math.min(ch - 24, (r.t + r.b) / 2 - top - 5))) + 'px'; arr.style.left = ''; }
+    }
+    // Только габариты: шторки, рамка, карточка — по текущему месту цели (прокрутка, ресайз, перерисовка).
+    function tourPos() {
+      var t = state.tour;
+      if (!t || !tourNode || tourNode.style.display !== 'block') return;
+      var step = tourSteps()[t.i];
+      if (!step) return;
+      var els = tourEls(step), W = window.innerWidth, H = window.innerHeight, r = null;
+      if (els.length) {
+        var u = tourRect(els), pd = step.pad === undefined ? 6 : step.pad;
+        r = { l: Math.max(0, u.left - pd), t: Math.max(0, u.top - pd), r: Math.min(W, u.right + pd), b: Math.min(H, u.bottom + pd) };
+        if (r.r - r.l < 4 || r.b - r.t < 4) r = null;
+      }
+      var Q = function (k) { return tourNode.querySelector('[data-tb="' + k + '"]'); }, rs = [];
+      if (r) {
+        tourBox(Q('t'), 0, 0, W, r.t);
+        tourBox(Q('b'), 0, r.b, W, H - r.b);
+        tourBox(Q('l'), 0, r.t, r.l, r.b - r.t);
+        tourBox(Q('r'), r.r, r.t, W - r.r, r.b - r.t);
+        tourBox(Q('h'), r.l, r.t, step.lock ? r.r - r.l : 0, step.lock ? r.b - r.t : 0);
+        rs.push([r.l, r.t, r.r - r.l, r.b - r.t]);
+      } else {
+        tourBox(Q('t'), 0, 0, W, H);
+        tourBox(Q('b'), 0, 0, 0, 0); tourBox(Q('l'), 0, 0, 0, 0); tourBox(Q('r'), 0, 0, 0, 0); tourBox(Q('h'), 0, 0, 0, 0);
+      }
+      var pool = tourQ('trings');
+      while (pool.children.length < rs.length) { var nr = document.createElement('div'); nr.className = CFG.ns + '-tring'; pool.appendChild(nr); }
+      for (var k = 0; k < pool.children.length; k++) {
+        var rg = pool.children[k];
+        rg.style.display = k < rs.length ? 'block' : 'none';
+        if (k < rs.length) tourBox(rg, rs[k][0], rs[k][1], rs[k][2], rs[k][3]);
+      }
+      tourPlace(r);
+    }
+    function tourShow() {
+      var t = state.tour, list = tourSteps(), step = list[t.i];
+      if (!step) { tourEnd(); return; }
+      var els = tourEls(step);
+      // Цели нет (нет строк, одна страница, нет группировки) — шаг пропускаем в ту же сторону.
+      if (step.sel && !els.length) { tourGo(t.i + (t.dir || 1), t.dir || 1); return; }
+      t.shown = t.i;
+      t.key = step.demo ? (els[0].getAttribute('data-key') || '') : '';
+      t.fold0 = allFolded(viewRows());
+      t.page0 = state.page || 0;
+      t.was = step.demo ? !!step.done(t.key) : false;
+      t.busy = false;
+      state.tip = null;
+      hideTip();
+      var L = tourLayer();
+      L.style.display = 'block';
+      tourQ('tcur').style.display = 'none';
+      tourScroll(els);
+      tourQ('tcard').innerHTML = tourCardHTML(list, t.i, step, t.was);
+      tourPos();
+      var pb = L.querySelector('.' + CFG.ns + '-tcf .' + CFG.ns + '-pri');
+      if (pb && pb.focus) pb.focus();
+    }
+    function tourGo(i, dir) {
+      var t = state.tour;
+      if (!t) return;
+      if (i >= tourSteps().length) { tourEnd(); return; }
+      if (i < 0) { i = 0; dir = 1; }
+      t.i = i; t.dir = dir; t.shown = -1;
+      tourShow();
+    }
+    function tourStart() {
+      state.open = ''; state.q = ''; state.colDraft = null; state.tip = null;
+      hideTip();
+      state.tour = { i: 0, dir: 1, shown: -1, key: '', was: false, busy: false, fold0: false };
+      overlay.scrollTop = 0;
+      render();
+    }
+    function tourEnd() {
+      state.tour = null;
+      if (tourNode) tourNode.style.display = 'none';
+    }
+    // После каждой перерисовки: шаг «нажми — будет» сделан (пользователем или показом) — следующий
+    // шаг; иначе подсветка — по новому месту цели. Доступа нет — тур окончен.
+    function tourSync() {
+      var t = state.tour;
+      if (!t) {
+        if (tourNode) tourNode.style.display = 'none';
+        else { var old = document.querySelector('body > .' + CFG.ns + '-tour'); if (old) old.parentNode.removeChild(old); }
+        return;
+      }
+      if (MODEL.err || !MODEL.ok) { tourEnd(); return; }
+      if (!tourNode || !tourNode.parentNode || t.shown !== t.i) { tourShow(); return; }
+      var step = tourSteps()[t.i];
+      if (step && step.demo && !t.was && !t.busy && step.done(t.key)) { tourGo(t.i + 1, 1); return; }
+      tourPos();
+    }
+    // Показ «нажми — будет»: курсор едет от кнопки к цели, «нажимает» — и клик идёт по-настоящему,
+    // тем же обработчиком, что и клик мышью. Без анимации (prefers-reduced-motion) — сразу клик.
+    function tourDemo() {
+      var t = state.tour;
+      if (!t || t.busy) return;
+      var step = tourSteps()[t.i], els = tourEls(step);
+      if (!els.length) return;
+      var r = els[0].getBoundingClientRect(), cur = tourQ('tcur'), clk = tourQ('tclk');
+      var x = r.left + r.width / 2, y = r.top + r.height / 2;
+      var fire = function () {
+        if (state.tour !== t) { cur.style.display = 'none'; return; }
+        t.busy = false;
+        var now = tourEls(step);
+        if (now.length && !step.done(t.key)) onClick({ target: now[0] });
+        else tourSync();
+      };
+      if (!canAnim()) { fire(); return; }
+      t.busy = true;
+      var btn = tourNode.querySelector('[data-tact="demo"]'), br = btn ? btn.getBoundingClientRect() : { left: x, top: y + 90, width: 0, height: 0 };
+      cur.style.transition = 'none';
+      cur.style.left = Math.round(br.left + br.width / 2) + 'px';
+      cur.style.top = Math.round(br.top + br.height / 2) + 'px';
+      cur.style.display = 'block';
+      cur.getBoundingClientRect();
+      cur.style.transition = '';
+      cur.style.left = Math.round(x - 5) + 'px';
+      cur.style.top = Math.round(y - 2.5) + 'px';
+      setTimeout(function () {
+        clk.style.left = Math.round(x) + 'px';
+        clk.style.top = Math.round(y) + 'px';
+        clk.animate([{ opacity: 0.9, transform: 'scale(.35)' }, { opacity: 0, transform: 'scale(1.5)' }], { duration: 450, easing: 'ease-out' });
+        cur.animate([{ transform: 'scale(1)' }, { transform: 'scale(.82)' }, { transform: 'scale(1)' }], { duration: 240 });
+        setTimeout(function () { fire(); setTimeout(function () { cur.style.display = 'none'; }, 420); }, 200);
+      }, 700);
+    }
+    function tourAct(a) {
+      if (a === 'tour') { tourStart(); return; }
+      if (!state.tour) return;
+      if (a === 'next') tourGo(state.tour.i + 1, 1);
+      else if (a === 'back') tourGo(state.tour.i - 1, -1);
+      else if (a === 'demo') tourDemo();
+      else if (a === 'close') tourEnd();
+    }
+
     // render ТОЛЬКО пересобирает разметку. Делегированные обработчики
     // навешиваются ОДИН РАЗ СНАРУЖИ render(): overlay не пересоздаётся.
     // Любой addEventListener внутри render() ЗАПРЕЩЁН — он создаёт дубли.
@@ -1231,6 +1624,7 @@ function buildHTML() {
         if (pop) { try { pop.focus({ preventScroll: true }); } catch (er) { pop.focus(); } }
       }
       renderTip();
+      tourSync();
     }
     // Только таблица, страницы и итог — поле поиска по таблице не пересоздаётся (фокус остаётся).
     function refreshTable() {
@@ -1242,6 +1636,12 @@ function buildHTML() {
       if (pg) pg.innerHTML = pagerHTML(V);
       var tc = overlay.querySelector('[data-tcount]');
       if (tc) tc.innerHTML = countHTML(V);
+      // Зона группировки (общая каретка) и «Копировать» (нечего копировать — выключена); открытый поповер не трогаем.
+      var gz = overlay.querySelector('[data-gzone]');
+      if (gz && !state.open) gz.innerHTML = gzoneInner(V);
+      var cb = overlay.querySelector('[data-action="copy"]');
+      if (cb) cb.outerHTML = copyBtnHTML(V);
+      tourSync();
     }
     // Список открытого поповера «Колонки» — без поля поиска над ним (каретка живёт, RETRO 68).
     function refreshList() {
@@ -1371,15 +1771,18 @@ function buildHTML() {
           lines.push(line.join('\t'));
         }
       }
-      var text = lines.join('\n'), done = function (ok) {
-        state.copied = ok ? 'Скопировано: ' + fmtInt(nb) : 'Не скопировалось';
-        var tx = overlay.querySelector('[data-copytx]');
-        if (tx) { tx.textContent = state.copied; tx.parentNode.className = CFG.ns + '-btn' + (ok ? ' ' + CFG.ns + '-ok' : ''); }
-        setTimeout(function () {
-          state.copied = '';
-          var t2 = overlay.querySelector('[data-copytx]');
-          if (t2) { t2.textContent = 'Копировать'; t2.parentNode.className = CFG.ns + '-btn'; }
-        }, 2200);
+      // Итог — иконкой (галочка) и в подсказке кнопки; кнопка не меняет ширину и место.
+      var text = lines.join('\n'), swap = function () {
+        var b = overlay.querySelector('[data-action="copy"]');
+        if (!b) return;
+        b.outerHTML = copyBtnHTML(viewRows());
+        var nb2 = overlay.querySelector('[data-action="copy"]');
+        if (state.tip && state.tip.kind !== 'cell' && nb2) { state.tip.key = nb2.getAttribute('data-tip') || ''; renderTip(); }
+      }, done = function (ok) {
+        state.copied = ok ? 'Скопировано: ' + fmtInt(nb) + ' ' + plural(nb, 'сотрудник', 'сотрудника', 'сотрудников') : 'Не скопировалось';
+        swap();
+        if (state.copyT) clearTimeout(state.copyT);
+        state.copyT = setTimeout(function () { state.copyT = null; state.copied = ''; swap(); }, 2200);
       };
       var fallback = function () {
         var ta = document.createElement('textarea'), ok = false;
@@ -1404,8 +1807,36 @@ function buildHTML() {
       return out;
     }
 
+    // Группировка — только вид: снять колонку (to — поставить её перед этой колонкой таблицы) или добавить.
+    function ungroup(k, to) {
+      var gl = state.groupBy.slice(), gi = gl.indexOf(k);
+      if (gi < 0) return;
+      gl.splice(gi, 1);
+      state.groupBy = gl;
+      if (to && to !== k && !inArr(LOCKED, to)) {
+        var o = colOrder(), fi = o.indexOf(k);
+        if (fi > -1) o.splice(fi, 1);
+        o.splice(Math.max(0, o.indexOf(to)), 0, k);
+        state.columnOrder = o;
+      }
+      state.collapsedGroups = {};
+      state.page = 0;
+      render();
+    }
+    function groupAdd(k, before) {
+      if (!canGroup(k)) return;
+      var gl = state.groupBy.slice(), at = before ? gl.indexOf(before) : -1;
+      if (at > -1) gl.splice(at, 0, k); else gl.push(k);
+      state.groupBy = gl;
+      state.collapsedGroups = {};
+      state.page = 0;
+      render();
+    }
     function onClick(e) {
       if (state.noClick && Date.now() - state.noClick < 250) return;
+      // Тур «Как работать»: кнопка в шапке.
+      var ta = trigger(e.target, 'data-tact');
+      if (ta) { tourAct(ta.getAttribute('data-tact')); return; }
       // Клик мимо открытого поповера закрывает его; data-scope — на обёртке
       // открывателя вместе с поповером: клик по списку/поиску — «внутри».
       var sc = trigger(e.target, 'data-scope');
@@ -1481,16 +1912,19 @@ function buildHTML() {
         return;
       }
       if (act === 'grp') { state.collapsedGroups[key] = !state.collapsedGroups[key]; refreshTable(); return; }
-      if (act === 'gfold') {
+      // Общая каретка: все свёрнуты — развернуть все, иначе свернуть все уровни.
+      if (act === 'gall') {
+        var Vg = viewRows(), fold = allFolded(Vg);
         state.collapsedGroups = {};
-        if (key === '1') {
-          var V = viewRows();
-          for (var g = 0; V && V.items && g < V.items.length; g++) if (V.items[g].g && V.items[g].g.lvl === 0) state.collapsedGroups[V.items[g].g.key] = true;
-        }
+        if (!fold) for (var g = 0; Vg && g < Vg.gkeys.length; g++) state.collapsedGroups[Vg.gkeys[g]] = true;
         state.page = 0;
-        render();
+        refreshTable();
+        // Подсказка каретки — уже про обратное действие.
+        var gb = overlay.querySelector('[data-action="gall"]');
+        if (state.tip && gb) { state.tip.key = gb.getAttribute('data-tip') || ''; renderTip(); }
         return;
       }
+      if (act === 'gdel') { ungroup(key, ''); return; }
       if (act === 'ps') { state.pageSize = +key || 100; state.page = 0; refreshTable(); return; }
       if (act === 'pg') {
         var Vp = viewRows(), pgs = Vp ? pageSlice(Vp) : null;
@@ -1582,44 +2016,83 @@ function buildHTML() {
       }
     }
 
-    // ── КОЛОНКИ: перетащить заголовок — порядок, край заголовка — ширина ──
+    // ── КОЛОНКИ: перетащить заголовок — порядок или группировка, край заголовка — ширина ──
+    // Заголовок → на заголовок: порядок колонок; → в зону группировки: сгруппировать.
+    // Плашка группировки → на плашку: порядок уровней; → на заголовки: снять группировку.
     function onDragStart(e) {
       if (state.resizing) { e.preventDefault(); return; }
-      var th = trigger(e.target, 'data-col');
-      if (!th) return;
-      var k = th.getAttribute('data-col');
-      if (inArr(LOCKED, k)) { e.preventDefault(); return; }
+      var th = trigger(e.target, 'data-col'), ch = th ? null : trigger(e.target, 'data-gcol');
+      var k = th ? th.getAttribute('data-col') : (ch ? ch.getAttribute('data-gcol') : '');
+      if (!k) return;
+      if (th && inArr(LOCKED, k) && !canGroup(k)) { e.preventDefault(); return; }
       state.drag = k;
-      th.classList.add(CFG.ns + '-dragsrc');
+      state.dragFrom = th ? 'th' : 'gz';
+      (th || ch).classList.add(CFG.ns + '-dragsrc');
       if (e.dataTransfer) { e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', k); } catch (er) { /* IE */ } }
       dropTip();
     }
-    function markOver(th) {
+    function markOver(el, zone) {
       var old = overlay.querySelectorAll('.' + CFG.ns + '-dragover');
-      for (var i = 0; i < old.length; i++) if (old[i] !== th) old[i].classList.remove(CFG.ns + '-dragover');
-      if (th) th.classList.add(CFG.ns + '-dragover');
+      for (var i = 0; i < old.length; i++) if (old[i] !== el) old[i].classList.remove(CFG.ns + '-dragover');
+      if (el) el.classList.add(CFG.ns + '-dragover');
+      var gz = overlay.querySelector('[data-gzone]');
+      if (gz) gz.classList[zone ? 'add' : 'remove'](CFG.ns + '-gzon');
+    }
+    // Куда можно бросить: {zone, el, to} или null.
+    function dropAt(target) {
+      var k = state.drag, from = state.dragFrom;
+      if (!k) return null;
+      if (trigger(target, 'data-gzone')) {
+        var ch = trigger(target, 'data-gcol'), to = ch ? ch.getAttribute('data-gcol') : '';
+        if (from === 'gz') return { zone: true, el: ch && to !== k ? ch : null, to: to };
+        return canGroup(k) ? { zone: true, el: ch, to: to } : null;
+      }
+      var th = trigger(target, 'data-col'), tk = th ? th.getAttribute('data-col') : '';
+      if (!th) return null;
+      if (from === 'gz') return { el: th, to: tk };
+      if (inArr(LOCKED, k) || inArr(LOCKED, tk)) return null;
+      return { el: th, to: tk };
     }
     function onDragOver(e) {
-      if (!state.drag) return;
-      var th = trigger(e.target, 'data-col');
-      if (!th || inArr(LOCKED, th.getAttribute('data-col'))) { markOver(null); return; }
+      var d = dropAt(e.target);
+      if (!d) { markOver(null, false); return; }
       e.preventDefault();
-      markOver(th);
+      markOver(d.el, d.zone);
     }
     function onDrop(e) {
       if (!state.drag) return;
       e.preventDefault();
-      var th = trigger(e.target, 'data-col'), to = th ? th.getAttribute('data-col') : '', from = state.drag;
-      state.drag = '';
-      if (!to || to === from || inArr(LOCKED, to)) { refreshTable(); return; }
+      var d = dropAt(e.target), from = state.drag, src = state.dragFrom;
+      state.drag = ''; state.dragFrom = '';
+      markOver(null, false);
+      state.noClick = Date.now();
+      if (!d) { refreshTable(); return; }
+      if (d.zone && src === 'gz') {
+        if (!d.to || d.to === from) return;
+        var gl = state.groupBy.slice();
+        gl.splice(gl.indexOf(from), 1);
+        gl.splice(gl.indexOf(d.to), 0, from);
+        state.groupBy = gl;
+        state.collapsedGroups = {};
+        state.page = 0;
+        render();
+        return;
+      }
+      if (d.zone) { groupAdd(from, d.to); return; }
+      if (src === 'gz') { ungroup(from, d.to); return; }
+      if (!d.to || d.to === from) { refreshTable(); return; }
       var o = colOrder(), fi = o.indexOf(from);
       if (fi > -1) o.splice(fi, 1);
-      o.splice(o.indexOf(to), 0, from);
+      o.splice(o.indexOf(d.to), 0, from);
       state.columnOrder = o;
-      state.noClick = Date.now();
       refreshTable();
     }
-    function onDragEnd() { state.drag = ''; markOver(null); var s = overlay.querySelector('.' + CFG.ns + '-dragsrc'); if (s) s.classList.remove(CFG.ns + '-dragsrc'); }
+    function onDragEnd() {
+      state.drag = ''; state.dragFrom = '';
+      markOver(null, false);
+      var s = overlay.querySelector('.' + CFG.ns + '-dragsrc');
+      if (s) s.classList.remove(CFG.ns + '-dragsrc');
+    }
     function onDown(e) {
       var t = e.target, key = t && t.getAttribute ? t.getAttribute('data-rsz') : null;
       if (!key) return;
@@ -1666,15 +2139,14 @@ function buildHTML() {
     overlay.addEventListener('drop', onDrop);
     overlay.addEventListener('dragend', onDragEnd);
     // Полка прокрутилась — поповер её фильтра едет следом (scroll не всплывает: перехват).
-    overlay.addEventListener('scroll', function (e) {
-      if (state.open && e.target && e.target.getAttribute && e.target.getAttribute('data-shelfl') !== null) placePop();
-    }, true);
+    // Прокрутка чарта или таблицы во время тура — подсветка едет за целью (scroll не всплывает: перехват).
+    overlay.addEventListener('scroll', function () { if (state.tour) tourPos(); }, true);
 
     // Глобальные слушатели переживают перезапуск скрипта и накапливаются.
     // Старый снимаем ЯВНО, ссылку держим в state. Escape вешай здесь же,
     // тем же способом, и никогда не внутри render().
     if (state.onWinResize) window.removeEventListener('resize', state.onWinResize);
-    state.onWinResize = function () { if (state.tip) renderTip(); };
+    state.onWinResize = function () { if (state.tip) renderTip(); if (state.tour) tourPos(); };
     window.addEventListener('resize', state.onWinResize);
     // Клик мимо виджета (по дашборду) закрывает поповер.
     if (state.onDocDown) document.removeEventListener('mousedown', state.onDocDown, true);
@@ -1698,6 +2170,18 @@ function buildHTML() {
       render();
     };
     document.addEventListener('keydown', state.onDocKey, true);
+    // Клавиши тура — на документе (фокус в карточке тура, она вне overlay): Esc закрывает,
+    // стрелки листают. Старый слушатель снимаем — он держит прошлый запуск скрипта.
+    if (state.onTourKey) document.removeEventListener('keydown', state.onTourKey, true);
+    state.onTourKey = function (ev) {
+      if (!state.tour) return;
+      var k = ev.keyCode || ev.which, tag = ev.target && ev.target.tagName;
+      if (k === 27) { ev.preventDefault(); ev.stopPropagation(); tourEnd(); return; }
+      if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+      if (k === 39) { ev.preventDefault(); tourAct('next'); }
+      else if (k === 37) { ev.preventDefault(); tourAct('back'); }
+    };
+    document.addEventListener('keydown', state.onTourKey, true);
     state.rerender = render;
     // «Применить» в строке фильтров той же вкладки (тот же cf): ждём ответ с её меткой frq.
     if (state.onFlt) window.removeEventListener('message', state.onFlt);
@@ -1737,6 +2221,7 @@ function buildHTML() {
       var ro = new ResizeObserver(function() {
         overlay.style.width = '100%'; overlay.style.height = '100%';
         if (state.open) placePop();
+        if (state.tour) tourPos();
       });
       ro.observe(host);
       state.ro = ro;

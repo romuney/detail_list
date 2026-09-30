@@ -56,13 +56,16 @@
 | 9 | Сортировка по клику на заголовок | us_table (sort_key) | — | sort_f | DONE | act 'sort': в памяти или на сервере |
 | 10 | Изменение ширины колонок | us_table (resizer) | COL_MIN_W 160 | — | DONE | onDown / colW |
 | 11 | Перестановка колонок перетаскиванием | us_table (drag-src) | — | — | DONE | onDragStart / onDrop, state.columnOrder |
-| 12 | Группировка (зона «перетащите заголовок сюда», свернуть / развернуть) | us_table 173, 272 | group_by | — | DONE | groupDDHTML, viewCompute (группы), gfold |
-| 13 | Пагинация: строк на странице, вперёд / назад | us_table 173 | 10/50/100/500 | — | DONE | pagerHTML: 50/100/200/500, «« ‹ › »» |
+| 12 | Группировка (зона «перетащите заголовок сюда», свернуть / развернуть) | us_table 173, 272 | group_by | — | DONE | gzoneHTML над таблицей: заголовок в зону, плашки уровней (тянуть, ×), «+ колонка» (groupDDHTML); общая каретка `gall`; onDrop |
+| 13 | Пагинация: строк на странице, вперёд / назад | us_table 173 | 10/50/100/500 | — | DONE | pagerHTML над таблицей (вторая строка панели, справа): 50/100/200/500, «« ‹ › »» |
 | 14 | КП: блоки сотрудника (rowspan), подсветка блока | kp_table 195 | — | r (строки аллокаций) | DONE | blockHTML (tbody на блок), prepRows |
 | 15 | КП: «Суммарная аллокация», «Кол-во аллокаций» | kp_table 186–190 | — | r (alloc) | DONE | blockVal, reqCols (alloc для суммы) |
 | 25 | Под фильтрами больше, чем загружено | — | — | meta.n | DONE | limNoteHTML: > 25 000 — «сузьте фильтры», иначе «Загрузить всех» |
 | 26 | Фильтры — отдельным чартом над списком; «Обновляю…» по «Применить» строки | — | — | meta.frq | DONE | onFlt (DL_FLT), noticesHTML; фильтры — detail-list-filters.chart.js |
 | 22 | Маска warden «⛔️ Нет доступа к данным» | us_table (cellVal) | — | '⛔' в r | DONE | cellHTML (коротко), copyText (прежний текст) |
+| 27 | Шапка как в HRBP HUB / Adoption: имя слева, «Как работать» и плашки данных справа | HRBP HUB headHTML | — | meta | DONE | headHTML |
+| 28 | Тур «Как работать» | HRBP HUB tourSteps / движок тура | — | — | DONE | tourSteps, tourCardHTML (БЛОК 5), tourLayer…tourAct (БЛОК 6) |
+| 29 | «Копировать» иконкой, всегда справа | просьба пользователя 30.09 | — | r | DONE | copyBtnHTML: галочка и «Скопировано: N» в подсказке |
 | 23 | Лимит 25 000 строк | чарт 726821 row_limit | 25 000 | lim_f | DONE | limDDHTML: 5 000 / 10 000 / 25 000 |
 
 ## §2 ПРОЧИТАНО
