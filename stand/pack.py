@@ -1,15 +1,19 @@
 """Папка поставки: копии исходников «что куда вставлять».
 
-    python3 stand/pack.py           # обновить файлы 1–8 из proteus/
+    python3 stand/pack.py           # обновить файлы 1–8 и 10 из proteus/
     python3 stand/pack.py --check   # только сверить: копии == исходники (код 1 — разошлись)
 
 Исходники — источник правды: proteus/detail-list.data.sql, proteus/detail-list.chart.js (список) и
 proteus/detail-list-filters.chart.js (строка фильтров). Датасеты отличаются строками MODE (вкладка) и
 VIEW (чарт), JS — строкой ns (свои состояние, стили и тултип у каждого чарта на дашборде).
+Файл 10 — проверка на бою одним запросом (stand/diag.py, собирается из того же SQL).
 Файлы 0 и 9 папки пишутся руками и здесь не трогаются.
 """
 import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import diag  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 PACK = os.path.join(ROOT, 'Поставка — Детальные списки')
@@ -41,6 +45,7 @@ def copies():
         ('6. Чарт «Детальные списки КП».js', one_line(js, "  ns: 'dl',\n", "  ns: 'dlk',\n")),
         ('7. Чарт «Детальные списки: фильтры».js', one_line(jsf, "  ns: 'dlf',\n", "  ns: 'dlf',\n")),
         ('8. Чарт «Детальные списки КП: фильтры».js', one_line(jsf, "  ns: 'dlf',\n", "  ns: 'dlkf',\n")),
+        (os.path.basename(diag.OUT), diag.build()),
     ]
 
 

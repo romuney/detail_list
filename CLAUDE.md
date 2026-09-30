@@ -18,7 +18,8 @@ Superset) без нативных фильтров: две вкладки одн
 |---|---|
 | Поменять датасет | `proteus/detail-list.data.sql` → `stand/parse.py` (разбор, как Proteus при сохранении) → `stand/check.py` (оба режима, 0 провалов) |
 | Поменять чарт | список — `proteus/detail-list.chart.js`, панель фильтров — `proteus/detail-list-filters.chart.js`, по скиллу proteus-echarts-builder → `node --check` → ESLint `no-undef` (`stand/eslint.chart.cjs`, 0 ошибок) → `check.py` скилла (у каждого чарта; `SELF_CHECK.md` — последнего прогона, копия панели фильтров — `SELF_CHECK.filters.md`) → `stand/click.cjs` на стенде борда |
-| Отдать владельцу | `python3 stand/pack.py` → папка «Поставка — Детальные списки» (файлы 1–8; 0 и 9 — руками), правка `0. Инструкция.md` (раздел «Что нового»: какие файлы заменить) |
+| Проверить на бою | файл 10 поставки — один запрос для SQL Lab (владелец может выполнить только один): источник, словари, деревья, датасеты как есть по ролям; собирает `stand/diag.py` из того же SQL |
+| Отдать владельцу | `python3 stand/pack.py` → папка «Поставка — Детальные списки» (файлы 1–8 и 10; 0 и 9 — руками), правка `0. Инструкция.md` (раздел «Что нового»: какие файлы заменить) |
 | Прежние чарты и фильтры | выгрузка 7241 в корне: `charts/` (ключ `jsx` — код чартов 726821 и 795014), `datasets/Proteus_CROSS/`, `dashboards/`; первая выгрузка по ошибке («Анализ закрытых вакансий», 13198) к задаче не относится |
 | Образец архитектуры | репозиторий `romuney/HRBP_HUB`: `docs/architecture.md`, `proteus/hrbp-hub.data.sql` |
 | Скилл чарта | репозиторий `romuney/adoption`, ветка `new`, `skills/proteus-echarts-builder/`: `python3 <скилл>/check.py proteus/detail-list.chart.js` (для smoke — `NODE_PATH=$(npm root -g)`) |
@@ -38,7 +39,8 @@ python3 stand/parse.py                        # разбор SQL sqlglot, как
 NODE_PATH=$(npm root -g) node stand/click.cjs # живой прогон борда: каждый контрол обоих чартов обеих вкладок, каскад панели до «Применить», тур списка (126 шагов, 0 провалов)
 node $(npm root -g)/eslint/bin/eslint.js -c stand/eslint.chart.cjs --no-config-lookup proteus/detail-list.chart.js
 <venv>/bin/python stand/mock.py               # моки smoke скилла: detail-list.mock.json и detail-list-filters.mock.json (live.py остановить: chdb держит каталог)
-python3 stand/pack.py [--check]               # файлы 1–8 поставки из исходников
+python3 stand/pack.py [--check]               # файлы 1–8 и 10 поставки из исходников
+<venv>/bin/python stand/diag.py --run [логин] # файл 10 — проверка на бою одним запросом (SQL Lab): собрать и выполнить на стенде
 ```
 
 Логины мира: `a.user` — частичный доступ (маски warden), `hr.super` — всё, `p.lead` — лидер
